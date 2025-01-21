@@ -2,22 +2,29 @@
   "name": "@nfets/nfets",
   "version": "0.0.1",
   "description": "typescript libraries for Brazilian's SEFAZ standards",
-  "main": "index.js",
   "scripts": {
-    "build": "rimraf packages/xml-builder/tsconfig.tsbuildinfo packages/nfe/tsconfig.tsbuildinfo packages/transmission/tsconfig.tsbuildinfo && bun --filter @nfets/xml-builder build && bun --filter @nfets/transmission build"
+    "clean": "rimraf packages/{xml-builder,nfe,transmission}/{tsconfig.tsbuildinfo,dist}",
+    "build": "bun clean && bun --filter @nfets/xml-builder build && bun --filter @nfets/transmission build && bun --filter @nfets/nfe build",
+    "lint": "eslint -c eslint.config.mjs"
   },
   "license": "ISC",
   "workspaces": [
     "packages/*"
   ],
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
   "dependencies": {
     "jest": "^29.7.0",
     "rimraf": "^6.0.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "@types/bun": "latest",
+    "@types/node": "^22.10.7",
+    "@typescript-eslint/parser": "^8.21.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "globals": "^15.14.0",
+    "typescript-eslint": "^8.21.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
   }
 }
