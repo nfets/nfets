@@ -1,0 +1,19 @@
+{
+  "name": "@nfets/xml-builder",
+  "version": "0.0.1",
+  "type": "module",
+  "dependencies": {
+    "xml2js": "^0.6.2"
+  },
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && bun build src/index.ts --outdir=dist --target node"
+  }
+}

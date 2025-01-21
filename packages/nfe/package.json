@@ -1,0 +1,15 @@
+{
+  "name": "@nfets/nfe",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
+  "exports": {
+    "default": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  },
+  "dependencies": {
+    "@nfets/xml-builder": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsc && bun build --target=node ./src/index.ts --outfile=dist/index.js"
+  }
+}

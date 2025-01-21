@@ -3,6 +3,21 @@
   "version": "0.0.1",
   "description": "typescript libraries for Brazilian's SEFAZ standards",
   "main": "index.js",
-  "scripts": {},
-  "license": "ISC"
+  "scripts": {
+    "build": "rimraf packages/xml-builder/tsconfig.tsbuildinfo packages/nfe/tsconfig.tsbuildinfo packages/transmission/tsconfig.tsbuildinfo && bun --filter @nfets/xml-builder build && bun --filter @nfets/transmission build"
+  },
+  "license": "ISC",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "jest": "^29.7.0",
+    "rimraf": "^6.0.1"
+  }
 }
