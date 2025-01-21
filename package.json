@@ -1,0 +1,8 @@
+{
+  "name": "@nfets/nfets",
+  "version": "0.0.1",
+  "description": "typescript libraries for Brazilian's SEFAZ standards",
+  "main": "index.js",
+  "scripts": {},
+  "license": "ISC"
+}
