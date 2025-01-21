@@ -5,7 +5,8 @@
     "rootDir": "src",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/"]
+      "@/*": ["./src/*"],
+      "src/*": ["./src/*"]
     },
     "composite": true
   },

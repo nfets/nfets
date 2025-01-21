@@ -1,12 +1,20 @@
 {
   "name": "@nfets/transmission",
   "version": "0.0.1",
-  "main": "./dist/index.js",
   "type": "module",
+  "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc && bun build src/index.ts --outdir=dist --target node --packages external"
+    "build": "tsc && bun build src/index.ts --outdir=dist --target=node --packages external"
   },
   "dependencies": {
-    "@nfets/xml-builder": "workspace:"
-  }
+    "@nfets/xml-builder": "workspace:*"
+  },
+  "devDependencies": {},
+  "exports": {
+    "default": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  },
+  "files": [
+    "dist"
+  ]
 }

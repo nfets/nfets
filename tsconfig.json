@@ -10,11 +10,15 @@
     "sourceMap": true,
     "declaration": true,
     "skipLibCheck": true,
+    "removeComments": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "verbatimModuleSyntax": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "noFallthroughCasesInSwitch": false,
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]
   }
 }
