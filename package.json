@@ -2,10 +2,13 @@
   "name": "nfets",
   "version": "0.0.1",
   "description": "typescript libraries for Brazilian's SEFAZ standards",
+  "type": "module",
+  "main": "dist/index.js",
   "scripts": {
     "clean": "rimraf packages/{core,nfe,transmission}/{tsconfig.tsbuildinfo,dist}",
     "build": "bun clean && bun --filter @nfets/core build && bun --filter @nfets/transmission build && bun --filter @nfets/nfe build",
-    "lint": "eslint -c eslint.config.mjs"
+    "lint": "eslint -c eslint.config.mjs",
+    "test": "bun --filter * test"
   },
   "license": "ISC",
   "workspaces": [
@@ -14,21 +17,21 @@
   "files": [
     "dist"
   ],
-  "main": "dist/index.js",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "jest": "^29.7.0",
     "rimraf": "^6.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
     "@types/bun": "^1.1.18",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.10.7",
     "@typescript-eslint/parser": "^8.21.0",
     "eslint-plugin-prettier": "^5.2.3",
     "globals": "^15.14.0",
+    "jest": "^29.7.0",
     "tsc-alias": "^1.8.10",
     "typescript-eslint": "^8.21.0"
   },

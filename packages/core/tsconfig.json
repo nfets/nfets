@@ -9,5 +9,5 @@
     },
     "composite": true
   },
-  "include": ["src/**/*.ts", "**/*.d.ts"]
+  "include": ["src/**/*.ts", "test/**/*.ts", "**/*.d.ts"]
 }
