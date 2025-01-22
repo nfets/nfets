@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"] # TODO: add "!main" to array
+
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  ci-bun:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        bun: [1.1.45, latest]
+
+    steps:
+      - name: setup bun v${{ matrix.bun }}
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ matrix.bun }}
+
+      - name: install packages
+        run: bun install
+
+      - name: run unit tests
+        run: bun test
+
+      - name: run lint
+        run: bun lint
