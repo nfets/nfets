@@ -5,7 +5,7 @@ import {
   type BuilderOptions,
   type IBuilder,
   type ParserOptions,
-} from 'src/domain/entities/builder';
+} from 'src/domain/entities/xml-builder';
 
 export class Xml2JsBuilder implements IBuilder {
   public constructor(private readonly xml2js = Xml2js) {}

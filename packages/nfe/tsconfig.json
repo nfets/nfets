@@ -2,13 +2,12 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
       "src/*": ["./src/*"]
     }
   },
-  "references": [{ "path": "../xml-builder" }],
+  "references": [{ "path": "../core" }],
   "include": ["src/**/*.ts", "**/*.d.ts"]
 }

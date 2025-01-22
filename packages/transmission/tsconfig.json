@@ -5,10 +5,9 @@
     "rootDir": "src",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
       "src/*": ["./src/*"]
     }
   },
-  "references": [{ "path": "../xml-builder" }],
+  "references": [{ "path": "../core" }],
   "include": ["src/**/*.ts", "**/*.d.ts"]
 }

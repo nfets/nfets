@@ -7,13 +7,13 @@
     "build": "tsc && bun build src/index.ts --outdir=dist --target=node --packages external"
   },
   "dependencies": {
-    "@nfets/xml-builder": "workspace:*"
+    "@nfets/core": "workspace:*"
   },
   "devDependencies": {},
   "exports": {
-    "default": "./dist/index.js",
-    "types": "./dist/index.d.ts"
+    ".": "./dist/index.js"
   },
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ]

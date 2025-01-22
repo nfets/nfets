@@ -1,6 +1,7 @@
-import { build } from '@nfets/xml-builder';
+import { Decimal } from '@nfets/core';
 
 export const nfe = () => {
-  build({ name: 'uiui' });
-  console.log('success!');
+  console.log('success!', new Decimal(0.2).add(0.1).toNumber());
 };
+
+nfe();
