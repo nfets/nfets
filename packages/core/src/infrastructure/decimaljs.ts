@@ -1,4 +1,11 @@
 import { Decimal as DecimalJs } from 'decimal.js';
-import type { Decimal as IDecimal } from 'src/domain/entities/decimal';
+import type {
+  DecimalValue,
+  Decimal as IDecimal,
+} from 'src/domain/entities/decimal';
 
-export class Decimal extends DecimalJs implements IDecimal {}
+export class Decimal extends DecimalJs implements IDecimal {
+  static from(value: DecimalValue): IDecimal {
+    return new Decimal(value as DecimalJs.Value);
+  }
+}
