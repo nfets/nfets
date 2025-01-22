@@ -17,6 +17,8 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: setup bun v${{ matrix.bun }}
         uses: oven-sh/setup-bun@v2
         with:
