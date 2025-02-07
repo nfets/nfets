@@ -23,5 +23,50 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
-  ]
+  ],
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": ".",
+    "workerIdleMemoryLimit": "2048MB",
+    "maxWorkers": "90%",
+    "maxConcurrency": 5,
+    "passWithNoTests": true,
+    "detectOpenHandles": true,
+    "forceExit": true,
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.json"
+        }
+      ]
+    },
+    "coverageThreshold": {
+      "global": {
+        "statements": 98,
+        "branches": 98,
+        "lines": 98,
+        "functions": 98
+      }
+    },
+    "collectCoverageFrom": [
+      "src/**/*.(t|j)s"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/coverage/",
+      "/dist/"
+    ],
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/src/$1",
+      "^test/(.*)$": "<rootDir>/test/$1"
+    },
+    "coverageDirectory": "coverage",
+    "testEnvironment": "node"
+  }
 }
