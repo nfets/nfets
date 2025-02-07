@@ -1,11 +1,14 @@
 import * as Xml2js from 'xml2js';
 
 import {
-  defaultParserOptions,
   type BuilderOptions,
   type IBuilder,
+} from 'src/domain/entities/xml/xml-builder';
+
+import {
+  defaultParserOptions,
   type ParserOptions,
-} from 'src/domain/entities/xml-builder';
+} from 'src/domain/entities/xml/xml-parser';
 
 export class Xml2JsBuilder implements IBuilder {
   public constructor(private readonly xml2js = Xml2js) {}
