@@ -14,13 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
         with:
-          bun-version: 1.1.45
+          node-version: 22.x
 
       - name: install packages
-        run: bun install
+        run: pnpm install
 
-      - run: bun publish
+      - run: pnpm publish
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}

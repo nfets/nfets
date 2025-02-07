@@ -2,33 +2,33 @@ name: CI
 
 on:
   push:
-    branches: ["**"] # TODO: add "!main" to array
+    branches: ['**'] # TODO: add "!main" to array
 
   pull_request:
     types: [opened, synchronize]
 
 jobs:
-  ci-bun:
+  ci:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        bun: [1.1.45, latest]
+        node-version: [22.x, latest]
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: setup bun v${{ matrix.bun }}
-        uses: oven-sh/setup-bun@v2
+      - name: setup node-version v${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          bun-version: ${{ matrix.bun }}
+          node-version: ${{ matrix.node-version }}
 
       - name: install packages
-        run: bun install
+        run: pnpm install
 
       - name: run unit tests
-        run: bun test
+        run: pnpm test
 
       - name: run lint
-        run: bun lint
+        run: pnpm lint

@@ -6,14 +6,17 @@
   "main": "dist/index.js",
   "scripts": {
     "clean": "rimraf packages/{core,nfe,transmission}/{tsconfig.tsbuildinfo,dist}",
-    "build": "bun clean && bun --filter @nfets/core build && bun --filter @nfets/transmission build && bun --filter @nfets/nfe build",
+    "build": "pnpm clean && pnpm --filter @nfets/core build && pnpm --filter @nfets/transmission build && pnpm --filter @nfets/nfe build",
     "lint": "eslint -c eslint.config.mjs",
-    "test": "bun --filter * test"
+    "test": "pnpm --filter * test"
+  },
+  "engines": {
+    "pnpm": ">=9",
+    "node": ">=22",
+    "yarn": "use pnpm!",
+    "npm": "use pnpm!"
   },
   "license": "ISC",
-  "workspaces": [
-    "packages/*"
-  ],
   "files": [
     "dist"
   ],
@@ -25,7 +28,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
-    "@types/bun": "^1.1.18",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.7",
     "@typescript-eslint/parser": "^8.21.0",

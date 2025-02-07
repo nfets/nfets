@@ -48,7 +48,6 @@ export default [
         ...globals.node,
         ...globals.jest,
         NodeJS: true,
-        Bun: true,
       },
 
       parser: tsParser,
