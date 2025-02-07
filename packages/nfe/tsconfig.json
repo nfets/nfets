@@ -5,7 +5,8 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "src/*": ["./src/*"]
+      "src/*": ["./src/*"],
+      "@nfets/*": ["../*/src/index.ts"]
     }
   },
   "references": [{ "path": "../core" }],

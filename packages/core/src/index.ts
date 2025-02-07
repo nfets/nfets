@@ -1,5 +1,5 @@
-export type * from './domain/entities/decimal';
-export type * from './domain/entities/xml-builder';
+export type * from './domain/entities/calculator/decimal';
+export type * from './domain/entities/xml/xml-builder';
 
-export { Decimal } from './infrastructure/decimaljs';
-export { Xml2JsBuilder } from './infrastructure/xml2js-builder';
+export { Decimal } from './infrastructure/calculator/decimaljs';
+export { Xml2JsBuilder } from './infrastructure/xml/xml2js-builder';
