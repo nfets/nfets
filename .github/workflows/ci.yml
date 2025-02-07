@@ -24,6 +24,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - run: npm install -g pnpm
+
       - name: install packages
         run: pnpm install
 
