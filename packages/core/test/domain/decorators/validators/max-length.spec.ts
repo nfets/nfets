@@ -3,12 +3,14 @@ import { ValidationError } from 'src/domain/errors/validation-error';
 
 describe('@MaxLength decorator (unit)', () => {
   it('should throw exception when default value exceeds max length', () => {
+    class Test1 {
+      @MaxLength(2)
+      declare public name: string;
+    }
+
+    const instance = new Test1();
     expect(() => {
-      class Test {
-        @MaxLength(2)
-        public name = 'world';
-      }
-      new Test();
+      instance.name = 'world';
     }).toThrow(
       new ValidationError(
         `ValidationError: The length of the "name" property exceeds 2 characters`,
@@ -17,12 +19,12 @@ describe('@MaxLength decorator (unit)', () => {
   });
 
   it('should throw exception when value exceeds max length', () => {
-    class Test {
+    class Test2 {
       @MaxLength(15)
-      public name?: string;
+      declare public name?: string;
     }
 
-    const instance = new Test();
+    const instance = new Test2();
     expect(() => {
       instance.name = '.'.repeat(16);
     }).toThrow(
@@ -33,12 +35,13 @@ describe('@MaxLength decorator (unit)', () => {
   });
 
   it("should validate and don't throw exception", () => {
-    class Test {
+    class Test3 {
       @MaxLength(5)
-      public name = 'world';
+      declare public name: string;
     }
 
-    const instance = new Test();
+    const instance = new Test3();
+    instance.name = 'world';
     expect(instance.name).toStrictEqual('world');
   });
 });
