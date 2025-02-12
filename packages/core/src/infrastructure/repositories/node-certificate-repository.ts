@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import path from 'node:path';
 import forge from 'node-forge';
 
 import { NFeTsError } from 'src/domain/errors/nfets-error';
@@ -16,7 +17,7 @@ export class NodeCertificateRepository implements CertificateRepository {
     try {
       const pfxBuffer = this.isValidUrl(pfxPathOrBase64)
         ? fs.readFileSync(pfxPathOrBase64)
-        : 'TODO: create buffer from base64 contents';
+        : Buffer.from(pfxPathOrBase64, 'base64');
 
       const p12Asn1 = forge.asn1.fromDer(pfxBuffer.toString('binary'));
       const p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, password);
@@ -47,8 +48,10 @@ export class NodeCertificateRepository implements CertificateRepository {
     try {
       new URL(pfxPathOrBase64);
       return true;
-    } catch (_) {
-      return false;
+    } catch (e) {
+      //
     }
+
+    return path.isAbsolute(pfxPathOrBase64) || fs.existsSync(pfxPathOrBase64);
   }
 }
