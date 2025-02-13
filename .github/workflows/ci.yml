@@ -29,8 +29,11 @@ jobs:
       - name: install packages
         run: pnpm install
 
-      - name: run unit tests
-        run: pnpm test
-
       - name: run lint
-        run: pnpm lint
+        run: make lint
+
+      - name: run build
+        run: make build
+
+      - name: run unit tests
+        run: make test

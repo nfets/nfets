@@ -4,12 +4,6 @@
   "description": "typescript libraries for Brazilian's SEFAZ standards",
   "type": "module",
   "main": "dist/index.js",
-  "scripts": {
-    "clean": "rimraf packages/{core,nfe,transmission}/{tsconfig.tsbuildinfo,dist}",
-    "build": "pnpm clean && pnpm --filter @nfets/core build && pnpm --filter @nfets/transmission build && pnpm --filter @nfets/nfe build",
-    "lint": "eslint -c eslint.config.mjs",
-    "test": "pnpm --filter @nfets/* test"
-  },
   "engines": {
     "pnpm": ">=9",
     "node": ">=22",
@@ -28,15 +22,18 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
+    "@types/fs-extra": "^11.0.4",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.7",
     "@typescript-eslint/parser": "^8.21.0",
     "eslint": "^9.19.0",
     "eslint-plugin-prettier": "^5.2.3",
+    "fs-extra": "^11.3.0",
     "globals": "^15.14.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
     "tsc-alias": "^1.8.10",
+    "tsx": "^4.19.2",
     "typescript-eslint": "^8.21.0"
   },
   "peerDependencies": {

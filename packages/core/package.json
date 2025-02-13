@@ -4,7 +4,7 @@
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc && pnpm build src/index.ts --outdir=dist --target=node --packages external",
+    "build": "tsc && tsc-alias",
     "test": "jest"
   },
   "dependencies": {
