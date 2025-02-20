@@ -4,7 +4,7 @@ import {
   type Left,
   type Right,
   type Either,
-} from 'src/shared/either';
+} from '../../core/src/shared/either';
 
 export const expectIsRight: <L, A>(
   result: Either<L, A>,

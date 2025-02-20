@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "..",
+    "paths": {
+      "@nfets/core/*": ["../core/src/*"]
+    },
+    "composite": true
+  },
+  "references": [{ "path": "../core" }],
+  "include": ["src"]
+}
