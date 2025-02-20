@@ -40,3 +40,11 @@ export interface Certificate {
   privateKey: PrivateKey | Buffer | Uint8Array;
   publicKey: PublicKey | Buffer | Uint8Array;
 }
+
+export interface ReadCertificateResponse {
+  cert: Certificate;
+  certificate: Buffer | string;
+  privateKey: Buffer | string;
+  ca: (Buffer | string)[];
+  password?: string;
+}
