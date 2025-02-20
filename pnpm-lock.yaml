@@ -97,15 +97,6 @@ importers:
 
   packages/test: {}
 
-  packages/transmission:
-    dependencies:
-      '@nfets/core':
-        specifier: workspace:*
-        version: link:../core
-      soap:
-        specifier: ^1.1.7
-        version: 1.1.8
-
 packages:
 
   '@ampproject/remapping@2.3.0':

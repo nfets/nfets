@@ -58,6 +58,4 @@ async function buildAll(): Promise<void> {
   console.log('Build completed successfully!');
 }
 
-buildAll().catch((err: unknown) => {
-  console.error('Build failed:', err);
-});
+await buildAll();
