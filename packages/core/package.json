@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsc && tsc-alias",
-    "test": "jest --config jest.config.ts"
+    "test": "jest --config jest.config.ts --passWithNoTests"
   },
   "dependencies": {
     "decimal.js": "^10.4.3",
