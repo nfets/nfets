@@ -11,5 +11,5 @@
     "composite": true
   },
   "references": [{ "path": "../test" }],
-  "include": ["src/**/*.ts", "test/**/*.ts", "**/*.d.ts", "jest.config.ts"]
+  "include": ["src/**/*.ts", "test/**/*.ts", "jest.config.ts"]
 }

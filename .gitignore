@@ -52,7 +52,7 @@ bower_components
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 
-build/Release
+build/
 
 # Dependency directories
 
@@ -159,6 +159,7 @@ dist
 # Stores VSCode versions used for testing VSCode extensions
 
 .vscode-test
+.vscode
 
 # yarn v2
 
