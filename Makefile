@@ -1,3 +1,5 @@
+.PHONY: build
+
 lint:
 	@pnpm eslint -c eslint.config.mjs
 
