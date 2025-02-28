@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "install": "node-gyp rebuild",
-    "preinstall": "rimraf node_modules packages/{core,nfe}/node_modules"
+    "clean": "rimraf node_modules packages/{core,nfe}/node_modules"
   },
   "publishConfig": {
     "access": "public"
