@@ -41,7 +41,7 @@ jobs:
 
       - run: sudo apt update && sudo apt install -y libxml2-dev pkg-config
 
-      - run: pkg-config --cflags-only-I libxml-2.0
+      - run: export CXXFLAGS="-I$(pkg-config --cflags-only-I libxml-2.0)"
       # - run: pkg-config --libs libxml-2.0
 
       - name: install dependencies
