@@ -18,8 +18,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: true
 
       - uses: actions/cache@v4
         with:
@@ -33,21 +31,15 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # - run: |
-      #     cd vendor/libxml2
-      #     ./autogen.sh --prefix=$(pwd)/build
-      #     make -j$(nproc)
-      #     make install
+      - run: sudo apt update && sudo apt install -y libxml2-dev
 
-      - run: sudo apt update && sudo apt install -y libxml2-dev pkg-config
-
-      - run: export CXXFLAGS="$(pkg-config --cflags-only-I libxml-2.0)"
-      # - run: pkg-config --libs libxml-2.0
+      - run: pkg-config --cflags-only-I libxml-2.0
+      - run: pkg-config --libs libxml-2.0
 
       - name: install dependencies
         run: |
           corepack enable
-          pnpm install --frozen-lockfile
+          CXXFLAGS="$(pkg-config --cflags-only-I libxml-2.0)" pnpm install --frozen-lockfile
 
       - name: run lint
         run: make lint
