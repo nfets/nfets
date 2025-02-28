@@ -26,8 +26,8 @@ jobs:
 
       - run: sudo apt update && sudo apt install -y libxml2-dev pkg-config
 
-      - run: ls -l /usr/include/libxml2
-      - run: ls -l /usr/include/libxml2/libxml/parser.h
+      - run: pkg-config --cflags-only-I libxml-2.0
+      - run: pkg-config --libs libxml-2.0
 
       - run: npm install -g pnpm
 
