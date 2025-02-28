@@ -2,6 +2,7 @@
 
 #include <libxml/parser.h>
 #include <libxml/xmlschemas.h>
+#include "libxml/xmlversion.h"
 
 #include <string.h>
 #include <unistd.h>
