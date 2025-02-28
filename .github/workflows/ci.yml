@@ -24,12 +24,15 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - run: sudo apt update && sudo apt install libxml2-dev pkg-config
+      - run: sudo apt update && sudo apt install -y libxml2-dev pkg-config
+
+      - run: ls -l /usr/include/libxml2
+      - run: ls -l /usr/include/libxml2/libxml/parser.h
 
       - run: npm install -g pnpm
 
       - name: install dependencies
-        run: pnpm install
+        run: CXXFLAGS="-I/usr/include/libxml2" pnpm install
 
       - name: run lint
         run: make lint
