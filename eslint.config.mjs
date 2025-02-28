@@ -16,6 +16,7 @@ export default [
     ignores: [
       '**/.json',
       '**/dist/**/*',
+      '**/vendor/**/*',
       'package.json',
       'node_modules/**/*',
       'eslint.config.mjs',
