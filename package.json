@@ -16,7 +16,7 @@
     "dist"
   ],
   "scripts": {
-    "install": "node-gyp rebuild --verbose",
+    "install": "node-gyp rebuild",
     "clean": "rimraf node_modules packages/{core,nfe}/node_modules"
   },
   "publishConfig": {

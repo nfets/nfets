@@ -26,19 +26,17 @@ jobs:
 
       - run: sudo apt update && sudo apt install -y libxml2-dev
 
-      - name: install dependencies
-        run: |
+      - run: |
           corepack enable
-          CXXFLAGS="$(pkg-config --cflags-only-I libxml-2.0)" LDFLAGS="$(pkg-config --libs libxml-2.0)" pnpm install --frozen-lockfile
-
-      - run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - uses: actions/cache@v4
         with:
           path: ${{ env.STORE_PATH }}
-          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            pnpm-${{ runner.os }}-
+          key: pnpm-${{ matrix.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: install dependencies
+        run: CXXFLAGS="$(pkg-config --cflags-only-I libxml-2.0)" LDFLAGS="$(pkg-config --libs libxml-2.0)" pnpm install --frozen-lockfile
 
       - name: run lint
         run: make lint
