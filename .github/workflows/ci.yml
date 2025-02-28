@@ -33,6 +33,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - run: |
+          cd vendor/libxml2
+          ./autogen.sh --prefix=$(pwd)/build
+          make -j$(nproc)
+          make install
+
       # - run: sudo apt update && sudo apt install -y libxml2-dev pkg-config
 
       # - run: pkg-config --cflags-only-I libxml-2.0
