@@ -10,6 +10,7 @@
     "yarn": "use pnpm!",
     "npm": "use pnpm!"
   },
+  "packageManager": "pnpm@10.4.0",
   "license": "ISC",
   "files": [
     "dist"
