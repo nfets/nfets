@@ -6,10 +6,10 @@
         "addons/xml_validator.cpp"
       ],
       "include_dirs": [
-        "<!(pwd)/vendor/libxml2",
-        "<!(pwd)/vendor/libxml2/include",
-        "<!(pwd)/vendor/libxml2/include/libxml",
-        "<!(pwd)/vendor/libxml2.config"
+        "<!@(pkg-config --cflags-only-I libxml-2.0)"
+      ],
+      "libraries": [
+        "<!@(pkg-config --libs libxml-2.0)"
       ]
     }
   ]
