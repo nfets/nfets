@@ -19,13 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/cache@v4
-        with:
-          path: ~/.pnpm-store
-          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            pnpm-${{ runner.os }}-
-
       - name: setup node-version v${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -33,13 +26,17 @@ jobs:
 
       - run: sudo apt update && sudo apt install -y libxml2-dev
 
-      - run: pkg-config --cflags-only-I libxml-2.0
-      - run: pkg-config --libs libxml-2.0
+      - uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
 
       - name: install dependencies
         run: |
           corepack enable
-          CXXFLAGS="$(pkg-config --cflags-only-I libxml-2.0)" pnpm install --frozen-lockfile
+          CXXFLAGS="$(pkg-config --cflags-only-I libxml-2.0)" LDFLAGS="$(pkg-config --libs libxml-2.0)" pnpm install --frozen-lockfile
 
       - name: run lint
         run: make lint
