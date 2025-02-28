@@ -3,11 +3,13 @@ import { Agent as HttpsAgent, type AgentOptions } from 'node:https';
 import { createClientAsync } from 'soap';
 
 import { right } from 'src/shared/either';
+import { leftFromError } from 'src/shared/left-from-error';
 
 import type { RemoteTransmissionRepository } from 'src/domain/repositories/remote-transmission-repository';
 import type { CertificateRepository } from 'src/domain/repositories/certificate-repository';
 import type { ReadCertificateResponse } from 'src/domain/entities/certificate/certificate';
 import type { AxiosRequestConfig } from 'axios';
+import type { SendTransmissionPayload } from 'src/domain/entities/transmission/payload';
 
 export class SoapRemoteTransmissionRepository
   implements RemoteTransmissionRepository
@@ -15,13 +17,8 @@ export class SoapRemoteTransmissionRepository
   private declare certificate?: ReadCertificateResponse;
 
   public constructor(
-    private readonly schemas: string,
     private readonly certificateRepository: CertificateRepository,
   ) {}
-
-  validateSchema(_: string, __: string) {
-    return Promise.resolve(right());
-  }
 
   public async setCertificate(pfxPathOrBase64: string, password: string) {
     const certificateOrError = await this.certificateRepository.read(
@@ -34,7 +31,7 @@ export class SoapRemoteTransmissionRepository
     }
   }
 
-  private get httpsAgent(): AgentOptions {
+  protected get httpsAgent(): AgentOptions {
     return new HttpsAgent({
       rejectUnauthorized: false,
       ca: this.certificate?.ca,
@@ -45,28 +42,31 @@ export class SoapRemoteTransmissionRepository
     });
   }
 
-  async send() {
-    const httpsAgent = this.httpsAgent;
-
-    const client = await createClientAsync(
-      'https://nfe-homologacao.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx?WSDL',
-      { wsdl_options: { httpsAgent } },
-    );
-
-    const xmlData = `<consStatServ xmlns="http://www.portalfiscal.inf.br/nfe" versao="4.00">
-    <tpAmb>2</tpAmb>
-    <cUF>43</cUF>
-    <xServ>STATUS</xServ>
-    </consStatServ>`;
-
-    client.addSoapHeader({
+  protected get defaultSoapHeaders() {
+    return {
       'Content-Type': 'application/soap+xml; charset=utf-8',
-    });
+    };
+  }
 
-    const args = { nfeDadosMsg: xmlData };
-    const [result] = await client.nfeStatusServicoNFAsync(args, { httpsAgent });
+  async send<R, M extends string>(params: SendTransmissionPayload<M>) {
+    try {
+      const httpsAgent = this.httpsAgent;
 
-    return Promise.resolve(right(result));
+      const client = await createClientAsync(`${params.url}?wsdl`, {
+        wsdl_options: { httpsAgent },
+      });
+
+      client.addSoapHeader(this.defaultSoapHeaders);
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
+      const [result] = await client[params.method](params.payload, {
+        httpsAgent,
+      });
+
+      return right(result as R);
+    } catch (e) {
+      return leftFromError(e);
+    }
   }
 }
 
