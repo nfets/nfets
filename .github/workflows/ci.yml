@@ -17,14 +17,14 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - uses: actions/checkout@v4
+
       - uses: actions/cache@v4
         with:
           path: ~/.pnpm-store
           key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-${{ runner.os }}-
-
-      - uses: actions/checkout@v4
 
       - name: setup node-version v${{ matrix.node-version }}
         uses: actions/setup-node@v4
