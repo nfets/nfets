@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - run: sudo apt update && sudo apt install libxml2-dev
+      - run: sudo apt update && sudo apt install libxml2-dev pkg-config
 
       - run: npm install -g pnpm
 
