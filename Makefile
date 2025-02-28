@@ -3,8 +3,12 @@
 lint:
 	@pnpm eslint -c eslint.config.mjs
 
+install:
+	@pnpm rimraf node_modules packages/{core,nfe}/node_modules \
+		&& pnpm install
+
 clean:
-	@pnpm rimraf packages/{core,nfe,transmission}/{tsconfig.tsbuildinfo,dist}
+	@pnpm rimraf packages/{core,nfe}/{tsconfig.tsbuildinfo,dist}
 
 test:
 	@pnpm --filter @nfets/* test
@@ -18,6 +22,3 @@ build\:core:
 
 build\:nfe:
 	@pnpm --filter @nfets/nfe build
-
-build\:transmission:
-	@pnpm --filter @nfets/transmission build

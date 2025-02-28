@@ -13,7 +13,8 @@ type Package = {
 
 function getPackages(): string[] {
   try {
-    const output = execSync('pnpm -r ls --depth -1 --json', {
+    // eslint-disable-next-line no-useless-escape
+    const output = execSync(`pnpm -r ls --depth -1 --filter "\!test" --json`, {
       encoding: 'utf-8',
     });
     const packageList = JSON.parse(output) as Package[];

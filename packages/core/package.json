@@ -4,7 +4,7 @@
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc && tsc-alias",
+    "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "test": "NODE_OPTIONS=--openssl-legacy-provider NFETS_ADDONS_DIR=\"$(pwd)/../../build/Release\" jest --config jest.config.ts --passWithNoTests"
   },
   "dependencies": {

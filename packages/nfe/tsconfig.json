@@ -10,5 +10,5 @@
     }
   },
   "references": [{ "path": "../core" }],
-  "include": ["src/**/*.ts", "test/**/*.ts", "**/*.d.ts"]
+  "include": ["src/**/*.ts", "test/**/*.ts"]
 }
