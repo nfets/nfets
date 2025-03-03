@@ -32,7 +32,7 @@ export default [
   { plugins: { prettier: eslintPluginPrettier } },
   // rewrite ts eslint rules
   {
-    files: ['test/**/*.ts'],
+    files: ['**/test/**/*.ts'],
     rules: {
       '@typescript-eslint/unbound-method': 'off',
       '@typescript-eslint/no-unsafe-return': 'off',
@@ -41,6 +41,7 @@ export default [
       '@typescript-eslint/no-unsafe-member-access': 'off',
       '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/non-nullable-type-assertion-style': 'off',
+      'eslint-disable-next-line @typescript-eslint/no-unsafe-assignment': 'off',
     },
   },
   {

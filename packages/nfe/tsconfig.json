@@ -6,9 +6,10 @@
     "baseUrl": ".",
     "paths": {
       "src/*": ["./src/*"],
-      "@nfets/*": ["../*/src/index.ts"]
+      "@nfets/*": ["../*/src/index.ts"],
+      "@nfets/test/*": ["../test/src/*"]
     }
   },
-  "references": [{ "path": "../core" }],
-  "include": ["src/**/*.ts", "test/**/*.ts"]
+  "references": [{ "path": "../core" }, { "path": "../test" }],
+  "include": ["src/**/*.ts", "test/**/*.ts", "jest.config.ts"]
 }

@@ -4,7 +4,8 @@
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc && tsc-alias"
+    "build": "tsc && tsc-alias",
+    "test": "jest --config jest.config.ts --passWithNoTests"
   },
   "dependencies": {
     "@nfets/core": "workspace:*"
