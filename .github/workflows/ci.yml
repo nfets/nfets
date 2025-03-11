@@ -36,7 +36,7 @@ jobs:
           key: os:${{ matrix.os }}|node:${{ matrix.node-version }}|pnpm:${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: install dependencies
-        run: CXXFLAGS="$(pkg-config --cflags-only-I libxml-2.0)" LDFLAGS="$(pkg-config --libs libxml-2.0)" pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: run lint
         run: make lint
