@@ -11,5 +11,5 @@
     }
   },
   "references": [{ "path": "../core" }, { "path": "../test" }],
-  "include": ["src/**/*.ts", "test/**/*.ts", "jest.config.ts"]
+  "include": ["src/**/*.ts", "test/**/*.ts"]
 }

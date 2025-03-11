@@ -25,6 +25,7 @@ export default {
     '^test/(.*)$': '<rootDir>/test/$1',
     '^@nfets/test/(.*)$': '<rootDir>/../test/src/$1',
   },
+  coverageReporters: [['text', { skipFull: true }]],
   testPathIgnorePatterns: ['/node_modules/', '/coverage/', '/dist/'],
   coverageDirectory: 'coverage',
   testEnvironment: 'node',

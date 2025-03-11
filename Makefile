@@ -9,6 +9,9 @@ clean:
 test:
 	@pnpm --filter @nfets/* test
 
+test\:coverage-summary:
+	@pnpm --filter @nfets/* test:coverage --coverageReporters=\"json-summary\"
+
 build:
 	@make clean
 	@pnpm tsx scripts/build.ts

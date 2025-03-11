@@ -5,7 +5,8 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsc && tsc-alias",
-    "test": "jest --config jest.config.ts --passWithNoTests"
+    "test": "jest --config jest.config.ts --passWithNoTests",
+    "test:coverage": "pnpm test --coverage"
   },
   "dependencies": {
     "@nfets/core": "workspace:*"
