@@ -32,7 +32,7 @@ importers:
         version: 8.26.1(eslint@9.23.0)(typescript@5.7.3)
       axios:
         specifier: ^1.7.9
-        version: 1.8.2
+        version: 1.8.4(debug@4.4.0)
       eslint:
         specifier: ^9.19.0
         version: 9.23.0
@@ -856,9 +856,6 @@ packages:
 
   axios-ntlm@1.4.4:
     resolution: {integrity: sha512-kpCRdzMfL8gi0Z0o96P3QPAK4XuC8iciGgxGXe+PeQ4oyjI2LZN8WSOKbu0Y9Jo3T/A7pB81n6jYVPIpglEuRA==}
-
-  axios@1.8.2:
-    resolution: {integrity: sha512-ls4GYBm5aig9vWx8AWDSGLpnpDQRtWAfrjU+EuytuODrFBkqesN2RkOQCBzrA1RQNHw1SmRMSDDDSwzNAYQ6Rg==}
 
   axios@1.8.4:
     resolution: {integrity: sha512-eBSYY4Y68NNlHbHBMdeDmKNtDgXWhQsJcGqzO3iLUM0GraQFSS9cVgPX5I9b3lbdFKyYoAEGAZF1DwhTaljNAw==}
@@ -3257,14 +3254,6 @@ snapshots:
       des.js: 1.1.0
       dev-null: 0.1.1
       js-md4: 0.3.2
-    transitivePeerDependencies:
-      - debug
-
-  axios@1.8.2:
-    dependencies:
-      follow-redirects: 1.15.9(debug@4.4.0)
-      form-data: 4.0.2
-      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
 
