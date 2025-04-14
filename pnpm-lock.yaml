@@ -79,8 +79,8 @@ importers:
         specifier: ^1.1.7
         version: 1.1.10
       xml-crypto:
-        specifier: 6.0.1
-        version: 6.0.1
+        specifier: 6.1.0
+        version: 6.1.0
       xml2js:
         specifier: ^0.6.2
         version: 0.6.2
@@ -2334,8 +2334,8 @@ packages:
     resolution: {integrity: sha512-7KxauUdBmSdWnmpaGFg+ppNjKF8uNLry8LyzjauQDOVONfFLNKrKvQOxZ/VuTIcS/gge/YNahf5RIIQWTSarlg==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
 
-  xml-crypto@6.0.1:
-    resolution: {integrity: sha512-v05aU7NS03z4jlZ0iZGRFeZsuKO1UfEbbYiaeRMiATBFs6Jq9+wqKquEMTn4UTrYZ9iGD8yz3KT4L9o2iF682w==}
+  xml-crypto@6.1.0:
+    resolution: {integrity: sha512-0TYPBRPwXLnRGc2F0f9Zc/H076YcP7tkCa2US4jpguuPTEx7TWFqSysIfJ1hP4r2KF82IYzhnzepnsUEsOjlOw==}
     engines: {node: '>=16'}
 
   xml2js@0.6.2:
@@ -4656,7 +4656,7 @@ snapshots:
       sax: 1.4.1
       strip-bom: 3.0.0
       whatwg-mimetype: 4.0.0
-      xml-crypto: 6.0.1
+      xml-crypto: 6.1.0
     transitivePeerDependencies:
       - supports-color
 
@@ -4908,7 +4908,7 @@ snapshots:
       imurmurhash: 0.1.4
       signal-exit: 3.0.7
 
-  xml-crypto@6.0.1:
+  xml-crypto@6.1.0:
     dependencies:
       '@xmldom/is-dom-node': 1.0.1
       '@xmldom/xmldom': 0.8.10
