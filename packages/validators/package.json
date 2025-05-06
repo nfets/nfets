@@ -1,0 +1,21 @@
+{
+  "name": "@nfets/validators",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "test": "jest --config jest.config.ts --passWithNoTests",
+    "test:coverage": "pnpm test --coverage"
+  },
+  "dependencies": {
+    "@nfets/core": "workspace:*"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ]
+}

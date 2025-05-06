@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["./src/*"],
+      "@nfets/*": ["../*/src/index.ts"],
+      "@nfets/test/*": ["../test/src/*"]
+    }
+  },
+  "references": [{ "path": "../core" }, { "path": "../test" }],
+  "include": ["src/**/*.ts", "test/**/*.ts"]
+}
