@@ -1,0 +1,1 @@
+export { InfIntermed } from './main';

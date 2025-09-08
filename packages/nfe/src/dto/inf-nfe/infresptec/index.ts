@@ -1,0 +1,1 @@
+export { InfRespTec } from './main';

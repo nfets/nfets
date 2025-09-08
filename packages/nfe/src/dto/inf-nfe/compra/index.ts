@@ -1,0 +1,1 @@
+export { Compra } from './main';

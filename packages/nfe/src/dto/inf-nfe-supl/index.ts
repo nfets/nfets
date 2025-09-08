@@ -1,0 +1,1 @@
+export { InfNFeSupl } from './main';
