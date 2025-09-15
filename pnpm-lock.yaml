@@ -44,7 +44,7 @@ importers:
         version: 11.3.0
       globals:
         specifier: ^16.0.0
-        version: 16.0.0
+        version: 16.4.0
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.14.1)(ts-node@10.9.2(@types/node@22.14.1)(typescript@5.7.3))
@@ -1390,8 +1390,8 @@ packages:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
     engines: {node: '>=18'}
 
-  globals@16.0.0:
-    resolution: {integrity: sha512-iInW14XItCXET01CQFqudPOWP2jYMl7T+QRQT+UNcR/iQncN/F0UNpgd76iFkBPgNQb4+X3LV9tLJYzwh+Gl3A==}
+  globals@16.4.0:
+    resolution: {integrity: sha512-ob/2LcVVaVGCYN+r14cnwnoDPUufjiYgSqRhiFD0Q1iI4Odora5RE8Iv1D24hAz5oMophRGkGz+yuvQmmUMnMw==}
     engines: {node: '>=18'}
 
   globby@11.1.0:
@@ -3906,7 +3906,7 @@ snapshots:
 
   globals@14.0.0: {}
 
-  globals@16.0.0: {}
+  globals@16.4.0: {}
 
   globby@11.1.0:
     dependencies:
