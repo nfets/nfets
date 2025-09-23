@@ -1,0 +1,29 @@
+export interface Prod {
+  cProd: string;
+  cEAN?: string;
+  xProd: string;
+  NCM: string;
+  CEST?: string;
+  indEscala?: string;
+  CNPJFab?: string;
+  cBenef?: string;
+  EXTIPI?: string;
+  CFOP: string;
+  uCom: string;
+  qCom: string;
+  vUnCom: string;
+  vProd: string;
+  cEANTrib?: string;
+  uTrib: string;
+  qTrib: string;
+  vUnTrib: string;
+  vFrete?: string;
+  vSeg?: string;
+  vDesc?: string;
+  vOutro?: string;
+  indTot?: string;
+  xPed?: string;
+  nItemPed?: string;
+  nFCI?: string;
+  nRECOPI?: string;
+}

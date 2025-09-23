@@ -1,6 +1,7 @@
 import { IsDefined, IsOptional, IsString } from 'class-validator';
+import type { EnderEmit as IEnderEmit } from 'src/entities/nfe/inf-nfe/emit';
 
-export class EnderEmit {
+export class EnderEmit implements IEnderEmit {
   @IsDefined()
   @IsString()
   declare xLgr: string;

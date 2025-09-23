@@ -5,8 +5,11 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import type { IPITrib as IIPITrib } from 'src/entities/nfe/inf-nfe/det/imposto/ipi';
+import type { IPINT as IIPINT } from 'src/entities/nfe/inf-nfe/det/imposto/ipi';
+import type { IPI as IIPI } from 'src/entities/nfe/inf-nfe/det/imposto/ipi';
 
-export class IPITrib {
+export class IPITrib implements IIPITrib {
   @IsDefined()
   @IsString()
   declare CST: string;
@@ -32,13 +35,13 @@ export class IPITrib {
   declare vIPI?: string;
 }
 
-export class IPINT {
+export class IPINT implements IIPINT {
   @IsDefined()
   @IsString()
   declare CST: string;
 }
 
-export class IPI {
+export class IPI implements IIPI {
   @IsOptional()
   @IsString()
   declare CNPJProd?: string;
@@ -58,16 +61,10 @@ export class IPI {
   @IsOptional()
   @ValidateNested()
   @Type(() => IPITrib)
-  declare IPITrib?: IPITrib;
+  declare IPITrib?: IIPITrib;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => IPINT)
-  declare IPINT?: IPINT;
-}
-
-export class DevolIPI {
-  @IsDefined()
-  @IsString()
-  declare vIPIDevol: string;
+  declare IPINT?: IIPINT;
 }

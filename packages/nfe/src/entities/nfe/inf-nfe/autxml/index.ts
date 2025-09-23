@@ -1,3 +1,1 @@
-export { AutXML } from './main';
-
-
+export type { AutXML } from './main';

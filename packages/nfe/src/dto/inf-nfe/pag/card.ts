@@ -1,6 +1,7 @@
 import { IsOptional, IsString } from 'class-validator';
+import { Card as ICard } from 'src/entities/nfe/inf-nfe/pag';
 
-export class Card {
+export class Card implements ICard {
   @IsOptional()
   @IsString()
   declare cNPJ?: string;

@@ -1,6 +1,7 @@
 import { IsOptional, IsString } from 'class-validator';
+import { RetTransp as IRetTransp } from 'src/entities/nfe/inf-nfe/transp';
 
-export class RetTransp {
+export class RetTransp implements IRetTransp {
   @IsOptional()
   @IsString()
   declare vServ?: string;

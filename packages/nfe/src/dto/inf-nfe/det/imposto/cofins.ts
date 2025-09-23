@@ -6,7 +6,16 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class PISAliq {
+import type {
+  COFINSAliq as ICOFINSAliq,
+  COFINSQtde as ICOFINSQtde,
+  COFINSNT as ICOFINSNT,
+  COFINSOutr as ICOFINSOutr,
+  COFINS as ICOFINS,
+  COFINSST as ICOFINSST,
+} from 'src/entities/nfe/inf-nfe/det/imposto/cofins';
+
+export class COFINSAliq implements ICOFINSAliq {
   @IsDefined()
   @IsString()
   declare CST: string;
@@ -17,14 +26,14 @@ export class PISAliq {
 
   @IsOptional()
   @IsString()
-  declare pPIS?: string;
+  declare pCOFINS?: string;
 
   @IsOptional()
   @IsString()
-  declare vPIS?: string;
+  declare vCOFINS?: string;
 }
 
-export class PISQtde {
+export class COFINSQtde implements ICOFINSQtde {
   @IsDefined()
   @IsString()
   declare CST: string;
@@ -39,16 +48,16 @@ export class PISQtde {
 
   @IsOptional()
   @IsString()
-  declare vPIS?: string;
+  declare vCOFINS?: string;
 }
 
-export class PISNT {
+export class COFINSNT implements ICOFINSNT {
   @IsDefined()
   @IsString()
   declare CST: string;
 }
 
-export class PISOutr {
+export class COFINSOutr implements ICOFINSOutr {
   @IsDefined()
   @IsString()
   declare CST: string;
@@ -59,7 +68,7 @@ export class PISOutr {
 
   @IsOptional()
   @IsString()
-  declare pPIS?: string;
+  declare pCOFINS?: string;
 
   @IsOptional()
   @IsString()
@@ -71,39 +80,39 @@ export class PISOutr {
 
   @IsOptional()
   @IsString()
-  declare vPIS?: string;
+  declare vCOFINS?: string;
 }
 
-export class PIS {
+export class COFINS implements ICOFINS {
   @IsOptional()
   @ValidateNested()
-  @Type(() => PISAliq)
-  declare PISAliq?: PISAliq;
+  @Type(() => COFINSAliq)
+  declare COFINSAliq?: COFINSAliq;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => PISQtde)
-  declare PISQtde?: PISQtde;
+  @Type(() => COFINSQtde)
+  declare COFINSQtde?: COFINSQtde;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => PISNT)
-  declare PISNT?: PISNT;
+  @Type(() => COFINSNT)
+  declare COFINSNT?: COFINSNT;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => PISOutr)
-  declare PISOutr?: PISOutr;
+  @Type(() => COFINSOutr)
+  declare COFINSOutr?: COFINSOutr;
 }
 
-export class PISST {
+export class COFINSST implements ICOFINSST {
   @IsOptional()
   @IsString()
   declare vBC?: string;
 
   @IsOptional()
   @IsString()
-  declare pPIS?: string;
+  declare pCOFINS?: string;
 
   @IsOptional()
   @IsString()
@@ -115,5 +124,5 @@ export class PISST {
 
   @IsOptional()
   @IsString()
-  declare vPIS?: string;
+  declare vCOFINS?: string;
 }

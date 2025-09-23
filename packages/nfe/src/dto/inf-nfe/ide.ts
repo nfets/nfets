@@ -1,19 +1,22 @@
 import {
   IsArray,
   IsDefined,
-  IsIn,
   IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import type {
+  RefNF as IRefNF,
+  RefNFP as IRefNFP,
+  Ide as IIde,
+  RefECF as IRefECF,
+  NFref as INFref,
+} from 'src/entities/nfe/inf-nfe/ide';
 
-export class RefNF {
+export class RefNF implements IRefNF {
   @IsDefined()
   @IsString()
-  @IsIn([
-    '11', '12', '13', '14', '15', '16', '17', '21', '22', '23', '24', '25', '26', '27', '28', '29', '31', '32', '33', '35', '41', '42', '43', '50', '51', '52', '53',
-  ])
   declare cUF: string;
 
   @IsDefined()
@@ -26,7 +29,6 @@ export class RefNF {
 
   @IsDefined()
   @IsString()
-  @IsIn(['01', '02'])
   declare mod: string;
 
   @IsDefined()
@@ -38,12 +40,9 @@ export class RefNF {
   declare nNF: string;
 }
 
-export class RefNFP {
+export class RefNFP implements IRefNFP {
   @IsDefined()
   @IsString()
-  @IsIn([
-    '11', '12', '13', '14', '15', '16', '17', '21', '22', '23', '24', '25', '26', '27', '28', '29', '31', '32', '33', '35', '41', '42', '43', '50', '51', '52', '53',
-  ])
   declare cUF: string;
 
   @IsDefined()
@@ -64,7 +63,6 @@ export class RefNFP {
 
   @IsDefined()
   @IsString()
-  @IsIn(['01', '04'])
   declare mod: string;
 
   @IsDefined()
@@ -76,10 +74,9 @@ export class RefNFP {
   declare nNF: string;
 }
 
-export class RefECF {
+export class RefECF implements IRefECF {
   @IsDefined()
   @IsString()
-  @IsIn(['2B', '2C', '2D'])
   declare mod: string;
 
   @IsDefined()
@@ -91,7 +88,7 @@ export class RefECF {
   declare nCOO: string;
 }
 
-export class NFref {
+export class NFref implements INFref {
   @IsOptional()
   @IsString()
   declare refNFe?: string;
@@ -103,12 +100,12 @@ export class NFref {
   @IsOptional()
   @ValidateNested()
   @Type(() => RefNF)
-  declare refNF?: RefNF;
+  declare refNF?: IRefNF;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => RefNFP)
-  declare refNFP?: RefNFP;
+  declare refNFP?: IRefNFP;
 
   @IsOptional()
   @IsString()
@@ -117,15 +114,12 @@ export class NFref {
   @IsOptional()
   @ValidateNested()
   @Type(() => RefECF)
-  declare refECF?: RefECF;
+  declare refECF?: IRefECF;
 }
 
-export class Ide {
+export class Ide implements IIde {
   @IsDefined()
   @IsString()
-  @IsIn([
-    '11', '12', '13', '14', '15', '16', '17', '21', '22', '23', '24', '25', '26', '27', '28', '29', '31', '32', '33', '35', '41', '42', '43', '50', '51', '52', '53',
-  ])
   declare cUF: string;
 
   @IsDefined()
@@ -138,7 +132,6 @@ export class Ide {
 
   @IsDefined()
   @IsString()
-  @IsIn(['55', '65'])
   declare mod: string;
 
   @IsDefined()
@@ -159,12 +152,10 @@ export class Ide {
 
   @IsDefined()
   @IsString()
-  @IsIn(['0', '1'])
   declare tpNF: string;
 
   @IsDefined()
   @IsString()
-  @IsIn(['1', '2', '3'])
   declare idDest: string;
 
   @IsDefined()
@@ -173,12 +164,10 @@ export class Ide {
 
   @IsDefined()
   @IsString()
-  @IsIn(['0', '1', '2', '3', '4', '5'])
   declare tpImp: string;
 
   @IsDefined()
   @IsString()
-  @IsIn(['1', '2', '3', '4', '5', '6', '7', '9'])
   declare tpEmis: string;
 
   @IsDefined()
@@ -187,32 +176,26 @@ export class Ide {
 
   @IsDefined()
   @IsString()
-  @IsIn(['1', '2'])
   declare tpAmb: string;
 
   @IsDefined()
   @IsString()
-  @IsIn(['1', '2', '3', '4'])
   declare finNFe: string;
 
   @IsDefined()
   @IsString()
-  @IsIn(['0', '1'])
   declare indFinal: string;
 
   @IsDefined()
   @IsString()
-  @IsIn(['0', '1', '2', '3', '4', '5', '9'])
   declare indPres: string;
 
   @IsOptional()
   @IsString()
-  @IsIn(['0', '1'])
   declare indIntermed?: string;
 
   @IsDefined()
   @IsString()
-  @IsIn(['0', '1', '2', '3'])
   declare procEmi: string;
 
   @IsDefined()
@@ -231,5 +214,5 @@ export class Ide {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => NFref)
-  declare NFref?: NFref[];
+  declare NFref?: INFref[];
 }

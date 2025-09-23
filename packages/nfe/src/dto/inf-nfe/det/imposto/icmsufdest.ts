@@ -1,6 +1,7 @@
 import { IsOptional, IsString } from 'class-validator';
+import { ICMSUFDest as IICMSUFDest } from 'src/entities/nfe/inf-nfe/det/imposto/icmsufdest';
 
-export class ICMSUFDest {
+export class ICMSUFDest implements IICMSUFDest {
   @IsOptional()
   @IsString()
   declare vBCUFDest?: string;

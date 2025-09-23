@@ -23,6 +23,22 @@ export interface ICMSTot {
   vNF: string;
 }
 
+export interface ISSQNTot {
+  vServ?: string;
+  vBC?: string;
+  vISS?: string;
+  vPIS?: string;
+  vCOFINS?: string;
+  dCompet: string;
+  vDeducao?: string;
+  vOutro?: string;
+  vDescIncond?: string;
+  vDescCond?: string;
+  vISSRet?: string;
+  cRegTrib?: string;
+}
+
 export interface Total {
   ICMSTot: ICMSTot;
+  ISSQNtot?: ISSQNTot;
 }

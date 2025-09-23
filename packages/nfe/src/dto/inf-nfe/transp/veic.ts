@@ -1,6 +1,10 @@
 import { IsOptional, IsString } from 'class-validator';
+import {
+  VeicTransp as IVeicTransp,
+  Reboque as IReboque,
+} from 'src/entities/nfe/inf-nfe/transp';
 
-export class VeicTransp {
+export class VeicTransp implements IVeicTransp {
   @IsOptional()
   @IsString()
   declare placa?: string;
@@ -14,7 +18,7 @@ export class VeicTransp {
   declare RNTC?: string;
 }
 
-export class Reboque {
+export class Reboque implements IReboque {
   @IsOptional()
   @IsString()
   declare placa?: string;

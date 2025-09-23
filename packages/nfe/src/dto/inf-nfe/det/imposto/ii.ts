@@ -1,6 +1,7 @@
 import { IsOptional, IsString } from 'class-validator';
+import type { II as III } from 'src/entities/nfe/inf-nfe/det/imposto/ii';
 
-export class II {
+export class II implements III {
   @IsOptional()
   @IsString()
   declare vBC?: string;

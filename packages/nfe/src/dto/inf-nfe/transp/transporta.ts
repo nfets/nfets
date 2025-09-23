@@ -1,6 +1,7 @@
 import { IsOptional, IsString } from 'class-validator';
+import { Transporta as ITransporta } from 'src/entities/nfe/inf-nfe/transp';
 
-export class Transporta {
+export class Transporta implements ITransporta {
   @IsOptional()
   @IsString()
   declare CNPJ?: string;

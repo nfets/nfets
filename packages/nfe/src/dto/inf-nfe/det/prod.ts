@@ -5,8 +5,9 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
+import { Prod as IProd } from 'src/entities/nfe/inf-nfe/det/prod';
 
-export class Prod {
+export class Prod implements IProd {
   @IsDefined()
   @IsString()
   declare cProd: string;

@@ -1,6 +1,7 @@
 import { IsOptional, IsString } from 'class-validator';
+import { Vol as IVol } from 'src/entities/nfe/inf-nfe/transp';
 
-export class Vol {
+export class Vol implements IVol {
   @IsOptional()
   @IsString()
   declare qVol?: string;

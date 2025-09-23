@@ -1,5 +1,4 @@
 import {
-  IsIn,
   IsNotEmptyObject,
   IsObject,
   IsOptional,
@@ -26,18 +25,29 @@ import { InfAdic } from './infadic';
 import { Cana } from './cana';
 import { Det } from './det';
 
-export class InfNFeAttributes {
+import type {
+  InfNFeAttributes as IInfNFeAttributes,
+  InfNFe as IInfNFe,
+} from 'src/entities/nfe/inf-nfe/inf-nfe';
+import type { InfAdic as IInfAdic } from 'src/entities/nfe/inf-nfe/infadic';
+import type { Cana as ICana } from 'src/entities/nfe/inf-nfe/cana';
+import type { Pag as IPag } from 'src/entities/nfe/inf-nfe/pag';
+import type { Ide as IIde } from 'src/entities/nfe/inf-nfe/ide';
+import type { Det as IDet } from 'src/entities/nfe/inf-nfe/det';
+import type { Total as ITotal } from 'src/entities/nfe/inf-nfe/total';
+import type { Transp as ITransp } from 'src/entities/nfe/inf-nfe/transp';
+
+export class InfNFeAttributes implements IInfNFeAttributes {
   @IsOptional()
   @IsString()
   declare Id?: string;
 
   @IsOptional()
   @IsString()
-  @IsIn(['4.00'])
   declare versao?: string;
 }
 
-export class InfNFe {
+export class InfNFe implements IInfNFe {
   @IsObject()
   @IsNotEmptyObject()
   @Type(() => InfNFeAttributes)
@@ -47,7 +57,7 @@ export class InfNFe {
   @IsNotEmptyObject()
   @ValidateNested()
   @Type(() => Ide)
-  declare ide: Ide;
+  declare ide: IIde;
 
   @IsObject()
   @IsNotEmptyObject()
@@ -98,17 +108,17 @@ export class InfNFe {
   @IsDefined()
   @ValidateNested({ each: true })
   @Type(() => Det)
-  declare det: Det[];
+  declare det: IDet[];
 
   @IsDefined()
   @ValidateNested()
   @Type(() => Total)
-  declare total: Total;
+  declare total: ITotal;
 
   @IsDefined()
   @ValidateNested()
   @Type(() => Transp)
-  declare transp: Transp;
+  declare transp: ITransp;
 
   @IsOptional()
   @ValidateNested()
@@ -118,15 +128,15 @@ export class InfNFe {
   @IsDefined()
   @ValidateNested()
   @Type(() => Pag)
-  declare pag: Pag;
+  declare pag: IPag;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => InfAdic)
-  declare infAdic?: InfAdic;
+  declare infAdic?: IInfAdic;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => Cana)
-  declare cana?: Cana;
+  declare cana?: ICana;
 }

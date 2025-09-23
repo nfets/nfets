@@ -11,5 +11,3 @@ export interface EnderDest {
   xPais?: string;
   fone?: string;
 }
-
-
