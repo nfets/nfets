@@ -13,7 +13,7 @@ describe('xml validator (unit)', () => {
 
   it('should return left when 3 args was not provided', async () => {
     await expect(
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (xml as any).validate(null, null) as Either<NFeTsError, void>,
     ).resolves.toStrictEqual(
       left(

@@ -8,8 +8,8 @@ export class AccessKeyBuider {
     const cUF = payload.cUF.toString().padStart(2, '0');
     const year = payload.year.toString().padStart(2, '0');
     const month = payload.month.toString().padStart(2, '0');
-    const identification = payload.identification.toString().padStart(14, '0');
-    const mod = payload.mod.toString().padStart(2, '0');
+    const identification = payload.identification.padStart(14, '0');
+    const mod = payload.mod.padStart(2, '0');
     const serie = payload.serie.toString().padStart(3, '0');
     const nNF = payload.nNF.toString().padStart(9, '0');
     const tpEmis = payload.tpEmis.toString().padStart(1, '0');
