@@ -1,1 +1,4 @@
-export type { AutXML } from './main';
+export interface AutXML {
+  CNPJ?: string;
+  CPF?: string;
+}

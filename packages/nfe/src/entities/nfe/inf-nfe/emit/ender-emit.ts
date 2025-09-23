@@ -11,5 +11,3 @@ export interface EnderEmit {
   xPais?: string;
   fone?: string;
 }
-
-

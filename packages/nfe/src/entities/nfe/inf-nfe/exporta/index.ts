@@ -1,1 +1,5 @@
-export type { Exporta } from './main';
+export interface Exporta {
+  UFSaidaPais: string;
+  xLocExporta?: string;
+  xLocDespacho?: string;
+}

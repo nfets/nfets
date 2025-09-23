@@ -4,7 +4,7 @@ lint:
 	@pnpm eslint -c eslint.config.mjs
 
 clean:
-	@pnpm rimraf packages/{core,nfe}/{tsconfig.tsbuildinfo,dist}
+	@pnpm rimraf packages/{core,nfe,validators}/{tsconfig.tsbuildinfo,dist}
 
 test:
 	@pnpm --filter @nfets/* test
@@ -21,3 +21,6 @@ build\:core:
 
 build\:nfe:
 	@pnpm --filter @nfets/nfe build
+
+build\:validators:
+	@pnpm --filter @nfets/validators build

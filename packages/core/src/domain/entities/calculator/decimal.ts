@@ -1,6 +1,6 @@
 type DecimalRounding = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
-export type DecimalValue = string | number | Decimal;
+export type DecimalValue = string | number | bigint | Decimal;
 
 export interface Decimal {
   d: number[];
