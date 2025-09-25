@@ -1,9 +1,4 @@
-import {
-  IsDefined,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Transporta, Transporta as ITransporta } from './transporta';
 import { RetTransp, RetTransp as IRetTransp } from './ret-transp';
@@ -17,7 +12,6 @@ import { Vol, Vol as IVol } from './vol';
 import { Transp as ITransp } from 'src/entities/nfe/inf-nfe/transp';
 
 export class Transp implements ITransp {
-  @IsDefined()
   @IsString()
   declare modFrete: string;
 

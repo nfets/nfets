@@ -1,18 +1,10 @@
-import {
-  IsArray,
-  IsDefined,
-  IsObject,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsArray, IsObject, IsOptional, IsString } from 'class-validator';
 import { Prod as IProd } from 'src/entities/nfe/inf-nfe/det/prod';
 
 export class Prod implements IProd {
-  @IsDefined()
   @IsString()
   declare cProd: string;
 
-  @IsDefined()
   @IsString()
   declare cEAN: string;
 
@@ -20,11 +12,9 @@ export class Prod implements IProd {
   @IsString()
   declare cBarra?: string;
 
-  @IsDefined()
   @IsString()
   declare xProd: string;
 
-  @IsDefined()
   @IsString()
   declare NCM: string;
 
@@ -57,39 +47,30 @@ export class Prod implements IProd {
   @IsString()
   declare EXTIPI?: string;
 
-  @IsDefined()
   @IsString()
   declare CFOP: string;
 
-  @IsDefined()
   @IsString()
   declare uCom: string;
 
-  @IsDefined()
   @IsString()
   declare qCom: string;
 
-  @IsDefined()
   @IsString()
   declare vUnCom: string;
 
-  @IsDefined()
   @IsString()
   declare vProd: string;
 
-  @IsDefined()
   @IsString()
   declare cEANTrib: string;
 
-  @IsDefined()
   @IsString()
   declare uTrib: string;
 
-  @IsDefined()
   @IsString()
   declare qTrib: string;
 
-  @IsDefined()
   @IsString()
   declare vUnTrib: string;
 
@@ -109,7 +90,6 @@ export class Prod implements IProd {
   @IsString()
   declare vOutro?: string;
 
-  @IsDefined()
   @IsString()
   declare indTot: string;
 

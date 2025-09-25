@@ -1,9 +1,4 @@
-import {
-  IsDefined,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import type {
@@ -14,21 +9,17 @@ import type {
 } from 'src/entities/nfe/inf-nfe/infadic';
 
 export class ObsCont implements IObsCont {
-  @IsDefined()
   @IsString()
   declare xCampo: string;
 
-  @IsDefined()
   @IsString()
   declare xTexto: string;
 }
 
 export class ObsFisco implements IObsFisco {
-  @IsDefined()
   @IsString()
   declare xCampo: string;
 
-  @IsDefined()
   @IsString()
   declare xTexto: string;
 }

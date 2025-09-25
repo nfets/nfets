@@ -1,5 +1,7 @@
 export const defaultParserOptions = {
   explicitArray: false,
+  explicitRoot: false,
+  preserveChildrenOrder: true,
 } as ParserOptions;
 
 export interface ParserOptions {

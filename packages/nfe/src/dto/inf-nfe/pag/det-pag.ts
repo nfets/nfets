@@ -1,9 +1,4 @@
-import {
-  IsDefined,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Card, Card as ICard } from './card';
 import { DetPag as IDetPag } from 'src/entities/nfe/inf-nfe/pag';
@@ -13,11 +8,9 @@ export class DetPag implements IDetPag {
   @IsString()
   declare indPag?: string;
 
-  @IsDefined()
   @IsString()
   declare tPag: string;
 
-  @IsDefined()
   @IsString()
   declare vPag: string;
 

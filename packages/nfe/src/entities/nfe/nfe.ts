@@ -1,4 +1,4 @@
-import type { InfNFe } from './inf-nfe/inf-nfe';
+import type { InfNFe } from './inf-nfe';
 
 export interface NFe {
   infNFe: InfNFe;

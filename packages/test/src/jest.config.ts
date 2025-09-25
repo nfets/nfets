@@ -1,3 +1,8 @@
+import path from 'node:path';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: path.resolve('..', '..', '.env') });
+
 export default {
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: '.',
@@ -24,6 +29,8 @@ export default {
     '^src/(.*)$': '<rootDir>/src/$1',
     '^test/(.*)$': '<rootDir>/test/$1',
     '^@nfets/test/(.*)$': '<rootDir>/../test/src/$1',
+    '^@nfets/core$': '<rootDir>/../core/src/index.ts',
+    '^@nfets/core/(.*)$': '<rootDir>/../core/src/$1',
   },
   coverageReporters: [['text', { skipFull: true }]],
   testPathIgnorePatterns: ['/node_modules/', '/coverage/', '/dist/'],

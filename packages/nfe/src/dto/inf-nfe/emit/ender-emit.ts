@@ -1,12 +1,10 @@
-import { IsDefined, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import type { EnderEmit as IEnderEmit } from 'src/entities/nfe/inf-nfe/emit';
 
 export class EnderEmit implements IEnderEmit {
-  @IsDefined()
   @IsString()
   declare xLgr: string;
 
-  @IsDefined()
   @IsString()
   declare nro: string;
 
@@ -14,23 +12,18 @@ export class EnderEmit implements IEnderEmit {
   @IsString()
   declare xCpl?: string;
 
-  @IsDefined()
   @IsString()
   declare xBairro: string;
 
-  @IsDefined()
   @IsString()
   declare cMun: string;
 
-  @IsDefined()
   @IsString()
   declare xMun: string;
 
-  @IsDefined()
   @IsString()
   declare UF: string;
 
-  @IsDefined()
   @IsString()
   declare CEP: string;
 

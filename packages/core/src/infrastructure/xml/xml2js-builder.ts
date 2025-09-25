@@ -7,15 +7,16 @@ import validator from './xml-validator';
 import {
   type BuilderOptions,
   type XmlBuilder,
-} from 'src/domain/entities/xml/xml-builder';
+  defaultBuilderOptions,
+} from '../../domain/entities/xml/xml-builder';
 
 import {
   defaultParserOptions,
   type ParserOptions,
-} from 'src/domain/entities/xml/xml-parser';
+} from '../../domain/entities/xml/xml-parser';
 
-import { right } from 'src/shared/either';
-import { leftFromError } from 'src/shared/left-from-error';
+import { right } from '../../shared/either';
+import { leftFromError } from '../../shared/left-from-error';
 
 export class Xml2JsBuilder implements XmlBuilder {
   public constructor(private readonly xml2js = Xml2js) {}
@@ -34,9 +35,11 @@ export class Xml2JsBuilder implements XmlBuilder {
   }
 
   parse<T>(xml: string, options?: ParserOptions): Promise<T> {
-    options ??= defaultParserOptions;
     return new Promise((resolve, reject) =>
-      new this.xml2js.Parser(options).parseString(xml, (err, result) =>
+      new this.xml2js.Parser({
+        ...defaultParserOptions,
+        ...options,
+      }).parseString(xml, (err, result) =>
         err ? reject(err) : resolve(result as T),
       ),
     );
@@ -44,7 +47,10 @@ export class Xml2JsBuilder implements XmlBuilder {
 
   build(object: object, options?: BuilderOptions): Promise<string> {
     return Promise.resolve(
-      new this.xml2js.Builder(options).buildObject(object),
+      new this.xml2js.Builder({
+        ...defaultBuilderOptions,
+        ...options,
+      }).buildObject(object),
     );
   }
 }

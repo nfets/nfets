@@ -18,6 +18,7 @@ import type { Cana } from './cana';
 export interface InfNFeAttributes {
   Id?: string;
   versao?: string;
+  pk_nItem?: string;
 }
 
 export interface InfNFe {

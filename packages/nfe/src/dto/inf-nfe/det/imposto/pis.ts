@@ -1,9 +1,4 @@
-import {
-  IsDefined,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import type {
@@ -16,7 +11,6 @@ import type {
 } from 'src/entities/nfe/inf-nfe/det/imposto/pis';
 
 export class PISAliq implements IPISAliq {
-  @IsDefined()
   @IsString()
   declare CST: string;
 
@@ -34,7 +28,6 @@ export class PISAliq implements IPISAliq {
 }
 
 export class PISQtde implements IPISQtde {
-  @IsDefined()
   @IsString()
   declare CST: string;
 
@@ -52,13 +45,11 @@ export class PISQtde implements IPISQtde {
 }
 
 export class PISNT implements IPISNT {
-  @IsDefined()
   @IsString()
   declare CST: string;
 }
 
 export class PISOutr implements IPISOutr {
-  @IsDefined()
   @IsString()
   declare CST: string;
 

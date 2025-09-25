@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ['**'] # TODO: add "!main" to array
+    branches: ["**"] # TODO: add "!main" to array
 
   pull_request:
     types: [opened, synchronize]
@@ -41,6 +41,8 @@ jobs:
 
       - name: install dependencies
         run: pnpm install --frozen-lockfile
+        env:
+          NFETS_ADDONS_DIR: "$(pwd)/../../build/Release"
 
       - name: run lint
         run: make lint

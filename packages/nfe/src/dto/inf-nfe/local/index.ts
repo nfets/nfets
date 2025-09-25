@@ -1,4 +1,4 @@
-import { IsDefined, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { Local as ILocal } from 'src/entities/nfe/inf-nfe/local';
 
 export class Local implements ILocal {
@@ -14,11 +14,9 @@ export class Local implements ILocal {
   @IsString()
   declare xNome?: string;
 
-  @IsDefined()
   @IsString()
   declare xLgr: string;
 
-  @IsDefined()
   @IsString()
   declare nro: string;
 
@@ -26,19 +24,15 @@ export class Local implements ILocal {
   @IsString()
   declare xCpl?: string;
 
-  @IsDefined()
   @IsString()
   declare xBairro: string;
 
-  @IsDefined()
   @IsString()
   declare cMun: string;
 
-  @IsDefined()
   @IsString()
   declare xMun: string;
 
-  @IsDefined()
   @IsString()
   declare UF: string;
 

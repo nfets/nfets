@@ -1,9 +1,4 @@
-import {
-  IsDefined,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import type { ICMS as IICMS } from 'src/entities/nfe/inf-nfe/det/imposto/icms';
 import type {
@@ -30,8 +25,8 @@ import type { ICMSST as IICMSST } from 'src/entities/nfe/inf-nfe/det/imposto/icm
 import type { ICMSPart as IICMSPart } from 'src/entities/nfe/inf-nfe/det/imposto/icms';
 
 export class ICMS00 implements IICMS00 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CST: string;
+  @IsString() declare orig: string;
+  @IsString() declare CST: string;
   @IsOptional() @IsString() declare modBC?: string;
   @IsOptional() @IsString() declare vBC?: string;
   @IsOptional() @IsString() declare pICMS?: string;
@@ -39,8 +34,8 @@ export class ICMS00 implements IICMS00 {
 }
 
 export class ICMS10 implements IICMS10 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CST: string;
+  @IsString() declare orig: string;
+  @IsString() declare CST: string;
   @IsOptional() @IsString() declare modBC?: string;
   @IsOptional() @IsString() declare vBC?: string;
   @IsOptional() @IsString() declare pICMS?: string;
@@ -52,8 +47,8 @@ export class ICMS10 implements IICMS10 {
 }
 
 export class ICMS20 implements IICMS20 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CST: string;
+  @IsString() declare orig: string;
+  @IsString() declare CST: string;
   @IsOptional() @IsString() declare modBC?: string;
   @IsOptional() @IsString() declare pRedBC?: string;
   @IsOptional() @IsString() declare vBC?: string;
@@ -62,8 +57,8 @@ export class ICMS20 implements IICMS20 {
 }
 
 export class ICMS30 implements IICMS30 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CST: string;
+  @IsString() declare orig: string;
+  @IsString() declare CST: string;
   @IsOptional() @IsString() declare modBCST?: string;
   @IsOptional() @IsString() declare vBCST?: string;
   @IsOptional() @IsString() declare pICMSST?: string;
@@ -71,15 +66,15 @@ export class ICMS30 implements IICMS30 {
 }
 
 export class ICMS40 implements IICMS40 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CST: string;
+  @IsString() declare orig: string;
+  @IsString() declare CST: string;
   @IsOptional() @IsString() declare vICMSDeson?: string;
   @IsOptional() @IsString() declare motDesICMS?: string;
 }
 
 export class ICMS51 implements IICMS51 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CST: string;
+  @IsString() declare orig: string;
+  @IsString() declare CST: string;
   @IsOptional() @IsString() declare modBC?: string;
   @IsOptional() @IsString() declare pRedBC?: string;
   @IsOptional() @IsString() declare vBC?: string;
@@ -90,8 +85,8 @@ export class ICMS51 implements IICMS51 {
 }
 
 export class ICMS60 implements IICMS60 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CST: string;
+  @IsString() declare orig: string;
+  @IsString() declare CST: string;
   @IsOptional() @IsString() declare vBCSTRet?: string;
   @IsOptional() @IsString() declare pST?: string;
   @IsOptional() @IsString() declare vICMSSubstituto?: string;
@@ -99,8 +94,8 @@ export class ICMS60 implements IICMS60 {
 }
 
 export class ICMS70 implements IICMS70 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CST: string;
+  @IsString() declare orig: string;
+  @IsString() declare CST: string;
   @IsOptional() @IsString() declare modBC?: string;
   @IsOptional() @IsString() declare pRedBC?: string;
   @IsOptional() @IsString() declare vBC?: string;
@@ -113,8 +108,8 @@ export class ICMS70 implements IICMS70 {
 }
 
 export class ICMS90 implements IICMS90 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CST: string;
+  @IsString() declare orig: string;
+  @IsString() declare CST: string;
   @IsOptional() @IsString() declare modBC?: string;
   @IsOptional() @IsString() declare pRedBC?: string;
   @IsOptional() @IsString() declare vBC?: string;
@@ -127,8 +122,8 @@ export class ICMS90 implements IICMS90 {
 }
 
 export class ICMSPart implements IICMSPart {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CST: string;
+  @IsString() declare orig: string;
+  @IsString() declare CST: string;
   @IsOptional() @IsString() declare modBC?: string;
   @IsOptional() @IsString() declare vBC?: string;
   @IsOptional() @IsString() declare pRedBC?: string;
@@ -145,8 +140,8 @@ export class ICMSPart implements IICMSPart {
 }
 
 export class ICMSST implements IICMSST {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CST: string;
+  @IsString() declare orig: string;
+  @IsString() declare CST: string;
   @IsOptional() @IsString() declare vBCSTRet?: string;
   @IsOptional() @IsString() declare pST?: string;
   @IsOptional() @IsString() declare vICMSSubstituto?: string;
@@ -154,20 +149,20 @@ export class ICMSST implements IICMSST {
 }
 
 export class ICMSSN101 implements IICMSSN101 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CSOSN: string;
+  @IsString() declare orig: string;
+  @IsString() declare CSOSN: string;
   @IsOptional() @IsString() declare pCredSN?: string;
   @IsOptional() @IsString() declare vCredICMSSN?: string;
 }
 
 export class ICMSSN102 implements IICMSSN102 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CSOSN: string;
+  @IsString() declare orig: string;
+  @IsString() declare CSOSN: string;
 }
 
 export class ICMSSN201 implements IICMSSN201 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CSOSN: string;
+  @IsString() declare orig: string;
+  @IsString() declare CSOSN: string;
   @IsOptional() @IsString() declare modBCST?: string;
   @IsOptional() @IsString() declare vBCST?: string;
   @IsOptional() @IsString() declare pICMSST?: string;
@@ -177,8 +172,8 @@ export class ICMSSN201 implements IICMSSN201 {
 }
 
 export class ICMSSN202 implements IICMSSN202 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CSOSN: string;
+  @IsString() declare orig: string;
+  @IsString() declare CSOSN: string;
   @IsOptional() @IsString() declare modBCST?: string;
   @IsOptional() @IsString() declare vBCST?: string;
   @IsOptional() @IsString() declare pICMSST?: string;
@@ -186,8 +181,8 @@ export class ICMSSN202 implements IICMSSN202 {
 }
 
 export class ICMSSN500 implements IICMSSN500 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CSOSN: string;
+  @IsString() declare orig: string;
+  @IsString() declare CSOSN: string;
   @IsOptional() @IsString() declare vBCSTRet?: string;
   @IsOptional() @IsString() declare pST?: string;
   @IsOptional() @IsString() declare vICMSSubstituto?: string;
@@ -195,8 +190,8 @@ export class ICMSSN500 implements IICMSSN500 {
 }
 
 export class ICMSSN900 implements IICMSSN900 {
-  @IsDefined() @IsString() declare orig: string;
-  @IsDefined() @IsString() declare CSOSN: string;
+  @IsString() declare orig: string;
+  @IsString() declare CSOSN: string;
   @IsOptional() @IsString() declare modBC?: string;
   @IsOptional() @IsString() declare vBC?: string;
   @IsOptional() @IsString() declare pRedBC?: string;

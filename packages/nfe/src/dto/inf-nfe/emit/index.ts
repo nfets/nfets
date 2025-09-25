@@ -1,9 +1,4 @@
-import {
-  IsDefined,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { EnderEmit } from './ender-emit';
 
@@ -18,7 +13,6 @@ export class Emit implements IEmit {
   @IsString()
   declare CPF?: string;
 
-  @IsDefined()
   @IsString()
   declare xNome: string;
 
@@ -26,12 +20,10 @@ export class Emit implements IEmit {
   @IsString()
   declare xFant?: string;
 
-  @IsDefined()
   @ValidateNested()
   @Type(() => EnderEmit)
   declare enderEmit: EnderEmit;
 
-  @IsDefined()
   @IsString()
   declare IE: string;
 
@@ -47,7 +39,6 @@ export class Emit implements IEmit {
   @IsString()
   declare CNAE?: string;
 
-  @IsDefined()
   @IsString()
   declare CRT: string;
 }

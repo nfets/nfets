@@ -2,7 +2,7 @@ import path from 'node:path';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const validator = require(path.join(
-  process.env.NFETS_ADDONS_DIR ?? '', // TODO: set this env on build time
+  process.env.NFETS_ADDONS_DIR ?? '',
   'xml_validator.node',
 )) as XmlValidator;
 

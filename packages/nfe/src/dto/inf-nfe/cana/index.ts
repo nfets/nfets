@@ -1,9 +1,4 @@
-import {
-  IsDefined,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import type {
   ForDia as IForDia,
@@ -12,21 +7,17 @@ import type {
 } from 'src/entities/nfe/inf-nfe/cana';
 
 export class ForDia implements IForDia {
-  @IsDefined()
   @IsString()
   declare qtde: string;
 
-  @IsDefined()
   @IsString()
   declare dia: string;
 }
 
 export class Deduc implements IDeduc {
-  @IsDefined()
   @IsString()
   declare xDed: string;
 
-  @IsDefined()
   @IsString()
   declare vDed: string;
 
@@ -40,11 +31,9 @@ export class Deduc implements IDeduc {
 }
 
 export class Cana implements ICana {
-  @IsDefined()
   @IsString()
   declare safra: string;
 
-  @IsDefined()
   @IsString()
   declare ref: string;
 

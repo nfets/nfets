@@ -1,9 +1,4 @@
-import {
-  IsDefined,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { EnderDest } from './ender-dest';
 
@@ -32,7 +27,6 @@ export class Dest implements IDest {
   @Type(() => EnderDest)
   declare enderDest?: IEnderDest;
 
-  @IsDefined()
   @IsString()
   declare indIEDest: string;
 

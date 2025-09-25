@@ -1,16 +1,10 @@
-import {
-  IsDefined,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import type { IPITrib as IIPITrib } from 'src/entities/nfe/inf-nfe/det/imposto/ipi';
 import type { IPINT as IIPINT } from 'src/entities/nfe/inf-nfe/det/imposto/ipi';
 import type { IPI as IIPI } from 'src/entities/nfe/inf-nfe/det/imposto/ipi';
 
 export class IPITrib implements IIPITrib {
-  @IsDefined()
   @IsString()
   declare CST: string;
 
@@ -36,7 +30,6 @@ export class IPITrib implements IIPITrib {
 }
 
 export class IPINT implements IIPINT {
-  @IsDefined()
   @IsString()
   declare CST: string;
 }
@@ -54,7 +47,6 @@ export class IPI implements IIPI {
   @IsString()
   declare qSelo?: string;
 
-  @IsDefined()
   @IsString()
   declare cEnq: string;
 

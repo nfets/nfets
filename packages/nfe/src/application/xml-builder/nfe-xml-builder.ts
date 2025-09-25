@@ -1,8 +1,79 @@
-import type { InfNfe } from 'src/entities/nfe/inf-nfe';
+import { NFeTsError, XmlBuilder } from '@nfets/core';
+
+import type {
+  InfNFeAttributes as IInfNFeAttributes,
+  InfNFe as IInfNFe,
+} from 'src/entities/nfe/inf-nfe';
+import type { Ide as IIde } from 'src/entities/nfe/inf-nfe/ide';
+import type { Emit as IEmit } from 'src/entities/nfe/inf-nfe/emit';
+import type { Det as IDet } from 'src/entities/nfe/inf-nfe/det';
+import type { Pag as IPag } from 'src/entities/nfe/inf-nfe/pag';
+
 import type { NFeBuilder } from 'src/entities/xml-builder/nfe';
+import type { IdeBuilder } from 'src/entities/xml-builder/inf-nfe/ide-builder';
+import type { EmitBuilder } from 'src/entities/xml-builder/inf-nfe/emit-builder';
+import type { DetBuilder } from 'src/entities/xml-builder/inf-nfe/det-builder';
+import type { PagBuilder } from 'src/entities/xml-builder/inf-nfe/pag-builder';
+import type {
+  AssembleNfeBuilder,
+  InfNFeBuilder,
+} from 'src/entities/xml-builder/inf-nfe';
+import type { NFe } from 'src/entities/nfe/nfe';
+
+import { ValidateErrorsMetadata, Validates } from '../validator/validate';
+import { InfNFeAttributes } from 'src/dto/inf-nfe/inf-nfe';
+import { Ide } from 'src/dto/inf-nfe/ide';
+import { Emit } from 'src/dto/inf-nfe/emit';
 
 export class NfeXmlBuilder implements NFeBuilder {
-  public infNFe(_payload: InfNfe) {
-    return void 0;
+  public static create(builder: XmlBuilder): InfNFeBuilder & IdeBuilder {
+    return new this(builder);
+  }
+
+  protected constructor(
+    private readonly builder: XmlBuilder,
+    private readonly data: NFe = {} as NFe,
+  ) {}
+
+  @Validates(InfNFeAttributes)
+  public infNFe($: IInfNFeAttributes): IdeBuilder {
+    this.data.infNFe = { $ } as IInfNFe;
+    return this;
+  }
+
+  @Validates(Ide)
+  public ide(payload: IIde): EmitBuilder {
+    this.data.infNFe.ide = payload;
+    return this;
+  }
+
+  @Validates(Emit)
+  public emit(payload: IEmit): DetBuilder {
+    this.data.infNFe.emit = payload;
+    return this;
+  }
+
+  public det(_payload: IDet[]): PagBuilder {
+    return this;
+  }
+
+  public pag(_payload: IPag): AssembleNfeBuilder {
+    return this;
+  }
+
+  public quiet(): AssembleNfeBuilder {
+    Reflect.deleteMetadata(ValidateErrorsMetadata, this.constructor);
+    return this;
+  }
+
+  /** @throws {NFeTsError} */
+  public assemble(): Promise<string> {
+    const errors = Reflect.getMetadata(
+      ValidateErrorsMetadata,
+      this.constructor,
+    ) as string[] | undefined;
+
+    if (errors) throw new NFeTsError(errors.join(', '));
+    return this.builder.build(this.data, { rootName: 'NFe' });
   }
 }

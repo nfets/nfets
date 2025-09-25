@@ -1,5 +1,4 @@
 import {
-  IsDefined,
   IsObject,
   IsOptional,
   IsString,
@@ -30,7 +29,6 @@ export class Det implements IDet {
   @Type(() => DetAttributes)
   declare $: IDetAttributes;
 
-  @IsDefined()
   @ValidateNested()
   @Type(() => Prod)
   declare prod: IProd;

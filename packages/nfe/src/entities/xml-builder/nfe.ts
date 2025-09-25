@@ -1,5 +1,9 @@
-import type { InfNfe } from '../nfe/inf-nfe';
+import type { AssembleNfeBuilder, InfNFeBuilder } from './inf-nfe';
+import type { DetBuilder } from './inf-nfe/det-builder';
+import type { IdeBuilder } from './inf-nfe/ide-builder';
 
-export interface NFeBuilder {
-  infNFe(payload: InfNfe): void;
-}
+export interface NFeBuilder
+  extends InfNFeBuilder,
+    IdeBuilder,
+    DetBuilder,
+    AssembleNfeBuilder {}

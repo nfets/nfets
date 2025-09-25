@@ -1,4 +1,4 @@
-import { NFeTsError } from 'src/domain/errors/nfets-error';
+import { NFeTsError } from '../domain/errors/nfets-error';
 import { left } from './either';
 
 const hasMessageInRecord = (error: unknown): error is { message: string } =>

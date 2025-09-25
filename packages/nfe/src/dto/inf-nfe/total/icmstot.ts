@@ -1,12 +1,10 @@
-import { IsDefined, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { ICMSTot as IICMSTot } from 'src/entities/nfe/inf-nfe/total';
 
 export class ICMSTot implements IICMSTot {
-  @IsDefined()
   @IsString()
   declare vBC: string;
 
-  @IsDefined()
   @IsString()
   declare vICMS: string;
 
@@ -86,7 +84,6 @@ export class ICMSTot implements IICMSTot {
   @IsString()
   declare vOutro?: string;
 
-  @IsDefined()
   @IsString()
   declare vNF: string;
 }

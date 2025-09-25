@@ -1,9 +1,4 @@
-import {
-  IsDefined,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import type {
@@ -16,7 +11,6 @@ import type {
 } from 'src/entities/nfe/inf-nfe/det/imposto/cofins';
 
 export class COFINSAliq implements ICOFINSAliq {
-  @IsDefined()
   @IsString()
   declare CST: string;
 
@@ -34,7 +28,6 @@ export class COFINSAliq implements ICOFINSAliq {
 }
 
 export class COFINSQtde implements ICOFINSQtde {
-  @IsDefined()
   @IsString()
   declare CST: string;
 
@@ -52,13 +45,11 @@ export class COFINSQtde implements ICOFINSQtde {
 }
 
 export class COFINSNT implements ICOFINSNT {
-  @IsDefined()
   @IsString()
   declare CST: string;
 }
 
 export class COFINSOutr implements ICOFINSOutr {
-  @IsDefined()
   @IsString()
   declare CST: string;
 
