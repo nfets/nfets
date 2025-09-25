@@ -20,6 +20,9 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
+    env:
+      NFETS_ADDONS_DIR: "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/build/Release"
+
     steps:
       - uses: actions/checkout@v4
 
@@ -41,8 +44,6 @@ jobs:
 
       - name: install dependencies
         run: pnpm install --frozen-lockfile
-        env:
-          NFETS_ADDONS_DIR: "$(pwd)/../../build/Release"
 
       - name: run lint
         run: make lint
