@@ -1,3 +1,5 @@
+import type { DecimalValue } from '@nfets/core';
+
 export interface Prod {
   cProd: string;
   cEAN?: string;
@@ -10,17 +12,17 @@ export interface Prod {
   EXTIPI?: string;
   CFOP: string;
   uCom: string;
-  qCom: string;
-  vUnCom: string;
-  vProd: string;
+  qCom: DecimalValue;
+  vUnCom: DecimalValue;
+  vProd: DecimalValue;
   cEANTrib?: string;
   uTrib: string;
-  qTrib: string;
-  vUnTrib: string;
-  vFrete?: string;
-  vSeg?: string;
-  vDesc?: string;
-  vOutro?: string;
+  qTrib: DecimalValue;
+  vUnTrib: DecimalValue;
+  vFrete?: DecimalValue;
+  vSeg?: DecimalValue;
+  vDesc?: DecimalValue;
+  vOutro?: DecimalValue;
   indTot?: string;
   xPed?: string;
   nItemPed?: string;

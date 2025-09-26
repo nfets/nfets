@@ -1,6 +1,12 @@
-import type { Det as IDet } from 'src/entities/nfe/inf-nfe/det';
 import type { PagBuilder } from './pag-builder';
+import type {
+  AssembleDetXmlBuilder,
+  ProdBuilder,
+} from '../nfe-det-xml-builder';
 
 export interface DetBuilder {
-  det(payload: IDet[]): PagBuilder;
+  det<T>(
+    items: T[],
+    build: (ctx: ProdBuilder, item: T) => AssembleDetXmlBuilder,
+  ): PagBuilder;
 }

@@ -6,10 +6,9 @@ import type {
 } from 'src/entities/nfe/inf-nfe';
 import type { Ide as IIde } from 'src/entities/nfe/inf-nfe/ide';
 import type { Emit as IEmit } from 'src/entities/nfe/inf-nfe/emit';
-import type { Det as IDet } from 'src/entities/nfe/inf-nfe/det';
 import type { Pag as IPag } from 'src/entities/nfe/inf-nfe/pag';
 
-import type { NFeBuilder } from 'src/entities/xml-builder/nfe';
+import type { INfeXmlBuilder } from 'src/entities/xml-builder/nfe-xml-builder';
 import type { IdeBuilder } from 'src/entities/xml-builder/inf-nfe/ide-builder';
 import type { EmitBuilder } from 'src/entities/xml-builder/inf-nfe/emit-builder';
 import type { DetBuilder } from 'src/entities/xml-builder/inf-nfe/det-builder';
@@ -25,18 +24,22 @@ import { InfNFeAttributes } from 'src/dto/inf-nfe/inf-nfe';
 import { Ide } from 'src/dto/inf-nfe/ide';
 import { Emit } from 'src/dto/inf-nfe/emit';
 import { AccessKeyBuider } from '../access-key/access-key-builder';
+import {
+  AssembleDetXmlBuilder,
+  ProdBuilder,
+} from 'src/entities/xml-builder/nfe-det-xml-builder';
+import { NfeDetXmlBuilder } from './nfe-det-xml-builder';
 
-export class NfeXmlBuilder implements NFeBuilder {
+export class NfeXmlBuilder implements INfeXmlBuilder {
+  private readonly data = {
+    $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
+  } as NFe;
+
   public static create(builder: XmlBuilder): InfNFeBuilder & IdeBuilder {
     return new this(builder);
   }
 
-  protected constructor(
-    private readonly builder: XmlBuilder,
-    private readonly data: NFe = {
-      $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
-    } as NFe,
-  ) {}
+  protected constructor(private readonly builder: XmlBuilder) {}
 
   @Validates(InfNFeAttributes)
   public infNFe($: IInfNFeAttributes): IdeBuilder {
@@ -57,7 +60,16 @@ export class NfeXmlBuilder implements NFeBuilder {
     return this;
   }
 
-  public det(_payload: IDet[]): PagBuilder {
+  public det<T>(
+    items: T[],
+    build: (ctx: ProdBuilder, item: T) => AssembleDetXmlBuilder,
+  ): PagBuilder {
+    this.data.infNFe.det = items.map((item, index) =>
+      build(
+        NfeDetXmlBuilder.create().det({ nItem: (index + 1).toString() }),
+        item,
+      ).assemble(),
+    );
     return this;
   }
 

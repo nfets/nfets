@@ -1,3 +1,4 @@
+import type { DecimalValue } from '@nfets/core';
 import { IsArray, IsObject, IsOptional, IsString } from 'class-validator';
 import { Prod as IProd } from 'src/entities/nfe/inf-nfe/det/prod';
 
@@ -54,13 +55,13 @@ export class Prod implements IProd {
   public uCom!: string;
 
   @IsString()
-  public qCom!: string;
+  public qCom!: DecimalValue;
 
   @IsString()
-  public vUnCom!: string;
+  public vUnCom!: DecimalValue;
 
   @IsString()
-  public vProd!: string;
+  public vProd!: DecimalValue;
 
   @IsString()
   public cEANTrib!: string;
@@ -69,26 +70,26 @@ export class Prod implements IProd {
   public uTrib!: string;
 
   @IsString()
-  public qTrib!: string;
+  public qTrib!: DecimalValue;
 
   @IsString()
-  public vUnTrib!: string;
-
-  @IsOptional()
-  @IsString()
-  public vFrete?: string;
+  public vUnTrib!: DecimalValue;
 
   @IsOptional()
   @IsString()
-  public vSeg?: string;
+  public vFrete?: DecimalValue;
 
   @IsOptional()
   @IsString()
-  public vDesc?: string;
+  public vSeg?: DecimalValue;
 
   @IsOptional()
   @IsString()
-  public vOutro?: string;
+  public vDesc?: DecimalValue;
+
+  @IsOptional()
+  @IsString()
+  public vOutro?: DecimalValue;
 
   @IsString()
   public indTot!: string;

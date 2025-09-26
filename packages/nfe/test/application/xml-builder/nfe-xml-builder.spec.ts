@@ -25,7 +25,7 @@ describe('xml builder with xml2js builder', () => {
         cNF: '45941728',
       } as never)
       .emit({} as never)
-      .det([])
+      .det([], () => void 0 as never)
       .pag({} as never);
 
     const xml = await builder.assemble();
@@ -67,7 +67,7 @@ describe('xml builder with xml2js builder', () => {
         cNF: '12345678',
       } as never)
       .emit({ xNome: 'xD', IE: '', CRT: '' } as never)
-      .det([])
+      .det([], () => void 0 as never)
       .pag({} as never);
 
     const xml = await builder.assemble();
@@ -108,7 +108,7 @@ describe('xml builder with xml2js builder', () => {
         tpEmis: '1',
       } as never)
       .emit({} as never)
-      .det([])
+      .det([], () => void 0 as never)
       .pag({} as never);
 
     await expect(async () => await builder.assemble()).rejects.toThrow(
@@ -117,6 +117,17 @@ describe('xml builder with xml2js builder', () => {
   });
 
   it('should build a valid nfe xml with correct order and without undefined values', async () => {
+    const items = [
+      {
+        description: 'Product 1',
+        code: '1',
+        price: 100,
+        quantity: 1,
+        unit: 'UN',
+        total: 100,
+      },
+    ];
+
     const builder = NfeXmlBuilder.create(new Xml2JsBuilder())
       .infNFe({ versao: '4.00' })
       .ide({
@@ -163,7 +174,24 @@ describe('xml builder with xml2js builder', () => {
           xPais: void 0,
         },
       })
-      .det([])
+      .det(items, (ctx, item) =>
+        ctx.prod({
+          cProd: item.code,
+          cEAN: 'SEM GTIN',
+          xProd: item.description,
+          NCM: '00',
+          CFOP: '5102',
+          uCom: item.unit,
+          qCom: item.quantity,
+          vUnCom: item.price,
+          vProd: item.total,
+          cEANTrib: 'SEM GTIN',
+          uTrib: item.unit,
+          qTrib: item.quantity,
+          vUnTrib: item.price,
+          indTot: '1',
+        }),
+      )
       .pag({} as never);
 
     const xml = await builder.assemble();
@@ -215,6 +243,24 @@ describe('xml builder with xml2js builder', () => {
       <CNAE>1234567</CNAE>
       <CRT>1</CRT>
     </emit>
+    <det nItem="1">
+      <prod>
+        <cProd>1</cProd>
+        <cEAN>SEM GTIN</cEAN>
+        <xProd>Product 1</xProd>
+        <NCM>00</NCM>
+        <CFOP>5102</CFOP>
+        <uCom>UN</uCom>
+        <qCom>1</qCom>
+        <vUnCom>100</vUnCom>
+        <vProd>100</vProd>
+        <cEANTrib>SEM GTIN</cEANTrib>
+        <uTrib>UN</uTrib>
+        <qTrib>1</qTrib>
+        <vUnTrib>100</vUnTrib>
+        <indTot>1</indTot>
+      </prod>
+    </det>
   </infNFe>
 </NFe>`);
   });
