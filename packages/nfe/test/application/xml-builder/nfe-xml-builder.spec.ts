@@ -15,7 +15,15 @@ describe('xml builder with xml2js builder', () => {
 
     const builder = DontValidateNfeXmlBuilder.create(new Xml2JsBuilder())
       .infNFe({ versao: { some: 'invalid-value' } as never })
-      .ide({} as never)
+      .ide({
+        mod: '55',
+        serie: 1,
+        nNF: 1,
+        dhEmi: '2024-06-12T06:55:26-03:00',
+        cUF: '52',
+        tpEmis: '1',
+        cNF: '45941728',
+      } as never)
       .emit({} as never)
       .det([])
       .pag({} as never);
@@ -23,15 +31,23 @@ describe('xml builder with xml2js builder', () => {
     const xml = await builder.assemble();
     expect(xml).toBeDefined();
     expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
-<NFe>
-  <infNFe versao="[object Object]">
-    <ide/>
+<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+  <infNFe Id="52240600000000000000550010000000011459417288" versao="[object Object]">
+    <ide>
+      <mod>55</mod>
+      <serie>1</serie>
+      <nNF>1</nNF>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <cUF>52</cUF>
+      <tpEmis>1</tpEmis>
+      <cNF>45941728</cNF>
+    </ide>
     <emit/>
   </infNFe>
 </NFe>`);
   });
 
-  it('should ignores only one method validation', async () => {
+  it('should ignores only one method validation and consequently gets a invalid xml...', async () => {
     class DontValidateNfeXmlBuilder extends NfeXmlBuilder {
       @SkipValidation()
       public ide(payload: Ide): EmitBuilder {
@@ -41,7 +57,15 @@ describe('xml builder with xml2js builder', () => {
 
     const builder = DontValidateNfeXmlBuilder.create(new Xml2JsBuilder())
       .infNFe({ versao: '4.00' })
-      .ide({ mod: { invalid: 'model' } as never } as never)
+      .ide({
+        mod: { invalid: 'model' } as never,
+        dhEmi: '2024-06-12T06:55:26-03:00',
+        serie: 1,
+        nNF: 1,
+        cUF: '52',
+        tpEmis: '1',
+        cNF: '12345678',
+      } as never)
       .emit({ xNome: 'xD', IE: '', CRT: '' } as never)
       .det([])
       .pag({} as never);
@@ -50,12 +74,18 @@ describe('xml builder with xml2js builder', () => {
 
     expect(xml).toBeDefined();
     expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
-<NFe>
-  <infNFe versao="4.00">
+<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+  <infNFe Id="52240600000000000000[object Object]001000000001112345678NaN" versao="4.00">
     <ide>
       <mod>
         <invalid>model</invalid>
       </mod>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <serie>1</serie>
+      <nNF>1</nNF>
+      <cUF>52</cUF>
+      <tpEmis>1</tpEmis>
+      <cNF>12345678</cNF>
     </ide>
     <emit>
       <xNome>xD</xNome>
@@ -69,13 +99,20 @@ describe('xml builder with xml2js builder', () => {
   it('should throw exception when assemble an invalid nfe xml', async () => {
     const builder = NfeXmlBuilder.create(new Xml2JsBuilder())
       .infNFe({ versao: '4.00' })
-      .ide({ mod: '55' } as never)
+      .ide({
+        mod: '55',
+        dhEmi: '2024-06-12T06:55:26-03:00',
+        cUF: '52',
+        serie: 1,
+        nNF: 1,
+        tpEmis: '1',
+      } as never)
       .emit({} as never)
       .det([])
       .pag({} as never);
 
     await expect(async () => await builder.assemble()).rejects.toThrow(
-      'ide.cUF must be a string, ide.cNF must be a string, ide.natOp must be a string, ide.serie must be a string, ide.nNF must be a string, ide.dhEmi must be a string, ide.tpNF must be a string, ide.idDest must be a string, ide.cMunFG must be a string, ide.tpImp must be a string, ide.tpEmis must be a string, ide.cDV must be a string, ide.tpAmb must be a string, ide.finNFe must be a string, ide.indFinal must be a string, ide.indPres must be a string, ide.procEmi must be a string, ide.verProc must be a string, emit.xNome must be a string, emit.IE must be a string, emit.CRT must be a string',
+      'ide.cNF must be a string, ide.natOp must be a string, ide.serie must be a string, ide.nNF must be a string, ide.tpNF must be a string, ide.idDest must be a string, ide.cMunFG must be a string, ide.tpImp must be a string, ide.cDV must be a string, ide.tpAmb must be a string, ide.finNFe must be a string, ide.indFinal must be a string, ide.indPres must be a string, ide.procEmi must be a string, ide.verProc must be a string, emit.xNome must be a string, emit.IE must be a string, emit.CRT must be a string',
     );
   });
 
@@ -133,8 +170,8 @@ describe('xml builder with xml2js builder', () => {
 
     expect(xml).toBeDefined();
     expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
-<NFe>
-  <infNFe versao="4.00">
+<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+  <infNFe Id="52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
       <cUF>52</cUF>
       <cNF>78527251</cNF>
