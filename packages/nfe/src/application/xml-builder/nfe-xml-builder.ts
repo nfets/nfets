@@ -53,26 +53,7 @@ export class NfeXmlBuilder implements NFeBuilder {
   @Validates(Emit)
   public emit(payload: IEmit): DetBuilder {
     this.data.infNFe.emit = payload;
-
-    if (!this.data.infNFe.$.Id) {
-      this.data.infNFe.$ = {
-        Id: new AccessKeyBuider().compile({
-          cUF: this.data.infNFe.ide.cUF,
-          year: this.data.infNFe.ide.dhEmi.substring(2, 4),
-          month: this.data.infNFe.ide.dhEmi.substring(5, 7),
-          identification:
-            this.data.infNFe.emit.CPF ?? this.data.infNFe.emit.CNPJ,
-          mod: this.data.infNFe.ide.mod,
-          serie: this.data.infNFe.ide.serie,
-          nNF: this.data.infNFe.ide.nNF,
-          tpEmis: this.data.infNFe.ide.tpEmis,
-          cNF: this.data.infNFe.ide.cNF,
-        }),
-        versao: this.data.infNFe.$.versao,
-        pk_nItem: this.data.infNFe.$.pk_nItem,
-      };
-    }
-
+    this.fillAccessKeyIfEmpty();
     return this;
   }
 
@@ -97,5 +78,25 @@ export class NfeXmlBuilder implements NFeBuilder {
 
     if (errors) throw new NFeTsError(errors.join(', '));
     return this.builder.build(this.data, { rootName: 'NFe' });
+  }
+
+  private fillAccessKeyIfEmpty(): void {
+    if (this.data.infNFe.$.Id) return;
+
+    this.data.infNFe.$ = {
+      Id: new AccessKeyBuider().compile({
+        cUF: this.data.infNFe.ide.cUF,
+        year: this.data.infNFe.ide.dhEmi.substring(2, 4),
+        month: this.data.infNFe.ide.dhEmi.substring(5, 7),
+        identification: this.data.infNFe.emit.CPF ?? this.data.infNFe.emit.CNPJ,
+        mod: this.data.infNFe.ide.mod,
+        serie: this.data.infNFe.ide.serie,
+        nNF: this.data.infNFe.ide.nNF,
+        tpEmis: this.data.infNFe.ide.tpEmis,
+        cNF: this.data.infNFe.ide.cNF,
+      }),
+      versao: this.data.infNFe.$.versao,
+      pk_nItem: this.data.infNFe.$.pk_nItem,
+    };
   }
 }
