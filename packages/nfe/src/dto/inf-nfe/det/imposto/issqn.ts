@@ -4,25 +4,25 @@ import { ISSQN as IISSQN } from 'src/entities/nfe/inf-nfe/det/imposto/issqn';
 export class ISSQN implements IISSQN {
   @IsOptional()
   @IsString()
-  declare vBC?: string;
+  public vBC?: string;
 
   @IsOptional()
   @IsString()
-  declare vAliq?: string;
+  public vAliq?: string;
 
   @IsOptional()
   @IsString()
-  declare vISSQN?: string;
+  public vISSQN?: string;
 
   @IsOptional()
   @IsString()
-  declare cMunFG?: string;
+  public cMunFG?: string;
 
   @IsOptional()
   @IsString()
-  declare cListServ?: string;
+  public cListServ?: string;
 
   @IsOptional()
   @IsString()
-  declare cSitTrib?: string;
+  public cSitTrib?: string;
 }

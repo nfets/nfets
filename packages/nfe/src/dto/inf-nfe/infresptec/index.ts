@@ -3,22 +3,22 @@ import { InfRespTec as IInfRespTec } from 'src/entities/nfe/inf-nfe/infresptec';
 
 export class InfRespTec implements IInfRespTec {
   @IsString()
-  declare CNPJ: string;
+  public CNPJ!: string;
 
   @IsString()
-  declare xContato: string;
+  public xContato!: string;
 
   @IsString()
-  declare email: string;
+  public email!: string;
 
   @IsString()
-  declare fone: string;
-
-  @IsOptional()
-  @IsString()
-  declare idCSRT?: string;
+  public fone!: string;
 
   @IsOptional()
   @IsString()
-  declare hashCSRT?: string;
+  public idCSRT?: string;
+
+  @IsOptional()
+  @IsString()
+  public hashCSRT?: string;
 }

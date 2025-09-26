@@ -12,108 +12,108 @@ import type {
 
 export class COFINSAliq implements ICOFINSAliq {
   @IsString()
-  declare CST: string;
+  public CST!: string;
 
   @IsOptional()
   @IsString()
-  declare vBC?: string;
+  public vBC?: string;
 
   @IsOptional()
   @IsString()
-  declare pCOFINS?: string;
+  public pCOFINS?: string;
 
   @IsOptional()
   @IsString()
-  declare vCOFINS?: string;
+  public vCOFINS?: string;
 }
 
 export class COFINSQtde implements ICOFINSQtde {
   @IsString()
-  declare CST: string;
+  public CST!: string;
 
   @IsOptional()
   @IsString()
-  declare qBCProd?: string;
+  public qBCProd?: string;
 
   @IsOptional()
   @IsString()
-  declare vAliqProd?: string;
+  public vAliqProd?: string;
 
   @IsOptional()
   @IsString()
-  declare vCOFINS?: string;
+  public vCOFINS?: string;
 }
 
 export class COFINSNT implements ICOFINSNT {
   @IsString()
-  declare CST: string;
+  public CST!: string;
 }
 
 export class COFINSOutr implements ICOFINSOutr {
   @IsString()
-  declare CST: string;
+  public CST!: string;
 
   @IsOptional()
   @IsString()
-  declare vBC?: string;
+  public vBC?: string;
 
   @IsOptional()
   @IsString()
-  declare pCOFINS?: string;
+  public pCOFINS?: string;
 
   @IsOptional()
   @IsString()
-  declare qBCProd?: string;
+  public qBCProd?: string;
 
   @IsOptional()
   @IsString()
-  declare vAliqProd?: string;
+  public vAliqProd?: string;
 
   @IsOptional()
   @IsString()
-  declare vCOFINS?: string;
+  public vCOFINS?: string;
 }
 
 export class COFINS implements ICOFINS {
   @IsOptional()
   @ValidateNested()
   @Type(() => COFINSAliq)
-  declare COFINSAliq?: COFINSAliq;
+  public COFINSAliq?: COFINSAliq;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => COFINSQtde)
-  declare COFINSQtde?: COFINSQtde;
+  public COFINSQtde?: COFINSQtde;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => COFINSNT)
-  declare COFINSNT?: COFINSNT;
+  public COFINSNT?: COFINSNT;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => COFINSOutr)
-  declare COFINSOutr?: COFINSOutr;
+  public COFINSOutr?: COFINSOutr;
 }
 
 export class COFINSST implements ICOFINSST {
   @IsOptional()
   @IsString()
-  declare vBC?: string;
+  public vBC?: string;
 
   @IsOptional()
   @IsString()
-  declare pCOFINS?: string;
+  public pCOFINS?: string;
 
   @IsOptional()
   @IsString()
-  declare qBCProd?: string;
+  public qBCProd?: string;
 
   @IsOptional()
   @IsString()
-  declare vAliqProd?: string;
+  public vAliqProd?: string;
 
   @IsOptional()
   @IsString()
-  declare vCOFINS?: string;
+  public vCOFINS?: string;
 }

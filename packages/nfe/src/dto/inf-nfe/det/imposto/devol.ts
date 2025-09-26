@@ -6,15 +6,15 @@ import type { Devol as IDevol } from 'src/entities/nfe/inf-nfe/det/imposto/devol
 
 export class IpiDevol implements IIpiDevol {
   @IsString()
-  declare vIPIDevol: string;
+  public vIPIDevol!: string;
 }
 
 export class Devol implements IDevol {
   @IsString()
-  declare pDevol: string;
+  public pDevol!: string;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => IpiDevol)
-  declare IPI?: IIpiDevol;
+  public IPI?: IIpiDevol;
 }

@@ -3,9 +3,9 @@ import { InfIntermed as IInfIntermed } from 'src/entities/nfe/inf-nfe/infinterme
 
 export class InfIntermed implements IInfIntermed {
   @IsString()
-  declare CNPJ: string;
+  public CNPJ!: string;
 
   @IsOptional()
   @IsString()
-  declare idCadIntTran?: string;
+  public idCadIntTran?: string;
 }

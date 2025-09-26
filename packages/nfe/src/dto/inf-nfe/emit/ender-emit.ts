@@ -3,39 +3,39 @@ import type { EnderEmit as IEnderEmit } from 'src/entities/nfe/inf-nfe/emit';
 
 export class EnderEmit implements IEnderEmit {
   @IsString()
-  declare xLgr: string;
+  public xLgr!: string;
 
   @IsString()
-  declare nro: string;
-
-  @IsOptional()
-  @IsString()
-  declare xCpl?: string;
-
-  @IsString()
-  declare xBairro: string;
-
-  @IsString()
-  declare cMun: string;
-
-  @IsString()
-  declare xMun: string;
-
-  @IsString()
-  declare UF: string;
-
-  @IsString()
-  declare CEP: string;
+  public nro!: string;
 
   @IsOptional()
   @IsString()
-  declare cPais?: string;
+  public xCpl?: string;
+
+  @IsString()
+  public xBairro!: string;
+
+  @IsString()
+  public cMun!: string;
+
+  @IsString()
+  public xMun!: string;
+
+  @IsString()
+  public UF!: string;
+
+  @IsString()
+  public CEP!: string;
 
   @IsOptional()
   @IsString()
-  declare xPais?: string;
+  public cPais?: string;
 
   @IsOptional()
   @IsString()
-  declare fone?: string;
+  public xPais?: string;
+
+  @IsOptional()
+  @IsString()
+  public fone?: string;
 }

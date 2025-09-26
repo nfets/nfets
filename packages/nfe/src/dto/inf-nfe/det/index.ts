@@ -20,7 +20,7 @@ import type { Imposto as IImposto } from 'src/entities/nfe/inf-nfe/det/imposto';
 
 export class DetAttributes implements IDetAttributes {
   @IsString()
-  declare nItem: string;
+  public nItem!: string;
 }
 
 export class Det implements IDet {
@@ -31,19 +31,19 @@ export class Det implements IDet {
 
   @ValidateNested()
   @Type(() => Prod)
-  declare prod: IProd;
+  public prod!: IProd;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => Imposto)
-  declare imposto?: IImposto;
+  public imposto?: IImposto;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => Devol)
-  declare impostoDevol?: IDevol;
+  public impostoDevol?: IDevol;
 
   @IsOptional()
   @IsString()
-  declare infAdProd?: string;
+  public infAdProd?: string;
 }

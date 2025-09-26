@@ -4,25 +4,25 @@ import { Vol as IVol } from 'src/entities/nfe/inf-nfe/transp';
 export class Vol implements IVol {
   @IsOptional()
   @IsString()
-  declare qVol?: string;
+  public qVol?: string;
 
   @IsOptional()
   @IsString()
-  declare esp?: string;
+  public esp?: string;
 
   @IsOptional()
   @IsString()
-  declare marca?: string;
+  public marca?: string;
 
   @IsOptional()
   @IsString()
-  declare nVol?: string;
+  public nVol?: string;
 
   @IsOptional()
   @IsString()
-  declare pesoL?: string;
+  public pesoL?: string;
 
   @IsOptional()
   @IsString()
-  declare pesoB?: string;
+  public pesoB?: string;
 }

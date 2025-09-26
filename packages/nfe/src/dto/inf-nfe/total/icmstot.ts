@@ -3,87 +3,87 @@ import { ICMSTot as IICMSTot } from 'src/entities/nfe/inf-nfe/total';
 
 export class ICMSTot implements IICMSTot {
   @IsString()
-  declare vBC: string;
+  public vBC!: string;
 
   @IsString()
-  declare vICMS: string;
-
-  @IsOptional()
-  @IsString()
-  declare vICMSDeson?: string;
+  public vICMS!: string;
 
   @IsOptional()
   @IsString()
-  declare vFCPUFDest?: string;
+  public vICMSDeson?: string;
 
   @IsOptional()
   @IsString()
-  declare vICMSUFDest?: string;
+  public vFCPUFDest?: string;
 
   @IsOptional()
   @IsString()
-  declare vICMSUFRemet?: string;
+  public vICMSUFDest?: string;
 
   @IsOptional()
   @IsString()
-  declare vFCP?: string;
+  public vICMSUFRemet?: string;
 
   @IsOptional()
   @IsString()
-  declare vBCST?: string;
+  public vFCP?: string;
 
   @IsOptional()
   @IsString()
-  declare vST?: string;
+  public vBCST?: string;
 
   @IsOptional()
   @IsString()
-  declare vFCPST?: string;
+  public vST?: string;
 
   @IsOptional()
   @IsString()
-  declare vFCPSTRet?: string;
+  public vFCPST?: string;
 
   @IsOptional()
   @IsString()
-  declare vProd?: string;
+  public vFCPSTRet?: string;
 
   @IsOptional()
   @IsString()
-  declare vFrete?: string;
+  public vProd?: string;
 
   @IsOptional()
   @IsString()
-  declare vSeg?: string;
+  public vFrete?: string;
 
   @IsOptional()
   @IsString()
-  declare vDesc?: string;
+  public vSeg?: string;
 
   @IsOptional()
   @IsString()
-  declare vII?: string;
+  public vDesc?: string;
 
   @IsOptional()
   @IsString()
-  declare vIPI?: string;
+  public vII?: string;
 
   @IsOptional()
   @IsString()
-  declare vIPIDevol?: string;
+  public vIPI?: string;
 
   @IsOptional()
   @IsString()
-  declare vPIS?: string;
+  public vIPIDevol?: string;
 
   @IsOptional()
   @IsString()
-  declare vCOFINS?: string;
+  public vPIS?: string;
 
   @IsOptional()
   @IsString()
-  declare vOutro?: string;
+  public vCOFINS?: string;
+
+  @IsOptional()
+  @IsString()
+  public vOutro?: string;
 
   @IsString()
-  declare vNF: string;
+  public vNF!: string;
 }

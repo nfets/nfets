@@ -4,48 +4,48 @@ import { ISSQNTot as IISSQNTot } from 'src/entities/nfe/inf-nfe/total';
 export class ISSQNTot implements IISSQNTot {
   @IsOptional()
   @IsString()
-  declare vServ?: string;
+  public vServ?: string;
 
   @IsOptional()
   @IsString()
-  declare vBC?: string;
+  public vBC?: string;
 
   @IsOptional()
   @IsString()
-  declare vISS?: string;
+  public vISS?: string;
 
   @IsOptional()
   @IsString()
-  declare vPIS?: string;
+  public vPIS?: string;
 
   @IsOptional()
   @IsString()
-  declare vCOFINS?: string;
+  public vCOFINS?: string;
 
   @IsString()
-  declare dCompet: string;
-
-  @IsOptional()
-  @IsString()
-  declare vDeducao?: string;
+  public dCompet!: string;
 
   @IsOptional()
   @IsString()
-  declare vOutro?: string;
+  public vDeducao?: string;
 
   @IsOptional()
   @IsString()
-  declare vDescIncond?: string;
+  public vOutro?: string;
 
   @IsOptional()
   @IsString()
-  declare vDescCond?: string;
+  public vDescIncond?: string;
 
   @IsOptional()
   @IsString()
-  declare vISSRet?: string;
+  public vDescCond?: string;
 
   @IsOptional()
   @IsString()
-  declare cRegTrib?: string;
+  public vISSRet?: string;
+
+  @IsOptional()
+  @IsString()
+  public cRegTrib?: string;
 }

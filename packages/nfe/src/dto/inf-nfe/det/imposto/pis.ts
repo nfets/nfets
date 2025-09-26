@@ -12,108 +12,108 @@ import type {
 
 export class PISAliq implements IPISAliq {
   @IsString()
-  declare CST: string;
+  public CST!: string;
 
   @IsOptional()
   @IsString()
-  declare vBC?: string;
+  public vBC?: string;
 
   @IsOptional()
   @IsString()
-  declare pPIS?: string;
+  public pPIS?: string;
 
   @IsOptional()
   @IsString()
-  declare vPIS?: string;
+  public vPIS?: string;
 }
 
 export class PISQtde implements IPISQtde {
   @IsString()
-  declare CST: string;
+  public CST!: string;
 
   @IsOptional()
   @IsString()
-  declare qBCProd?: string;
+  public qBCProd?: string;
 
   @IsOptional()
   @IsString()
-  declare vAliqProd?: string;
+  public vAliqProd?: string;
 
   @IsOptional()
   @IsString()
-  declare vPIS?: string;
+  public vPIS?: string;
 }
 
 export class PISNT implements IPISNT {
   @IsString()
-  declare CST: string;
+  public CST!: string;
 }
 
 export class PISOutr implements IPISOutr {
   @IsString()
-  declare CST: string;
+  public CST!: string;
 
   @IsOptional()
   @IsString()
-  declare vBC?: string;
+  public vBC?: string;
 
   @IsOptional()
   @IsString()
-  declare pPIS?: string;
+  public pPIS?: string;
 
   @IsOptional()
   @IsString()
-  declare qBCProd?: string;
+  public qBCProd?: string;
 
   @IsOptional()
   @IsString()
-  declare vAliqProd?: string;
+  public vAliqProd?: string;
 
   @IsOptional()
   @IsString()
-  declare vPIS?: string;
+  public vPIS?: string;
 }
 
 export class PIS implements IPIS {
   @IsOptional()
   @ValidateNested()
   @Type(() => PISAliq)
-  declare PISAliq?: PISAliq;
+  public PISAliq?: PISAliq;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => PISQtde)
-  declare PISQtde?: PISQtde;
+  public PISQtde?: PISQtde;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => PISNT)
-  declare PISNT?: PISNT;
+  public PISNT?: PISNT;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => PISOutr)
-  declare PISOutr?: PISOutr;
+  public PISOutr?: PISOutr;
 }
 
 export class PISST implements IPISST {
   @IsOptional()
   @IsString()
-  declare vBC?: string;
+  public vBC?: string;
 
   @IsOptional()
   @IsString()
-  declare pPIS?: string;
+  public pPIS?: string;
 
   @IsOptional()
   @IsString()
-  declare qBCProd?: string;
+  public qBCProd?: string;
 
   @IsOptional()
   @IsString()
-  declare vAliqProd?: string;
+  public vAliqProd?: string;
 
   @IsOptional()
   @IsString()
-  declare vPIS?: string;
+  public vPIS?: string;
 }

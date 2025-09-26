@@ -62,16 +62,15 @@ export class NfeXmlBuilder implements NFeBuilder {
   }
 
   public quiet(): AssembleNfeBuilder {
-    Reflect.deleteMetadata(ValidateErrorsMetadata, this.constructor);
+    Reflect.deleteMetadata(ValidateErrorsMetadata, this);
     return this;
   }
 
   /** @throws {NFeTsError} */
   public assemble(): Promise<string> {
-    const errors = Reflect.getMetadata(
-      ValidateErrorsMetadata,
-      this.constructor,
-    ) as string[] | undefined;
+    const errors = Reflect.getMetadata(ValidateErrorsMetadata, this) as
+      | string[]
+      | undefined;
 
     if (errors) throw new NFeTsError(errors.join(', '));
     return this.builder.build(this.data, { rootName: 'NFe' });

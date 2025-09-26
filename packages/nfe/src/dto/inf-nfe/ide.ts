@@ -10,169 +10,169 @@ import type {
 
 export class RefNF implements IRefNF {
   @IsString()
-  declare cUF: string;
+  public cUF!: string;
 
   @IsString()
-  declare AAMM: string;
+  public AAMM!: string;
 
   @IsString()
-  declare CNPJ: string;
+  public CNPJ!: string;
 
   @IsString()
-  declare mod: string;
+  public mod!: string;
 
   @IsString()
-  declare serie: string;
+  public serie!: string;
 
   @IsString()
-  declare nNF: string;
+  public nNF!: string;
 }
 
 export class RefNFP implements IRefNFP {
   @IsString()
-  declare cUF: string;
+  public cUF!: string;
 
   @IsString()
-  declare AAMM: string;
-
-  @IsOptional()
-  @IsString()
-  declare CNPJ?: string;
+  public AAMM!: string;
 
   @IsOptional()
   @IsString()
-  declare CPF?: string;
+  public CNPJ?: string;
+
+  @IsOptional()
+  @IsString()
+  public CPF?: string;
 
   @IsString()
-  declare IE: string;
+  public IE!: string;
 
   @IsString()
-  declare mod: string;
+  public mod!: string;
 
   @IsString()
-  declare serie: string;
+  public serie!: string;
 
   @IsString()
-  declare nNF: string;
+  public nNF!: string;
 }
 
 export class RefECF implements IRefECF {
   @IsString()
-  declare mod: string;
+  public mod!: string;
 
   @IsString()
-  declare nECF: string;
+  public nECF!: string;
 
   @IsString()
-  declare nCOO: string;
+  public nCOO!: string;
 }
 
 export class NFref implements INFref {
   @IsOptional()
   @IsString()
-  declare refNFe?: string;
+  public refNFe?: string;
 
   @IsOptional()
   @IsString()
-  declare refNFeSig?: string;
+  public refNFeSig?: string;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => RefNF)
-  declare refNF?: IRefNF;
+  public refNF?: IRefNF;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => RefNFP)
-  declare refNFP?: IRefNFP;
+  public refNFP?: IRefNFP;
 
   @IsOptional()
   @IsString()
-  declare refCTe?: string;
+  public refCTe?: string;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => RefECF)
-  declare refECF?: IRefECF;
+  public refECF?: IRefECF;
 }
 
 export class Ide implements IIde {
   @IsString()
-  declare cUF: string;
+  public cUF!: string;
 
   @IsString()
-  declare cNF: string;
+  public cNF!: string;
 
   @IsString()
-  declare natOp: string;
+  public natOp!: string;
 
   @IsString()
-  declare mod: string;
+  public mod!: string;
 
   @IsString()
-  declare serie: string;
+  public serie!: string;
 
   @IsString()
-  declare nNF: string;
+  public nNF!: string;
 
   @IsString()
-  declare dhEmi: string;
-
-  @IsOptional()
-  @IsString()
-  declare dhSaiEnt?: string;
-
-  @IsString()
-  declare tpNF: string;
-
-  @IsString()
-  declare idDest: string;
-
-  @IsString()
-  declare cMunFG: string;
-
-  @IsString()
-  declare tpImp: string;
-
-  @IsString()
-  declare tpEmis: string;
-
-  @IsString()
-  declare cDV: string;
-
-  @IsString()
-  declare tpAmb: string;
-
-  @IsString()
-  declare finNFe: string;
-
-  @IsString()
-  declare indFinal: string;
-
-  @IsString()
-  declare indPres: string;
+  public dhEmi!: string;
 
   @IsOptional()
   @IsString()
-  declare indIntermed?: string;
+  public dhSaiEnt?: string;
 
   @IsString()
-  declare procEmi: string;
+  public tpNF!: string;
 
   @IsString()
-  declare verProc: string;
+  public idDest!: string;
+
+  @IsString()
+  public cMunFG!: string;
+
+  @IsString()
+  public tpImp!: string;
+
+  @IsString()
+  public tpEmis!: string;
+
+  @IsString()
+  public cDV!: string;
+
+  @IsString()
+  public tpAmb!: string;
+
+  @IsString()
+  public finNFe!: string;
+
+  @IsString()
+  public indFinal!: string;
+
+  @IsString()
+  public indPres!: string;
 
   @IsOptional()
   @IsString()
-  declare dhCont?: string;
+  public indIntermed?: string;
+
+  @IsString()
+  public procEmi!: string;
+
+  @IsString()
+  public verProc!: string;
 
   @IsOptional()
   @IsString()
-  declare xJust?: string;
+  public dhCont?: string;
+
+  @IsOptional()
+  @IsString()
+  public xJust?: string;
 
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => NFref)
-  declare NFref?: INFref[];
+  public NFref?: INFref[];
 }

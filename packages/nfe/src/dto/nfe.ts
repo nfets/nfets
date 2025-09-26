@@ -6,5 +6,5 @@ export class NFe {
   @IsObject()
   @IsNotEmptyObject()
   @Type(() => InfNFe)
-  declare infNFe: InfNFe;
+  public infNFe!: InfNFe;
 }

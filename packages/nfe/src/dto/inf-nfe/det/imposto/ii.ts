@@ -4,17 +4,17 @@ import type { II as III } from 'src/entities/nfe/inf-nfe/det/imposto/ii';
 export class II implements III {
   @IsOptional()
   @IsString()
-  declare vBC?: string;
+  public vBC?: string;
 
   @IsOptional()
   @IsString()
-  declare vDespAdu?: string;
+  public vDespAdu?: string;
 
   @IsOptional()
   @IsString()
-  declare vII?: string;
+  public vII?: string;
 
   @IsOptional()
   @IsString()
-  declare vIOF?: string;
+  public vIOF?: string;
 }

@@ -7,27 +7,27 @@ import {
 export class VeicTransp implements IVeicTransp {
   @IsOptional()
   @IsString()
-  declare placa?: string;
+  public placa?: string;
 
   @IsOptional()
   @IsString()
-  declare UF?: string;
+  public UF?: string;
 
   @IsOptional()
   @IsString()
-  declare RNTC?: string;
+  public RNTC?: string;
 }
 
 export class Reboque implements IReboque {
   @IsOptional()
   @IsString()
-  declare placa?: string;
+  public placa?: string;
 
   @IsOptional()
   @IsString()
-  declare UF?: string;
+  public UF?: string;
 
   @IsOptional()
   @IsString()
-  declare RNTC?: string;
+  public RNTC?: string;
 }

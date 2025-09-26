@@ -3,8 +3,8 @@ import type { InfNFeSupl as IInfNFeSupl } from 'src/entities/nfe/inf-nfe-supl';
 
 export class InfNFeSupl implements IInfNFeSupl {
   @IsString()
-  declare qrCode: string;
+  public qrCode!: string;
 
   @IsString()
-  declare urlChave: string;
+  public urlChave!: string;
 }

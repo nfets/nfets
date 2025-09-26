@@ -4,37 +4,37 @@ import { ICMSUFDest as IICMSUFDest } from 'src/entities/nfe/inf-nfe/det/imposto/
 export class ICMSUFDest implements IICMSUFDest {
   @IsOptional()
   @IsString()
-  declare vBCUFDest?: string;
+  public vBCUFDest?: string;
 
   @IsOptional()
   @IsString()
-  declare vBCFCPUFDest?: string;
+  public vBCFCPUFDest?: string;
 
   @IsOptional()
   @IsString()
-  declare pFCPUFDest?: string;
+  public pFCPUFDest?: string;
 
   @IsOptional()
   @IsString()
-  declare pICMSUFDest?: string;
+  public pICMSUFDest?: string;
 
   @IsOptional()
   @IsString()
-  declare pICMSInter?: string;
+  public pICMSInter?: string;
 
   @IsOptional()
   @IsString()
-  declare pICMSInterPart?: string;
+  public pICMSInterPart?: string;
 
   @IsOptional()
   @IsString()
-  declare vFCPUFDest?: string;
+  public vFCPUFDest?: string;
 
   @IsOptional()
   @IsString()
-  declare vICMSUFDest?: string;
+  public vICMSUFDest?: string;
 
   @IsOptional()
   @IsString()
-  declare vICMSUFRemet?: string;
+  public vICMSUFRemet?: string;
 }

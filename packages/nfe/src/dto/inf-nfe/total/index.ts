@@ -6,10 +6,10 @@ import { Total as ITotal } from 'src/entities/nfe/inf-nfe/total';
 
 export class Total implements ITotal {
   @ValidateNested()
-  declare ICMSTot: ICMSTot;
+  public ICMSTot!: ICMSTot;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ISSQNTot)
-  declare ISSQNtot?: ISSQNTot;
+  public ISSQNtot?: ISSQNTot;
 }

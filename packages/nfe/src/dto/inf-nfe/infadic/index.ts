@@ -10,51 +10,51 @@ import type {
 
 export class ObsCont implements IObsCont {
   @IsString()
-  declare xCampo: string;
+  public xCampo!: string;
 
   @IsString()
-  declare xTexto: string;
+  public xTexto!: string;
 }
 
 export class ObsFisco implements IObsFisco {
   @IsString()
-  declare xCampo: string;
+  public xCampo!: string;
 
   @IsString()
-  declare xTexto: string;
+  public xTexto!: string;
 }
 
 export class ProcRef implements IProcRef {
   @IsOptional()
   @IsString()
-  declare nProc?: string;
+  public nProc?: string;
 
   @IsOptional()
   @IsString()
-  declare indProc?: string;
+  public indProc?: string;
 }
 
 export class InfAdic implements IInfAdic {
   @IsOptional()
   @IsString()
-  declare infAdFisco?: string;
+  public infAdFisco?: string;
 
   @IsOptional()
   @IsString()
-  declare infCpl?: string;
+  public infCpl?: string;
 
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => ObsCont)
-  declare obsCont?: IObsCont[];
+  public obsCont?: IObsCont[];
 
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => ObsFisco)
-  declare obsFisco?: IObsFisco[];
+  public obsFisco?: IObsFisco[];
 
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => ProcRef)
-  declare procRef?: IProcRef[];
+  public procRef?: IProcRef[];
 }

@@ -7,10 +7,10 @@ export class NFCe {
   @IsObject()
   @IsNotEmptyObject()
   @Type(() => InfNFe)
-  declare infNFe: InfNFe;
+  public infNFe!: InfNFe;
 
   @IsObject()
   @IsNotEmptyObject()
   @Type(() => InfNFeSupl)
-  declare infNFeSupl: InfNFeSupl;
+  public infNFeSupl!: InfNFeSupl;
 }

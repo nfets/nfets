@@ -3,105 +3,105 @@ import { Prod as IProd } from 'src/entities/nfe/inf-nfe/det/prod';
 
 export class Prod implements IProd {
   @IsString()
-  declare cProd: string;
+  public cProd!: string;
 
   @IsString()
-  declare cEAN: string;
+  public cEAN!: string;
 
   @IsOptional()
   @IsString()
-  declare cBarra?: string;
+  public cBarra?: string;
 
   @IsString()
-  declare xProd: string;
+  public xProd!: string;
 
   @IsString()
-  declare NCM: string;
+  public NCM!: string;
 
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  declare NVE?: string[];
+  public NVE?: string[];
 
   @IsOptional()
   @IsString()
-  declare CEST?: string;
+  public CEST?: string;
 
   @IsOptional()
   @IsString()
-  declare indEscala?: string;
+  public indEscala?: string;
 
   @IsOptional()
   @IsString()
-  declare CNPJFab?: string;
+  public CNPJFab?: string;
 
   @IsOptional()
   @IsString()
-  declare cBenef?: string;
+  public cBenef?: string;
 
   @IsOptional()
   @IsObject()
-  declare gCred?: unknown;
+  public gCred?: unknown;
 
   @IsOptional()
   @IsString()
-  declare EXTIPI?: string;
+  public EXTIPI?: string;
 
   @IsString()
-  declare CFOP: string;
+  public CFOP!: string;
 
   @IsString()
-  declare uCom: string;
+  public uCom!: string;
 
   @IsString()
-  declare qCom: string;
+  public qCom!: string;
 
   @IsString()
-  declare vUnCom: string;
+  public vUnCom!: string;
 
   @IsString()
-  declare vProd: string;
+  public vProd!: string;
 
   @IsString()
-  declare cEANTrib: string;
+  public cEANTrib!: string;
 
   @IsString()
-  declare uTrib: string;
+  public uTrib!: string;
 
   @IsString()
-  declare qTrib: string;
+  public qTrib!: string;
 
   @IsString()
-  declare vUnTrib: string;
-
-  @IsOptional()
-  @IsString()
-  declare vFrete?: string;
+  public vUnTrib!: string;
 
   @IsOptional()
   @IsString()
-  declare vSeg?: string;
+  public vFrete?: string;
 
   @IsOptional()
   @IsString()
-  declare vDesc?: string;
+  public vSeg?: string;
 
   @IsOptional()
   @IsString()
-  declare vOutro?: string;
-
-  @IsString()
-  declare indTot: string;
+  public vDesc?: string;
 
   @IsOptional()
   @IsString()
-  declare xPed?: string;
+  public vOutro?: string;
+
+  @IsString()
+  public indTot!: string;
 
   @IsOptional()
   @IsString()
-  declare nItemPed?: string;
+  public xPed?: string;
 
   @IsOptional()
   @IsString()
-  declare nFCI?: string;
+  public nItemPed?: string;
+
+  @IsOptional()
+  @IsString()
+  public nFCI?: string;
 }

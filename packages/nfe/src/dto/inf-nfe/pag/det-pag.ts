@@ -6,20 +6,20 @@ import { DetPag as IDetPag } from 'src/entities/nfe/inf-nfe/pag';
 export class DetPag implements IDetPag {
   @IsOptional()
   @IsString()
-  declare indPag?: string;
+  public indPag?: string;
 
   @IsString()
-  declare tPag: string;
+  public tPag!: string;
 
   @IsString()
-  declare vPag: string;
+  public vPag!: string;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => Card)
-  declare card?: ICard;
+  public card?: ICard;
 
   @IsOptional()
   @IsString()
-  declare xPag?: string;
+  public xPag?: string;
 }

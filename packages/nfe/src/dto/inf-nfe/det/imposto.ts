@@ -23,50 +23,50 @@ import type { ICMSUFDest as IICMSUFDest } from 'src/entities/nfe/inf-nfe/det/imp
 export class Imposto implements IImposto {
   @IsOptional()
   @IsNumber()
-  declare vTotTrib?: number;
+  public vTotTrib?: number;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMS)
-  declare ICMS?: IICMS;
+  public ICMS?: IICMS;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => IPI)
-  declare IPI?: IIPI;
+  public IPI?: IIPI;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => II)
-  declare II?: III;
+  public II?: III;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => PIS)
-  declare PIS?: IPIS;
+  public PIS?: IPIS;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => PISST)
-  declare PISST?: IPISST;
+  public PISST?: IPISST;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => COFINS)
-  declare COFINS?: ICOFINS;
+  public COFINS?: ICOFINS;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => COFINSST)
-  declare COFINSST?: ICOFINSST;
+  public COFINSST?: ICOFINSST;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ISSQN)
-  declare ISSQN?: IISSQN;
+  public ISSQN?: IISSQN;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMSUFDest)
-  declare ICMSUFDest?: IICMSUFDest;
+  public ICMSUFDest?: IICMSUFDest;
 }

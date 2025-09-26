@@ -4,13 +4,13 @@ import type { Compra as ICompra } from 'src/entities/nfe/inf-nfe/compra';
 export class Compra implements ICompra {
   @IsOptional()
   @IsString()
-  declare xNEmp?: string;
+  public xNEmp?: string;
 
   @IsOptional()
   @IsString()
-  declare xPed?: string;
+  public xPed?: string;
 
   @IsOptional()
   @IsString()
-  declare xCont?: string;
+  public xCont?: string;
 }

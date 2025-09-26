@@ -4,25 +4,25 @@ import { RetTransp as IRetTransp } from 'src/entities/nfe/inf-nfe/transp';
 export class RetTransp implements IRetTransp {
   @IsOptional()
   @IsString()
-  declare vServ?: string;
+  public vServ?: string;
 
   @IsOptional()
   @IsString()
-  declare vBCRet?: string;
+  public vBCRet?: string;
 
   @IsOptional()
   @IsString()
-  declare pICMSRet?: string;
+  public pICMSRet?: string;
 
   @IsOptional()
   @IsString()
-  declare vICMSRet?: string;
+  public vICMSRet?: string;
 
   @IsOptional()
   @IsString()
-  declare CFOP?: string;
+  public CFOP?: string;
 
   @IsOptional()
   @IsString()
-  declare cMunFG?: string;
+  public cMunFG?: string;
 }

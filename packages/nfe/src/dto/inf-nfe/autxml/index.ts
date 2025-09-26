@@ -4,9 +4,9 @@ import type { AutXML as IAutXML } from 'src/entities/nfe/inf-nfe/autxml';
 export class AutXML implements IAutXML {
   @IsOptional()
   @IsString()
-  declare CNPJ?: string;
+  public CNPJ?: string;
 
   @IsOptional()
   @IsString()
-  declare CPF?: string;
+  public CPF?: string;
 }

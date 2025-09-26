@@ -6,5 +6,5 @@ import { Pag as IPag } from 'src/entities/nfe/inf-nfe/pag';
 export class Pag implements IPag {
   @ValidateNested({ each: true })
   @Type(() => DetPag)
-  declare detPag: IDetPag[];
+  public detPag!: IDetPag[];
 }

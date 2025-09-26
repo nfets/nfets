@@ -4,45 +4,45 @@ import type { EnderDest as IEnderDest } from 'src/entities/nfe/inf-nfe/dest';
 export class EnderDest implements IEnderDest {
   @IsOptional()
   @IsString()
-  declare xLgr?: string;
+  public xLgr?: string;
 
   @IsOptional()
   @IsString()
-  declare nro?: string;
+  public nro?: string;
 
   @IsOptional()
   @IsString()
-  declare xCpl?: string;
+  public xCpl?: string;
 
   @IsOptional()
   @IsString()
-  declare xBairro?: string;
+  public xBairro?: string;
 
   @IsOptional()
   @IsString()
-  declare cMun?: string;
+  public cMun?: string;
 
   @IsOptional()
   @IsString()
-  declare xMun?: string;
+  public xMun?: string;
 
   @IsOptional()
   @IsString()
-  declare UF?: string;
+  public UF?: string;
 
   @IsOptional()
   @IsString()
-  declare CEP?: string;
+  public CEP?: string;
 
   @IsOptional()
   @IsString()
-  declare cPais?: string;
+  public cPais?: string;
 
   @IsOptional()
   @IsString()
-  declare xPais?: string;
+  public xPais?: string;
 
   @IsOptional()
   @IsString()
-  declare fone?: string;
+  public fone?: string;
 }

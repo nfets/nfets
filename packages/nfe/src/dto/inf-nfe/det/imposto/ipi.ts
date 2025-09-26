@@ -6,57 +6,57 @@ import type { IPI as IIPI } from 'src/entities/nfe/inf-nfe/det/imposto/ipi';
 
 export class IPITrib implements IIPITrib {
   @IsString()
-  declare CST: string;
+  public CST!: string;
 
   @IsOptional()
   @IsString()
-  declare vBC?: string;
+  public vBC?: string;
 
   @IsOptional()
   @IsString()
-  declare pIPI?: string;
+  public pIPI?: string;
 
   @IsOptional()
   @IsString()
-  declare qUnid?: string;
+  public qUnid?: string;
 
   @IsOptional()
   @IsString()
-  declare vUnid?: string;
+  public vUnid?: string;
 
   @IsOptional()
   @IsString()
-  declare vIPI?: string;
+  public vIPI?: string;
 }
 
 export class IPINT implements IIPINT {
   @IsString()
-  declare CST: string;
+  public CST!: string;
 }
 
 export class IPI implements IIPI {
   @IsOptional()
   @IsString()
-  declare CNPJProd?: string;
+  public CNPJProd?: string;
 
   @IsOptional()
   @IsString()
-  declare cSelo?: string;
+  public cSelo?: string;
 
   @IsOptional()
   @IsString()
-  declare qSelo?: string;
+  public qSelo?: string;
 
   @IsString()
-  declare cEnq: string;
+  public cEnq!: string;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => IPITrib)
-  declare IPITrib?: IIPITrib;
+  public IPITrib?: IIPITrib;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => IPINT)
-  declare IPINT?: IIPINT;
+  public IPINT?: IIPINT;
 }

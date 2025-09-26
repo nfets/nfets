@@ -8,41 +8,41 @@ import type { EnderDest as IEnderDest } from 'src/entities/nfe/inf-nfe/dest';
 export class Dest implements IDest {
   @IsOptional()
   @IsString()
-  declare CNPJ?: string;
+  public CNPJ?: string;
 
   @IsOptional()
   @IsString()
-  declare CPF?: string;
+  public CPF?: string;
 
   @IsOptional()
   @IsString()
-  declare idEstrangeiro?: string;
+  public idEstrangeiro?: string;
 
   @IsOptional()
   @IsString()
-  declare xNome?: string;
+  public xNome?: string;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => EnderDest)
-  declare enderDest?: IEnderDest;
+  public enderDest?: IEnderDest;
 
   @IsString()
-  declare indIEDest: string;
-
-  @IsOptional()
-  @IsString()
-  declare IE?: string;
+  public indIEDest!: string;
 
   @IsOptional()
   @IsString()
-  declare ISUF?: string;
+  public IE?: string;
 
   @IsOptional()
   @IsString()
-  declare IM?: string;
+  public ISUF?: string;
 
   @IsOptional()
   @IsString()
-  declare email?: string;
+  public IM?: string;
+
+  @IsOptional()
+  @IsString()
+  public email?: string;
 }

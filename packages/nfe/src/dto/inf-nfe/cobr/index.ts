@@ -9,43 +9,43 @@ import type {
 export class Fat implements IFat {
   @IsOptional()
   @IsString()
-  declare nFat?: string;
+  public nFat?: string;
 
   @IsOptional()
   @IsString()
-  declare vOrig?: string;
+  public vOrig?: string;
 
   @IsOptional()
   @IsString()
-  declare vDesc?: string;
+  public vDesc?: string;
 
   @IsOptional()
   @IsString()
-  declare vLiq?: string;
+  public vLiq?: string;
 }
 
 export class Dup implements IDup {
   @IsOptional()
   @IsString()
-  declare nDup?: string;
+  public nDup?: string;
 
   @IsOptional()
   @IsString()
-  declare dVenc?: string;
+  public dVenc?: string;
 
   @IsOptional()
   @IsString()
-  declare vDup?: string;
+  public vDup?: string;
 }
 
 export class Cobr implements ICobr {
   @IsOptional()
   @ValidateNested()
   @Type(() => Fat)
-  declare fat?: Fat;
+  public fat?: Fat;
 
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => Dup)
-  declare dup?: Dup[];
+  public dup?: Dup[];
 }

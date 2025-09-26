@@ -48,14 +48,14 @@ import type { InfRespTec as IInfRespTec } from 'src/entities/nfe/inf-nfe/infresp
 export class InfNFeAttributes implements IInfNFeAttributes {
   @IsOptional()
   @IsString()
-  declare Id?: string;
+  public Id?: string;
 
   @IsOptional()
   @IsString()
   @Transform(({ value }: { value: string | undefined }): string =>
     typeof value === 'string' && value !== '' ? value : '4.00',
   )
-  declare versao?: string;
+  public versao?: string;
 }
 
 export class InfNFe implements IInfNFe {
@@ -68,82 +68,82 @@ export class InfNFe implements IInfNFe {
   @IsNotEmptyObject()
   @ValidateNested()
   @Type(() => Ide)
-  declare ide: IIde;
+  public ide!: IIde;
 
   @IsObject()
   @IsNotEmptyObject()
   @ValidateNested()
   @Type(() => Emit)
-  declare emit: IEmit;
+  public emit!: IEmit;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => Dest)
-  declare dest?: IDest;
+  public dest?: IDest;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => Local)
-  declare retirada?: ILocal;
+  public retirada?: ILocal;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => Local)
-  declare entrega?: ILocal;
+  public entrega?: ILocal;
 
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => AutXML)
-  declare autXML?: IAutXML[];
+  public autXML?: IAutXML[];
 
   @IsOptional()
   @ValidateNested()
   @Type(() => InfIntermed)
-  declare infIntermed?: IInfIntermed;
+  public infIntermed?: IInfIntermed;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => Exporta)
-  declare exporta?: IExporta;
+  public exporta?: IExporta;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => Compra)
-  declare compra?: ICompra;
+  public compra?: ICompra;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => InfRespTec)
-  declare infRespTec?: IInfRespTec;
+  public infRespTec?: IInfRespTec;
 
   @ValidateNested({ each: true })
   @Type(() => Det)
-  declare det: IDet[];
+  public det!: IDet[];
 
   @ValidateNested()
   @Type(() => Total)
-  declare total: ITotal;
+  public total!: ITotal;
 
   @ValidateNested()
   @Type(() => Transp)
-  declare transp: ITransp;
+  public transp!: ITransp;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => Cobr)
-  declare cobr?: ICobr;
+  public cobr?: ICobr;
 
   @ValidateNested()
   @Type(() => Pag)
-  declare pag: IPag;
+  public pag!: IPag;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => InfAdic)
-  declare infAdic?: IInfAdic;
+  public infAdic?: IInfAdic;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => Cana)
-  declare cana?: ICana;
+  public cana?: ICana;
 }

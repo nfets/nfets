@@ -8,54 +8,54 @@ import type {
 
 export class ForDia implements IForDia {
   @IsString()
-  declare qtde: string;
+  public qtde!: string;
 
   @IsString()
-  declare dia: string;
+  public dia!: string;
 }
 
 export class Deduc implements IDeduc {
   @IsString()
-  declare xDed: string;
+  public xDed!: string;
 
   @IsString()
-  declare vDed: string;
-
-  @IsOptional()
-  @IsString()
-  declare vFor?: string;
+  public vDed!: string;
 
   @IsOptional()
   @IsString()
-  declare vTotDed?: string;
+  public vFor?: string;
+
+  @IsOptional()
+  @IsString()
+  public vTotDed?: string;
 }
 
 export class Cana implements ICana {
   @IsString()
-  declare safra: string;
+  public safra!: string;
 
   @IsString()
-  declare ref: string;
-
-  @IsOptional()
-  @IsString()
-  declare qTotMes?: string;
+  public ref!: string;
 
   @IsOptional()
   @IsString()
-  declare qTotAnt?: string;
+  public qTotMes?: string;
 
   @IsOptional()
   @IsString()
-  declare qTotGer?: string;
+  public qTotAnt?: string;
+
+  @IsOptional()
+  @IsString()
+  public qTotGer?: string;
 
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => ForDia)
-  declare forDia?: ForDia[];
+  public forDia?: ForDia[];
 
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => Deduc)
-  declare deduc?: Deduc[];
+  public deduc?: Deduc[];
 }

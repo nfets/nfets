@@ -25,9 +25,19 @@ const mapConstraintsToErrors = (
     return constraints.concat(messages);
   }, []);
 
+const clearUndefinedValues = (instance: Record<string, unknown>): void => {
+  for (const [key, value] of Object.entries(instance)) {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+    if (typeof value === 'undefined') delete instance[key];
+    if (value && typeof value === 'object') {
+      clearUndefinedValues(value as Record<string, unknown>);
+    }
+  }
+};
+
 export const Validates = <T extends object>(klass: new () => T) => {
   return (
-    target: object,
+    _target: object,
     property: string | symbol,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     descriptor: TypedPropertyDescriptor<(payload: T, ...args: object[]) => any>,
@@ -53,23 +63,25 @@ export const Validates = <T extends object>(klass: new () => T) => {
       }
 
       const [payload, ...rest] = args;
-      const instance = plainToInstance(klass, payload);
+      type Instance = Record<string, keyof T>;
+      const instance = plainToInstance(klass, payload) as Instance;
 
+      clearUndefinedValues(instance);
       const errors = validateSync(instance, { whitelist: true });
+
       if (errors.length) {
-        const current = (Reflect.getMetadata(
-          ValidateErrorsMetadata,
-          this.constructor,
-        ) ?? []) as string[];
+        const current = (Reflect.getMetadata(ValidateErrorsMetadata, this) ??
+          []) as string[];
+
         Reflect.defineMetadata(
           ValidateErrorsMetadata,
           current.concat(mapConstraintsToErrors(errors, original?.name)),
-          this.constructor,
+          this,
         );
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return original?.apply(this, [instance, ...rest]);
+      return original?.apply(this, [instance as T, ...rest]);
     };
   };
 };

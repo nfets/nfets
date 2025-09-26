@@ -7,38 +7,38 @@ import type { Emit as IEmit } from 'src/entities/nfe/inf-nfe/emit';
 export class Emit implements IEmit {
   @IsOptional()
   @IsString()
-  declare CNPJ?: string;
+  public CNPJ?: string;
 
   @IsOptional()
   @IsString()
-  declare CPF?: string;
+  public CPF?: string;
 
   @IsString()
-  declare xNome: string;
+  public xNome!: string;
 
   @IsOptional()
   @IsString()
-  declare xFant?: string;
+  public xFant?: string;
 
   @ValidateNested()
   @Type(() => EnderEmit)
-  declare enderEmit: EnderEmit;
+  public enderEmit!: EnderEmit;
 
   @IsString()
-  declare IE: string;
-
-  @IsOptional()
-  @IsString()
-  declare IEST?: string;
+  public IE!: string;
 
   @IsOptional()
   @IsString()
-  declare IM?: string;
+  public IEST?: string;
 
   @IsOptional()
   @IsString()
-  declare CNAE?: string;
+  public IM?: string;
+
+  @IsOptional()
+  @IsString()
+  public CNAE?: string;
 
   @IsString()
-  declare CRT: string;
+  public CRT!: string;
 }

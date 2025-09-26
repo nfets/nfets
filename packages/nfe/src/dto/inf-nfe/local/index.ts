@@ -4,59 +4,59 @@ import { Local as ILocal } from 'src/entities/nfe/inf-nfe/local';
 export class Local implements ILocal {
   @IsOptional()
   @IsString()
-  declare CNPJ?: string;
+  public CNPJ?: string;
 
   @IsOptional()
   @IsString()
-  declare CPF?: string;
+  public CPF?: string;
 
   @IsOptional()
   @IsString()
-  declare xNome?: string;
+  public xNome?: string;
 
   @IsString()
-  declare xLgr: string;
+  public xLgr!: string;
 
   @IsString()
-  declare nro: string;
-
-  @IsOptional()
-  @IsString()
-  declare xCpl?: string;
-
-  @IsString()
-  declare xBairro: string;
-
-  @IsString()
-  declare cMun: string;
-
-  @IsString()
-  declare xMun: string;
-
-  @IsString()
-  declare UF: string;
+  public nro!: string;
 
   @IsOptional()
   @IsString()
-  declare CEP?: string;
+  public xCpl?: string;
+
+  @IsString()
+  public xBairro!: string;
+
+  @IsString()
+  public cMun!: string;
+
+  @IsString()
+  public xMun!: string;
+
+  @IsString()
+  public UF!: string;
 
   @IsOptional()
   @IsString()
-  declare cPais?: string;
+  public CEP?: string;
 
   @IsOptional()
   @IsString()
-  declare xPais?: string;
+  public cPais?: string;
 
   @IsOptional()
   @IsString()
-  declare fone?: string;
+  public xPais?: string;
 
   @IsOptional()
   @IsString()
-  declare email?: string;
+  public fone?: string;
 
   @IsOptional()
   @IsString()
-  declare IE?: string;
+  public email?: string;
+
+  @IsOptional()
+  @IsString()
+  public IE?: string;
 }

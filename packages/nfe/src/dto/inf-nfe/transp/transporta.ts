@@ -4,29 +4,29 @@ import { Transporta as ITransporta } from 'src/entities/nfe/inf-nfe/transp';
 export class Transporta implements ITransporta {
   @IsOptional()
   @IsString()
-  declare CNPJ?: string;
+  public CNPJ?: string;
 
   @IsOptional()
   @IsString()
-  declare CPF?: string;
+  public CPF?: string;
 
   @IsOptional()
   @IsString()
-  declare xNome?: string;
+  public xNome?: string;
 
   @IsOptional()
   @IsString()
-  declare IE?: string;
+  public IE?: string;
 
   @IsOptional()
   @IsString()
-  declare xEnder?: string;
+  public xEnder?: string;
 
   @IsOptional()
   @IsString()
-  declare xMun?: string;
+  public xMun?: string;
 
   @IsOptional()
   @IsString()
-  declare UF?: string;
+  public UF?: string;
 }

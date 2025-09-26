@@ -13,38 +13,38 @@ import { Transp as ITransp } from 'src/entities/nfe/inf-nfe/transp';
 
 export class Transp implements ITransp {
   @IsString()
-  declare modFrete: string;
+  public modFrete!: string;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => Transporta)
-  declare transporta?: ITransporta;
+  public transporta?: ITransporta;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => RetTransp)
-  declare retTransp?: IRetTransp;
+  public retTransp?: IRetTransp;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => VeicTransp)
-  declare veicTransp?: IVeicTransp;
+  public veicTransp?: IVeicTransp;
 
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => Reboque)
-  declare reboque?: IReboque[];
+  public reboque?: IReboque[];
 
   @IsOptional()
   @IsString()
-  declare vagao?: string;
+  public vagao?: string;
 
   @IsOptional()
   @IsString()
-  declare balsa?: string;
+  public balsa?: string;
 
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => Vol)
-  declare vol?: IVol[];
+  public vol?: IVol[];
 }
