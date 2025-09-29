@@ -68,7 +68,7 @@ importers:
         version: 1.8.16
       tsx:
         specifier: ^4.19.2
-        version: 4.20.5
+        version: 4.20.6
       typescript-eslint:
         specifier: ^8.21.0
         version: 8.44.1(eslint@9.36.0)(typescript@5.9.2)
@@ -2284,8 +2284,8 @@ packages:
     engines: {node: '>=16.20.2'}
     hasBin: true
 
-  tsx@4.20.5:
-    resolution: {integrity: sha512-+wKjMNU9w/EaQayHXb7WA7ZaHY6hN8WgfvHNQ3t1PnU91/7O8TcTnIhCDYTZwnt8JsO9IBqZ30Ln1r7pPF52Aw==}
+  tsx@4.20.6:
+    resolution: {integrity: sha512-ytQKuwgmrrkDTFP4LjR0ToE2nqgy886GpvRSpU0JAnrdBYppuY5rLkRUYPU1yCryb24SsKBTL/hlDQAEFVwtZg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -4903,7 +4903,7 @@ snapshots:
       normalize-path: 3.0.0
       plimit-lit: 1.6.1
 
-  tsx@4.20.5:
+  tsx@4.20.6:
     dependencies:
       esbuild: 0.25.10
       get-tsconfig: 4.10.1
