@@ -6,7 +6,7 @@ import {
   SkipValidation,
 } from 'src/application/validator/skip-validations';
 import type { Ide } from 'src/entities/nfe/inf-nfe/ide';
-import type { EmitBuilder } from 'src/entities/xml-builder/inf-nfe/emit-builder';
+import type { EmitBuilder } from 'src/entities/xml-builder/nfe-xml-builder';
 
 describe('xml builder with xml2js builder', () => {
   it('should completely ignores validations and sets the versao to [object Object]', async () => {
@@ -34,15 +34,19 @@ describe('xml builder with xml2js builder', () => {
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="52240600000000000000550010000000011459417288" versao="[object Object]">
     <ide>
+      <cUF>52</cUF>
+      <cNF>45941728</cNF>
       <mod>55</mod>
       <serie>1</serie>
       <nNF>1</nNF>
       <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
-      <cUF>52</cUF>
       <tpEmis>1</tpEmis>
-      <cNF>45941728</cNF>
     </ide>
     <emit/>
+    <total>
+      <ICMSTot/>
+    </total>
+    <pag/>
   </infNFe>
 </NFe>`);
   });
@@ -77,21 +81,25 @@ describe('xml builder with xml2js builder', () => {
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="52240600000000000000[object Object]001000000001112345678NaN" versao="4.00">
     <ide>
+      <cUF>52</cUF>
+      <cNF>12345678</cNF>
       <mod>
         <invalid>model</invalid>
       </mod>
-      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
       <serie>1</serie>
       <nNF>1</nNF>
-      <cUF>52</cUF>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
       <tpEmis>1</tpEmis>
-      <cNF>12345678</cNF>
     </ide>
     <emit>
       <xNome>xD</xNome>
       <IE/>
       <CRT/>
     </emit>
+    <total>
+      <ICMSTot/>
+    </total>
+    <pag/>
   </infNFe>
 </NFe>`);
   });
@@ -175,22 +183,48 @@ describe('xml builder with xml2js builder', () => {
         },
       })
       .det(items, (ctx, item) =>
-        ctx.prod({
-          cProd: item.code,
-          cEAN: 'SEM GTIN',
-          xProd: item.description,
-          NCM: '00',
-          CFOP: '5102',
-          uCom: item.unit,
-          qCom: item.quantity,
-          vUnCom: item.price,
-          vProd: item.total,
-          cEANTrib: 'SEM GTIN',
-          uTrib: item.unit,
-          qTrib: item.quantity,
-          vUnTrib: item.price,
-          indTot: '1',
-        }),
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: '18',
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '99',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '99',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '99',
+            },
+          }),
       )
       .pag({} as never);
 
@@ -260,7 +294,44 @@ describe('xml builder with xml2js builder', () => {
         <vUnTrib>100</vUnTrib>
         <indTot>1</indTot>
       </prod>
+      <imposto>
+        <ICMS>
+          <ICMS00>
+            <orig>1</orig>
+            <CST>00</CST>
+            <modBC>0</modBC>
+            <vBC>100</vBC>
+            <pICMS>18</pICMS>
+          </ICMS00>
+        </ICMS>
+        <IPI>
+          <cEnq>999</cEnq>
+          <IPINT>
+            <CST>99</CST>
+          </IPINT>
+        </IPI>
+        <PIS>
+          <PISNT>
+            <CST>99</CST>
+          </PISNT>
+        </PIS>
+        <COFINS>
+          <COFINSNT>
+            <CST>99</CST>
+          </COFINSNT>
+        </COFINS>
+      </imposto>
     </det>
+    <total>
+      <ICMSTot>
+        <vProd>100.00</vProd>
+        <vFrete>0.00</vFrete>
+        <vSeg>0.00</vSeg>
+        <vDesc>0.00</vDesc>
+        <vOutro>0.00</vOutro>
+      </ICMSTot>
+    </total>
+    <pag/>
   </infNFe>
 </NFe>`);
   });

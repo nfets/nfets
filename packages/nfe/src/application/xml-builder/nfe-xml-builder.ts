@@ -7,22 +7,31 @@ import type {
 import type { Ide as IIde } from 'src/entities/nfe/inf-nfe/ide';
 import type { Emit as IEmit } from 'src/entities/nfe/inf-nfe/emit';
 import type { Pag as IPag } from 'src/entities/nfe/inf-nfe/pag';
+import type { Transp as ITransp } from 'src/entities/nfe/inf-nfe/transp';
+import type { Total as ITotal } from 'src/entities/nfe/inf-nfe/total';
 
-import type { INfeXmlBuilder } from 'src/entities/xml-builder/nfe-xml-builder';
-import type { IdeBuilder } from 'src/entities/xml-builder/inf-nfe/ide-builder';
-import type { EmitBuilder } from 'src/entities/xml-builder/inf-nfe/emit-builder';
-import type { DetBuilder } from 'src/entities/xml-builder/inf-nfe/det-builder';
-import type { PagBuilder } from 'src/entities/xml-builder/inf-nfe/pag-builder';
 import type {
-  AssembleNfeBuilder,
+  INfeXmlBuilder,
   InfNFeBuilder,
-} from 'src/entities/xml-builder/inf-nfe';
-import type { NFe } from 'src/entities/nfe/nfe';
+  IdeBuilder,
+  EmitBuilder,
+  DetBuilder,
+  PagBuilder,
+  AssembleNfeBuilder,
+  TranspBuilder,
+  TotalBuilder,
+} from 'src/entities/xml-builder/nfe-xml-builder';
+import type { NFe as INFe } from 'src/entities/nfe/nfe';
 
 import { ValidateErrorsMetadata, Validates } from '../validator/validate';
+
+import { NFe } from 'src/dto/nfe';
 import { InfNFeAttributes } from 'src/dto/inf-nfe/inf-nfe';
 import { Ide } from 'src/dto/inf-nfe/ide';
 import { Emit } from 'src/dto/inf-nfe/emit';
+import { Total } from 'src/dto/inf-nfe/total';
+import { Pag } from 'src/dto/inf-nfe/pag';
+import { Transp } from 'src/dto/inf-nfe/transp';
 import { AccessKeyBuider } from '../access-key/access-key-builder';
 import {
   AssembleDetXmlBuilder,
@@ -30,10 +39,24 @@ import {
 } from 'src/entities/xml-builder/nfe-det-xml-builder';
 import { NfeDetXmlBuilder } from './nfe-det-xml-builder';
 
+import {
+  DefaultDetBuilderListener,
+  type DetBuilderListener,
+} from '../listeners/det-builder-listener';
+import { plainToInstance } from '../transforms/plain-to-instance';
+
 export class NfeXmlBuilder implements INfeXmlBuilder {
   private readonly data = {
     $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
-  } as NFe;
+    infNFe: {
+      total: { ICMSTot: {} },
+    },
+  } as Partial<INFe>;
+
+  protected readonly $det: DetBuilderListener | undefined =
+    new DefaultDetBuilderListener(this);
+
+  protected readonly nfeDetXmlBuilder = NfeDetXmlBuilder.create(this.$det);
 
   public static create(builder: XmlBuilder): InfNFeBuilder & IdeBuilder {
     return new this(builder);
@@ -43,18 +66,21 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
 
   @Validates(InfNFeAttributes)
   public infNFe($: IInfNFeAttributes): IdeBuilder {
-    this.data.infNFe = { $ } as IInfNFe;
+    this.data.infNFe ??= {} as IInfNFe;
+    this.data.infNFe.$ = $;
     return this;
   }
 
   @Validates(Ide)
   public ide(payload: IIde): EmitBuilder {
+    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.ide = payload;
     return this;
   }
 
   @Validates(Emit)
   public emit(payload: IEmit): DetBuilder {
+    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.emit = payload;
     this.fillAccessKeyIfEmpty();
     return this;
@@ -64,16 +90,46 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     items: T[],
     build: (ctx: ProdBuilder, item: T) => AssembleDetXmlBuilder,
   ): PagBuilder {
+    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.det = items.map((item, index) =>
       build(
-        NfeDetXmlBuilder.create().det({ nItem: (index + 1).toString() }),
+        this.nfeDetXmlBuilder.det({ nItem: (index + 1).toString() }),
         item,
       ).assemble(),
     );
     return this;
   }
 
-  public pag(_payload: IPag): AssembleNfeBuilder {
+  @Validates(Total)
+  public total(payload: ITotal): TranspBuilder {
+    this.data.infNFe ??= {} as IInfNFe;
+    this.data.infNFe.total = payload;
+    return this;
+  }
+
+  public increment(
+    callback: (context: ITotal) => Partial<ITotal>,
+  ): TranspBuilder & TotalBuilder {
+    this.data.infNFe ??= {} as IInfNFe;
+    this.data.infNFe.total = {
+      ...this.data.infNFe.total,
+      ...callback(this.data.infNFe.total),
+    };
+
+    return this;
+  }
+
+  @Validates(Transp)
+  public transp(payload: ITransp): PagBuilder {
+    this.data.infNFe ??= {} as IInfNFe;
+    this.data.infNFe.transp = payload;
+    return this;
+  }
+
+  @Validates(Pag)
+  public pag(payload: IPag): AssembleNfeBuilder {
+    this.data.infNFe ??= {} as IInfNFe;
+    this.data.infNFe.pag = payload;
     return this;
   }
 
@@ -89,12 +145,15 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
       | undefined;
 
     if (errors) throw new NFeTsError(errors.join(', '));
-    return this.builder.build(this.data, { rootName: 'NFe' });
+    return this.builder.build(plainToInstance(this.data, NFe), {
+      rootName: 'NFe',
+    });
   }
 
   private fillAccessKeyIfEmpty(): void {
-    if (this.data.infNFe.$.Id) return;
+    if (this.data.infNFe?.$.Id) return;
 
+    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.$ = {
       Id: new AccessKeyBuider().compile({
         cUF: this.data.infNFe.ide.cUF,

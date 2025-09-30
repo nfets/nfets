@@ -5,7 +5,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { Type, Transform } from 'class-transformer';
+import { Type } from 'class-transformer';
 
 import { Ide } from './ide';
 import { Emit } from './emit';
@@ -52,9 +52,6 @@ export class InfNFeAttributes implements IInfNFeAttributes {
 
   @IsOptional()
   @IsString()
-  @Transform(({ value }: { value: string | undefined }): string =>
-    typeof value === 'string' && value !== '' ? value : '4.00',
-  )
   public versao?: string;
 }
 

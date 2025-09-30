@@ -1,40 +1,43 @@
+import type { DecimalValue } from '@nfets/core';
+
 export interface ICMSTot {
-  vBC: string;
-  vICMS: string;
-  vICMSDeson?: string;
-  vFCPUFDest?: string;
-  vICMSUFDest?: string;
-  vICMSUFRemet?: string;
-  vFCP?: string;
-  vBCST?: string;
-  vST?: string;
-  vFCPST?: string;
-  vFCPSTRet?: string;
-  vProd?: string;
-  vFrete?: string;
-  vSeg?: string;
-  vDesc?: string;
-  vII?: string;
-  vIPI?: string;
-  vIPIDevol?: string;
-  vPIS?: string;
-  vCOFINS?: string;
-  vOutro?: string;
-  vNF: string;
+  vBC: DecimalValue;
+  vICMS: DecimalValue;
+  vICMSDeson: DecimalValue;
+  vFCPUFDest?: DecimalValue;
+  vICMSUFDest?: DecimalValue;
+  vICMSUFRemet?: DecimalValue;
+  vFCP: DecimalValue;
+  vBCST: DecimalValue;
+  vST: DecimalValue;
+  vFCPST: DecimalValue;
+  vFCPSTRet: DecimalValue;
+  vProd: DecimalValue;
+  vFrete: DecimalValue;
+  vSeg: DecimalValue;
+  vDesc: DecimalValue;
+  vII: DecimalValue;
+  vIPI: DecimalValue;
+  vIPIDevol: DecimalValue;
+  vPIS: DecimalValue;
+  vCOFINS: DecimalValue;
+  vOutro: DecimalValue;
+  vNF: DecimalValue;
+  vTotTrib?: DecimalValue;
 }
 
 export interface ISSQNTot {
-  vServ?: string;
-  vBC?: string;
-  vISS?: string;
-  vPIS?: string;
-  vCOFINS?: string;
+  vServ?: DecimalValue;
+  vBC?: DecimalValue;
+  vISS?: DecimalValue;
+  vPIS?: DecimalValue;
+  vCOFINS?: DecimalValue;
   dCompet: string;
-  vDeducao?: string;
-  vOutro?: string;
-  vDescIncond?: string;
-  vDescCond?: string;
-  vISSRet?: string;
+  vDeducao?: DecimalValue;
+  vOutro?: DecimalValue;
+  vDescIncond?: DecimalValue;
+  vDescCond?: DecimalValue;
+  vISSRet?: DecimalValue;
   cRegTrib?: string;
 }
 

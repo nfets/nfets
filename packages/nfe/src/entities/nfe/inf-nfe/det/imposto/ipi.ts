@@ -1,14 +1,10 @@
 export interface IPI {
-  clEnq?: string;
   CNPJProd?: string;
   cSelo?: string;
   qSelo?: string;
-  cEnq?: string;
-  vBC?: string;
-  qUnid?: string;
-  vUnid?: string;
-  pIPI?: string;
-  vIPI?: string;
+  cEnq: string;
+  IPITrib?: IPITrib;
+  IPINT?: IPINT;
 }
 
 export interface IPITrib {

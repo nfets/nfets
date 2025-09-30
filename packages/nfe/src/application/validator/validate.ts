@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 
-import { plainToInstance } from 'class-transformer';
 import { validateSync, type ValidationError } from 'class-validator';
 import { SkipValidationMetadata } from './skip-validations';
+import { plainToInstance } from '../transforms/plain-to-instance';
 
 export const ValidateErrorsMetadata = '__ValidateErrors__';
 
@@ -24,16 +24,6 @@ const mapConstraintsToErrors = (
     if (!messages) return constraints;
     return constraints.concat(messages);
   }, []);
-
-const clearUndefinedValues = (instance: Record<string, unknown>): void => {
-  for (const [key, value] of Object.entries(instance)) {
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    if (typeof value === 'undefined') delete instance[key];
-    if (value && typeof value === 'object') {
-      clearUndefinedValues(value as Record<string, unknown>);
-    }
-  }
-};
 
 export const Validates = <T extends object>(klass: new () => T) => {
   return (
@@ -63,10 +53,7 @@ export const Validates = <T extends object>(klass: new () => T) => {
       }
 
       const [payload, ...rest] = args;
-      type Instance = Record<string, keyof T>;
-      const instance = plainToInstance(klass, payload) as Instance;
-
-      clearUndefinedValues(instance);
+      const instance = plainToInstance<T>(payload, klass);
       const errors = validateSync(instance, { whitelist: true });
 
       if (errors.length) {
@@ -81,7 +68,7 @@ export const Validates = <T extends object>(klass: new () => T) => {
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return original?.apply(this, [instance as T, ...rest]);
+      return original?.apply(this, [instance, ...rest]);
     };
   };
 };

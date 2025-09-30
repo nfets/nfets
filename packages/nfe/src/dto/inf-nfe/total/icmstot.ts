@@ -8,9 +8,8 @@ export class ICMSTot implements IICMSTot {
   @IsString()
   public vICMS!: string;
 
-  @IsOptional()
   @IsString()
-  public vICMSDeson?: string;
+  public vICMSDeson!: string;
 
   @IsOptional()
   @IsString()
@@ -24,66 +23,55 @@ export class ICMSTot implements IICMSTot {
   @IsString()
   public vICMSUFRemet?: string;
 
-  @IsOptional()
   @IsString()
-  public vFCP?: string;
+  public vFCP!: string;
 
-  @IsOptional()
   @IsString()
-  public vBCST?: string;
+  public vBCST!: string;
 
-  @IsOptional()
   @IsString()
-  public vST?: string;
+  public vST!: string;
 
-  @IsOptional()
   @IsString()
-  public vFCPST?: string;
+  public vFCPST!: string;
 
-  @IsOptional()
   @IsString()
-  public vFCPSTRet?: string;
+  public vFCPSTRet!: string;
 
-  @IsOptional()
   @IsString()
-  public vProd?: string;
+  public vProd!: string;
 
-  @IsOptional()
   @IsString()
-  public vFrete?: string;
+  public vFrete!: string;
 
-  @IsOptional()
   @IsString()
-  public vSeg?: string;
+  public vSeg!: string;
 
-  @IsOptional()
   @IsString()
-  public vDesc?: string;
+  public vDesc!: string;
 
-  @IsOptional()
   @IsString()
-  public vII?: string;
+  public vII!: string;
 
-  @IsOptional()
   @IsString()
-  public vIPI?: string;
+  public vIPI!: string;
 
-  @IsOptional()
   @IsString()
-  public vIPIDevol?: string;
+  public vIPIDevol!: string;
 
-  @IsOptional()
   @IsString()
-  public vPIS?: string;
+  public vPIS!: string;
 
-  @IsOptional()
   @IsString()
-  public vCOFINS?: string;
+  public vCOFINS!: string;
 
-  @IsOptional()
   @IsString()
-  public vOutro?: string;
+  public vOutro!: string;
 
   @IsString()
   public vNF!: string;
+
+  @IsOptional()
+  @IsString()
+  vTotTrib?: string;
 }
