@@ -1,4 +1,10 @@
 {
   "name": "@nfets/test",
-  "private": true
+  "private": true,
+  "exports": {
+    "./certificates": "./src/certificates.ts",
+    "./ensure-integration-tests": "./src/ensure-integration-tests.ts",
+    "./expects": "./src/expects.ts",
+    "./jest.config": "./src/jest.config.ts"
+  }
 }

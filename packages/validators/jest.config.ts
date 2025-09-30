@@ -1,4 +1,4 @@
-import config from '../test/src/jest.config';
+import config from '@nfets/test/jest.config';
 
 export default {
   ...config,

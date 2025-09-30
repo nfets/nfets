@@ -9,7 +9,8 @@
     "test:coverage": "pnpm test --coverage"
   },
   "dependencies": {
-    "@nfets/core": "workspace:*"
+    "@nfets/core": "workspace:*",
+    "@nfets/test": "workspace:*"
   },
   "exports": {
     ".": "./dist/index.js"
