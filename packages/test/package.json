@@ -1,6 +1,7 @@
 {
   "name": "@nfets/test",
   "private": true,
+  "type": "module",
   "exports": {
     "./certificates": "./src/certificates.ts",
     "./ensure-integration-tests": "./src/ensure-integration-tests.ts",

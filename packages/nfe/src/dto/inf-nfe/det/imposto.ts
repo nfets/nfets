@@ -20,6 +20,8 @@ import type { COFINSST as ICOFINSST } from 'src/entities/nfe/inf-nfe/det/imposto
 import type { ISSQN as IISSQN } from 'src/entities/nfe/inf-nfe/det/imposto/issqn';
 import type { ICMSUFDest as IICMSUFDest } from 'src/entities/nfe/inf-nfe/det/imposto/icmsufdest';
 
+import { Case } from 'src/application/validator/switch-case';
+
 export class Imposto implements IImposto {
   @IsOptional()
   @IsNumber()
@@ -28,12 +30,19 @@ export class Imposto implements IImposto {
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMS)
+  @Case()
   public ICMS?: IICMS;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => IPI)
   public IPI?: IIPI;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ISSQN)
+  @Case()
+  public ISSQN?: IISSQN;
 
   @IsOptional()
   @ValidateNested()
@@ -59,11 +68,6 @@ export class Imposto implements IImposto {
   @ValidateNested()
   @Type(() => COFINSST)
   public COFINSST?: ICOFINSST;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => ISSQN)
-  public ISSQN?: IISSQN;
 
   @IsOptional()
   @ValidateNested()

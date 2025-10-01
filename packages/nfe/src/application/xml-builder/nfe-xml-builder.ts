@@ -1,4 +1,4 @@
-import { NFeTsError, XmlBuilder } from '@nfets/core';
+import { DeepPartial, NFeTsError, XmlBuilder } from '@nfets/core';
 
 import type {
   InfNFeAttributes as IInfNFeAttributes,
@@ -40,10 +40,14 @@ import {
 import { NfeDetXmlBuilder } from './nfe-det-xml-builder';
 
 import {
-  DefaultDetBuilderListener,
-  type DetBuilderListener,
-} from '../listeners/det-builder-listener';
-import { plainToInstance } from '../transforms/plain-to-instance';
+  DefaultDetBuilderAggregator,
+  type DetBuilderAggregator,
+} from '../aggregator/det-builder-aggregator';
+import { plainToInstance } from '../transform/plain-to-instance';
+import {
+  DefaultTotalBuilderAggregator,
+  type TotalBuilderAggregator,
+} from '../aggregator/total-builder-aggregator';
 
 export class NfeXmlBuilder implements INfeXmlBuilder {
   private readonly data = {
@@ -53,8 +57,10 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     },
   } as Partial<INFe>;
 
-  protected readonly $det: DetBuilderListener | undefined =
-    new DefaultDetBuilderListener(this);
+  protected readonly $det: DetBuilderAggregator | undefined =
+    new DefaultDetBuilderAggregator(this);
+  protected readonly $total: TotalBuilderAggregator | undefined =
+    new DefaultTotalBuilderAggregator(this);
 
   protected readonly nfeDetXmlBuilder = NfeDetXmlBuilder.create(this.$det);
 
@@ -91,12 +97,13 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     build: (ctx: ProdBuilder, item: T) => AssembleDetXmlBuilder,
   ): PagBuilder {
     this.data.infNFe ??= {} as IInfNFe;
-    this.data.infNFe.det = items.map((item, index) =>
-      build(
+    this.data.infNFe.det = items.map((item, index) => {
+      const builder = build(
         this.nfeDetXmlBuilder.det({ nItem: (index + 1).toString() }),
         item,
-      ).assemble(),
-    );
+      );
+      return this.collect(builder), builder.assemble();
+    });
     return this;
   }
 
@@ -108,12 +115,17 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
   }
 
   public increment(
-    callback: (context: ITotal) => Partial<ITotal>,
+    callback: (context: DeepPartial<ITotal>) => DeepPartial<ITotal>,
   ): TranspBuilder & TotalBuilder {
     this.data.infNFe ??= {} as IInfNFe;
+    const result = callback(this.data.infNFe.total) as ITotal;
+
     this.data.infNFe.total = {
       ...this.data.infNFe.total,
-      ...callback(this.data.infNFe.total),
+      ICMSTot: { ...this.data.infNFe.total.ICMSTot, ...result.ICMSTot },
+      ISSQNtot: result.ISSQNtot
+        ? { ...this.data.infNFe.total.ISSQNtot, ...result.ISSQNtot }
+        : void 0,
     };
 
     return this;
@@ -140,14 +152,33 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
 
   /** @throws {NFeTsError} */
   public assemble(): Promise<string> {
-    const errors = Reflect.getMetadata(ValidateErrorsMetadata, this) as
-      | string[]
-      | undefined;
-
+    const errors = this.errors();
     if (errors) throw new NFeTsError(errors.join(', '));
+    this.$total?.aggregate();
     return this.builder.build(plainToInstance(this.data, NFe), {
       rootName: 'NFe',
     });
+  }
+
+  private errors(): string[] | undefined {
+    return Reflect.getMetadata(ValidateErrorsMetadata, this) as
+      | string[]
+      | undefined;
+  }
+
+  private collect(target: object): void {
+    const errors = Reflect.getMetadata(ValidateErrorsMetadata, target) as
+      | string[]
+      | undefined;
+
+    if (!errors) return;
+
+    const current = this.errors();
+    Reflect.defineMetadata(
+      ValidateErrorsMetadata,
+      (current ?? []).concat(errors),
+      this,
+    );
   }
 
   private fillAccessKeyIfEmpty(): void {

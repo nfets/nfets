@@ -12,6 +12,12 @@ export interface ICMSTot {
   vST: DecimalValue;
   vFCPST: DecimalValue;
   vFCPSTRet: DecimalValue;
+  qBCMono?: DecimalValue;
+  vICMSMono?: DecimalValue;
+  qBCMonoReten?: DecimalValue;
+  vICMSMonoReten?: DecimalValue;
+  qBCMonoRet?: DecimalValue;
+  vICMSMonoRet?: DecimalValue;
   vProd: DecimalValue;
   vFrete: DecimalValue;
   vSeg: DecimalValue;

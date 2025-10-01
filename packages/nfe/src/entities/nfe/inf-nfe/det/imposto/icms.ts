@@ -1,3 +1,5 @@
+import type { DecimalValue } from '@nfets/core';
+
 export interface ICMS {
   ICMS00?: ICMS00;
   ICMS10?: ICMS10;
@@ -22,47 +24,47 @@ export interface ICMS00 {
   orig: string;
   CST: string;
   modBC?: string;
-  vBC?: string;
-  pICMS?: string;
-  vICMS?: string;
+  vBC?: DecimalValue;
+  pICMS?: DecimalValue;
+  vICMS?: DecimalValue;
 }
 
 export interface ICMS10 {
   orig: string;
   CST: string;
   modBC?: string;
-  vBC?: string;
-  pICMS?: string;
-  vICMS?: string;
+  vBC?: DecimalValue;
+  pICMS?: DecimalValue;
+  vICMS?: DecimalValue;
   modBCST?: string;
-  vBCST?: string;
-  pICMSST?: string;
-  vICMSST?: string;
+  vBCST?: DecimalValue;
+  pICMSST?: DecimalValue;
+  vICMSST?: DecimalValue;
 }
 
 export interface ICMS20 {
   orig: string;
   CST: string;
   modBC?: string;
-  pRedBC?: string;
-  vBC?: string;
-  pICMS?: string;
-  vICMS?: string;
+  pRedBC?: DecimalValue;
+  vBC?: DecimalValue;
+  pICMS?: DecimalValue;
+  vICMS?: DecimalValue;
 }
 
 export interface ICMS30 {
   orig: string;
   CST: string;
   modBCST?: string;
-  vBCST?: string;
-  pICMSST?: string;
-  vICMSST?: string;
+  vBCST?: DecimalValue;
+  pICMSST?: DecimalValue;
+  vICMSST?: DecimalValue;
 }
 
 export interface ICMS40 {
   orig: string;
   CST: string;
-  vICMSDeson?: string;
+  vICMSDeson?: DecimalValue;
   motDesICMS?: string;
 }
 
@@ -70,56 +72,56 @@ export interface ICMS51 {
   orig: string;
   CST: string;
   modBC?: string;
-  pRedBC?: string;
-  vBC?: string;
-  pICMS?: string;
-  vICMS?: string;
-  pDif?: string;
-  vICMSDif?: string;
+  pRedBC?: DecimalValue;
+  vBC?: DecimalValue;
+  pICMS?: DecimalValue;
+  vICMS?: DecimalValue;
+  pDif?: DecimalValue;
+  vICMSDif?: DecimalValue;
 }
 
 export interface ICMS60 {
   orig: string;
   CST: string;
-  vBCSTRet?: string;
-  pST?: string;
-  vICMSSubstituto?: string;
-  vICMSSTRet?: string;
+  vBCSTRet?: DecimalValue;
+  pST?: DecimalValue;
+  vICMSSubstituto?: DecimalValue;
+  vICMSSTRet?: DecimalValue;
 }
 
 export interface ICMS70 {
   orig: string;
   CST: string;
   modBC?: string;
-  pRedBC?: string;
-  vBC?: string;
-  pICMS?: string;
-  vICMS?: string;
+  pRedBC?: DecimalValue;
+  vBC?: DecimalValue;
+  pICMS?: DecimalValue;
+  vICMS?: DecimalValue;
   modBCST?: string;
-  vBCST?: string;
-  pICMSST?: string;
-  vICMSST?: string;
+  vBCST?: DecimalValue;
+  pICMSST?: DecimalValue;
+  vICMSST?: DecimalValue;
 }
 
 export interface ICMS90 {
   orig: string;
   CST: string;
   modBC?: string;
-  pRedBC?: string;
-  vBC?: string;
-  pICMS?: string;
-  vICMS?: string;
+  pRedBC?: DecimalValue;
+  vBC?: DecimalValue;
+  pICMS?: DecimalValue;
+  vICMS?: DecimalValue;
   modBCST?: string;
-  vBCST?: string;
-  pICMSST?: string;
-  vICMSST?: string;
+  vBCST?: DecimalValue;
+  pICMSST?: DecimalValue;
+  vICMSST?: DecimalValue;
 }
 
 export interface ICMSSN101 {
   orig: string;
   CSOSN: string;
-  pCredSN?: string;
-  vCredICMSSN?: string;
+  pCredSN?: DecimalValue;
+  vCredICMSSN?: DecimalValue;
 }
 
 export interface ICMSSN102 {
@@ -130,71 +132,71 @@ export interface ICMSSN102 {
 export interface ICMSSN201 {
   orig: string;
   CSOSN: string;
-  modBCST?: string;
-  vBCST?: string;
-  pICMSST?: string;
-  vICMSST?: string;
-  pCredSN?: string;
-  vCredICMSSN?: string;
+  modBCST?: DecimalValue;
+  vBCST?: DecimalValue;
+  pICMSST?: DecimalValue;
+  vICMSST?: DecimalValue;
+  pCredSN?: DecimalValue;
+  vCredICMSSN?: DecimalValue;
 }
 
 export interface ICMSSN202 {
   orig: string;
   CSOSN: string;
   modBCST?: string;
-  vBCST?: string;
-  pICMSST?: string;
-  vICMSST?: string;
+  vBCST?: DecimalValue;
+  pICMSST?: DecimalValue;
+  vICMSST?: DecimalValue;
 }
 
 export interface ICMSSN500 {
   orig: string;
   CSOSN: string;
-  vBCSTRet?: string;
-  pST?: string;
-  vICMSSubstituto?: string;
-  vICMSSTRet?: string;
+  vBCSTRet?: DecimalValue;
+  pST?: DecimalValue;
+  vICMSSubstituto?: DecimalValue;
+  vICMSSTRet?: DecimalValue;
 }
 
 export interface ICMSSN900 {
   orig: string;
   CSOSN: string;
-  modBC?: string;
-  vBC?: string;
-  pRedBC?: string;
-  pICMS?: string;
-  vICMS?: string;
+  modBC?: DecimalValue;
+  vBC?: DecimalValue;
+  pRedBC?: DecimalValue;
+  pICMS?: DecimalValue;
+  vICMS?: DecimalValue;
   modBCST?: string;
-  vBCST?: string;
-  pICMSST?: string;
-  vICMSST?: string;
-  pCredSN?: string;
-  vCredICMSSN?: string;
+  vBCST?: DecimalValue;
+  pICMSST?: DecimalValue;
+  vICMSST?: DecimalValue;
+  pCredSN?: DecimalValue;
+  vCredICMSSN?: DecimalValue;
 }
 
 export interface ICMSPart {
   orig: string;
   CST: string;
   modBC?: string;
-  vBC?: string;
-  pRedBC?: string;
-  pICMS?: string;
-  vICMS?: string;
+  vBC?: DecimalValue;
+  pRedBC?: DecimalValue;
+  pICMS?: DecimalValue;
+  vICMS?: DecimalValue;
   modBCST?: string;
-  pMVAST?: string;
-  pRedBCST?: string;
-  vBCST?: string;
-  pICMSST?: string;
-  vICMSST?: string;
-  pBCOp?: string;
+  pMVAST?: DecimalValue;
+  pRedBCST?: DecimalValue;
+  vBCST?: DecimalValue;
+  pICMSST?: DecimalValue;
+  vICMSST?: DecimalValue;
+  pBCOp?: DecimalValue;
   UFST?: string;
 }
 
 export interface ICMSST {
   orig: string;
   CST: string;
-  vBCSTRet?: string;
-  pST?: string;
-  vICMSSubstituto?: string;
-  vICMSSTRet?: string;
+  vBCSTRet?: DecimalValue;
+  pST?: DecimalValue;
+  vICMSSubstituto?: DecimalValue;
+  vICMSSTRet?: DecimalValue;
 }

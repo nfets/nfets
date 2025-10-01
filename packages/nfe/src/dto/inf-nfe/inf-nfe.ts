@@ -59,6 +59,7 @@ export class InfNFe implements IInfNFe {
   @IsObject()
   @IsNotEmptyObject()
   @Type(() => InfNFeAttributes)
+  @ValidateNested()
   declare $: IInfNFeAttributes;
 
   @IsObject()

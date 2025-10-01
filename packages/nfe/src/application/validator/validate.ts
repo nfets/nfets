@@ -2,18 +2,21 @@ import 'reflect-metadata';
 
 import { validateSync, type ValidationError } from 'class-validator';
 import { SkipValidationMetadata } from './skip-validations';
-import { plainToInstance } from '../transforms/plain-to-instance';
+import { plainToInstance } from '../transform/plain-to-instance';
 
 export const ValidateErrorsMetadata = '__ValidateErrors__';
 
-const mapConstraintsToErrors = (
+export const mapConstraintsToErrors = (
   errors: ValidationError[],
   parent?: string,
 ): string[] =>
   errors.reduce<string[]>((constraints, it) => {
     if (it.children?.length) {
       return constraints.concat(
-        mapConstraintsToErrors(it.children, it.property),
+        mapConstraintsToErrors(
+          it.children,
+          parent ? `${parent}.${it.property}` : it.property,
+        ),
       );
     }
 

@@ -28,7 +28,9 @@ export interface DetBuilder {
 
 export interface TotalBuilder {
   total(payload: ITotal): TranspBuilder;
-  increment(callback: (context: ITotal) => DeepPartial<ITotal>): TranspBuilder;
+  increment(
+    callback: (context: DeepPartial<ITotal>) => DeepPartial<ITotal>,
+  ): TranspBuilder;
 }
 
 export interface TranspBuilder {

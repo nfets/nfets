@@ -1,4 +1,4 @@
-import { Xml2JsBuilder } from '@nfets/core';
+import { Decimal, Xml2JsBuilder } from '@nfets/core';
 import { NfeXmlBuilder } from 'src/application/xml-builder/nfe-xml-builder';
 
 import {
@@ -44,7 +44,27 @@ describe('xml builder with xml2js builder', () => {
     </ide>
     <emit/>
     <total>
-      <ICMSTot/>
+      <ICMSTot>
+        <vBC>0.00</vBC>
+        <vICMS>0.00</vICMS>
+        <vICMSDeson>0.00</vICMSDeson>
+        <vFCP>0.00</vFCP>
+        <vBCST>0.00</vBCST>
+        <vST>0.00</vST>
+        <vFCPST>0.00</vFCPST>
+        <vFCPSTRet>0.00</vFCPSTRet>
+        <vProd>0.00</vProd>
+        <vFrete>0.00</vFrete>
+        <vSeg>0.00</vSeg>
+        <vDesc>0.00</vDesc>
+        <vII>0.00</vII>
+        <vIPI>0.00</vIPI>
+        <vIPIDevol>0.00</vIPIDevol>
+        <vPIS>0.00</vPIS>
+        <vCOFINS>0.00</vCOFINS>
+        <vOutro>0.00</vOutro>
+        <vNF>0.00</vNF>
+      </ICMSTot>
     </total>
     <pag/>
   </infNFe>
@@ -97,7 +117,27 @@ describe('xml builder with xml2js builder', () => {
       <CRT/>
     </emit>
     <total>
-      <ICMSTot/>
+      <ICMSTot>
+        <vBC>0.00</vBC>
+        <vICMS>0.00</vICMS>
+        <vICMSDeson>0.00</vICMSDeson>
+        <vFCP>0.00</vFCP>
+        <vBCST>0.00</vBCST>
+        <vST>0.00</vST>
+        <vFCPST>0.00</vFCPST>
+        <vFCPSTRet>0.00</vFCPSTRet>
+        <vProd>0.00</vProd>
+        <vFrete>0.00</vFrete>
+        <vSeg>0.00</vSeg>
+        <vDesc>0.00</vDesc>
+        <vII>0.00</vII>
+        <vIPI>0.00</vIPI>
+        <vIPIDevol>0.00</vIPIDevol>
+        <vPIS>0.00</vPIS>
+        <vCOFINS>0.00</vCOFINS>
+        <vOutro>0.00</vOutro>
+        <vNF>0.00</vNF>
+      </ICMSTot>
     </total>
     <pag/>
   </infNFe>
@@ -206,7 +246,8 @@ describe('xml builder with xml2js builder', () => {
               CST: '00',
               modBC: '0',
               vBC: '100',
-              pICMS: '18',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
             },
           })
           .ipi({
@@ -302,6 +343,7 @@ describe('xml builder with xml2js builder', () => {
             <modBC>0</modBC>
             <vBC>100</vBC>
             <pICMS>18</pICMS>
+            <vICMS>18</vICMS>
           </ICMS00>
         </ICMS>
         <IPI>
@@ -324,11 +366,25 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
+        <vBC>0.00</vBC>
+        <vICMS>0.00</vICMS>
+        <vICMSDeson>0.00</vICMSDeson>
+        <vFCP>0.00</vFCP>
+        <vBCST>0.00</vBCST>
+        <vST>0.00</vST>
+        <vFCPST>0.00</vFCPST>
+        <vFCPSTRet>0.00</vFCPSTRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
         <vDesc>0.00</vDesc>
+        <vII>0.00</vII>
+        <vIPI>0.00</vIPI>
+        <vIPIDevol>0.00</vIPIDevol>
+        <vPIS>0.00</vPIS>
+        <vCOFINS>0.00</vCOFINS>
         <vOutro>0.00</vOutro>
+        <vNF>100.00</vNF>
       </ICMSTot>
     </total>
     <pag/>

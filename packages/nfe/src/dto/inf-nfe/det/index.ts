@@ -8,15 +8,17 @@ import { Type } from 'class-transformer';
 import { Prod } from './prod';
 
 import { Imposto } from './imposto';
-import { Devol } from './imposto/devol';
+import { Devol } from './imposto-devol';
+import { ObsItem } from './obs-item';
 
 import type {
   Det as IDet,
   DetAttributes as IDetAttributes,
 } from 'src/entities/nfe/inf-nfe/det';
-import type { Devol as IDevol } from 'src/entities/nfe/inf-nfe/det/imposto/devol';
+import type { Devol as IDevol } from 'src/entities/nfe/inf-nfe/det/imposto-devol';
 import type { Prod as IProd } from 'src/entities/nfe/inf-nfe/det/prod';
 import type { Imposto as IImposto } from 'src/entities/nfe/inf-nfe/det/imposto';
+import type { ObsItem as IObsItem } from 'src/entities/nfe/inf-nfe/det/obs-item';
 
 export class DetAttributes implements IDetAttributes {
   @IsString()
@@ -46,4 +48,9 @@ export class Det implements IDet {
   @IsOptional()
   @IsString()
   public infAdProd?: string;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ObsItem)
+  public obsItem?: IObsItem;
 }

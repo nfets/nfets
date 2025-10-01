@@ -3,6 +3,7 @@ import {
   IsNotEmptyObject,
   IsObject,
   IsString,
+  ValidateNested,
 } from 'class-validator';
 import type {
   NFe as INFe,
@@ -22,10 +23,12 @@ export class NFe implements INFe {
   @IsObject()
   @IsNotEmptyObject()
   @Type(() => NFeAttributes)
+  @ValidateNested()
   public $!: INFeAttributes;
 
   @IsObject()
   @IsNotEmptyObject()
   @Type(() => InfNFe)
+  @ValidateNested()
   public infNFe!: IInfNFe;
 }

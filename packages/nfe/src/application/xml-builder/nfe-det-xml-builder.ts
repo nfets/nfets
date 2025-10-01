@@ -36,18 +36,18 @@ import { PIS, PISST } from 'src/dto/inf-nfe/det/imposto/pis';
 import { COFINS, COFINSST } from 'src/dto/inf-nfe/det/imposto/cofins';
 import { ICMSUFDest } from 'src/dto/inf-nfe/det/imposto/icmsufdest';
 import { II } from 'src/dto/inf-nfe/det/imposto/ii';
-import { DetBuilderListener } from '../listeners/det-builder-listener';
+import { DetBuilderAggregator } from '../aggregator/det-builder-aggregator';
 
 export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   private readonly data = {} as IDet;
 
   public static create(
-    listener?: DetBuilderListener,
+    listener?: DetBuilderAggregator,
   ): DetBuilder & ProdBuilder {
     return new this(listener);
   }
 
-  protected constructor(private readonly listener?: DetBuilderListener) {}
+  protected constructor(private readonly listener?: DetBuilderAggregator) {}
 
   @Validates(DetAttributes)
   public det(payload: IDetAttributes) {
