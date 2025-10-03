@@ -1,5 +1,8 @@
 import { IsOptional, IsString } from 'class-validator';
+import { IsDecimal } from 'src/application/validator/decimal';
 import { Vol as IVol } from 'src/entities/nfe/inf-nfe/transp';
+
+import type { DecimalValue } from '@nfets/core';
 
 export class Vol implements IVol {
   @IsOptional()
@@ -19,10 +22,10 @@ export class Vol implements IVol {
   public nVol?: string;
 
   @IsOptional()
-  @IsString()
-  public pesoL?: string;
+  @IsDecimal()
+  public pesoL?: DecimalValue;
 
   @IsOptional()
-  @IsString()
-  public pesoB?: string;
+  @IsDecimal()
+  public pesoB?: DecimalValue;
 }

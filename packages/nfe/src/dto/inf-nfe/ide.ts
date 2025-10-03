@@ -1,4 +1,10 @@
-import { IsArray, IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  ArrayMaxSize,
+  IsArray,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import type {
   RefNF as IRefNF,
@@ -7,6 +13,7 @@ import type {
   RefECF as IRefECF,
   NFref as INFref,
 } from 'src/entities/nfe/inf-nfe/ide';
+import { Case } from 'src/application/validator/switch-case';
 
 export class RefNF implements IRefNF {
   @IsString()
@@ -37,10 +44,12 @@ export class RefNFP implements IRefNFP {
 
   @IsOptional()
   @IsString()
+  @Case()
   public CNPJ?: string;
 
   @IsOptional()
   @IsString()
+  @Case()
   public CPF?: string;
 
   @IsString()
@@ -172,6 +181,7 @@ export class Ide implements IIde {
 
   @IsOptional()
   @IsArray()
+  @ArrayMaxSize(999)
   @ValidateNested({ each: true })
   @Type(() => NFref)
   public NFref?: INFref[];

@@ -1,4 +1,5 @@
 import {
+  ArrayMaxSize,
   IsNotEmptyObject,
   IsObject,
   IsOptional,
@@ -23,6 +24,8 @@ import { Pag } from './pag';
 import { InfAdic } from './infadic';
 import { Cana } from './cana';
 import { Det } from './det';
+import { Avulsa } from './avulsa';
+import { InfSolicNFF } from './inf-solic-nff';
 
 import type {
   InfNFeAttributes as IInfNFeAttributes,
@@ -44,6 +47,8 @@ import type { InfIntermed as IInfIntermed } from 'src/entities/nfe/inf-nfe/infin
 import type { Exporta as IExporta } from 'src/entities/nfe/inf-nfe/exporta';
 import type { Compra as ICompra } from 'src/entities/nfe/inf-nfe/compra';
 import type { InfRespTec as IInfRespTec } from 'src/entities/nfe/inf-nfe/infresptec';
+import type { Avulsa as IAvulsa } from 'src/entities/nfe/inf-nfe/avulsa';
+import type { InfSolicNFF as ISolicNFF } from 'src/entities/nfe/inf-nfe/inf-solic-nff';
 
 export class InfNFeAttributes implements IInfNFeAttributes {
   @IsOptional()
@@ -76,6 +81,11 @@ export class InfNFe implements IInfNFe {
 
   @IsOptional()
   @ValidateNested()
+  @Type(() => Avulsa)
+  public avulsa?: IAvulsa;
+
+  @IsOptional()
+  @ValidateNested()
   @Type(() => Dest)
   public dest?: IDest;
 
@@ -91,30 +101,12 @@ export class InfNFe implements IInfNFe {
 
   @IsOptional()
   @ValidateNested({ each: true })
+  @ArrayMaxSize(10)
   @Type(() => AutXML)
   public autXML?: IAutXML[];
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => InfIntermed)
-  public infIntermed?: IInfIntermed;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => Exporta)
-  public exporta?: IExporta;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => Compra)
-  public compra?: ICompra;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => InfRespTec)
-  public infRespTec?: IInfRespTec;
-
   @ValidateNested({ each: true })
+  @ArrayMaxSize(990)
   @Type(() => Det)
   public det!: IDet[];
 
@@ -137,11 +129,36 @@ export class InfNFe implements IInfNFe {
 
   @IsOptional()
   @ValidateNested()
+  @Type(() => InfIntermed)
+  public infIntermed?: IInfIntermed;
+
+  @IsOptional()
+  @ValidateNested()
   @Type(() => InfAdic)
   public infAdic?: IInfAdic;
 
   @IsOptional()
   @ValidateNested()
+  @Type(() => Exporta)
+  public exporta?: IExporta;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Compra)
+  public compra?: ICompra;
+
+  @IsOptional()
+  @ValidateNested()
   @Type(() => Cana)
   public cana?: ICana;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => InfRespTec)
+  public infRespTec?: IInfRespTec;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => InfSolicNFF)
+  public infSolicNFF?: ISolicNFF;
 }

@@ -5,23 +5,23 @@ import { MemoryCacheAdapter } from 'src/infrastructure/repositories/memory-cache
 import { NodeCertificateRepository } from 'src/infrastructure/repositories/node-certificate-repository';
 import { SoapRemoteTransmissionRepository } from 'src/infrastructure/repositories/soap-remote-transmission-repository';
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
-import { Xml2JsBuilder } from 'src/index';
-
-const certificatePath = process.env.TEST_CERTIFICATE_PATH,
-  password = process.env.TEST_CERTIFICATE_PASSWORD;
+import { Xml2JsToolkit } from 'src/index';
 
 describe('soap remote transmission nfe (integration) (not destructive)', () => {
-  if (!certificatePath || password === undefined)
-    return ensureIntegrationTestsHasValidCertificate();
+  const certificate = ensureIntegrationTestsHasValidCertificate();
+  if (certificate === undefined) return;
 
-  const xml = new Xml2JsBuilder();
+  const xml = new Xml2JsToolkit();
 
   const transmission = new SoapRemoteTransmissionRepository(
     new NodeCertificateRepository(axios.create(), new MemoryCacheAdapter()),
   );
 
   it('should return schema failed when payload is invalid', async () => {
-    await transmission.setCertificate(certificatePath, password);
+    await transmission.setCertificate(
+      certificate.certificatePath,
+      certificate.password,
+    );
 
     const nfeDadosMsg = await xml.build({
       consStatServ: {

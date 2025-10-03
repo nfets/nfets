@@ -32,13 +32,23 @@ export class SoapRemoteTransmissionRepository
   }
 
   protected get httpsAgent(): AgentOptions {
-    return new HttpsAgent({
+    const defaultAgentOptions = {
       rejectUnauthorized: false,
-      ca: this.certificate?.ca,
-      key: this.certificate?.privateKey,
-      cert: this.certificate?.certificate,
-      passphrase: this.certificate?.password,
       secureOptions: constants.SSL_OP_LEGACY_SERVER_CONNECT,
+    };
+
+    if (!this.certificate) return new HttpsAgent({ ...defaultAgentOptions });
+    const { ca, password, certificate, privateKey } = this.certificate;
+
+    const key = this.certificateRepository.getStringPrivateKey(privateKey);
+    const cert = this.certificateRepository.getStringPublicKey(certificate);
+
+    return new HttpsAgent({
+      key,
+      cert,
+      ca: ca,
+      passphrase: password,
+      ...defaultAgentOptions,
     });
   }
 

@@ -1,22 +1,18 @@
-import { IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  ArrayMaxSize,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 import type {
-  ObsCont as IObsCont,
-  ObsFisco as IObsFisco,
   ProcRef as IProcRef,
   InfAdic as IInfAdic,
+  InfAdicObs as IInfAdicObs,
 } from 'src/entities/nfe/inf-nfe/infadic';
 
-export class ObsCont implements IObsCont {
-  @IsString()
-  public xCampo!: string;
-
-  @IsString()
-  public xTexto!: string;
-}
-
-export class ObsFisco implements IObsFisco {
+export class InfAdicObs implements IInfAdicObs {
   @IsString()
   public xCampo!: string;
 
@@ -45,16 +41,19 @@ export class InfAdic implements IInfAdic {
 
   @IsOptional()
   @ValidateNested({ each: true })
-  @Type(() => ObsCont)
-  public obsCont?: IObsCont[];
+  @Type(() => InfAdicObs)
+  @ArrayMaxSize(10)
+  public obsCont?: InfAdicObs[];
 
   @IsOptional()
   @ValidateNested({ each: true })
-  @Type(() => ObsFisco)
-  public obsFisco?: IObsFisco[];
+  @Type(() => InfAdicObs)
+  @ArrayMaxSize(10)
+  public obsFisco?: IInfAdicObs[];
 
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => ProcRef)
+  @ArrayMaxSize(100)
   public procRef?: IProcRef[];
 }

@@ -1,4 +1,4 @@
-import { Decimal, Xml2JsBuilder } from '@nfets/core';
+import { Decimal, Xml2JsToolkit } from '@nfets/core';
 import { NfeXmlBuilder } from 'src/application/xml-builder/nfe-xml-builder';
 
 import {
@@ -13,7 +13,7 @@ describe('xml builder with xml2js builder', () => {
     @SkipAllValidations()
     class DontValidateNfeXmlBuilder extends NfeXmlBuilder {}
 
-    const builder = DontValidateNfeXmlBuilder.create(new Xml2JsBuilder())
+    const builder = DontValidateNfeXmlBuilder.create(new Xml2JsToolkit())
       .infNFe({ versao: { some: 'invalid-value' } as never })
       .ide({
         mod: '55',
@@ -32,7 +32,7 @@ describe('xml builder with xml2js builder', () => {
     expect(xml).toBeDefined();
     expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
-  <infNFe Id="52240600000000000000550010000000011459417288" versao="[object Object]">
+  <infNFe Id="NFe52240600000000000000550010000000011459417288" versao="[object Object]">
     <ide>
       <cUF>52</cUF>
       <cNF>45941728</cNF>
@@ -79,7 +79,7 @@ describe('xml builder with xml2js builder', () => {
       }
     }
 
-    const builder = DontValidateNfeXmlBuilder.create(new Xml2JsBuilder())
+    const builder = DontValidateNfeXmlBuilder.create(new Xml2JsToolkit())
       .infNFe({ versao: '4.00' })
       .ide({
         mod: { invalid: 'model' } as never,
@@ -99,7 +99,7 @@ describe('xml builder with xml2js builder', () => {
     expect(xml).toBeDefined();
     expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
-  <infNFe Id="52240600000000000000[object Object]001000000001112345678NaN" versao="4.00">
+  <infNFe Id="NFe52240600000000000000[object Object]001000000001112345678NaN" versao="4.00">
     <ide>
       <cUF>52</cUF>
       <cNF>12345678</cNF>
@@ -145,7 +145,7 @@ describe('xml builder with xml2js builder', () => {
   });
 
   it('should throw exception when assemble an invalid nfe xml', async () => {
-    const builder = NfeXmlBuilder.create(new Xml2JsBuilder())
+    const builder = NfeXmlBuilder.create(new Xml2JsToolkit())
       .infNFe({ versao: '4.00' })
       .ide({
         mod: '55',
@@ -176,7 +176,7 @@ describe('xml builder with xml2js builder', () => {
       },
     ];
 
-    const builder = NfeXmlBuilder.create(new Xml2JsBuilder())
+    const builder = NfeXmlBuilder.create(new Xml2JsToolkit())
       .infNFe({ versao: '4.00' })
       .ide({
         cUF: '52',
@@ -274,7 +274,7 @@ describe('xml builder with xml2js builder', () => {
     expect(xml).toBeDefined();
     expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
-  <infNFe Id="52240646755763000143550990000080181785272515" versao="4.00">
+  <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
       <cUF>52</cUF>
       <cNF>78527251</cNF>

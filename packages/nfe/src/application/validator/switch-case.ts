@@ -6,13 +6,16 @@ import {
   type ValidationArguments,
 } from 'class-validator';
 
-export const Case = (
-  validationOptions?: ValidationOptions & { group: string },
-): PropertyDecorator => {
+export interface CaseOptions extends ValidationOptions {
+  allow?: string[];
+}
+
+export const Case = ({
+  allow,
+  ...validationOptions
+}: CaseOptions = {}): PropertyDecorator => {
   return (target: object, propertyKey: string | symbol) => {
-    const key = `${validationOptions?.group ?? 'default'}.${
-      target.constructor.name
-    }`;
+    const key = target.constructor.name;
 
     registerDecorator({
       name: 'case',
@@ -26,6 +29,7 @@ export const Case = (
             | string
             | undefined;
 
+          if (allow?.includes(alreadySettedOption ?? '')) return true;
           if (alreadySettedOption) return false;
 
           Reflect.defineMetadata(key, propertyKey as string, instance);

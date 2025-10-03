@@ -1,13 +1,16 @@
 import { IsOptional, IsString } from 'class-validator';
+import { Case } from 'src/application/validator/switch-case';
 import { Local as ILocal } from 'src/entities/nfe/inf-nfe/local';
 
 export class Local implements ILocal {
   @IsOptional()
   @IsString()
+  @Case()
   public CNPJ?: string;
 
   @IsOptional()
   @IsString()
+  @Case()
   public CPF?: string;
 
   @IsOptional()

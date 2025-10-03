@@ -1,3 +1,5 @@
+import type { DecimalValue } from '@nfets/core';
+
 export interface Transporta {
   CNPJ?: string;
   CPF?: string;
@@ -9,10 +11,10 @@ export interface Transporta {
 }
 
 export interface RetTransp {
-  vServ?: string;
-  vBCRet?: string;
-  pICMSRet?: string;
-  vICMSRet?: string;
+  vServ?: DecimalValue;
+  vBCRet?: DecimalValue;
+  pICMSRet?: DecimalValue;
+  vICMSRet?: DecimalValue;
   CFOP?: string;
   cMunFG?: string;
 }
@@ -34,8 +36,8 @@ export interface Vol {
   esp?: string;
   marca?: string;
   nVol?: string;
-  pesoL?: string;
-  pesoB?: string;
+  pesoL?: DecimalValue;
+  pesoB?: DecimalValue;
 }
 
 export interface Transp {

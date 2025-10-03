@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
-import { type Either, left, NFeTsError, Xml2JsBuilder } from 'src/index';
+import { type Either, left, NFeTsError, Xml2JsToolkit } from 'src/index';
 
 describe('xml validator (unit)', () => {
   const nfeNfceSchemas = path.resolve(
@@ -9,7 +9,7 @@ describe('xml validator (unit)', () => {
     'nfe',
     'schemas',
   );
-  const xml = new Xml2JsBuilder();
+  const xml = new Xml2JsToolkit();
 
   it('should return left when 3 args was not provided', async () => {
     await expect(

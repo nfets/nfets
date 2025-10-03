@@ -4,14 +4,17 @@ import { EnderDest } from './ender-dest';
 
 import type { Dest as IDest } from 'src/entities/nfe/inf-nfe/dest';
 import type { EnderDest as IEnderDest } from 'src/entities/nfe/inf-nfe/dest';
+import { Case } from 'src/application/validator/switch-case';
 
 export class Dest implements IDest {
   @IsOptional()
   @IsString()
+  @Case()
   public CNPJ?: string;
 
   @IsOptional()
   @IsString()
+  @Case()
   public CPF?: string;
 
   @IsOptional()

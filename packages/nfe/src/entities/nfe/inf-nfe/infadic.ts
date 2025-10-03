@@ -1,9 +1,4 @@
-export interface ObsCont {
-  xCampo: string;
-  xTexto: string;
-}
-
-export interface ObsFisco {
+export interface InfAdicObs {
   xCampo: string;
   xTexto: string;
 }
@@ -16,7 +11,7 @@ export interface ProcRef {
 export interface InfAdic {
   infAdFisco?: string;
   infCpl?: string;
-  obsCont?: ObsCont[];
-  obsFisco?: ObsFisco[];
+  obsCont?: InfAdicObs[];
+  obsFisco?: InfAdicObs[];
   procRef?: ProcRef[];
 }

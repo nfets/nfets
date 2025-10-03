@@ -1,4 +1,4 @@
-import { DeepPartial, NFeTsError, XmlBuilder } from '@nfets/core';
+import { DeepPartial, NFeTsError, XmlToolkit } from '@nfets/core';
 
 import type {
   InfNFeAttributes as IInfNFeAttributes,
@@ -57,6 +57,8 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     },
   } as Partial<INFe>;
 
+  protected readonly root = 'NFe';
+
   protected readonly $det: DetBuilderAggregator | undefined =
     new DefaultDetBuilderAggregator(this);
   protected readonly $total: TotalBuilderAggregator | undefined =
@@ -64,11 +66,11 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
 
   protected readonly nfeDetXmlBuilder = NfeDetXmlBuilder.create(this.$det);
 
-  public static create(builder: XmlBuilder): InfNFeBuilder & IdeBuilder {
+  public static create(builder: XmlToolkit): InfNFeBuilder & IdeBuilder {
     return new this(builder);
   }
 
-  protected constructor(private readonly builder: XmlBuilder) {}
+  protected constructor(private readonly builder: XmlToolkit) {}
 
   @Validates(InfNFeAttributes)
   public infNFe($: IInfNFeAttributes): IdeBuilder {
@@ -150,14 +152,16 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     return this;
   }
 
+  public toObject(): NFe {
+    return plainToInstance(this.data, NFe);
+  }
+
   /** @throws {NFeTsError} */
   public assemble(): Promise<string> {
     const errors = this.errors();
     if (errors) throw new NFeTsError(errors.join(', '));
     this.$total?.aggregate();
-    return this.builder.build(plainToInstance(this.data, NFe), {
-      rootName: 'NFe',
-    });
+    return this.builder.build(this.toObject(), { rootName: this.root });
   }
 
   private errors(): string[] | undefined {
@@ -185,18 +189,20 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     if (this.data.infNFe?.$.Id) return;
 
     this.data.infNFe ??= {} as IInfNFe;
+    const Id = new AccessKeyBuider().compile({
+      cUF: this.data.infNFe.ide.cUF,
+      year: this.data.infNFe.ide.dhEmi.substring(2, 4),
+      month: this.data.infNFe.ide.dhEmi.substring(5, 7),
+      identification: this.data.infNFe.emit.CPF ?? this.data.infNFe.emit.CNPJ,
+      mod: this.data.infNFe.ide.mod,
+      serie: this.data.infNFe.ide.serie,
+      nNF: this.data.infNFe.ide.nNF,
+      tpEmis: this.data.infNFe.ide.tpEmis,
+      cNF: this.data.infNFe.ide.cNF,
+    });
+
     this.data.infNFe.$ = {
-      Id: new AccessKeyBuider().compile({
-        cUF: this.data.infNFe.ide.cUF,
-        year: this.data.infNFe.ide.dhEmi.substring(2, 4),
-        month: this.data.infNFe.ide.dhEmi.substring(5, 7),
-        identification: this.data.infNFe.emit.CPF ?? this.data.infNFe.emit.CNPJ,
-        mod: this.data.infNFe.ide.mod,
-        serie: this.data.infNFe.ide.serie,
-        nNF: this.data.infNFe.ide.nNF,
-        tpEmis: this.data.infNFe.ide.tpEmis,
-        cNF: this.data.infNFe.ide.cNF,
-      }),
+      Id: `${this.root}${Id}`,
       versao: this.data.infNFe.$.versao,
       pk_nItem: this.data.infNFe.$.pk_nItem,
     };

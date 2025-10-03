@@ -1,4 +1,9 @@
-import { IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  ArrayMaxSize,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import type {
   Fat as IFat,
@@ -46,6 +51,7 @@ export class Cobr implements ICobr {
 
   @IsOptional()
   @ValidateNested({ each: true })
+  @ArrayMaxSize(120)
   @Type(() => Dup)
   public dup?: Dup[];
 }

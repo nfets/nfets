@@ -1,14 +1,21 @@
-import { IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  ArrayMaxSize,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import type {
   ForDia as IForDia,
   Cana as ICana,
   Deduc as IDeduc,
 } from 'src/entities/nfe/inf-nfe/cana';
+import { IsDecimal } from 'src/application/validator/decimal';
+import type { DecimalValue } from '@nfets/core';
 
 export class ForDia implements IForDia {
   @IsString()
-  public qtde!: string;
+  public qtde!: DecimalValue;
 
   @IsString()
   public dia!: string;
@@ -19,15 +26,15 @@ export class Deduc implements IDeduc {
   public xDed!: string;
 
   @IsString()
-  public vDed!: string;
+  public vDed!: DecimalValue;
 
   @IsOptional()
   @IsString()
-  public vFor?: string;
+  public vFor?: DecimalValue;
 
   @IsOptional()
   @IsString()
-  public vTotDed?: string;
+  public vTotDed?: DecimalValue;
 }
 
 export class Cana implements ICana {
@@ -39,23 +46,37 @@ export class Cana implements ICana {
 
   @IsOptional()
   @IsString()
-  public qTotMes?: string;
+  public qTotMes?: DecimalValue;
 
   @IsOptional()
   @IsString()
-  public qTotAnt?: string;
+  public qTotAnt?: DecimalValue;
 
   @IsOptional()
   @IsString()
-  public qTotGer?: string;
+  public qTotGer?: DecimalValue;
 
   @IsOptional()
   @ValidateNested({ each: true })
+  @ArrayMaxSize(31)
   @Type(() => ForDia)
   public forDia?: ForDia[];
 
   @IsOptional()
   @ValidateNested({ each: true })
+  @ArrayMaxSize(10)
   @Type(() => Deduc)
   public deduc?: Deduc[];
+
+  @IsOptional()
+  @IsDecimal()
+  public vFor?: DecimalValue;
+
+  @IsOptional()
+  @IsDecimal()
+  public vTotDed?: DecimalValue;
+
+  @IsOptional()
+  @IsDecimal()
+  public vLiqFor?: DecimalValue;
 }

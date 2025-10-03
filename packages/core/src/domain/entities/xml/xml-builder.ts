@@ -1,20 +1,6 @@
-import type { NFeTsError } from '../../errors/nfets-error';
-import type { Either } from '../../../shared/either';
-import type { ParserOptions } from './xml-parser';
-
 export const defaultBuilderOptions = {
   xmldec: { version: '1.0', encoding: 'UTF-8', standalone: undefined },
 } as BuilderOptions;
-
-export interface XmlBuilder {
-  parse<T>(xml: string, options?: ParserOptions): Promise<T>;
-  build(object: object, options?: BuilderOptions): Promise<string>;
-  validate(
-    xml: string,
-    xsdPathReference: string,
-    xsdFilename: string,
-  ): Promise<Either<NFeTsError, void>>;
-}
 
 export interface XmlDeclarationAttributes {
   version: string;
@@ -27,6 +13,7 @@ export interface RenderOptions {
   indent?: string | undefined;
   newline?: string | undefined;
 }
+
 export interface BuilderOptions {
   attrkey?: string | undefined;
   charkey?: string | undefined;

@@ -6,6 +6,7 @@ import type { AssembleDetXmlBuilder, ProdBuilder } from './nfe-det-xml-builder';
 import type { Total as ITotal } from 'src/entities/nfe/inf-nfe/total';
 import type { Transp as ITransp } from 'src/entities/nfe/inf-nfe/transp';
 import type { DeepPartial } from '@nfets/core';
+import type { NFe } from '../nfe/nfe';
 
 export interface InfNFeBuilder {
   infNFe(payload: InfNFeAttributes): IdeBuilder;
@@ -43,6 +44,7 @@ export interface PagBuilder {
 
 export interface AssembleNfeBuilder {
   quiet(): AssembleNfeBuilder;
+  toObject(): NFe;
   assemble(): Promise<string>;
 }
 

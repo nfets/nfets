@@ -47,7 +47,18 @@ export interface ISSQNTot {
   cRegTrib?: string;
 }
 
+export interface RetTrib {
+  vRetPIS?: DecimalValue;
+  vRetCOFINS?: DecimalValue;
+  vRetCSLL?: DecimalValue;
+  vBCIRRF?: DecimalValue;
+  vIRRF?: DecimalValue;
+  vBCRetPrev?: DecimalValue;
+  vRetPrev?: DecimalValue;
+}
+
 export interface Total {
   ICMSTot: ICMSTot;
   ISSQNtot?: ISSQNTot;
+  retTrib?: RetTrib;
 }

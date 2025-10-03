@@ -8,10 +8,18 @@ import { left, right, type Either } from 'src/shared/either';
 import { leftFromError } from 'src/shared/left-from-error';
 import { NullCacheAdapter } from './null-cache-adapter';
 
-import type { ReadCertificateResponse } from 'src/domain/entities/certificate/certificate';
+import type {
+  Certificate,
+  MessageDigest,
+  ReadCertificateResponse,
+} from 'src/domain/entities/certificate/certificate';
+import type { PrivateKey } from 'src/domain/entities/certificate/private-key';
 import type { CertificateRepository } from 'src/domain/repositories/certificate-repository';
 import type { CacheAdapter } from 'src/domain/repositories/cache-adapter';
 import type { HttpClient } from 'src/domain/repositories/http-client';
+
+import { SignatureAlgorithm } from 'src/domain/entities/signer/algo';
+import { unreachable } from 'src/shared/unreachable';
 
 export class NodeCertificateRepository implements CertificateRepository {
   public constructor(
@@ -43,17 +51,15 @@ export class NodeCertificateRepository implements CertificateRepository {
 
       const certBag = certBags[oidCertBag];
 
-      if (!certBag?.length)
-        return await Promise.resolve(
-          left(new NFeTsError('Cannot read certificate')),
-        );
+      if (!certBag?.length) {
+        return left(new NFeTsError('Cannot read certificate'));
+      }
 
-      const [{ cert }, ...chain] = certBag;
+      const [{ cert: certificate }, ...chain] = certBag;
 
-      if (!cert)
-        return await Promise.resolve(
-          left(new NFeTsError('Issuer Certificate not found')),
-        );
+      if (!certificate) {
+        return left(new NFeTsError('Issuer Certificate not found'));
+      }
 
       const privateKey = keyBags[pkcs8ShroudedKeyBag]?.[0].key;
 
@@ -62,26 +68,57 @@ export class NodeCertificateRepository implements CertificateRepository {
           left(new NFeTsError('Certificate Private Key not found')),
         );
 
-      const certificate = forge.pki.certificateToPem(cert),
-        privKey = forge.pki.privateKeyToPem(privateKey);
-
       const ca = chain
         .map((bag) => bag.cert)
         .filter((it): it is forge.pki.Certificate => typeof it !== 'undefined')
         .map(forge.pki.certificateToPem);
 
-      return await Promise.resolve(
-        right({
-          ca,
-          cert,
-          password,
-          privateKey: Buffer.from(privKey, 'utf-8'),
-          certificate: Buffer.from(certificate, 'utf-8'),
-        }),
-      );
+      return right({
+        ca,
+        password,
+        certificate: certificate as Certificate,
+        privateKey: privateKey as PrivateKey,
+      });
     } catch (e) {
       return Promise.resolve(leftFromError(e));
     }
+  }
+
+  private message(algorithm: SignatureAlgorithm): MessageDigest {
+    switch (algorithm) {
+      case SignatureAlgorithm.SHA1:
+        return forge.md.sha1.create() as MessageDigest;
+      case SignatureAlgorithm.SHA256:
+        return forge.md.sha256.create() as MessageDigest;
+      default:
+        return unreachable(algorithm);
+    }
+  }
+
+  public async sign(
+    content: string,
+    privateKey: PrivateKey,
+    algorithm: SignatureAlgorithm = SignatureAlgorithm.SHA1,
+  ) {
+    const md = this.message(algorithm).update(content);
+    const signature = forge.util.binary.raw.decode(
+      privateKey.sign(md, 'RSASSA-PKCS1-V1_5'),
+    );
+
+    const base64 = Buffer.from(signature).toString('base64');
+    return Promise.resolve(right(base64));
+  }
+
+  public getStringPublicKey(certificate: Certificate): string {
+    const pem = forge.pki.certificateToPem(
+      certificate as forge.pki.Certificate,
+    );
+    return pem.replace(/-----.*[\n]?/g, '').replace(/[\n\r]/g, '');
+  }
+
+  public getStringPrivateKey(privateKey: PrivateKey): string {
+    const pem = forge.pki.privateKeyToPem(privateKey as forge.pki.PrivateKey);
+    return pem.replace(/-----.*[\n]?/g, '').replace(/[\n\r]/g, '');
   }
 
   private async getPfxBuffer(

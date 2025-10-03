@@ -1,5 +1,11 @@
 import type { DecimalValue } from '@nfets/core';
-import { IsArray, IsObject, IsOptional, IsString } from 'class-validator';
+import {
+  ArrayMaxSize,
+  IsArray,
+  IsObject,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { Prod as IProd } from 'src/entities/nfe/inf-nfe/det/prod';
 import { IsDecimal } from 'src/application/validator/decimal';
 
@@ -22,6 +28,7 @@ export class Prod implements IProd {
 
   @IsOptional()
   @IsArray()
+  @ArrayMaxSize(8)
   @IsString({ each: true })
   public NVE?: string[];
 

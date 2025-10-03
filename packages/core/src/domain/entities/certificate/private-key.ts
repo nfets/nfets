@@ -1,5 +1,5 @@
-import type { SignatureScheme } from './certificate';
+import type { MessageDigest, SignatureScheme } from './certificate';
 
 export interface PrivateKey {
-  sign(md: string, scheme?: SignatureScheme): string;
+  sign(md: MessageDigest, scheme?: SignatureScheme): string;
 }

@@ -1,3 +1,4 @@
+import type { SignatureAlgorithm } from '../signer/algo';
 import type { PrivateKey } from './private-key';
 import type { PublicKey } from './public-key';
 
@@ -37,14 +38,29 @@ export interface Certificate {
     hash: string;
   };
   extensions: unknown[];
-  privateKey: PrivateKey | Buffer | Uint8Array;
-  publicKey: PublicKey | Buffer | Uint8Array;
+  publicKey: PublicKey;
+}
+
+interface ByteStringBuffer {
+  data: string;
+  read: number;
+  toString(): string;
+}
+
+export interface MessageDigest {
+  readonly algorithm: SignatureAlgorithm;
+  readonly blockLength: number;
+  readonly digestLength: number;
+  messageLength: number;
+  fullMessageLength: number[] | null;
+  readonly messageLengthSize: number;
+  update(msg: string, encoding?: 'raw' | 'utf8'): this;
+  digest(): ByteStringBuffer;
 }
 
 export interface ReadCertificateResponse {
-  cert: Certificate;
-  certificate: Buffer | string;
-  privateKey: Buffer | string;
+  password: string;
+  certificate: Certificate;
+  privateKey: PrivateKey;
   ca: (Buffer | string)[];
-  password?: string;
 }
