@@ -76,7 +76,7 @@ describe('xml builder with xml2js builder', () => {
   it('should ignores only one method validation and consequently gets a invalid xml...', async () => {
     class DontValidateNfeXmlBuilder extends NfeXmlBuilder {
       @SkipValidation()
-      public ide(payload: Ide): EmitBuilder {
+      public ide(payload: Ide) {
         return super.ide(payload);
       }
     }
