@@ -1,4 +1,13 @@
 import type { DecimalValue } from '@nfets/core';
+import type { DI } from './di';
+import type { DetExport } from './det-export';
+import type { Rastro } from './rastro';
+import type { InfProdNFF } from './infprod-nff';
+import type { InfProdEmb } from './infprod-emb';
+import type { VeicProd } from './veic-prod';
+import type { Med } from './med';
+import type { Arma } from './arma';
+import type { Comb } from './comb';
 
 export interface Prod {
   cProd: string;
@@ -24,8 +33,17 @@ export interface Prod {
   vDesc?: DecimalValue;
   vOutro?: DecimalValue;
   indTot?: string;
+  DI?: DI[];
+  detExport?: DetExport[];
   xPed?: string;
   nItemPed?: string;
   nFCI?: string;
+  rastro?: Rastro[];
+  infProdNFF?: InfProdNFF;
+  infProdEmb?: InfProdEmb;
+  veicProd?: VeicProd;
+  med?: Med;
+  arma?: Arma[];
+  comb?: Comb;
   nRECOPI?: string;
 }
