@@ -16,6 +16,7 @@ import {
   SignatureNamespace,
   SignatureAlgorithm,
   CanonicalizationMethod,
+  SignatureMethod,
 } from 'src/domain/entities/signer/algo';
 import {
   type CanonicalizeOptions,
@@ -85,9 +86,7 @@ export class Signer {
           $: { Algorithm: CanonicalizationMethod },
         },
         SignatureMethod: {
-          $: {
-            Algorithm: `${SignatureNamespace}rsa-${this.algorithm}`,
-          },
+          $: { Algorithm: this.method },
         },
         Reference: {
           $: { URI: `#${this.toolkit.getAttribute(node, mark)}` },
@@ -143,6 +142,17 @@ export class Signer {
         return DigestAlgorithm.SHA256;
       case SignatureAlgorithm.SHA1:
         return DigestAlgorithm.SHA1;
+      default:
+        return unreachable(this.algorithm);
+    }
+  }
+
+  private get method(): SignatureMethod {
+    switch (this.algorithm) {
+      case SignatureAlgorithm.SHA256:
+        return SignatureMethod.RSA_SHA256;
+      case SignatureAlgorithm.SHA1:
+        return SignatureMethod.RSA_SHA1;
       default:
         return unreachable(this.algorithm);
     }

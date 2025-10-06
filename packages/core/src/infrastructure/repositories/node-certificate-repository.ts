@@ -68,10 +68,11 @@ export class NodeCertificateRepository implements CertificateRepository {
           left(new NFeTsError('Certificate Private Key not found')),
         );
 
-      const ca = chain
-        .map((bag) => bag.cert)
-        .filter((it): it is forge.pki.Certificate => typeof it !== 'undefined')
-        .map(forge.pki.certificateToPem);
+      const ca = chain.reduce<string[]>((acc, bag) => {
+        const cert = bag.cert;
+        if (cert) acc.push(forge.pki.certificateToPem(cert));
+        return acc;
+      }, []);
 
       return right({
         ca,

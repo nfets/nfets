@@ -1,6 +1,6 @@
 import type {
   DigestAlgorithm,
-  SignatureAlgorithm,
+  SignatureMethod as EnumSignatureMethod,
   SignatureNamespace,
 } from './algo';
 
@@ -15,7 +15,7 @@ export interface CanonicalizationMethod {
 }
 
 export interface SignatureMethod {
-  $: { Algorithm: `${typeof SignatureNamespace}rsa-${SignatureAlgorithm}` };
+  $: { Algorithm: `${EnumSignatureMethod}` };
 }
 
 export interface Reference {
