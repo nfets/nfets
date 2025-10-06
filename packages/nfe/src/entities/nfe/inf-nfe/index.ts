@@ -33,7 +33,7 @@ export interface InfNFe {
   exporta?: Exporta;
   compra?: Compra;
   infRespTec?: InfRespTec;
-  det: Det[];
+  det: [Det, ...Det[]];
   total: Total;
   transp: Transp;
   cobr?: Cobr;

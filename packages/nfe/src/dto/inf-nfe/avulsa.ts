@@ -1,5 +1,5 @@
 import { IsDate, IsOptional, IsString } from 'class-validator';
-import { IsDecimal } from 'src/application/validator/decimal';
+import { TransformDecimal } from 'src/application/validator/decimal';
 
 import type { Avulsa as IAvulsa } from 'src/entities/nfe/inf-nfe/avulsa';
 import type { DecimalValue } from '@nfets/core';
@@ -33,7 +33,7 @@ export class Avulsa implements IAvulsa {
   public dEmi?: Date;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vDAR?: DecimalValue;
 
   @IsString()

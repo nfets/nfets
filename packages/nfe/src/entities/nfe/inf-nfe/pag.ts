@@ -15,6 +15,6 @@ export interface DetPag {
 }
 
 export interface Pag {
-  detPag: DetPag[];
+  detPag: [DetPag, ...DetPag[]];
   vTroco?: DecimalValue;
 }

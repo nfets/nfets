@@ -1,11 +1,27 @@
 import 'reflect-metadata';
-import { Decimal } from '@nfets/core';
+import { Decimal, type DecimalValue } from '@nfets/core';
 
 import {
   registerDecorator,
   type ValidationOptions,
   type ValidationArguments,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
+
+export interface TransformDecimalArgs extends ValidationOptions {
+  fixed?: number;
+}
+
+export const TransformDecimal = (
+  { fixed, ...args }: TransformDecimalArgs = { fixed: 2 },
+): PropertyDecorator => {
+  return (target: object, propertyKey: string | symbol) => {
+    IsDecimal(args)(target, propertyKey);
+    Transform(({ value }: { value: DecimalValue }) =>
+      Decimal.newOrUndefined(value)?.toFixed(fixed),
+    )(target, propertyKey);
+  };
+};
 
 export const IsDecimal = (
   validationOptions?: ValidationOptions,

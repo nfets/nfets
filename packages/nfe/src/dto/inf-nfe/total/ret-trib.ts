@@ -1,35 +1,35 @@
 import { IsOptional } from 'class-validator';
-import { IsDecimal } from 'src/application/validator/decimal';
+import { TransformDecimal } from 'src/application/validator/decimal';
 import { RetTrib as IRetTrib } from 'src/entities/nfe/inf-nfe/total';
 
 import type { DecimalValue } from '@nfets/core';
 
 export class RetTrib implements IRetTrib {
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vRetPIS?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vRetCOFINS?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vRetCSLL?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBCIRRF?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vIRRF?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBCRetPrev?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vRetPrev?: DecimalValue;
 }

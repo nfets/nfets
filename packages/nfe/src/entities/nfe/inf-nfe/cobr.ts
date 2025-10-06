@@ -1,14 +1,16 @@
+import type { DecimalValue } from '@nfets/core';
+
 export interface Fat {
   nFat?: string;
-  vOrig?: string;
-  vDesc?: string;
-  vLiq?: string;
+  vOrig?: DecimalValue;
+  vDesc?: DecimalValue;
+  vLiq?: DecimalValue;
 }
 
 export interface Dup {
   nDup?: string;
   dVenc?: string;
-  vDup?: string;
+  vDup?: DecimalValue;
 }
 
 export interface Cobr {

@@ -5,11 +5,12 @@ import {
   IsArray,
   ValidateNested,
   ArrayMaxSize,
+  ArrayMinSize,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { DI as IDI, Adi as IAdi } from 'src/entities/nfe/inf-nfe/det/di';
 
-import { IsDecimal } from 'src/application/validator/decimal';
+import { TransformDecimal } from 'src/application/validator/decimal';
 import { Case } from 'src/application/validator/switch-case';
 
 export class Adi implements IAdi {
@@ -22,7 +23,7 @@ export class Adi implements IAdi {
   @IsString()
   public cFabricante!: string;
 
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vDescDI!: DecimalValue;
 
   @IsOptional()
@@ -50,7 +51,7 @@ export class DI implements IDI {
   public tpViaTransp!: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vAFRMM?: DecimalValue;
 
   @IsString()
@@ -74,5 +75,6 @@ export class DI implements IDI {
   @ValidateNested({ each: true })
   @Type(() => Adi)
   @ArrayMaxSize(999)
-  public adi!: IAdi[];
+  @ArrayMinSize(1)
+  public adi!: [IAdi, ...IAdi[]];
 }

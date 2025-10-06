@@ -20,5 +20,5 @@ export interface DI {
   CNPJ?: string;
   CPF?: string;
   UFTerceiro?: string;
-  adi: Adi[];
+  adi: [Adi, ...Adi[]];
 }

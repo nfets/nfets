@@ -1,103 +1,104 @@
 import { IsOptional } from 'class-validator';
 import { ICMSTot as IICMSTot } from 'src/entities/nfe/inf-nfe/total';
 
-import { IsDecimal } from 'src/application/validator/decimal';
+import { TransformDecimal } from 'src/application/validator/decimal';
+import type { DecimalValue } from '@nfets/core';
 
 export class ICMSTot implements IICMSTot {
-  @IsDecimal()
-  public vBC = '0.00';
+  @TransformDecimal({ fixed: 2 })
+  public vBC: DecimalValue = '0.00';
 
-  @IsDecimal()
-  public vICMS = '0.00';
+  @TransformDecimal({ fixed: 2 })
+  public vICMS: DecimalValue = '0.00';
 
-  @IsDecimal()
-  public vICMSDeson = '0.00';
-
-  @IsOptional()
-  @IsDecimal()
-  public vFCPUFDest?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vICMSDeson: DecimalValue = '0.00';
 
   @IsOptional()
-  @IsDecimal()
-  public vICMSUFDest?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vFCPUFDest?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
-  public vICMSUFRemet?: string;
-
-  @IsDecimal()
-  public vFCP = '0.00';
-
-  @IsDecimal()
-  public vBCST = '0.00';
-
-  @IsDecimal()
-  public vST = '0.00';
-
-  @IsDecimal()
-  public vFCPST = '0.00';
-
-  @IsDecimal()
-  public vFCPSTRet = '0.00';
+  @TransformDecimal({ fixed: 2 })
+  public vICMSUFDest?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
-  public qBCMono?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vICMSUFRemet?: DecimalValue;
+
+  @TransformDecimal({ fixed: 2 })
+  public vFCP: DecimalValue = '0.00';
+
+  @TransformDecimal({ fixed: 2 })
+  public vBCST: DecimalValue = '0.00';
+
+  @TransformDecimal({ fixed: 2 })
+  public vST: DecimalValue = '0.00';
+
+  @TransformDecimal({ fixed: 2 })
+  public vFCPST: DecimalValue = '0.00';
+
+  @TransformDecimal({ fixed: 2 })
+  public vFCPSTRet: DecimalValue = '0.00';
 
   @IsOptional()
-  @IsDecimal()
-  public vICMSMono?: string;
+  @TransformDecimal({ fixed: 2 })
+  public qBCMono?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
-  public qBCMonoReten?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vICMSMono?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
-  public vICMSMonoReten?: string;
+  @TransformDecimal({ fixed: 2 })
+  public qBCMonoReten?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
-  public qBCMonoRet?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vICMSMonoReten?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
-  public vICMSMonoRet?: string;
-
-  @IsDecimal()
-  public vProd = '0.00';
-
-  @IsDecimal()
-  public vFrete = '0.00';
-
-  @IsDecimal()
-  public vSeg = '0.00';
-
-  @IsDecimal()
-  public vDesc = '0.00';
-
-  @IsDecimal()
-  public vII = '0.00';
-
-  @IsDecimal()
-  public vIPI = '0.00';
-
-  @IsDecimal()
-  public vIPIDevol = '0.00';
-
-  @IsDecimal()
-  public vPIS = '0.00';
-
-  @IsDecimal()
-  public vCOFINS = '0.00';
-
-  @IsDecimal()
-  public vOutro = '0.00';
-
-  @IsDecimal()
-  public vNF = '0.00';
+  @TransformDecimal({ fixed: 2 })
+  public qBCMonoRet?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
-  vTotTrib?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vICMSMonoRet?: DecimalValue;
+
+  @TransformDecimal({ fixed: 2 })
+  public vProd: DecimalValue = '0.00';
+
+  @TransformDecimal({ fixed: 2 })
+  public vFrete: DecimalValue = '0.00';
+
+  @TransformDecimal({ fixed: 2 })
+  public vSeg: DecimalValue = '0.00';
+
+  @TransformDecimal({ fixed: 2 })
+  public vDesc: DecimalValue = '0.00';
+
+  @TransformDecimal({ fixed: 2 })
+  public vII: DecimalValue = '0.00';
+
+  @TransformDecimal({ fixed: 2 })
+  public vIPI: DecimalValue = '0.00';
+
+  @TransformDecimal({ fixed: 2 })
+  public vIPIDevol: DecimalValue = '0.00';
+
+  @TransformDecimal({ fixed: 2 })
+  public vPIS: DecimalValue = '0.00';
+
+  @TransformDecimal({ fixed: 2 })
+  public vCOFINS: DecimalValue = '0.00';
+
+  @TransformDecimal({ fixed: 2 })
+  public vOutro: DecimalValue = '0.00';
+
+  @TransformDecimal({ fixed: 2 })
+  public vNF: DecimalValue = '0.00';
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 2 })
+  public vTotTrib?: DecimalValue;
 }

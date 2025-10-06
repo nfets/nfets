@@ -10,6 +10,8 @@ import type {
   Dup as IDup,
   Cobr as ICobr,
 } from 'src/entities/nfe/inf-nfe/cobr';
+import { TransformDecimal } from 'src/application/validator/decimal';
+import { type DecimalValue } from '@nfets/core';
 
 export class Fat implements IFat {
   @IsOptional()
@@ -17,16 +19,16 @@ export class Fat implements IFat {
   public nFat?: string;
 
   @IsOptional()
-  @IsString()
-  public vOrig?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vOrig?: DecimalValue;
 
   @IsOptional()
-  @IsString()
-  public vDesc?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vDesc?: DecimalValue;
 
   @IsOptional()
-  @IsString()
-  public vLiq?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vLiq?: DecimalValue;
 }
 
 export class Dup implements IDup {
@@ -39,8 +41,8 @@ export class Dup implements IDup {
   public dVenc?: string;
 
   @IsOptional()
-  @IsString()
-  public vDup?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vDup?: DecimalValue;
 }
 
 export class Cobr implements ICobr {

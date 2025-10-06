@@ -8,7 +8,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Prod as IProd } from 'src/entities/nfe/inf-nfe/det/prod';
-import { IsDecimal } from 'src/application/validator/decimal';
+import { TransformDecimal } from 'src/application/validator/decimal';
 import { Type } from 'class-transformer';
 import type { DI as IDI } from 'src/entities/nfe/inf-nfe/det/di';
 import type { DetExport as IDetExport } from 'src/entities/nfe/inf-nfe/det/det-export';
@@ -84,13 +84,13 @@ export class Prod implements IProd {
   @IsString()
   public uCom!: string;
 
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public qCom!: DecimalValue;
 
-  @IsDecimal()
+  @TransformDecimal({ fixed: 10 })
   public vUnCom!: DecimalValue;
 
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vProd!: DecimalValue;
 
   @IsString()
@@ -99,26 +99,26 @@ export class Prod implements IProd {
   @IsString()
   public uTrib!: string;
 
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public qTrib!: DecimalValue;
 
-  @IsDecimal()
+  @TransformDecimal({ fixed: 10 })
   public vUnTrib!: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vFrete?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vSeg?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vDesc?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vOutro?: DecimalValue;
 
   @IsString()

@@ -25,7 +25,8 @@ describe('xml builder with xml2js builder', () => {
         cNF: '45941728',
       } as never)
       .emit({} as never)
-      .det([], () => void 0 as never)
+      .det([] as never, () => void 0 as never)
+      .transp({} as never)
       .pag({} as never);
 
     const xml = await builder.assemble();
@@ -66,6 +67,7 @@ describe('xml builder with xml2js builder', () => {
         <vNF>0.00</vNF>
       </ICMSTot>
     </total>
+    <transp/>
     <pag/>
   </infNFe>
 </NFe>`);
@@ -91,8 +93,11 @@ describe('xml builder with xml2js builder', () => {
         cNF: '12345678',
       } as never)
       .emit({ xNome: 'xD', IE: '', CRT: '' } as never)
-      .det([], () => void 0 as never)
-      .pag({} as never);
+      .det([] as never, () => void 0 as never)
+      .transp({ modFrete: '9' })
+      .pag({
+        detPag: [{ tPag: '1', vPag: Decimal.from('100').toString() }],
+      });
 
     const xml = await builder.assemble();
 
@@ -139,7 +144,15 @@ describe('xml builder with xml2js builder', () => {
         <vNF>0.00</vNF>
       </ICMSTot>
     </total>
-    <pag/>
+    <transp>
+      <modFrete>9</modFrete>
+    </transp>
+    <pag>
+      <detPag>
+        <tPag>1</tPag>
+        <vPag>100.00</vPag>
+      </detPag>
+    </pag>
   </infNFe>
 </NFe>`);
   });
@@ -156,8 +169,11 @@ describe('xml builder with xml2js builder', () => {
         tpEmis: '1',
       } as never)
       .emit({} as never)
-      .det([], () => void 0 as never)
-      .pag({} as never);
+      .det([] as never, () => void 0 as never)
+      .transp({ modFrete: '9' })
+      .pag({
+        detPag: [{ tPag: '1', vPag: Decimal.from('100').toString() }],
+      });
 
     await expect(async () => await builder.assemble()).rejects.toThrow(
       'ide.cNF must be a string, ide.natOp must be a string, ide.serie must be a string, ide.nNF must be a string, ide.tpNF must be a string, ide.idDest must be a string, ide.cMunFG must be a string, ide.tpImp must be a string, ide.cDV must be a string, ide.tpAmb must be a string, ide.finNFe must be a string, ide.indFinal must be a string, ide.indPres must be a string, ide.procEmi must be a string, ide.verProc must be a string, emit.xNome must be a string, emit.IE must be a string, emit.CRT must be a string',
@@ -165,6 +181,15 @@ describe('xml builder with xml2js builder', () => {
   });
 
   it('should build a valid nfe xml with correct order and without undefined values', async () => {
+    interface Item {
+      description: string;
+      code: string;
+      price: number;
+      quantity: number;
+      unit: string;
+      total: number;
+    }
+
     const items = [
       {
         description: 'Product 1',
@@ -174,7 +199,7 @@ describe('xml builder with xml2js builder', () => {
         unit: 'UN',
         total: 100,
       },
-    ];
+    ] as [Item, ...Item[]];
 
     const builder = NfeXmlBuilder.create(new Xml2JsToolkit())
       .infNFe({ versao: '4.00' })
@@ -267,7 +292,20 @@ describe('xml builder with xml2js builder', () => {
             },
           }),
       )
-      .pag({} as never);
+      .transp({ modFrete: '9' })
+      .cobr({
+        fat: { nFat: 'NF-8018', vOrig: Decimal.from('100').toString() },
+        dup: [
+          {
+            nDup: '1',
+            dVenc: '2025-04-15',
+            vDup: Decimal.from('100').toString(),
+          },
+        ],
+      })
+      .pag({
+        detPag: [{ tPag: '1', vPag: Decimal.from('100').toString() }],
+      });
 
     const xml = await builder.assemble();
 
@@ -326,13 +364,13 @@ describe('xml builder with xml2js builder', () => {
         <NCM>00</NCM>
         <CFOP>5102</CFOP>
         <uCom>UN</uCom>
-        <qCom>1</qCom>
-        <vUnCom>100</vUnCom>
-        <vProd>100</vProd>
+        <qCom>1.0000</qCom>
+        <vUnCom>100.0000000000</vUnCom>
+        <vProd>100.00</vProd>
         <cEANTrib>SEM GTIN</cEANTrib>
         <uTrib>UN</uTrib>
-        <qTrib>1</qTrib>
-        <vUnTrib>100</vUnTrib>
+        <qTrib>1.0000</qTrib>
+        <vUnTrib>100.0000000000</vUnTrib>
         <indTot>1</indTot>
       </prod>
       <imposto>
@@ -341,9 +379,9 @@ describe('xml builder with xml2js builder', () => {
             <orig>1</orig>
             <CST>00</CST>
             <modBC>0</modBC>
-            <vBC>100</vBC>
-            <pICMS>18</pICMS>
-            <vICMS>18</vICMS>
+            <vBC>100.00</vBC>
+            <pICMS>18.0000</pICMS>
+            <vICMS>18.00</vICMS>
           </ICMS00>
         </ICMS>
         <IPI>
@@ -387,7 +425,26 @@ describe('xml builder with xml2js builder', () => {
         <vNF>100.00</vNF>
       </ICMSTot>
     </total>
-    <pag/>
+    <transp>
+      <modFrete>9</modFrete>
+    </transp>
+    <cobr>
+      <fat>
+        <nFat>NF-8018</nFat>
+        <vOrig>100.00</vOrig>
+      </fat>
+      <dup>
+        <nDup>1</nDup>
+        <dVenc>2025-04-15</dVenc>
+        <vDup>100.00</vDup>
+      </dup>
+    </cobr>
+    <pag>
+      <detPag>
+        <tPag>1</tPag>
+        <vPag>100.00</vPag>
+      </detPag>
+    </pag>
   </infNFe>
 </NFe>`);
   });

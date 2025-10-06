@@ -5,10 +5,12 @@ import type {
   InfNFe as IInfNFe,
 } from 'src/entities/nfe/inf-nfe';
 import type { Ide as IIde } from 'src/entities/nfe/inf-nfe/ide';
+import type { Cobr as ICobr } from 'src/entities/nfe/inf-nfe/cobr';
 import type { Emit as IEmit } from 'src/entities/nfe/inf-nfe/emit';
 import type { Pag as IPag } from 'src/entities/nfe/inf-nfe/pag';
 import type { Transp as ITransp } from 'src/entities/nfe/inf-nfe/transp';
 import type { Total as ITotal } from 'src/entities/nfe/inf-nfe/total';
+import type { Det as IDet } from 'src/entities/nfe/inf-nfe/det';
 
 import type {
   INfeXmlBuilder,
@@ -20,6 +22,7 @@ import type {
   AssembleNfeBuilder,
   TranspBuilder,
   TotalBuilder,
+  CobrBuilder,
 } from 'src/entities/xml-builder/nfe-xml-builder';
 import type { NFe as INFe } from 'src/entities/nfe/nfe';
 
@@ -48,6 +51,7 @@ import {
   DefaultTotalBuilderAggregator,
   type TotalBuilderAggregator,
 } from '../aggregator/total-builder-aggregator';
+import { Cobr } from 'src/dto/inf-nfe/cobr';
 
 export class NfeXmlBuilder implements INfeXmlBuilder {
   private readonly data = {
@@ -95,9 +99,9 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
   }
 
   public det<T>(
-    items: T[],
+    items: [T, ...T[]],
     build: (ctx: ProdBuilder, item: T) => AssembleDetXmlBuilder,
-  ): PagBuilder {
+  ): TotalBuilder & TranspBuilder {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.det = items.map((item, index) => {
       const builder = build(
@@ -105,7 +109,7 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
         item,
       );
       return this.collect(builder), builder.assemble();
-    });
+    }) as [IDet, ...IDet[]];
     return this;
   }
 
@@ -134,9 +138,16 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
   }
 
   @Validates(Transp)
-  public transp(payload: ITransp): PagBuilder {
+  public transp(payload: ITransp): CobrBuilder & PagBuilder {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.transp = payload;
+    return this;
+  }
+
+  @Validates(Cobr)
+  public cobr(payload: ICobr): PagBuilder {
+    this.data.infNFe ??= {} as IInfNFe;
+    this.data.infNFe.cobr = payload;
     return this;
   }
 

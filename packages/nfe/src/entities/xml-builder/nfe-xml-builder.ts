@@ -5,6 +5,7 @@ import type { Pag as IPag } from 'src/entities/nfe/inf-nfe/pag';
 import type { AssembleDetXmlBuilder, ProdBuilder } from './nfe-det-xml-builder';
 import type { Total as ITotal } from 'src/entities/nfe/inf-nfe/total';
 import type { Transp as ITransp } from 'src/entities/nfe/inf-nfe/transp';
+import type { Cobr as ICobr } from 'src/entities/nfe/inf-nfe/cobr';
 import type { DeepPartial } from '@nfets/core';
 import type { NFe } from '../nfe/nfe';
 
@@ -22,9 +23,9 @@ export interface EmitBuilder {
 
 export interface DetBuilder {
   det<T>(
-    items: T[],
+    items: [T, ...T[]],
     build: (ctx: ProdBuilder, item: T) => AssembleDetXmlBuilder,
-  ): PagBuilder;
+  ): TotalBuilder & TranspBuilder;
 }
 
 export interface TotalBuilder {
@@ -35,7 +36,11 @@ export interface TotalBuilder {
 }
 
 export interface TranspBuilder {
-  transp(payload: ITransp): PagBuilder;
+  transp(payload: ITransp): CobrBuilder & PagBuilder;
+}
+
+export interface CobrBuilder {
+  cobr(payload: ICobr): PagBuilder;
 }
 
 export interface PagBuilder {

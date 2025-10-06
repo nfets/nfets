@@ -16,7 +16,7 @@ export interface Cana {
   qTotMes?: DecimalValue;
   qTotAnt?: DecimalValue;
   qTotGer?: DecimalValue;
-  forDia?: ForDia[];
+  forDia: [ForDia, ...ForDia[]];
   deduc?: Deduc[];
   vFor?: DecimalValue;
   vTotDed?: DecimalValue;

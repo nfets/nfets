@@ -4,9 +4,10 @@ import {
   IsObject,
   ValidateNested,
   ArrayMaxSize,
+  Max,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { IsDecimal } from 'src/application/validator/decimal';
+import { TransformDecimal } from 'src/application/validator/decimal';
 
 import type { DecimalValue } from '@nfets/core';
 import type {
@@ -23,18 +24,19 @@ export class OrigComb implements IOrigComb {
   @IsString()
   public cUFOrig!: string;
 
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
+  @Max(100)
   public pOrig!: DecimalValue;
 }
 
 export class CIDE implements ICIDE {
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public qBCProd!: DecimalValue;
 
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public vAliqProd!: DecimalValue;
 
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vCIDE!: DecimalValue;
 }
 
@@ -48,10 +50,10 @@ export class Encerrante implements IEncerrante {
   @IsString()
   public nTanque!: string;
 
-  @IsDecimal()
+  @TransformDecimal({ fixed: 3 })
   public vEncIni!: DecimalValue;
 
-  @IsDecimal()
+  @TransformDecimal({ fixed: 3 })
   public vEncFin!: DecimalValue;
 }
 
@@ -62,28 +64,31 @@ export class Comb implements IComb {
   @IsString()
   public descANP!: string;
 
-  @IsDecimal()
   @IsOptional()
+  @Max(100)
+  @TransformDecimal({ fixed: 4 })
   public pGLP?: DecimalValue;
 
-  @IsDecimal()
   @IsOptional()
+  @Max(100)
+  @TransformDecimal({ fixed: 4 })
   public pGNn?: DecimalValue;
 
-  @IsDecimal()
   @IsOptional()
+  @Max(100)
+  @TransformDecimal({ fixed: 4 })
   public pGNi?: DecimalValue;
 
-  @IsDecimal()
   @IsOptional()
+  @TransformDecimal({ fixed: 2 })
   public vPart?: DecimalValue;
 
   @IsString()
   @IsOptional()
   public CODIF?: string;
 
-  @IsDecimal()
   @IsOptional()
+  @TransformDecimal({ fixed: 4 })
   public qTemp?: DecimalValue;
 
   @IsString()
@@ -99,8 +104,8 @@ export class Comb implements IComb {
   @Type(() => Encerrante)
   public encerrante!: IEncerrante;
 
-  @IsDecimal()
   @IsOptional()
+  @TransformDecimal({ fixed: 4 })
   public pBio?: DecimalValue;
 
   @IsObject()

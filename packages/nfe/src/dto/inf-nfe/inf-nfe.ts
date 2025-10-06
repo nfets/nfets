@@ -1,5 +1,6 @@
 import {
   ArrayMaxSize,
+  ArrayMinSize,
   IsNotEmptyObject,
   IsObject,
   IsOptional,
@@ -107,8 +108,9 @@ export class InfNFe implements IInfNFe {
 
   @ValidateNested({ each: true })
   @ArrayMaxSize(990)
+  @ArrayMinSize(1)
   @Type(() => Det)
-  public det!: IDet[];
+  public det!: [IDet, ...IDet[]];
 
   @ValidateNested()
   @Type(() => Total)

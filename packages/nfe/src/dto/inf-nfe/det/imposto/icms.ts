@@ -1,7 +1,7 @@
-import { IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsOptional, IsString, Max, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Case } from 'src/application/validator/switch-case';
-import { IsDecimal } from 'src/application/validator/decimal';
+import { TransformDecimal } from 'src/application/validator/decimal';
 
 import type { DecimalValue } from '@nfets/core';
 import type {
@@ -40,15 +40,15 @@ export class ICMS00 implements IICMS00 {
   public modBC?: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBC?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMS?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMS?: DecimalValue;
 }
 
@@ -64,15 +64,15 @@ export class ICMS10 implements IICMS10 {
   public modBC?: string;
 
   @IsOptional()
-  @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vBC?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMS?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMS?: DecimalValue;
 
   @IsOptional()
@@ -80,15 +80,15 @@ export class ICMS10 implements IICMS10 {
   public modBCST?: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBCST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMSST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSST?: DecimalValue;
 }
 
@@ -108,15 +108,15 @@ export class ICMS20 implements IICMS20 {
   public pRedBC?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBC?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMS?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMS?: DecimalValue;
 }
 
@@ -132,15 +132,15 @@ export class ICMS30 implements IICMS30 {
   public modBCST?: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBCST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMSST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSST?: DecimalValue;
 }
 
@@ -152,7 +152,7 @@ export class ICMS40 implements IICMS40 {
   public CST!: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSDeson?: DecimalValue;
 
   @IsOptional()
@@ -172,27 +172,28 @@ export class ICMS51 implements IICMS51 {
   public modBC?: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pRedBC?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBC?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMS?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMS?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
+  @Max(100)
   public pDif?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSDif?: DecimalValue;
 }
 
@@ -204,19 +205,19 @@ export class ICMS60 implements IICMS60 {
   public CST!: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBCSTRet?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSSubstituto?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSSTRet?: DecimalValue;
 }
 
@@ -232,19 +233,19 @@ export class ICMS70 implements IICMS70 {
   public modBC?: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pRedBC?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBC?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMS?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMS?: DecimalValue;
 
   @IsOptional()
@@ -252,15 +253,15 @@ export class ICMS70 implements IICMS70 {
   public modBCST?: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBCST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMSST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSST?: DecimalValue;
 }
 
@@ -276,19 +277,19 @@ export class ICMS90 implements IICMS90 {
   public modBC?: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pRedBC?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBC?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMS?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMS?: DecimalValue;
 
   @IsOptional()
@@ -296,15 +297,15 @@ export class ICMS90 implements IICMS90 {
   public modBCST?: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBCST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMSST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSST?: DecimalValue;
 }
 
@@ -320,19 +321,19 @@ export class ICMSPart implements IICMSPart {
   public modBC?: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBC?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pRedBC?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public pICMS?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMS?: DecimalValue;
 
   @IsOptional()
@@ -340,27 +341,27 @@ export class ICMSPart implements IICMSPart {
   public modBCST?: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pMVAST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pRedBCST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBCST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMSST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pBCOp?: DecimalValue;
 
   @IsOptional()
@@ -376,19 +377,19 @@ export class ICMSST implements IICMSST {
   public CST!: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBCSTRet?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSSubstituto?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSSTRet?: DecimalValue;
 }
 
@@ -400,11 +401,11 @@ export class ICMSSN101 implements IICMSSN101 {
   public CSOSN!: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pCredSN?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vCredICMSSN?: DecimalValue;
 }
 
@@ -428,23 +429,23 @@ export class ICMSSN201 implements IICMSSN201 {
   public modBCST?: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBCST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMSST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pCredSN?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vCredICMSSN?: DecimalValue;
 }
 
@@ -460,15 +461,15 @@ export class ICMSSN202 implements IICMSSN202 {
   public modBCST?: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBCST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMSST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSST?: DecimalValue;
 }
 
@@ -480,19 +481,19 @@ export class ICMSSN500 implements IICMSSN500 {
   public CSOSN!: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBCSTRet?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSSubstituto?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSSTRet?: DecimalValue;
 }
 
@@ -508,19 +509,19 @@ export class ICMSSN900 implements IICMSSN900 {
   public modBC?: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBC?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pRedBC?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMS?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMS?: DecimalValue;
 
   @IsOptional()
@@ -528,23 +529,23 @@ export class ICMSSN900 implements IICMSSN900 {
   public modBCST?: string;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBCST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMSST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSST?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pCredSN?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vCredICMSSN?: DecimalValue;
 }
 

@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
-import { IsDecimal } from 'src/application/validator/decimal';
+import { TransformDecimal } from 'src/application/validator/decimal';
 import type {
   DetExport as IDetExport,
   ExportInd as IExportInd,
@@ -14,7 +14,7 @@ export class ExportInd implements IExportInd {
   @IsString()
   public chNFe!: string;
 
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public qExport!: DecimalValue;
 }
 

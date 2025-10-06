@@ -1,24 +1,24 @@
 import { IsOptional, IsString } from 'class-validator';
-import { IsDecimal } from 'src/application/validator/decimal';
+import { TransformDecimal } from 'src/application/validator/decimal';
 import { RetTransp as IRetTransp } from 'src/entities/nfe/inf-nfe/transp';
 
 import type { DecimalValue } from '@nfets/core';
 
 export class RetTransp implements IRetTransp {
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vServ?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vBCRet?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 4 })
   public pICMSRet?: DecimalValue;
 
   @IsOptional()
-  @IsDecimal()
+  @TransformDecimal({ fixed: 2 })
   public vICMSRet?: DecimalValue;
 
   @IsOptional()
