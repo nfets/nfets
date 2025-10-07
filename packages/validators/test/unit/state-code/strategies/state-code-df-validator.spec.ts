@@ -1,4 +1,4 @@
-import { StateCodeDfValidator } from 'src/state-code/strategies/state-code-df-validator';
+import { StateCodeDfValidator } from '@nfets/validators/state-code/strategies/state-code-df-validator';
 
 describe('StateCodeDfValidator', () => {
   const validator = new StateCodeDfValidator();

@@ -1,6 +1,11 @@
 import path from 'node:path';
 import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
-import { type Either, left, NFeTsError, Xml2JsToolkit } from 'src/index';
+import {
+  type Either,
+  left,
+  NFeTsError,
+  Xml2JsToolkit,
+} from '@nfets/core/index';
 
 describe('xml validator (unit)', () => {
   const nfeNfceSchemas = path.resolve(

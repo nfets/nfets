@@ -1,8 +1,8 @@
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import type { Observation as IObservation } from 'src/entities/nfe/inf-nfe/det/obs-item';
-import type { ObsItem as IObsItem } from 'src/entities/nfe/inf-nfe/det/obs-item';
+import type { Observation as IObservation } from '@nfets/nfe/entities/nfe/inf-nfe/det/obs-item';
+import type { ObsItem as IObsItem } from '@nfets/nfe/entities/nfe/inf-nfe/det/obs-item';
 
 export class Observation implements IObservation {
   @IsString()

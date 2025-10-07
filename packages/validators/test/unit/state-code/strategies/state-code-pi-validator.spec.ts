@@ -1,4 +1,4 @@
-import { StateCodePiValidator } from 'src/state-code/strategies/state-code-pi-validator';
+import { StateCodePiValidator } from '@nfets/validators/state-code/strategies/state-code-pi-validator';
 
 describe('StateCodePiValidator', () => {
   const validator = new StateCodePiValidator();

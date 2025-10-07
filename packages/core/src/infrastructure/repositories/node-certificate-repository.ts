@@ -3,23 +3,23 @@ import path from 'node:path';
 import forge from 'node-forge';
 import crypto from 'node:crypto';
 
-import { NFeTsError } from 'src/domain/errors/nfets-error';
-import { left, right, type Either } from 'src/shared/either';
-import { leftFromError } from 'src/shared/left-from-error';
-import { NullCacheAdapter } from './null-cache-adapter';
+import { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
+import { left, right, type Either } from '@nfets/core/shared/either';
+import { leftFromError } from '@nfets/core/shared/left-from-error';
+import { NullCacheAdapter } from '@nfets/core/infrastructure/repositories/null-cache-adapter';
 
 import type {
   Certificate,
   MessageDigest,
   ReadCertificateResponse,
-} from 'src/domain/entities/certificate/certificate';
-import type { PrivateKey } from 'src/domain/entities/certificate/private-key';
-import type { CertificateRepository } from 'src/domain/repositories/certificate-repository';
-import type { CacheAdapter } from 'src/domain/repositories/cache-adapter';
-import type { HttpClient } from 'src/domain/repositories/http-client';
+} from '@nfets/core/domain/entities/certificate/certificate';
+import type { PrivateKey } from '@nfets/core/domain/entities/certificate/private-key';
+import type { CertificateRepository } from '@nfets/core/domain/repositories/certificate-repository';
+import type { CacheAdapter } from '@nfets/core/domain/repositories/cache-adapter';
+import type { HttpClient } from '@nfets/core/domain/repositories/http-client';
 
-import { SignatureAlgorithm } from 'src/domain/entities/signer/algo';
-import { unreachable } from 'src/shared/unreachable';
+import { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
+import { unreachable } from '@nfets/core/shared/unreachable';
 
 export class NodeCertificateRepository implements CertificateRepository {
   public constructor(

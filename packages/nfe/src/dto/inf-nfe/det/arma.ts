@@ -1,4 +1,4 @@
-import type { Arma as IArma } from 'src/entities/nfe/inf-nfe/det/arma';
+import type { Arma as IArma } from '@nfets/nfe/entities/nfe/inf-nfe/det/arma';
 import { IsString } from 'class-validator';
 
 export class Arma implements IArma {

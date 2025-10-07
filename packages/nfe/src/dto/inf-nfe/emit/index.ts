@@ -1,9 +1,9 @@
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
-import { Case } from 'src/application/validator/switch-case';
+import { Case } from '@nfets/nfe/application/validator/switch-case';
 import { Type } from 'class-transformer';
 import { EnderEmit } from './ender-emit';
 
-import type { Emit as IEmit } from 'src/entities/nfe/inf-nfe/emit';
+import type { Emit as IEmit } from '@nfets/nfe/entities/nfe/inf-nfe/emit';
 
 export class Emit implements IEmit {
   @IsOptional()

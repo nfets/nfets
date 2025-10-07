@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import type { Exporta as IExporta } from 'src/entities/nfe/inf-nfe/exporta';
+import type { Exporta as IExporta } from '@nfets/nfe/entities/nfe/inf-nfe/exporta';
 
 export class Exporta implements IExporta {
   @IsString()

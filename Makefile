@@ -4,7 +4,7 @@ lint:
 	@pnpm eslint -c eslint.config.mjs
 
 clean:
-	@pnpm rimraf packages/{core,nfe,validators}/{tsconfig.tsbuildinfo,dist}
+	@pnpm rimraf packages/{core,nfe,validators}/{tsconfig.build.tsbuildinfo,dist}
 
 test:
 	@pnpm --filter @nfets/* test
@@ -14,7 +14,7 @@ test\:coverage-summary:
 
 build:
 	@make clean
-	@pnpm tsx scripts/build.ts
+	@pnpm build
 
 build\:core:
 	@pnpm --filter @nfets/core build

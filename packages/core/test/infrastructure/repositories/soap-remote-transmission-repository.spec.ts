@@ -1,11 +1,12 @@
 import { expectIsRight } from '@nfets/test/expects';
 import axios from 'axios';
 
-import { MemoryCacheAdapter } from 'src/infrastructure/repositories/memory-cache-adapter';
-import { NodeCertificateRepository } from 'src/infrastructure/repositories/node-certificate-repository';
-import { SoapRemoteTransmissionRepository } from 'src/infrastructure/repositories/soap-remote-transmission-repository';
+import { Xml2JsToolkit } from '@nfets/core/infrastructure/xml/xml2js-toolkit';
+import { MemoryCacheAdapter } from '@nfets/core/infrastructure/repositories/memory-cache-adapter';
+import { NodeCertificateRepository } from '@nfets/core/infrastructure/repositories/node-certificate-repository';
+import { SoapRemoteTransmissionRepository } from '@nfets/core/infrastructure/repositories/soap-remote-transmission-repository';
+
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
-import { Xml2JsToolkit } from 'src/index';
 
 describe('soap remote transmission nfe (integration) (not destructive)', () => {
   const certificate = ensureIntegrationTestsHasValidCertificate();

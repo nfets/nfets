@@ -5,12 +5,13 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "src/*": ["./src/*"],
-      "@nfets/*": ["../*/src/index.ts"],
-      "@nfets/test/*": ["../test/src/*"]
+      "@nfets/validators/*": ["./src/*"],
+      "@nfets/core/*": ["../core/src/*"]
     },
     "composite": true
   },
-  "references": [{ "path": "../core" }, { "path": "../test" }],
-  "include": ["src/**/*.ts", "test/**/*.ts"]
+  "references": [{ "path": "../core" }],
+  "tsc-alias": {
+    "resolveFullPaths": true
+  }
 }

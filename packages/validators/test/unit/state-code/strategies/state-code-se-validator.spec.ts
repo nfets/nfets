@@ -1,4 +1,4 @@
-import { StateCodeSeValidator } from 'src/state-code/strategies/state-code-se-validator';
+import { StateCodeSeValidator } from '@nfets/validators/state-code/strategies/state-code-se-validator';
 
 describe('StateCodeSeValidator', () => {
   const validator = new StateCodeSeValidator();

@@ -9,8 +9,8 @@ import type {
   ForDia as IForDia,
   Cana as ICana,
   Deduc as IDeduc,
-} from 'src/entities/nfe/inf-nfe/cana';
-import { TransformDecimal } from 'src/application/validator/decimal';
+} from '@nfets/nfe/entities/nfe/inf-nfe/cana';
+import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
 import type { DecimalValue } from '@nfets/core';
 
 export class ForDia implements IForDia {

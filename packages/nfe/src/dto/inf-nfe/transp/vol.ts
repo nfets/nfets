@@ -1,6 +1,6 @@
 import { IsOptional, IsString } from 'class-validator';
-import { TransformDecimal } from 'src/application/validator/decimal';
-import { Vol as IVol } from 'src/entities/nfe/inf-nfe/transp';
+import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
+import { Vol as IVol } from '@nfets/nfe/entities/nfe/inf-nfe/transp';
 
 import type { DecimalValue } from '@nfets/core';
 

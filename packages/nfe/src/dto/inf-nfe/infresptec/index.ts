@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import { InfRespTec as IInfRespTec } from 'src/entities/nfe/inf-nfe/infresptec';
+import { InfRespTec as IInfRespTec } from '@nfets/nfe/entities/nfe/inf-nfe/infresptec';
 
 export class InfRespTec implements IInfRespTec {
   @IsString()

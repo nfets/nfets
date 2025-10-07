@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import { Rastro as IRastro } from 'src/entities/nfe/inf-nfe/det/rastro';
+import { Rastro as IRastro } from '@nfets/nfe/entities/nfe/inf-nfe/det/rastro';
 
 export class Rastro implements IRastro {
   @IsString()

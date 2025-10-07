@@ -4,15 +4,17 @@
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc && tsc-alias",
+    "build": "tsc -p tsconfig.build.json",
     "test": "jest --config jest.config.ts --passWithNoTests",
     "test:coverage": "pnpm test --coverage"
   },
   "dependencies": {
     "@nfets/core": "workspace:*",
-    "@nfets/test": "workspace:*",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1"
+  },
+  "devDependencies": {
+    "@nfets/test": "workspace:*"
   },
   "exports": {
     ".": "./dist/index.js"

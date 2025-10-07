@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import type { II as III } from 'src/entities/nfe/inf-nfe/det/imposto/ii';
+import type { II as III } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/ii';
 
 export class II implements III {
   @IsOptional()

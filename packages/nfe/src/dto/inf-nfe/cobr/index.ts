@@ -9,9 +9,9 @@ import type {
   Fat as IFat,
   Dup as IDup,
   Cobr as ICobr,
-} from 'src/entities/nfe/inf-nfe/cobr';
-import { TransformDecimal } from 'src/application/validator/decimal';
-import { type DecimalValue } from '@nfets/core';
+} from '@nfets/nfe/entities/nfe/inf-nfe/cobr';
+import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
+import type { DecimalValue } from '@nfets/core';
 
 export class Fat implements IFat {
   @IsOptional()

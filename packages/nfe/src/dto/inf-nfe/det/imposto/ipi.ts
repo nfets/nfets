@@ -1,8 +1,8 @@
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import type { IPITrib as IIPITrib } from 'src/entities/nfe/inf-nfe/det/imposto/ipi';
-import type { IPINT as IIPINT } from 'src/entities/nfe/inf-nfe/det/imposto/ipi';
-import type { IPI as IIPI } from 'src/entities/nfe/inf-nfe/det/imposto/ipi';
+import type { IPITrib as IIPITrib } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/ipi';
+import type { IPINT as IIPINT } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/ipi';
+import type { IPI as IIPI } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/ipi';
 
 export class IPITrib implements IIPITrib {
   @IsString()

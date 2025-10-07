@@ -4,12 +4,14 @@
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc && tsc-alias",
+    "build": "tsc -p tsconfig.build.json",
     "test": "jest --config jest.config.ts --passWithNoTests",
     "test:coverage": "pnpm test --coverage"
   },
   "dependencies": {
-    "@nfets/core": "workspace:*",
+    "@nfets/core": "workspace:*"
+  },
+  "devDependencies": {
     "@nfets/test": "workspace:*"
   },
   "exports": {

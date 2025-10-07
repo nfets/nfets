@@ -1,11 +1,11 @@
-import { MaxLength } from 'src/domain/decorators/validators/max-length';
-import { ValidationError } from 'src/domain/errors/validation-error';
+import { MaxLength } from '@nfets/core/domain/decorators/validators/max-length';
+import { ValidationError } from '@nfets/core/domain/errors/validation-error';
 
 describe('@MaxLength decorator (unit)', () => {
   it('should throw exception when default value exceeds max length', () => {
     class Test1 {
       @MaxLength(2)
-      declare public name: string;
+      public declare name: string;
     }
 
     const instance = new Test1();
@@ -21,7 +21,7 @@ describe('@MaxLength decorator (unit)', () => {
   it('should throw exception when value exceeds max length', () => {
     class Test2 {
       @MaxLength(15)
-      declare public name?: string;
+      public declare name?: string;
     }
 
     const instance = new Test2();
@@ -37,7 +37,7 @@ describe('@MaxLength decorator (unit)', () => {
   it("should validate and don't throw exception", () => {
     class Test3 {
       @MaxLength(5)
-      declare public name: string;
+      public declare name: string;
     }
 
     const instance = new Test3();

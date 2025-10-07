@@ -1,8 +1,8 @@
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Card, Card as ICard } from './card';
-import { DetPag as IDetPag } from 'src/entities/nfe/inf-nfe/pag';
-import { TransformDecimal } from 'src/application/validator/decimal';
+import { DetPag as IDetPag } from '@nfets/nfe/entities/nfe/inf-nfe/pag';
+import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
 
 import type { DecimalValue } from '@nfets/core';
 

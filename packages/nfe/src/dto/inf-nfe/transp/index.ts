@@ -14,8 +14,8 @@ import {
   Reboque as IReboque,
 } from './veic';
 import { Vol, Vol as IVol } from './vol';
-import { Transp as ITransp } from 'src/entities/nfe/inf-nfe/transp';
-import { Case } from 'src/application/validator/switch-case';
+import { Transp as ITransp } from '@nfets/nfe/entities/nfe/inf-nfe/transp';
+import { Case } from '@nfets/nfe/application/validator/switch-case';
 
 export class Transp implements ITransp {
   @IsString()

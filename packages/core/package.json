@@ -4,7 +4,7 @@
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json",
     "test": "NODE_OPTIONS=--openssl-legacy-provider jest --config jest.config.ts --passWithNoTests",
     "test:coverage": "pnpm test --coverage"
   },

@@ -1,11 +1,11 @@
-import type { Either } from 'src/shared/either';
-import type { NFeTsError } from '../errors/nfets-error';
+import type { Either } from '@nfets/core/shared/either';
+import type { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
 import type {
   Certificate,
   ReadCertificateResponse,
-} from '../entities/certificate/certificate';
-import type { PrivateKey } from '../entities/certificate/private-key';
-import type { SignatureAlgorithm } from '../entities/signer/algo';
+} from '@nfets/core/domain/entities/certificate/certificate';
+import type { PrivateKey } from '@nfets/core/domain/entities/certificate/private-key';
+import type { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
 
 export interface CertificateRepository {
   read(

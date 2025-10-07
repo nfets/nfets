@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import type { Compra as ICompra } from 'src/entities/nfe/inf-nfe/compra';
+import type { Compra as ICompra } from '@nfets/nfe/entities/nfe/inf-nfe/compra';
 
 export class Compra implements ICompra {
   @IsOptional()

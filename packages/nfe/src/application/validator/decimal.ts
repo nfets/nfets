@@ -1,5 +1,6 @@
 import 'reflect-metadata';
-import { Decimal, type DecimalValue } from '@nfets/core';
+import { Decimal } from '@nfets/core';
+import type { DecimalValue } from '@nfets/core';
 
 import {
   registerDecorator,

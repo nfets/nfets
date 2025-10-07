@@ -1,4 +1,4 @@
-import type { CacheAdapter } from 'src/domain/repositories/cache-adapter';
+import type { CacheAdapter } from '@nfets/core/domain/repositories/cache-adapter';
 
 export class MemoryCacheAdapter implements CacheAdapter {
   private cache = new Map<string, unknown>();

@@ -1,7 +1,7 @@
 import type {
   AccessKey,
   VerifiedAccessKey,
-} from 'src/entities/acess-keys/access-key';
+} from '@nfets/nfe/entities/acess-keys/access-key';
 
 export class AccessKeyBuider {
   public compile(payload: AccessKey): string {

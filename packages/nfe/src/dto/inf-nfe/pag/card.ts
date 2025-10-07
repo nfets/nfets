@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import { Card as ICard } from 'src/entities/nfe/inf-nfe/pag';
+import { Card as ICard } from '@nfets/nfe/entities/nfe/inf-nfe/pag';
 
 export class Card implements ICard {
   @IsOptional()

@@ -31,25 +31,25 @@ import { InfSolicNFF } from './inf-solic-nff';
 import type {
   InfNFeAttributes as IInfNFeAttributes,
   InfNFe as IInfNFe,
-} from 'src/entities/nfe/inf-nfe';
-import type { InfAdic as IInfAdic } from 'src/entities/nfe/inf-nfe/infadic';
-import type { Cana as ICana } from 'src/entities/nfe/inf-nfe/cana';
-import type { Pag as IPag } from 'src/entities/nfe/inf-nfe/pag';
-import type { Ide as IIde } from 'src/entities/nfe/inf-nfe/ide';
-import type { Det as IDet } from 'src/entities/nfe/inf-nfe/det';
-import type { Total as ITotal } from 'src/entities/nfe/inf-nfe/total';
-import type { Transp as ITransp } from 'src/entities/nfe/inf-nfe/transp';
-import type { Cobr as ICobr } from 'src/entities/nfe/inf-nfe/cobr';
-import type { Emit as IEmit } from 'src/entities/nfe/inf-nfe/emit';
-import type { Dest as IDest } from 'src/entities/nfe/inf-nfe/dest';
-import type { Local as ILocal } from 'src/entities/nfe/inf-nfe/local';
-import type { AutXML as IAutXML } from 'src/entities/nfe/inf-nfe/autxml';
-import type { InfIntermed as IInfIntermed } from 'src/entities/nfe/inf-nfe/infintermed';
-import type { Exporta as IExporta } from 'src/entities/nfe/inf-nfe/exporta';
-import type { Compra as ICompra } from 'src/entities/nfe/inf-nfe/compra';
-import type { InfRespTec as IInfRespTec } from 'src/entities/nfe/inf-nfe/infresptec';
-import type { Avulsa as IAvulsa } from 'src/entities/nfe/inf-nfe/avulsa';
-import type { InfSolicNFF as ISolicNFF } from 'src/entities/nfe/inf-nfe/inf-solic-nff';
+} from '@nfets/nfe/entities/nfe/inf-nfe';
+import type { InfAdic as IInfAdic } from '@nfets/nfe/entities/nfe/inf-nfe/infadic';
+import type { Cana as ICana } from '@nfets/nfe/entities/nfe/inf-nfe/cana';
+import type { Pag as IPag } from '@nfets/nfe/entities/nfe/inf-nfe/pag';
+import type { Ide as IIde } from '@nfets/nfe/entities/nfe/inf-nfe/ide';
+import type { Det as IDet } from '@nfets/nfe/entities/nfe/inf-nfe/det';
+import type { Total as ITotal } from '@nfets/nfe/entities/nfe/inf-nfe/total';
+import type { Transp as ITransp } from '@nfets/nfe/entities/nfe/inf-nfe/transp';
+import type { Cobr as ICobr } from '@nfets/nfe/entities/nfe/inf-nfe/cobr';
+import type { Emit as IEmit } from '@nfets/nfe/entities/nfe/inf-nfe/emit';
+import type { Dest as IDest } from '@nfets/nfe/entities/nfe/inf-nfe/dest';
+import type { Local as ILocal } from '@nfets/nfe/entities/nfe/inf-nfe/local';
+import type { AutXML as IAutXML } from '@nfets/nfe/entities/nfe/inf-nfe/autxml';
+import type { InfIntermed as IInfIntermed } from '@nfets/nfe/entities/nfe/inf-nfe/infintermed';
+import type { Exporta as IExporta } from '@nfets/nfe/entities/nfe/inf-nfe/exporta';
+import type { Compra as ICompra } from '@nfets/nfe/entities/nfe/inf-nfe/compra';
+import type { InfRespTec as IInfRespTec } from '@nfets/nfe/entities/nfe/inf-nfe/infresptec';
+import type { Avulsa as IAvulsa } from '@nfets/nfe/entities/nfe/inf-nfe/avulsa';
+import type { InfSolicNFF as ISolicNFF } from '@nfets/nfe/entities/nfe/inf-nfe/inf-solic-nff';
 
 export class InfNFeAttributes implements IInfNFeAttributes {
   @IsOptional()

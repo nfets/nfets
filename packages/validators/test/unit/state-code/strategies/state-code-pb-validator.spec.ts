@@ -1,4 +1,4 @@
-import { StateCodePbValidator } from 'src/state-code/strategies/state-code-pb-validator';
+import { StateCodePbValidator } from '@nfets/validators/state-code/strategies/state-code-pb-validator';
 
 describe('StateCodePbValidator', () => {
   const validator = new StateCodePbValidator();

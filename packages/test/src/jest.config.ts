@@ -22,15 +22,14 @@ export default {
     },
   },
   transform: {
-    '^.+\\.(t|j)s$': ['ts-jest', { tsconfig: './tsconfig.json' }],
+    '^.+\\.(t|j)s$': ['ts-jest', { tsconfig: './tsconfig.test.json' }],
   },
   collectCoverageFrom: ['src/**/*.(t|j)s'],
   moduleNameMapper: {
-    '^src/(.*)$': '<rootDir>/src/$1',
-    '^test/(.*)$': '<rootDir>/test/$1',
     '^@nfets/test/(.*)$': '<rootDir>/../test/src/$1',
-    '^@nfets/core$': '<rootDir>/../core/src/index.ts',
     '^@nfets/core/(.*)$': '<rootDir>/../core/src/$1',
+    '^@nfets/nfe/(.*)$': '<rootDir>/../nfe/src/$1',
+    '^@nfets/validators/(.*)$': '<rootDir>/../validators/src/$1',
   },
   coverageReporters: [['text', { skipFull: true }]],
   testPathIgnorePatterns: ['/node_modules/', '/coverage/', '/dist/'],

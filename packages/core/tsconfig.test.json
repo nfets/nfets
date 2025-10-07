@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@nfets/test/*": ["../test/src/*"]
+    }
+  },
+  "references": [{ "path": "../test" }]
+}

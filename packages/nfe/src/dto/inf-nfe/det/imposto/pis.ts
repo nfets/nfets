@@ -8,7 +8,7 @@ import type {
   PISOutr as IPISOutr,
   PISST as IPISST,
   PIS as IPIS,
-} from 'src/entities/nfe/inf-nfe/det/imposto/pis';
+} from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/pis';
 
 export class PISAliq implements IPISAliq {
   @IsString()

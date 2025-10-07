@@ -1,7 +1,7 @@
-import type { NFeTsError } from 'src/domain/errors/nfets-error';
+import type { NFeTsError } from '../../errors/nfets-error';
 import type { BuilderOptions } from './xml-builder';
 import type { ParserOptions } from './xml-parser';
-import type { Either } from 'src/shared/either';
+import type { Either } from '../../../shared/either';
 import type { CanonicalizeOptions } from './canonicalization';
 import type { SignatureAlgorithm } from '../signer/algo';
 

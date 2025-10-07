@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
-import { InfProdEmb as IInfProdEmb } from 'src/entities/nfe/inf-nfe/det/infprod-emb';
-import { TransformDecimal } from 'src/application/validator/decimal';
+import { InfProdEmb as IInfProdEmb } from '@nfets/nfe/entities/nfe/inf-nfe/det/infprod-emb';
+import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
 
 import type { DecimalValue } from '@nfets/core';
 

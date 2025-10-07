@@ -9,18 +9,18 @@ import { COFINS, COFINSST } from './imposto/cofins';
 import { ISSQN } from './imposto/issqn';
 import { ICMSUFDest } from './imposto/icmsufdest';
 
-import type { Imposto as IImposto } from 'src/entities/nfe/inf-nfe/det/imposto';
-import type { ICMS as IICMS } from 'src/entities/nfe/inf-nfe/det/imposto/icms';
-import type { IPI as IIPI } from 'src/entities/nfe/inf-nfe/det/imposto/ipi';
-import type { II as III } from 'src/entities/nfe/inf-nfe/det/imposto/ii';
-import type { PIS as IPIS } from 'src/entities/nfe/inf-nfe/det/imposto/pis';
-import type { PISST as IPISST } from 'src/entities/nfe/inf-nfe/det/imposto/pis';
-import type { COFINS as ICOFINS } from 'src/entities/nfe/inf-nfe/det/imposto/cofins';
-import type { COFINSST as ICOFINSST } from 'src/entities/nfe/inf-nfe/det/imposto/cofins';
-import type { ISSQN as IISSQN } from 'src/entities/nfe/inf-nfe/det/imposto/issqn';
-import type { ICMSUFDest as IICMSUFDest } from 'src/entities/nfe/inf-nfe/det/imposto/icmsufdest';
+import type { Imposto as IImposto } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto';
+import type { ICMS as IICMS } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/icms';
+import type { IPI as IIPI } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/ipi';
+import type { II as III } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/ii';
+import type { PIS as IPIS } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/pis';
+import type { PISST as IPISST } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/pis';
+import type { COFINS as ICOFINS } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/cofins';
+import type { COFINSST as ICOFINSST } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/cofins';
+import type { ISSQN as IISSQN } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/issqn';
+import type { ICMSUFDest as IICMSUFDest } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/icmsufdest';
 
-import { Case } from 'src/application/validator/switch-case';
+import { Case } from '@nfets/nfe/application/validator/switch-case';
 
 export class Imposto implements IImposto {
   @IsOptional()

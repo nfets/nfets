@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import { ISSQNTot as IISSQNTot } from 'src/entities/nfe/inf-nfe/total';
+import { ISSQNTot as IISSQNTot } from '@nfets/nfe/entities/nfe/inf-nfe/total';
 
 export class ISSQNTot implements IISSQNTot {
   @IsOptional()

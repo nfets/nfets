@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import type { EnderEmit as IEnderEmit } from 'src/entities/nfe/inf-nfe/emit';
+import type { EnderEmit as IEnderEmit } from '@nfets/nfe/entities/nfe/inf-nfe/emit';
 
 export class EnderEmit implements IEnderEmit {
   @IsString()

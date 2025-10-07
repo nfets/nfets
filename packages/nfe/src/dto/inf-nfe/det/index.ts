@@ -14,11 +14,11 @@ import { ObsItem } from './obs-item';
 import type {
   Det as IDet,
   DetAttributes as IDetAttributes,
-} from 'src/entities/nfe/inf-nfe/det';
-import type { Devol as IDevol } from 'src/entities/nfe/inf-nfe/det/imposto-devol';
-import type { Prod as IProd } from 'src/entities/nfe/inf-nfe/det/prod';
-import type { Imposto as IImposto } from 'src/entities/nfe/inf-nfe/det/imposto';
-import type { ObsItem as IObsItem } from 'src/entities/nfe/inf-nfe/det/obs-item';
+} from '@nfets/nfe/entities/nfe/inf-nfe/det';
+import type { Devol as IDevol } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto-devol';
+import type { Prod as IProd } from '@nfets/nfe/entities/nfe/inf-nfe/det/prod';
+import type { Imposto as IImposto } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto';
+import type { ObsItem as IObsItem } from '@nfets/nfe/entities/nfe/inf-nfe/det/obs-item';
 
 export class DetAttributes implements IDetAttributes {
   @IsString()

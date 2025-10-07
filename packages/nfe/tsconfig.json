@@ -5,11 +5,14 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "src/*": ["./src/*"],
-      "@nfets/*": ["../*/src/index.ts"],
-      "@nfets/test/*": ["../test/src/*"]
-    }
+      "@nfets/nfe/*": ["./src/*"],
+      "@nfets/core/*": ["../core/dist/*"],
+      "@nfets/core": ["../core/dist/index"]
+    },
+    "composite": true
   },
-  "references": [{ "path": "../core" }, { "path": "../test" }],
-  "include": ["src/**/*.ts", "test/**/*.ts"]
+  "references": [{ "path": "../core" }],
+  "tsc-alias": {
+    "resolveFullPaths": true
+  }
 }

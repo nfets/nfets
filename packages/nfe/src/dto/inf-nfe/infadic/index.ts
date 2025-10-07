@@ -10,7 +10,7 @@ import type {
   ProcRef as IProcRef,
   InfAdic as IInfAdic,
   InfAdicObs as IInfAdicObs,
-} from 'src/entities/nfe/inf-nfe/infadic';
+} from '@nfets/nfe/entities/nfe/inf-nfe/infadic';
 
 export class InfAdicObs implements IInfAdicObs {
   @IsString()

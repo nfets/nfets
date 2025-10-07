@@ -8,8 +8,8 @@ import {
 import type {
   NFe as INFe,
   NFeAttributes as INFeAttributes,
-} from 'src/entities/nfe/nfe';
-import type { InfNFe as IInfNFe } from 'src/entities/nfe/inf-nfe';
+} from '@nfets/nfe/entities/nfe/nfe';
+import type { InfNFe as IInfNFe } from '@nfets/nfe/entities/nfe/inf-nfe';
 import { InfNFe } from './inf-nfe/inf-nfe';
 import { Type } from 'class-transformer';
 

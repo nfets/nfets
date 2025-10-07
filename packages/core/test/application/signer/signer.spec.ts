@@ -1,18 +1,18 @@
 import axios from 'axios';
 
-import { Signer } from 'src/application/signer/signer';
-import { Xml2JsToolkit } from 'src/index';
+import { Signer } from '@nfets/core/application/signer/signer';
+import { Xml2JsToolkit } from '@nfets/core/index';
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
-import { SignatureAlgorithm } from 'src/domain/entities/signer/algo';
-import { NodeCertificateRepository } from 'src/infrastructure/repositories/node-certificate-repository';
-import { MemoryCacheAdapter } from 'src/infrastructure/repositories/memory-cache-adapter';
-import type { ReadCertificateResponse } from 'src/domain/entities/certificate/certificate';
+import { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
+import { NodeCertificateRepository } from '@nfets/core/infrastructure/repositories/node-certificate-repository';
+import { MemoryCacheAdapter } from '@nfets/core/infrastructure/repositories/memory-cache-adapter';
+import type { ReadCertificateResponse } from '@nfets/core/domain/entities/certificate/certificate';
 import {
   getCertificatePassword,
   getCnpjCertificate,
 } from '@nfets/test/certificates';
-import type { CertificateRepository } from 'src/domain/repositories/certificate-repository';
-import type { XmlToolkit } from 'src/domain/entities/xml/xml-toolkit';
+import type { CertificateRepository } from '@nfets/core/domain/repositories/certificate-repository';
+import type { XmlToolkit } from '@nfets/core/domain/entities/xml/xml-toolkit';
 
 import { expectIsRight } from '@nfets/test/expects';
 

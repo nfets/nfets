@@ -1,5 +1,5 @@
-import { ValidationError } from 'src/domain/errors/validation-error';
-import { isString } from 'src/domain/guards/is-string';
+import { ValidationError } from '@nfets/core/domain/errors/validation-error';
+import { isString } from '@nfets/core/domain/guards/is-string';
 
 export const MaxLength =
   (length: number): PropertyDecorator =>

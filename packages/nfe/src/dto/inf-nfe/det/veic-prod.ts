@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-import type { VeicProd as IVeicProd } from 'src/entities/nfe/inf-nfe/det/veic-prod';
+import type { VeicProd as IVeicProd } from '@nfets/nfe/entities/nfe/inf-nfe/det/veic-prod';
 
 export class VeicProd implements IVeicProd {
   @IsString()

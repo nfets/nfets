@@ -1,4 +1,4 @@
-import { Decimal } from 'src/infrastructure/calculator/decimaljs';
+import { Decimal } from '@nfets/core/infrastructure/calculator/decimaljs';
 
 describe('decimal (unit)', () => {
   // https://0.30000000000000004.com 🤡🤡🐞🐞

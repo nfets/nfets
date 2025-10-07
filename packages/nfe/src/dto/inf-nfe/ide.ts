@@ -12,8 +12,8 @@ import type {
   Ide as IIde,
   RefECF as IRefECF,
   NFref as INFref,
-} from 'src/entities/nfe/inf-nfe/ide';
-import { Case } from 'src/application/validator/switch-case';
+} from '@nfets/nfe/entities/nfe/inf-nfe/ide';
+import { Case } from '@nfets/nfe/application/validator/switch-case';
 
 export class RefNF implements IRefNF {
   @IsString()

@@ -1,4 +1,4 @@
-import { StateCodePaValidator } from 'src/state-code/strategies/state-code-pa-validator';
+import { StateCodePaValidator } from '@nfets/validators/state-code/strategies/state-code-pa-validator';
 
 describe('StateCodePaValidator', () => {
   const validator = new StateCodePaValidator();

@@ -2,7 +2,7 @@ import { IsOptional, IsString } from 'class-validator';
 import {
   VeicTransp as IVeicTransp,
   Reboque as IReboque,
-} from 'src/entities/nfe/inf-nfe/transp';
+} from '@nfets/nfe/entities/nfe/inf-nfe/transp';
 
 export class VeicTransp implements IVeicTransp {
   @IsOptional()

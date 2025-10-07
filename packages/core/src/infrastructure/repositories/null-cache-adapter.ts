@@ -1,4 +1,4 @@
-import type { CacheAdapter } from 'src/domain/repositories/cache-adapter';
+import type { CacheAdapter } from '@nfets/core/domain/repositories/cache-adapter';
 
 export class NullCacheAdapter implements CacheAdapter {
   async get<T>(_: string): Promise<T | null> {

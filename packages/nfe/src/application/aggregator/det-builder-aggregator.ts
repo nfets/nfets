@@ -1,7 +1,8 @@
-import type { INfeXmlBuilder } from 'src/entities/xml-builder/nfe-xml-builder';
-import type { Prod } from 'src/entities/nfe/inf-nfe/det/prod';
-import type { ICMS } from 'src/entities/nfe/inf-nfe/det/imposto/icms';
 import { Decimal } from '@nfets/core';
+
+import type { INfeXmlBuilder } from '@nfets/nfe/entities/xml-builder/nfe-xml-builder';
+import type { Prod } from '@nfets/nfe/entities/nfe/inf-nfe/det/prod';
+import type { ICMS } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/icms';
 
 export interface DetBuilderAggregator {
   prod(payload: Prod): void;

@@ -1,7 +1,7 @@
 import { IsDate, IsOptional, IsString } from 'class-validator';
-import { TransformDecimal } from 'src/application/validator/decimal';
+import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
 
-import type { Avulsa as IAvulsa } from 'src/entities/nfe/inf-nfe/avulsa';
+import type { Avulsa as IAvulsa } from '@nfets/nfe/entities/nfe/inf-nfe/avulsa';
 import type { DecimalValue } from '@nfets/core';
 
 export class Avulsa implements IAvulsa {

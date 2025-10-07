@@ -2,9 +2,9 @@ import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { EnderDest } from './ender-dest';
 
-import type { Dest as IDest } from 'src/entities/nfe/inf-nfe/dest';
-import type { EnderDest as IEnderDest } from 'src/entities/nfe/inf-nfe/dest';
-import { Case } from 'src/application/validator/switch-case';
+import type { Dest as IDest } from '@nfets/nfe/entities/nfe/inf-nfe/dest';
+import type { EnderDest as IEnderDest } from '@nfets/nfe/entities/nfe/inf-nfe/dest';
+import { Case } from '@nfets/nfe/application/validator/switch-case';
 
 export class Dest implements IDest {
   @IsOptional()

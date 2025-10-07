@@ -7,21 +7,21 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { Prod as IProd } from 'src/entities/nfe/inf-nfe/det/prod';
-import { TransformDecimal } from 'src/application/validator/decimal';
+import { Prod as IProd } from '@nfets/nfe/entities/nfe/inf-nfe/det/prod';
+import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
 import { Type } from 'class-transformer';
-import type { DI as IDI } from 'src/entities/nfe/inf-nfe/det/di';
-import type { DetExport as IDetExport } from 'src/entities/nfe/inf-nfe/det/det-export';
-import type { Rastro as IRastro } from 'src/entities/nfe/inf-nfe/det/rastro';
-import type { InfProdNFF as IInfProdNFF } from 'src/entities/nfe/inf-nfe/det/infprod-nff';
-import type { InfProdEmb as IInfProdEmb } from 'src/entities/nfe/inf-nfe/det/infprod-emb';
-import type { VeicProd as IVeicProd } from 'src/entities/nfe/inf-nfe/det/veic-prod';
-import type { Med as IMed } from 'src/entities/nfe/inf-nfe/det/med';
-import type { Arma as IArma } from 'src/entities/nfe/inf-nfe/det/arma';
-import type { Comb as IComb } from 'src/entities/nfe/inf-nfe/det/comb';
+import type { DI as IDI } from '@nfets/nfe/entities/nfe/inf-nfe/det/di';
+import type { DetExport as IDetExport } from '@nfets/nfe/entities/nfe/inf-nfe/det/det-export';
+import type { Rastro as IRastro } from '@nfets/nfe/entities/nfe/inf-nfe/det/rastro';
+import type { InfProdNFF as IInfProdNFF } from '@nfets/nfe/entities/nfe/inf-nfe/det/infprod-nff';
+import type { InfProdEmb as IInfProdEmb } from '@nfets/nfe/entities/nfe/inf-nfe/det/infprod-emb';
+import type { VeicProd as IVeicProd } from '@nfets/nfe/entities/nfe/inf-nfe/det/veic-prod';
+import type { Med as IMed } from '@nfets/nfe/entities/nfe/inf-nfe/det/med';
+import type { Arma as IArma } from '@nfets/nfe/entities/nfe/inf-nfe/det/arma';
+import type { Comb as IComb } from '@nfets/nfe/entities/nfe/inf-nfe/det/comb';
 
 import { Rastro } from './rastro';
-import { Case } from 'src/application/validator/switch-case';
+import { Case } from '@nfets/nfe/application/validator/switch-case';
 import { DI } from './di';
 import { DetExport } from './det-export';
 import { InfProdNFF } from './infprod-nff';

@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import { InfIntermed as IInfIntermed } from 'src/entities/nfe/inf-nfe/infintermed';
+import { InfIntermed as IInfIntermed } from '@nfets/nfe/entities/nfe/inf-nfe/infintermed';
 
 export class InfIntermed implements IInfIntermed {
   @IsString()

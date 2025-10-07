@@ -1,6 +1,6 @@
-import type { Either } from 'src/shared/either';
-import type { NFeTsError } from 'src/domain/errors/nfets-error';
-import type { SendTransmissionPayload } from '../entities/transmission/payload';
+import type { Either } from '../../shared/either';
+import type { NFeTsError } from '../../domain/errors/nfets-error';
+import type { SendTransmissionPayload } from '../../domain/entities/transmission/payload';
 
 export interface RemoteTransmissionRepository {
   send<R, M extends string>(

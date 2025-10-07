@@ -8,10 +8,10 @@ import {
   ArrayMinSize,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { DI as IDI, Adi as IAdi } from 'src/entities/nfe/inf-nfe/det/di';
+import { DI as IDI, Adi as IAdi } from '@nfets/nfe/entities/nfe/inf-nfe/det/di';
 
-import { TransformDecimal } from 'src/application/validator/decimal';
-import { Case } from 'src/application/validator/switch-case';
+import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
+import { Case } from '@nfets/nfe/application/validator/switch-case';
 
 export class Adi implements IAdi {
   @IsString()

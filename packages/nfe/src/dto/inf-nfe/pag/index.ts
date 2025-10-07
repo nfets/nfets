@@ -6,8 +6,8 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { DetPag, DetPag as IDetPag } from './det-pag';
-import { Pag as IPag } from 'src/entities/nfe/inf-nfe/pag';
-import { TransformDecimal } from 'src/application/validator/decimal';
+import { Pag as IPag } from '@nfets/nfe/entities/nfe/inf-nfe/pag';
+import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
 
 import type { DecimalValue } from '@nfets/core';
 

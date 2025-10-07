@@ -2,14 +2,14 @@ import type {
   Signature,
   SignedInfo,
   Transforms,
-} from 'src/domain/entities/signer/signature';
-import type { XmlToolkit } from 'src/domain/entities/xml/xml-toolkit';
+} from '../../domain/entities/signer/signature';
+import type { XmlToolkit } from '../../domain/entities/xml/xml-toolkit';
 import type {
   Certificate,
   ReadCertificateResponse,
-} from 'src/domain/entities/certificate/certificate';
-import type { CertificateRepository } from 'src/domain/repositories/certificate-repository';
-import type { PrivateKey } from 'src/domain/entities/certificate/private-key';
+} from '../../domain/entities/certificate/certificate';
+import type { CertificateRepository } from '../../domain/repositories/certificate-repository';
+import type { PrivateKey } from '../../domain/entities/certificate/private-key';
 
 import {
   DigestAlgorithm,
@@ -17,14 +17,14 @@ import {
   SignatureAlgorithm,
   CanonicalizationMethod,
   SignatureMethod,
-} from 'src/domain/entities/signer/algo';
+} from '../../domain/entities/signer/algo';
 import {
   type CanonicalizeOptions,
   defaultCanonicalizeOptions,
-} from 'src/domain/entities/xml/canonicalization';
-import { unreachable } from 'src/shared/unreachable';
-import { type Either, left, right } from 'src/shared/either';
-import { NFeTsError } from 'src/domain/errors/nfets-error';
+} from '../../domain/entities/xml/canonicalization';
+import { unreachable } from '../../shared/unreachable';
+import { type Either, left, right } from '../../shared/either';
+import { NFeTsError } from '../../domain/errors/nfets-error';
 
 export class Signer {
   public constructor(

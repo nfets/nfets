@@ -1,7 +1,7 @@
 import { IsOptional, IsString, Max, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Case } from 'src/application/validator/switch-case';
-import { TransformDecimal } from 'src/application/validator/decimal';
+import { Case } from '@nfets/nfe/application/validator/switch-case';
+import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
 
 import type { DecimalValue } from '@nfets/core';
 import type {
@@ -14,7 +14,7 @@ import type {
   ICMS60 as IICMS60,
   ICMS70 as IICMS70,
   ICMS90 as IICMS90,
-} from 'src/entities/nfe/inf-nfe/det/imposto/icms';
+} from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/icms';
 
 import type {
   ICMSSN101 as IICMSSN101,
@@ -23,10 +23,10 @@ import type {
   ICMSSN202 as IICMSSN202,
   ICMSSN500 as IICMSSN500,
   ICMSSN900 as IICMSSN900,
-} from 'src/entities/nfe/inf-nfe/det/imposto/icms';
-import type { ICMSST as IICMSST } from 'src/entities/nfe/inf-nfe/det/imposto/icms';
-import type { ICMSPart as IICMSPart } from 'src/entities/nfe/inf-nfe/det/imposto/icms';
-import type { ICMS as IICMS } from 'src/entities/nfe/inf-nfe/det/imposto/icms';
+} from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/icms';
+import type { ICMSST as IICMSST } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/icms';
+import type { ICMSPart as IICMSPart } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/icms';
+import type { ICMS as IICMS } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/icms';
 
 export class ICMS00 implements IICMS00 {
   @IsString()

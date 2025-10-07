@@ -112,15 +112,16 @@ importers:
       '@nfets/core':
         specifier: workspace:*
         version: link:../core
-      '@nfets/test':
-        specifier: workspace:*
-        version: link:../test
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
       class-validator:
         specifier: ^0.14.1
         version: 0.14.2
+    devDependencies:
+      '@nfets/test':
+        specifier: workspace:*
+        version: link:../test
 
   packages/test: {}
 
@@ -129,6 +130,7 @@ importers:
       '@nfets/core':
         specifier: workspace:*
         version: link:../core
+    devDependencies:
       '@nfets/test':
         specifier: workspace:*
         version: link:../test

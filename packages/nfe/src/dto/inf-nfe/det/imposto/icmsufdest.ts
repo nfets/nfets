@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import { ICMSUFDest as IICMSUFDest } from 'src/entities/nfe/inf-nfe/det/imposto/icmsufdest';
+import { ICMSUFDest as IICMSUFDest } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/icmsufdest';
 
 export class ICMSUFDest implements IICMSUFDest {
   @IsOptional()

@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import { ISSQN as IISSQN } from 'src/entities/nfe/inf-nfe/det/imposto/issqn';
+import { ISSQN as IISSQN } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/issqn';
 
 export class ISSQN implements IISSQN {
   @IsOptional()

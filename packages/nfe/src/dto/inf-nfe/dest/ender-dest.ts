@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
-import type { EnderDest as IEnderDest } from 'src/entities/nfe/inf-nfe/dest';
+import type { EnderDest as IEnderDest } from '@nfets/nfe/entities/nfe/inf-nfe/dest';
 
 export class EnderDest implements IEnderDest {
   @IsOptional()

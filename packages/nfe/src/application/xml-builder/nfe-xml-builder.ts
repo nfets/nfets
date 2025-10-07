@@ -1,27 +1,27 @@
-import { DeepPartial, NFeTsError, XmlToolkit } from '@nfets/core';
+import { type XmlToolkit, type DeepPartial, NFeTsError } from '@nfets/core';
 
 import type {
   InfNFeAttributes as IInfNFeAttributes,
   InfNFe as IInfNFe,
-} from 'src/entities/nfe/inf-nfe';
-import type { Ide as IIde } from 'src/entities/nfe/inf-nfe/ide';
-import type { Cobr as ICobr } from 'src/entities/nfe/inf-nfe/cobr';
-import type { Emit as IEmit } from 'src/entities/nfe/inf-nfe/emit';
-import type { Pag as IPag } from 'src/entities/nfe/inf-nfe/pag';
-import type { Transp as ITransp } from 'src/entities/nfe/inf-nfe/transp';
-import type { Total as ITotal } from 'src/entities/nfe/inf-nfe/total';
-import type { Det as IDet } from 'src/entities/nfe/inf-nfe/det';
-import type { InfIntermed as IInfIntermed } from 'src/entities/nfe/inf-nfe/infintermed';
-import type { Exporta as IExporta } from 'src/entities/nfe/inf-nfe/exporta';
-import type { Compra as ICompra } from 'src/entities/nfe/inf-nfe/compra';
-import type { Cana as ICana } from 'src/entities/nfe/inf-nfe/cana';
-import type { InfRespTec as IInfRespTec } from 'src/entities/nfe/inf-nfe/infresptec';
-import type { InfSolicNFF as ISolicNFF } from 'src/entities/nfe/inf-nfe/inf-solic-nff';
-import type { InfAdic as IInfAdic } from 'src/entities/nfe/inf-nfe/infadic';
-import type { Avulsa as IAvulsa } from 'src/entities/nfe/inf-nfe/avulsa';
-import type { AutXML as IAutXML } from 'src/entities/nfe/inf-nfe/autxml';
-import type { Local as ILocal } from 'src/entities/nfe/inf-nfe/local';
-import type { Dest as IDest } from 'src/entities/nfe/inf-nfe/dest';
+} from '@nfets/nfe/entities/nfe/inf-nfe';
+import type { Ide as IIde } from '@nfets/nfe/entities/nfe/inf-nfe/ide';
+import type { Cobr as ICobr } from '@nfets/nfe/entities/nfe/inf-nfe/cobr';
+import type { Emit as IEmit } from '@nfets/nfe/entities/nfe/inf-nfe/emit';
+import type { Pag as IPag } from '@nfets/nfe/entities/nfe/inf-nfe/pag';
+import type { Transp as ITransp } from '@nfets/nfe/entities/nfe/inf-nfe/transp';
+import type { Total as ITotal } from '@nfets/nfe/entities/nfe/inf-nfe/total';
+import type { Det as IDet } from '@nfets/nfe/entities/nfe/inf-nfe/det';
+import type { InfIntermed as IInfIntermed } from '@nfets/nfe/entities/nfe/inf-nfe/infintermed';
+import type { Exporta as IExporta } from '@nfets/nfe/entities/nfe/inf-nfe/exporta';
+import type { Compra as ICompra } from '@nfets/nfe/entities/nfe/inf-nfe/compra';
+import type { Cana as ICana } from '@nfets/nfe/entities/nfe/inf-nfe/cana';
+import type { InfRespTec as IInfRespTec } from '@nfets/nfe/entities/nfe/inf-nfe/infresptec';
+import type { InfSolicNFF as ISolicNFF } from '@nfets/nfe/entities/nfe/inf-nfe/inf-solic-nff';
+import type { InfAdic as IInfAdic } from '@nfets/nfe/entities/nfe/inf-nfe/infadic';
+import type { Avulsa as IAvulsa } from '@nfets/nfe/entities/nfe/inf-nfe/avulsa';
+import type { AutXML as IAutXML } from '@nfets/nfe/entities/nfe/inf-nfe/autxml';
+import type { Local as ILocal } from '@nfets/nfe/entities/nfe/inf-nfe/local';
+import type { Dest as IDest } from '@nfets/nfe/entities/nfe/inf-nfe/dest';
 
 import type {
   INfeXmlBuilder,
@@ -46,46 +46,49 @@ import type {
   EntregaBuilder,
   DestBuilder,
   AutXMLBuilder,
-} from 'src/entities/xml-builder/nfe-xml-builder';
-import type { NFe as INFe } from 'src/entities/nfe/nfe';
+} from '@nfets/nfe/entities/xml-builder/nfe-xml-builder';
+import type { NFe as INFe } from '@nfets/nfe/entities/nfe/nfe';
 
-import { ValidateErrorsMetadata, Validates } from '../validator/validate';
+import {
+  ValidateErrorsMetadata,
+  Validates,
+} from '@nfets/nfe/application/validator/validate';
 
-import { NFe } from 'src/dto/nfe';
-import { InfNFeAttributes } from 'src/dto/inf-nfe/inf-nfe';
-import { Ide } from 'src/dto/inf-nfe/ide';
-import { Emit } from 'src/dto/inf-nfe/emit';
-import { Total } from 'src/dto/inf-nfe/total';
-import { Pag } from 'src/dto/inf-nfe/pag';
-import { Transp } from 'src/dto/inf-nfe/transp';
-import { AccessKeyBuider } from '../access-key/access-key-builder';
+import { NFe } from '@nfets/nfe/dto/nfe';
+import { InfNFeAttributes } from '@nfets/nfe/dto/inf-nfe/inf-nfe';
+import { Ide } from '@nfets/nfe/dto/inf-nfe/ide';
+import { Emit } from '@nfets/nfe/dto/inf-nfe/emit';
+import { Total } from '@nfets/nfe/dto/inf-nfe/total';
+import { Pag } from '@nfets/nfe/dto/inf-nfe/pag';
+import { Transp } from '@nfets/nfe/dto/inf-nfe/transp';
+import { AccessKeyBuider } from '@nfets/nfe/application/access-key/access-key-builder';
 import {
   AssembleDetXmlBuilder,
   ProdBuilder,
-} from 'src/entities/xml-builder/nfe-det-xml-builder';
-import { NfeDetXmlBuilder } from './nfe-det-xml-builder';
+} from '@nfets/nfe/entities/xml-builder/nfe-det-xml-builder';
+import { NfeDetXmlBuilder } from '@nfets/nfe/application/xml-builder/nfe-det-xml-builder';
 
 import {
   DefaultDetBuilderAggregator,
   type DetBuilderAggregator,
-} from '../aggregator/det-builder-aggregator';
-import { plainToInstance } from '../transform/plain-to-instance';
+} from '@nfets/nfe/application/aggregator/det-builder-aggregator';
+import { plainToInstance } from '@nfets/nfe/application/transform/plain-to-instance';
 import {
   DefaultTotalBuilderAggregator,
   type TotalBuilderAggregator,
-} from '../aggregator/total-builder-aggregator';
-import { Cobr } from 'src/dto/inf-nfe/cobr';
-import { InfRespTec } from 'src/dto/inf-nfe/infresptec';
-import { InfSolicNFF } from 'src/dto/inf-nfe/inf-solic-nff';
-import { Avulsa } from 'src/dto/inf-nfe/avulsa';
-import { Dest } from 'src/dto/inf-nfe/dest';
-import { Local } from 'src/dto/inf-nfe/local';
-import { AutXML } from 'src/dto/inf-nfe/autxml';
-import { InfIntermed } from 'src/dto/inf-nfe/infintermed';
-import { Exporta } from 'src/dto/inf-nfe/exporta';
-import { Compra } from 'src/dto/inf-nfe/compra';
-import { InfAdic } from 'src/dto/inf-nfe/infadic';
-import { Cana } from 'src/dto/inf-nfe/cana';
+} from '@nfets/nfe/application/aggregator/total-builder-aggregator';
+import { Cobr } from '@nfets/nfe/dto/inf-nfe/cobr';
+import { InfRespTec } from '@nfets/nfe/dto/inf-nfe/infresptec';
+import { InfSolicNFF } from '@nfets/nfe/dto/inf-nfe/inf-solic-nff';
+import { Avulsa } from '@nfets/nfe/dto/inf-nfe/avulsa';
+import { Dest } from '@nfets/nfe/dto/inf-nfe/dest';
+import { Local } from '@nfets/nfe/dto/inf-nfe/local';
+import { AutXML } from '@nfets/nfe/dto/inf-nfe/autxml';
+import { InfIntermed } from '@nfets/nfe/dto/inf-nfe/infintermed';
+import { Exporta } from '@nfets/nfe/dto/inf-nfe/exporta';
+import { Compra } from '@nfets/nfe/dto/inf-nfe/compra';
+import { InfAdic } from '@nfets/nfe/dto/inf-nfe/infadic';
+import { Cana } from '@nfets/nfe/dto/inf-nfe/cana';
 
 export class NfeXmlBuilder implements INfeXmlBuilder {
   private readonly data = {
@@ -257,6 +260,7 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
   ): AssembleNfeBuilder &
     AvulsaBuilder &
     InfAdicBuilder &
+    InfRespTecBuilder &
     InfSolicNFFBuilder &
     CanaBuilder &
     CompraBuilder &
@@ -273,6 +277,7 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
   ): AssembleNfeBuilder &
     AvulsaBuilder &
     InfAdicBuilder &
+    InfRespTecBuilder &
     InfSolicNFFBuilder &
     CanaBuilder &
     CompraBuilder &
@@ -289,6 +294,7 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     AvulsaBuilder &
     InfAdicBuilder &
     InfSolicNFFBuilder &
+    InfRespTecBuilder &
     CanaBuilder &
     CompraBuilder &
     ExportaBuilder {
@@ -304,6 +310,7 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     AvulsaBuilder &
     InfAdicBuilder &
     InfSolicNFFBuilder &
+    InfRespTecBuilder &
     CanaBuilder &
     CompraBuilder {
     this.data.infNFe ??= {} as IInfNFe;
@@ -318,6 +325,7 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     AvulsaBuilder &
     InfAdicBuilder &
     InfSolicNFFBuilder &
+    InfRespTecBuilder &
     CanaBuilder {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.compra = payload;

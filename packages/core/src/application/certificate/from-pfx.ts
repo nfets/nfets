@@ -1,4 +1,4 @@
-import type { CertificateRepository } from 'src/domain/repositories/certificate-repository';
+import type { CertificateRepository } from '@nfets/core/domain/repositories/certificate-repository';
 
 export class ReadCertificateFromPfx {
   public constructor(private readonly repository: CertificateRepository) {}

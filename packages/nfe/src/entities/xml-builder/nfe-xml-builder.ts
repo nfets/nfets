@@ -1,25 +1,25 @@
-import type { DeepPartial } from '@nfets/core';
+import { type DeepPartial } from '@nfets/core';
 
-import type { Ide } from 'src/entities/nfe/inf-nfe/ide';
-import type { InfNFeAttributes } from 'src/entities/nfe/inf-nfe';
-import type { Emit as IEmit } from 'src/entities/nfe/inf-nfe/emit';
-import type { Dest as IDest } from 'src/entities/nfe/inf-nfe/dest';
-import type { Pag as IPag } from 'src/entities/nfe/inf-nfe/pag';
+import type { Ide } from '@nfets/nfe/entities/nfe/inf-nfe/ide';
+import type { InfNFeAttributes } from '@nfets/nfe/entities/nfe/inf-nfe';
+import type { Emit as IEmit } from '@nfets/nfe/entities/nfe/inf-nfe/emit';
+import type { Dest as IDest } from '@nfets/nfe/entities/nfe/inf-nfe/dest';
+import type { Pag as IPag } from '@nfets/nfe/entities/nfe/inf-nfe/pag';
 import type { AssembleDetXmlBuilder, ProdBuilder } from './nfe-det-xml-builder';
-import type { Total as ITotal } from 'src/entities/nfe/inf-nfe/total';
-import type { Transp as ITransp } from 'src/entities/nfe/inf-nfe/transp';
-import type { Cobr as ICobr } from 'src/entities/nfe/inf-nfe/cobr';
-import type { NFe } from 'src/entities/nfe/nfe';
-import type { InfIntermed as IInfIntermed } from 'src/entities/nfe/inf-nfe/infintermed';
-import type { Exporta as IExporta } from 'src/entities/nfe/inf-nfe/exporta';
-import type { Compra as ICompra } from 'src/entities/nfe/inf-nfe/compra';
-import type { Cana as ICana } from 'src/entities/nfe/inf-nfe/cana';
-import type { InfRespTec as IInfRespTec } from 'src/entities/nfe/inf-nfe/infresptec';
-import type { InfSolicNFF as ISolicNFF } from 'src/entities/nfe/inf-nfe/inf-solic-nff';
-import type { InfAdic as IInfAdic } from 'src/entities/nfe/inf-nfe/infadic';
-import type { Avulsa as IAvulsa } from 'src/entities/nfe/inf-nfe/avulsa';
-import type { Local as ILocal } from 'src/entities/nfe/inf-nfe/local';
-import type { AutXML as IAutXML } from 'src/entities/nfe/inf-nfe/autxml';
+import type { Total as ITotal } from '@nfets/nfe/entities/nfe/inf-nfe/total';
+import type { Transp as ITransp } from '@nfets/nfe/entities/nfe/inf-nfe/transp';
+import type { Cobr as ICobr } from '@nfets/nfe/entities/nfe/inf-nfe/cobr';
+import type { NFe } from '@nfets/nfe/entities/nfe/nfe';
+import type { InfIntermed as IInfIntermed } from '@nfets/nfe/entities/nfe/inf-nfe/infintermed';
+import type { Exporta as IExporta } from '@nfets/nfe/entities/nfe/inf-nfe/exporta';
+import type { Compra as ICompra } from '@nfets/nfe/entities/nfe/inf-nfe/compra';
+import type { Cana as ICana } from '@nfets/nfe/entities/nfe/inf-nfe/cana';
+import type { InfRespTec as IInfRespTec } from '@nfets/nfe/entities/nfe/inf-nfe/infresptec';
+import type { InfSolicNFF as ISolicNFF } from '@nfets/nfe/entities/nfe/inf-nfe/inf-solic-nff';
+import type { InfAdic as IInfAdic } from '@nfets/nfe/entities/nfe/inf-nfe/infadic';
+import type { Avulsa as IAvulsa } from '@nfets/nfe/entities/nfe/inf-nfe/avulsa';
+import type { Local as ILocal } from '@nfets/nfe/entities/nfe/inf-nfe/local';
+import type { AutXML as IAutXML } from '@nfets/nfe/entities/nfe/inf-nfe/autxml';
 
 export interface InfNFeBuilder {
   infNFe(payload: InfNFeAttributes): IdeBuilder;
@@ -47,38 +47,27 @@ export interface AvulsaBuilder {
     RetiradaBuilder &
     EntregaBuilder &
     AutXMLBuilder &
-    DetBuilder &
-    AssembleNfeBuilder;
+    DetBuilder;
 }
 
 export interface DestBuilder {
   dest(
     payload: IDest,
-  ): RetiradaBuilder &
-    EntregaBuilder &
-    AutXMLBuilder &
-    DetBuilder &
-    AssembleNfeBuilder;
+  ): RetiradaBuilder & EntregaBuilder & AutXMLBuilder & DetBuilder;
 }
 
 export interface RetiradaBuilder {
   retirada(
     payload: ILocal,
-  ): DestBuilder &
-    EntregaBuilder &
-    AutXMLBuilder &
-    DetBuilder &
-    AssembleNfeBuilder;
+  ): DestBuilder & EntregaBuilder & AutXMLBuilder & DetBuilder;
 }
 
 export interface EntregaBuilder {
-  entrega(
-    payload: ILocal,
-  ): DestBuilder & AutXMLBuilder & DetBuilder & AssembleNfeBuilder;
+  entrega(payload: ILocal): DestBuilder & AutXMLBuilder & DetBuilder;
 }
 
 export interface AutXMLBuilder {
-  autXML(payload: IAutXML): AutXMLBuilder & DetBuilder & AssembleNfeBuilder;
+  autXML(payload: IAutXML): AutXMLBuilder & DetBuilder;
 }
 
 export interface DetBuilder {
@@ -113,6 +102,7 @@ export interface PagBuilder {
     CanaBuilder &
     CompraBuilder &
     ExportaBuilder &
+    InfRespTecBuilder &
     InfIntermedBuilder;
 }
 
@@ -125,6 +115,7 @@ export interface InfIntermedBuilder {
     InfSolicNFFBuilder &
     CanaBuilder &
     CompraBuilder &
+    InfRespTecBuilder &
     ExportaBuilder;
 }
 
@@ -135,6 +126,7 @@ export interface InfAdicBuilder {
     AvulsaBuilder &
     InfAdicBuilder &
     InfSolicNFFBuilder &
+    InfRespTecBuilder &
     CanaBuilder &
     CompraBuilder &
     ExportaBuilder;
@@ -146,6 +138,7 @@ export interface ExportaBuilder {
     AvulsaBuilder &
     InfAdicBuilder &
     InfSolicNFFBuilder &
+    InfRespTecBuilder &
     CanaBuilder &
     CompraBuilder;
 }
@@ -157,6 +150,7 @@ export interface CompraBuilder {
     AvulsaBuilder &
     InfAdicBuilder &
     InfSolicNFFBuilder &
+    InfRespTecBuilder &
     CanaBuilder;
 }
 

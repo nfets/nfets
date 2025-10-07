@@ -1,6 +1,6 @@
 import { IsOptional } from 'class-validator';
-import { TransformDecimal } from 'src/application/validator/decimal';
-import { RetTrib as IRetTrib } from 'src/entities/nfe/inf-nfe/total';
+import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
+import { RetTrib as IRetTrib } from '@nfets/nfe/entities/nfe/inf-nfe/total';
 
 import type { DecimalValue } from '@nfets/core';
 

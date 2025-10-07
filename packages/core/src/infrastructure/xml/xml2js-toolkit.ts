@@ -5,9 +5,9 @@ import crypto from 'node:crypto';
 import * as Xml2js from 'xml2js';
 import * as XmlDsig from 'xmldsigjs';
 import xmldom from '@xmldom/xmldom';
-import validator from './xml-validator';
 import { setNodeDependencies } from 'xml-core';
 
+import validator from '../../infrastructure/xml/xml-validator';
 import {
   type BuilderOptions,
   defaultBuilderOptions,

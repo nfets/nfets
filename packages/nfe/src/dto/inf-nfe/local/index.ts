@@ -1,6 +1,6 @@
 import { IsOptional, IsString } from 'class-validator';
-import { Case } from 'src/application/validator/switch-case';
-import { Local as ILocal } from 'src/entities/nfe/inf-nfe/local';
+import { Case } from '@nfets/nfe/application/validator/switch-case';
+import { Local as ILocal } from '@nfets/nfe/entities/nfe/inf-nfe/local';
 
 export class Local implements ILocal {
   @IsOptional()

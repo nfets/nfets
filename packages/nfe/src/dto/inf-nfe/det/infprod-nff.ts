@@ -1,5 +1,5 @@
 import { IsString } from 'class-validator';
-import { InfProdNFF as IInfProdNFF } from 'src/entities/nfe/inf-nfe/det/infprod-nff';
+import { InfProdNFF as IInfProdNFF } from '@nfets/nfe/entities/nfe/inf-nfe/det/infprod-nff';
 
 export class InfProdNFF implements IInfProdNFF {
   @IsString()

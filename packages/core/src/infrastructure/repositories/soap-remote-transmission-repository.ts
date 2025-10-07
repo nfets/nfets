@@ -2,14 +2,14 @@ import { constants } from 'node:crypto';
 import { Agent as HttpsAgent, type AgentOptions } from 'node:https';
 import { createClientAsync } from 'soap';
 
-import { right } from 'src/shared/either';
-import { leftFromError } from 'src/shared/left-from-error';
+import { right } from '@nfets/core/shared/either';
+import { leftFromError } from '@nfets/core/shared/left-from-error';
 
-import type { RemoteTransmissionRepository } from 'src/domain/repositories/remote-transmission-repository';
-import type { CertificateRepository } from 'src/domain/repositories/certificate-repository';
-import type { ReadCertificateResponse } from 'src/domain/entities/certificate/certificate';
+import type { RemoteTransmissionRepository } from '@nfets/core/domain/repositories/remote-transmission-repository';
+import type { CertificateRepository } from '@nfets/core/domain/repositories/certificate-repository';
+import type { ReadCertificateResponse } from '@nfets/core/domain/entities/certificate/certificate';
 import type { AxiosRequestConfig } from 'axios';
-import type { SendTransmissionPayload } from 'src/domain/entities/transmission/payload';
+import type { SendTransmissionPayload } from '@nfets/core/domain/entities/transmission/payload';
 
 export class SoapRemoteTransmissionRepository
   implements RemoteTransmissionRepository

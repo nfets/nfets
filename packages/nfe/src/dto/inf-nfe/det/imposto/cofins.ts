@@ -8,7 +8,7 @@ import type {
   COFINSOutr as ICOFINSOutr,
   COFINS as ICOFINS,
   COFINSST as ICOFINSST,
-} from 'src/entities/nfe/inf-nfe/det/imposto/cofins';
+} from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/cofins';
 
 export class COFINSAliq implements ICOFINSAliq {
   @IsString()

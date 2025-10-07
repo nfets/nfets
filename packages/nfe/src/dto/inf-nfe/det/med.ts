@@ -1,6 +1,6 @@
-import { Med as IMed } from 'src/entities/nfe/inf-nfe/det/med';
+import { Med as IMed } from '@nfets/nfe/entities/nfe/inf-nfe/det/med';
 import { IsString } from 'class-validator';
-import { TransformDecimal } from 'src/application/validator/decimal';
+import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
 import type { DecimalValue } from '@nfets/core';
 
 export class Med implements IMed {

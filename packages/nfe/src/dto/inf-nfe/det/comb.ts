@@ -7,7 +7,7 @@ import {
   Max,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { TransformDecimal } from 'src/application/validator/decimal';
+import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
 
 import type { DecimalValue } from '@nfets/core';
 import type {
@@ -15,7 +15,7 @@ import type {
   CIDE as ICIDE,
   Encerrante as IEncerrante,
   OrigComb as IOrigComb,
-} from 'src/entities/nfe/inf-nfe/det/comb';
+} from '@nfets/nfe/entities/nfe/inf-nfe/det/comb';
 
 export class OrigComb implements IOrigComb {
   @IsString()

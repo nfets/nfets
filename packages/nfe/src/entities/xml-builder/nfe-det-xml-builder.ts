@@ -1,13 +1,19 @@
-import type { Det, DetAttributes } from '../nfe/inf-nfe/det';
-import type { Imposto } from '../nfe/inf-nfe/det/imposto';
-import type { COFINS, COFINSST } from '../nfe/inf-nfe/det/imposto/cofins';
-import type { ICMS } from '../nfe/inf-nfe/det/imposto/icms';
-import type { ICMSUFDest } from '../nfe/inf-nfe/det/imposto/icmsufdest';
-import type { II } from '../nfe/inf-nfe/det/imposto/ii';
-import type { IPI } from '../nfe/inf-nfe/det/imposto/ipi';
-import type { ISSQN } from '../nfe/inf-nfe/det/imposto/issqn';
-import type { PIS, PISST } from '../nfe/inf-nfe/det/imposto/pis';
-import type { Prod } from '../nfe/inf-nfe/det/prod';
+import type { Det, DetAttributes } from '@nfets/nfe/entities/nfe/inf-nfe/det';
+import type { Imposto } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto';
+import type {
+  COFINS,
+  COFINSST,
+} from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/cofins';
+import type { ICMS } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/icms';
+import type { ICMSUFDest } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/icmsufdest';
+import type { II } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/ii';
+import type { IPI } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/ipi';
+import type { ISSQN } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/issqn';
+import type {
+  PIS,
+  PISST,
+} from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/pis';
+import type { Prod } from '@nfets/nfe/entities/nfe/inf-nfe/det/prod';
 
 export interface DetBuilder {
   det($: DetAttributes): ProdBuilder;

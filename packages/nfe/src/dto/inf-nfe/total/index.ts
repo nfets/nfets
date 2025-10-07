@@ -9,7 +9,7 @@ import type {
   ICMSTot as IICMSTot,
   ISSQNTot as IISSQNTot,
   RetTrib as IRetTrib,
-} from 'src/entities/nfe/inf-nfe/total';
+} from '@nfets/nfe/entities/nfe/inf-nfe/total';
 
 export class Total implements ITotal {
   @ValidateNested()

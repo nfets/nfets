@@ -1,4 +1,4 @@
-import { AccessKeyBuider } from 'src/application/access-key/access-key-builder';
+import { AccessKeyBuider } from '@nfets/nfe/application/access-key/access-key-builder';
 
 describe('access key builder (unit)', () => {
   const accessKeyBuilder = new AccessKeyBuider();

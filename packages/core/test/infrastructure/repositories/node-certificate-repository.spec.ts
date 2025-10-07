@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { MemoryCacheAdapter } from 'src/infrastructure/repositories/memory-cache-adapter';
-import { NodeCertificateRepository } from 'src/infrastructure/repositories/node-certificate-repository';
+import { MemoryCacheAdapter } from '@nfets/core/infrastructure/repositories/memory-cache-adapter';
+import { NodeCertificateRepository } from '@nfets/core/infrastructure/repositories/node-certificate-repository';
 import { expectIsRight } from '@nfets/test/expects';
 import {
   getCertificatePassword,
