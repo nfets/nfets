@@ -31,7 +31,7 @@ import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
 import { getCnpjCertificate } from '@nfets/test/certificates';
 import { getCertificatePassword } from '@nfets/test/certificates';
 
-describe.skip('xml builder with xml2js builder', () => {
+describe('xml builder with xml2js builder', () => {
   const toolkit: XmlToolkit = new Xml2JsToolkit();
   const nfeNfceSchemas = path.resolve(__dirname, '../../../', 'schemas'),
     leiauteNFe4_00 = 'nfe_v4.00.xsd';
@@ -40,7 +40,7 @@ describe.skip('xml builder with xml2js builder', () => {
     validCnpjPfxCertificate = getCnpjCertificate();
 
   let signer: Signer;
-  let certificate: ReadCertificateResponse | undefined;
+  let certificate: ReadCertificateResponse;
   let certificateRepository: CertificateRepository;
 
   beforeAll(async () => {
@@ -65,8 +65,6 @@ describe.skip('xml builder with xml2js builder', () => {
   });
 
   it('should completely ignores validations and sets the versao to [object Object]', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     @SkipAllValidations()
     class DontValidateNfeXmlBuilder extends NfeXmlBuilder {}
 
@@ -129,12 +127,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsLeft(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsLeft(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should ignores only one method validation and consequently gets a invalid xml...', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     class DontValidateNfeXmlBuilder extends NfeXmlBuilder {
       @SkipValidation()
       public ide(payload: Ide) {
@@ -157,7 +157,7 @@ describe.skip('xml builder with xml2js builder', () => {
       .det([] as never, () => void 0 as never)
       .transp({ modFrete: '9' })
       .pag({
-        detPag: [{ tPag: '1', vPag: Decimal.from('100').toString() }],
+        detPag: [{ tPag: '01', vPag: Decimal.from('100').toString() }],
       });
 
     const xml = await builder.assemble();
@@ -217,12 +217,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsLeft(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should throw exception when assemble an invalid nfe xml', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide({
@@ -237,7 +239,7 @@ describe.skip('xml builder with xml2js builder', () => {
       .det([] as never, () => void 0 as never)
       .transp({ modFrete: '9' })
       .pag({
-        detPag: [{ tPag: '1', vPag: Decimal.from('100').toString() }],
+        detPag: [{ tPag: '01', vPag: Decimal.from('100').toString() }],
       });
 
     await expect(async () => await builder.assemble()).rejects.toThrow(
@@ -246,8 +248,6 @@ describe.skip('xml builder with xml2js builder', () => {
   });
 
   it('should build minimal NFe with only required elements', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -445,8 +445,6 @@ describe.skip('xml builder with xml2js builder', () => {
   });
 
   it('should build NFe with avulsa element', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -568,7 +566,7 @@ describe.skip('xml builder with xml2js builder', () => {
       <fone>11999999999</fone>
       <UF>SP</UF>
       <nDAR>123456789</nDAR>
-      <dEmi/>
+      <dEmi>2024-06-11</dEmi>
       <vDAR>100.00</vDAR>
       <repEmi>123456789</repEmi>
     </avulsa>
@@ -653,12 +651,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with dest element', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -877,12 +877,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with retirada element', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -1089,12 +1091,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with entrega element', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -1301,12 +1305,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with 2x autXML element', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -1501,12 +1507,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with cobr element', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -1710,12 +1718,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infIntermed element after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -1906,12 +1916,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infAdic element after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -2102,12 +2114,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infSolicNFF element after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -2296,12 +2310,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with cana element after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -2358,7 +2374,7 @@ describe.skip('xml builder with xml2js builder', () => {
         ref: '06/2024',
         forDia: [
           {
-            dia: '01',
+            $: { dia: '1' },
             qtde: '1000.0000',
           },
         ],
@@ -2506,13 +2522,12 @@ describe.skip('xml builder with xml2js builder', () => {
     <cana>
       <safra>2024/2025</safra>
       <ref>06/2024</ref>
+      <forDia dia="1">
+        <qtde>1000.0000</qtde>
+      </forDia>
       <qTotMes>1000.0000</qTotMes>
       <qTotAnt>0.0000</qTotAnt>
       <qTotGer>1000.0000</qTotGer>
-      <forDia>
-        <qtde>1000.0000</qtde>
-        <dia>01</dia>
-      </forDia>
       <deduc>
         <xDed>Dedução 1</xDed>
         <vDed>100.00</vDed>
@@ -2524,12 +2539,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with compra element after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -2722,12 +2739,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with exporta element after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -2920,12 +2939,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infRespTec element after cana', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -2982,11 +3003,11 @@ describe.skip('xml builder with xml2js builder', () => {
         ref: '06/2024',
         forDia: [
           {
-            dia: '01',
+            $: { dia: '1' },
             qtde: '1000.0000',
           },
           {
-            dia: '02',
+            $: { dia: '2' },
             qtde: '1000.0000',
           },
         ],
@@ -3008,8 +3029,6 @@ describe.skip('xml builder with xml2js builder', () => {
         xContato: 'João Silva',
         email: 'joao@email.com',
         fone: '11999999999',
-        idCSRT: '123456',
-        hashCSRT: 'abcdef123456',
       });
 
     const xml = await builder.assemble();
@@ -3142,17 +3161,15 @@ describe.skip('xml builder with xml2js builder', () => {
     <cana>
       <safra>2024/2025</safra>
       <ref>06/2024</ref>
+      <forDia dia="1">
+        <qtde>1000.0000</qtde>
+      </forDia>
+      <forDia dia="2">
+        <qtde>1000.0000</qtde>
+      </forDia>
       <qTotMes>1000.0000</qTotMes>
       <qTotAnt>0.0000</qTotAnt>
       <qTotGer>1000.0000</qTotGer>
-      <forDia>
-        <qtde>1000.0000</qtde>
-        <dia>01</dia>
-      </forDia>
-      <forDia>
-        <qtde>1000.0000</qtde>
-        <dia>02</dia>
-      </forDia>
       <deduc>
         <xDed>Dedução 1</xDed>
         <vDed>100.00</vDed>
@@ -3166,18 +3183,18 @@ describe.skip('xml builder with xml2js builder', () => {
       <xContato>João Silva</xContato>
       <email>joao@email.com</email>
       <fone>11999999999</fone>
-      <idCSRT>123456</idCSRT>
-      <hashCSRT>abcdef123456</hashCSRT>
     </infRespTec>
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with multiple optional elements in correct order', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -3307,7 +3324,7 @@ describe.skip('xml builder with xml2js builder', () => {
         ref: '06/2024',
         forDia: [
           {
-            dia: '01',
+            $: { dia: '1' },
             qtde: '1000.0000',
           },
         ],
@@ -3329,8 +3346,6 @@ describe.skip('xml builder with xml2js builder', () => {
         xContato: 'João Silva',
         email: 'joao@email.com',
         fone: '11999999999',
-        idCSRT: '123456',
-        hashCSRT: 'abcdef123456',
       })
       .infSolicNFF({
         xSolic: 'Solicitação NFF',
@@ -3559,13 +3574,12 @@ describe.skip('xml builder with xml2js builder', () => {
     <cana>
       <safra>2024/2025</safra>
       <ref>06/2024</ref>
+      <forDia dia="1">
+        <qtde>1000.0000</qtde>
+      </forDia>
       <qTotMes>1000.0000</qTotMes>
       <qTotAnt>0.0000</qTotAnt>
       <qTotGer>1000.0000</qTotGer>
-      <forDia>
-        <qtde>1000.0000</qtde>
-        <dia>01</dia>
-      </forDia>
       <deduc>
         <xDed>Dedução 1</xDed>
         <vDed>100.00</vDed>
@@ -3579,8 +3593,6 @@ describe.skip('xml builder with xml2js builder', () => {
       <xContato>João Silva</xContato>
       <email>joao@email.com</email>
       <fone>11999999999</fone>
-      <idCSRT>123456</idCSRT>
-      <hashCSRT>abcdef123456</hashCSRT>
     </infRespTec>
     <infSolicNFF>
       <xSolic>Solicitação NFF</xSolic>
@@ -3588,12 +3600,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infIntermed and infAdic after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -3797,12 +3811,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infIntermed and infSolicNFF after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -4004,12 +4020,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infIntermed and cana after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -4070,7 +4088,7 @@ describe.skip('xml builder with xml2js builder', () => {
         ref: '06/2024',
         forDia: [
           {
-            dia: '01',
+            $: { dia: '1' },
             qtde: '1000.0000',
           },
         ],
@@ -4227,13 +4245,12 @@ describe.skip('xml builder with xml2js builder', () => {
     <cana>
       <safra>2024/2025</safra>
       <ref>06/2024</ref>
+      <forDia dia="1">
+        <qtde>1000.0000</qtde>
+      </forDia>
       <qTotMes>1000.0000</qTotMes>
       <qTotAnt>0.0000</qTotAnt>
       <qTotGer>1000.0000</qTotGer>
-      <forDia>
-        <qtde>1000.0000</qtde>
-        <dia>01</dia>
-      </forDia>
       <deduc>
         <xDed>Dedução 1</xDed>
         <vDed>100.00</vDed>
@@ -4245,12 +4262,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infIntermed and compra after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -4456,12 +4475,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infIntermed and exporta after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -4667,12 +4688,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infAdic and infSolicNFF after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -4874,12 +4897,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infAdic and cana after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -4940,7 +4965,7 @@ describe.skip('xml builder with xml2js builder', () => {
         ref: '06/2024',
         forDia: [
           {
-            dia: '01',
+            $: { dia: '1' },
             qtde: '1000.0000',
           },
         ],
@@ -5097,13 +5122,12 @@ describe.skip('xml builder with xml2js builder', () => {
     <cana>
       <safra>2024/2025</safra>
       <ref>06/2024</ref>
+      <forDia dia="1">
+        <qtde>1000.0000</qtde>
+      </forDia>
       <qTotMes>1000.0000</qTotMes>
       <qTotAnt>0.0000</qTotAnt>
       <qTotGer>1000.0000</qTotGer>
-      <forDia>
-        <qtde>1000.0000</qtde>
-        <dia>01</dia>
-      </forDia>
       <deduc>
         <xDed>Dedução 1</xDed>
         <vDed>100.00</vDed>
@@ -5115,12 +5139,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infAdic and compra after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -5326,12 +5352,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infAdic and exporta after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -5537,12 +5565,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infSolicNFF and cana after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -5599,7 +5629,7 @@ describe.skip('xml builder with xml2js builder', () => {
         ref: '06/2024',
         forDia: [
           {
-            dia: '01',
+            $: { dia: '1' },
             qtde: '1000.0000',
           },
         ],
@@ -5755,13 +5785,12 @@ describe.skip('xml builder with xml2js builder', () => {
     <cana>
       <safra>2024/2025</safra>
       <ref>06/2024</ref>
+      <forDia dia="1">
+        <qtde>1000.0000</qtde>
+      </forDia>
       <qTotMes>1000.0000</qTotMes>
       <qTotAnt>0.0000</qTotAnt>
       <qTotGer>1000.0000</qTotGer>
-      <forDia>
-        <qtde>1000.0000</qtde>
-        <dia>01</dia>
-      </forDia>
       <deduc>
         <xDed>Dedução 1</xDed>
         <vDed>100.00</vDed>
@@ -5776,12 +5805,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infSolicNFF and compra after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -5985,12 +6016,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with cana and compra after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -6052,7 +6085,7 @@ describe.skip('xml builder with xml2js builder', () => {
         ref: '06/2024',
         forDia: [
           {
-            dia: '01',
+            $: { dia: '1' },
             qtde: '1000.0000',
           },
         ],
@@ -6210,13 +6243,12 @@ describe.skip('xml builder with xml2js builder', () => {
     <cana>
       <safra>2024/2025</safra>
       <ref>06/2024</ref>
+      <forDia dia="1">
+        <qtde>1000.0000</qtde>
+      </forDia>
       <qTotMes>1000.0000</qTotMes>
       <qTotAnt>0.0000</qTotAnt>
       <qTotGer>1000.0000</qTotGer>
-      <forDia>
-        <qtde>1000.0000</qtde>
-        <dia>01</dia>
-      </forDia>
       <deduc>
         <xDed>Dedução 1</xDed>
         <vDed>100.00</vDed>
@@ -6228,12 +6260,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with cana and exporta after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -6295,7 +6329,7 @@ describe.skip('xml builder with xml2js builder', () => {
         ref: '06/2024',
         forDia: [
           {
-            dia: '01',
+            $: { dia: '1' },
             qtde: '1000.0000',
           },
         ],
@@ -6453,13 +6487,12 @@ describe.skip('xml builder with xml2js builder', () => {
     <cana>
       <safra>2024/2025</safra>
       <ref>06/2024</ref>
+      <forDia dia="1">
+        <qtde>1000.0000</qtde>
+      </forDia>
       <qTotMes>1000.0000</qTotMes>
       <qTotAnt>0.0000</qTotAnt>
       <qTotGer>1000.0000</qTotGer>
-      <forDia>
-        <qtde>1000.0000</qtde>
-        <dia>01</dia>
-      </forDia>
       <deduc>
         <xDed>Dedução 1</xDed>
         <vDed>100.00</vDed>
@@ -6471,12 +6504,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with compra and exporta after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -6684,12 +6719,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with cana and infRespTec after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -6746,7 +6783,7 @@ describe.skip('xml builder with xml2js builder', () => {
         ref: '06/2024',
         forDia: [
           {
-            dia: '01',
+            $: { dia: '1' },
             qtde: '1000.0000',
           },
         ],
@@ -6768,8 +6805,6 @@ describe.skip('xml builder with xml2js builder', () => {
         xContato: 'João Silva',
         email: 'joao@email.com',
         fone: '11999999999',
-        idCSRT: '123456',
-        hashCSRT: 'abcdef123456',
       });
 
     const xml = await builder.assemble();
@@ -6907,13 +6942,12 @@ describe.skip('xml builder with xml2js builder', () => {
     <cana>
       <safra>2024/2025</safra>
       <ref>06/2024</ref>
+      <forDia dia="1">
+        <qtde>1000.0000</qtde>
+      </forDia>
       <qTotMes>1000.0000</qTotMes>
       <qTotAnt>0.0000</qTotAnt>
       <qTotGer>1000.0000</qTotGer>
-      <forDia>
-        <qtde>1000.0000</qtde>
-        <dia>01</dia>
-      </forDia>
       <deduc>
         <xDed>Dedução 1</xDed>
         <vDed>100.00</vDed>
@@ -6927,18 +6961,18 @@ describe.skip('xml builder with xml2js builder', () => {
       <xContato>João Silva</xContato>
       <email>joao@email.com</email>
       <fone>11999999999</fone>
-      <idCSRT>123456</idCSRT>
-      <hashCSRT>abcdef123456</hashCSRT>
     </infRespTec>
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infSolicNFF, infAdic and avulsa after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -7069,7 +7103,7 @@ describe.skip('xml builder with xml2js builder', () => {
       <fone>11999999999</fone>
       <UF>SP</UF>
       <nDAR>123456789</nDAR>
-      <dEmi/>
+      <dEmi>2024-06-11</dEmi>
       <vDAR>100.00</vDAR>
       <repEmi>123456789</repEmi>
     </avulsa>
@@ -7161,12 +7195,14 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build NFe with infRespTec, infAdic and avulsa after pag', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -7239,8 +7275,6 @@ describe.skip('xml builder with xml2js builder', () => {
         xContato: 'João Silva',
         email: 'joao@email.com',
         fone: '11999999999',
-        idCSRT: '123456',
-        hashCSRT: 'abcdef123456',
       });
 
     const xml = await builder.assemble();
@@ -7302,7 +7336,7 @@ describe.skip('xml builder with xml2js builder', () => {
       <fone>11999999999</fone>
       <UF>SP</UF>
       <nDAR>123456789</nDAR>
-      <dEmi/>
+      <dEmi>2024-06-11</dEmi>
       <vDAR>100.00</vDAR>
       <repEmi>123456789</repEmi>
     </avulsa>
@@ -7393,18 +7427,18 @@ describe.skip('xml builder with xml2js builder', () => {
       <xContato>João Silva</xContato>
       <email>joao@email.com</email>
       <fone>11999999999</fone>
-      <idCSRT>123456</idCSRT>
-      <hashCSRT>abcdef123456</hashCSRT>
     </infRespTec>
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 
   it('should build a valid nfe xml with correct order and without undefined values', async () => {
-    if (!certificate) return it.skip('certificate is required');
-
     interface Item {
       description: string;
       code: string;
@@ -7528,7 +7562,7 @@ describe.skip('xml builder with xml2js builder', () => {
         ],
       })
       .pag({
-        detPag: [{ tPag: '1', vPag: Decimal.from('100').toString() }],
+        detPag: [{ tPag: '01', vPag: Decimal.from('100').toString() }],
       });
 
     const xml = await builder.assemble();
@@ -7672,6 +7706,10 @@ describe.skip('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    expectIsRight(await toolkit.validate(xml, nfeNfceSchemas, leiauteNFe4_00));
+    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    expectIsRight(signed);
+    expectIsRight(
+      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
+    );
   });
 });

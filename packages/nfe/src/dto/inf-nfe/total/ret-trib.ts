@@ -1,5 +1,5 @@
 import { IsOptional } from 'class-validator';
-import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
+import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
 import { RetTrib as IRetTrib } from '@nfets/nfe/entities/nfe/inf-nfe/total';
 
 import type { DecimalValue } from '@nfets/core';

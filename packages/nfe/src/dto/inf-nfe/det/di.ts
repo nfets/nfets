@@ -10,7 +10,7 @@ import {
 import { Type } from 'class-transformer';
 import { DI as IDI, Adi as IAdi } from '@nfets/nfe/entities/nfe/inf-nfe/det/di';
 
-import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
+import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
 import { Case } from '@nfets/nfe/application/validator/switch-case';
 
 export class Adi implements IAdi {

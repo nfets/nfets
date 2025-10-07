@@ -8,7 +8,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Prod as IProd } from '@nfets/nfe/entities/nfe/inf-nfe/det/prod';
-import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
+import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
 import { Type } from 'class-transformer';
 import type { DI as IDI } from '@nfets/nfe/entities/nfe/inf-nfe/det/di';
 import type { DetExport as IDetExport } from '@nfets/nfe/entities/nfe/inf-nfe/det/det-export';

@@ -1,8 +1,10 @@
-import { IsDate, IsOptional, IsString } from 'class-validator';
-import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
+import { IsDate, IsDateString, IsOptional, IsString } from 'class-validator';
+import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
 
 import type { Avulsa as IAvulsa } from '@nfets/nfe/entities/nfe/inf-nfe/avulsa';
 import type { DecimalValue } from '@nfets/core';
+
+import { TransformDateString } from '@nfets/nfe/application/transform/transform-date-string';
 
 export class Avulsa implements IAvulsa {
   @IsString()
@@ -29,7 +31,8 @@ export class Avulsa implements IAvulsa {
   public nDAR?: string;
 
   @IsOptional()
-  @IsDate()
+  @IsDateString()
+  @TransformDateString({ format: 'YYYY-MM-DD' })
   public dEmi?: Date;
 
   @IsOptional()

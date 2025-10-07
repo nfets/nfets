@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
-import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
+import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
 import type {
   DetExport as IDetExport,
   ExportInd as IExportInd,

@@ -1,7 +1,7 @@
 import { IsOptional, IsString, Max, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Case } from '@nfets/nfe/application/validator/switch-case';
-import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
+import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
 
 import type { DecimalValue } from '@nfets/core';
 import type {

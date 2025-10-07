@@ -7,7 +7,7 @@ import {
   Max,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
+import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
 
 import type { DecimalValue } from '@nfets/core';
 import type {

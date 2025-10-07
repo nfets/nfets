@@ -10,7 +10,7 @@ import type {
   Dup as IDup,
   Cobr as ICobr,
 } from '@nfets/nfe/entities/nfe/inf-nfe/cobr';
-import { TransformDecimal } from '@nfets/nfe/application/validator/decimal';
+import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
 import type { DecimalValue } from '@nfets/core';
 
 export class Fat implements IFat {

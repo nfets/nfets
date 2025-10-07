@@ -12,7 +12,7 @@ export type * from './shared/types';
 
 export * from './domain/entities/signer/algo';
 
-export { isLeft, isRight, left, right } from './shared/either';
+export { left, right } from './shared/either';
 
 export { NFeTsError } from './domain/errors/nfets-error';
 

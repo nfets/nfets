@@ -36,11 +36,3 @@ export const left = <L = never>(l: L): Left<L> => new Left<L>(l);
 
 export const right = <R = never>(a?: R): Right<R> =>
   a === void 0 ? new Right<R>(void 0 as R) : new Right<R>(a);
-
-export const isRight = <L, R>(either: Either<L, R>): either is Right<R> => {
-  return either instanceof Right;
-};
-
-export const isLeft = <L, R>(either: Either<L, R>): either is Left<L> => {
-  return either instanceof Left;
-};
