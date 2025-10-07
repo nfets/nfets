@@ -8,8 +8,9 @@ export interface TransformToDateStringArgs extends ValidationOptions {
 
 export const TransformDateString = (args: TransformToDateStringArgs = {}) => {
   return (target: object, propertyKey: string | symbol) => {
-    Transform(({ value }: { value?: Date }) =>
-      value ? dayjs(value).format(args.format) : undefined,
-    )(target, propertyKey);
+    Transform(({ value }: { value?: Date | string }) => {
+      const parsed = value instanceof Date ? value.toISOString() : value;
+      return parsed ? dayjs(parsed).format(args.format) : void 0;
+    })(target, propertyKey);
   };
 };

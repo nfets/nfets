@@ -457,7 +457,6 @@ describe('xml builder with xml2js builder', () => {
         fone: '11999999999',
         UF: 'SP',
         nDAR: '123456789',
-        dEmi: new Date('2024-06-12'),
         vDAR: '100.00',
         repEmi: '123456789',
       })
@@ -566,7 +565,6 @@ describe('xml builder with xml2js builder', () => {
       <fone>11999999999</fone>
       <UF>SP</UF>
       <nDAR>123456789</nDAR>
-      <dEmi>2024-06-11</dEmi>
       <vDAR>100.00</vDAR>
       <repEmi>123456789</repEmi>
     </avulsa>
@@ -6985,7 +6983,6 @@ describe('xml builder with xml2js builder', () => {
         fone: '11999999999',
         UF: 'SP',
         nDAR: '123456789',
-        dEmi: new Date('2024-06-12'),
         vDAR: '100.00',
         repEmi: '123456789',
       })
@@ -7103,7 +7100,6 @@ describe('xml builder with xml2js builder', () => {
       <fone>11999999999</fone>
       <UF>SP</UF>
       <nDAR>123456789</nDAR>
-      <dEmi>2024-06-11</dEmi>
       <vDAR>100.00</vDAR>
       <repEmi>123456789</repEmi>
     </avulsa>
@@ -7215,7 +7211,6 @@ describe('xml builder with xml2js builder', () => {
         fone: '11999999999',
         UF: 'SP',
         nDAR: '123456789',
-        dEmi: new Date('2024-06-12'),
         vDAR: '100.00',
         repEmi: '123456789',
       })
@@ -7336,7 +7331,6 @@ describe('xml builder with xml2js builder', () => {
       <fone>11999999999</fone>
       <UF>SP</UF>
       <nDAR>123456789</nDAR>
-      <dEmi>2024-06-11</dEmi>
       <vDAR>100.00</vDAR>
       <repEmi>123456789</repEmi>
     </avulsa>
