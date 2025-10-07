@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { Xml2JsToolkit } from '@nfets/core/infrastructure/xml/xml2js-toolkit';
 import { MemoryCacheAdapter } from '@nfets/core/infrastructure/repositories/memory-cache-adapter';
-import { NodeCertificateRepository } from '@nfets/core/infrastructure/repositories/node-certificate-repository';
+import { NativeCertificateRepository } from '@nfets/core/infrastructure/repositories/native-certificate-repository';
 import { SoapRemoteTransmissionRepository } from '@nfets/core/infrastructure/repositories/soap-remote-transmission-repository';
 
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
@@ -15,7 +15,7 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
   const xml = new Xml2JsToolkit();
 
   const transmission = new SoapRemoteTransmissionRepository(
-    new NodeCertificateRepository(axios.create(), new MemoryCacheAdapter()),
+    new NativeCertificateRepository(axios.create(), new MemoryCacheAdapter()),
   );
 
   it('should return schema failed when payload is invalid', async () => {

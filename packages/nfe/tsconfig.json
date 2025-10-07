@@ -6,8 +6,8 @@
     "baseUrl": ".",
     "paths": {
       "@nfets/nfe/*": ["./src/*"],
-      "@nfets/core/*": ["../core/dist/*"],
-      "@nfets/core": ["../core/dist/index"]
+      "@nfets/core/*": ["../core/src/*"],
+      "@nfets/core": ["../core/src/index"]
     },
     "composite": true
   },

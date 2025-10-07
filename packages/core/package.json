@@ -23,9 +23,8 @@
     "@types/xml2js": "^0.4.14"
   },
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./src/index.ts"
   },
-  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ]

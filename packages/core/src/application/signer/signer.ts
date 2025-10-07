@@ -1,15 +1,12 @@
+import type { KeyObject } from 'node:crypto';
 import type {
   Signature,
   SignedInfo,
   Transforms,
 } from '../../domain/entities/signer/signature';
 import type { XmlToolkit } from '../../domain/entities/xml/xml-toolkit';
-import type {
-  Certificate,
-  ReadCertificateResponse,
-} from '../../domain/entities/certificate/certificate';
+import type { ReadCertificateResponse } from '../../domain/entities/certificate/certificate';
 import type { CertificateRepository } from '../../domain/repositories/certificate-repository';
-import type { PrivateKey } from '../../domain/entities/certificate/private-key';
 
 import {
   DigestAlgorithm,
@@ -57,7 +54,7 @@ export class Signer {
     xml: string,
     signedInfo: string,
     signature: string,
-    certificate: Certificate,
+    certificate: KeyObject,
   ) {
     const X509Certificate =
       this.certificateRepository.getStringPublicKey(certificate);
@@ -103,7 +100,7 @@ export class Signer {
     return this.toolkit.digest(node, this.algorithm, this.canonical);
   }
 
-  private async signOrLeft(signedInfo: string, privateKey: PrivateKey) {
+  private async signOrLeft(signedInfo: string, privateKey: KeyObject) {
     const SignedInfo = await this.toolkit.parse<SignedInfo>(signedInfo, {
       xmlns: false,
     });

@@ -42,11 +42,12 @@ export class SoapRemoteTransmissionRepository
 
     const key = this.certificateRepository.getStringPrivateKey(privateKey);
     const cert = this.certificateRepository.getStringPublicKey(certificate);
+    const cas = ca.map((c) => this.certificateRepository.getStringPublicKey(c));
 
     return new HttpsAgent({
       key,
       cert,
-      ca: ca,
+      ca: cas,
       passphrase: password,
       ...defaultAgentOptions,
     });

@@ -8,7 +8,7 @@ import {
   Xml2JsToolkit,
   ReadCertificateResponse,
   CertificateRepository,
-  NodeCertificateRepository,
+  NativeCertificateRepository,
   MemoryCacheAdapter,
   SignatureAlgorithm,
 } from '@nfets/core';
@@ -44,7 +44,7 @@ describe('xml builder with xml2js builder', () => {
   let certificateRepository: CertificateRepository;
 
   beforeAll(async () => {
-    certificateRepository = new NodeCertificateRepository(
+    certificateRepository = new NativeCertificateRepository(
       axios.create(),
       new MemoryCacheAdapter(),
     );

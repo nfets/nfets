@@ -4,7 +4,7 @@ import { Signer } from '@nfets/core/application/signer/signer';
 import { Xml2JsToolkit } from '@nfets/core/index';
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
 import { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
-import { NodeCertificateRepository } from '@nfets/core/infrastructure/repositories/node-certificate-repository';
+import { NativeCertificateRepository } from '@nfets/core/infrastructure/repositories/native-certificate-repository';
 import { MemoryCacheAdapter } from '@nfets/core/infrastructure/repositories/memory-cache-adapter';
 import type { ReadCertificateResponse } from '@nfets/core/domain/entities/certificate/certificate';
 import {
@@ -25,7 +25,7 @@ describe('signer (integration)', () => {
   if (cert === undefined) return;
 
   beforeAll(async () => {
-    certificateRepository = new NodeCertificateRepository(
+    certificateRepository = new NativeCertificateRepository(
       axios.create(),
       new MemoryCacheAdapter(),
     );
@@ -61,7 +61,7 @@ describe('signer (unit)', () => {
   let certificateRepository: CertificateRepository;
 
   beforeAll(async () => {
-    certificateRepository = new NodeCertificateRepository(
+    certificateRepository = new NativeCertificateRepository(
       axios.create(),
       new MemoryCacheAdapter(),
     );
