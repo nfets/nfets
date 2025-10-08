@@ -20,7 +20,6 @@ import type { InfSolicNFF } from './inf-solic-nff';
 export interface InfNFeAttributes {
   Id?: string;
   versao?: string;
-  pk_nItem?: string;
 }
 
 export interface InfNFe {

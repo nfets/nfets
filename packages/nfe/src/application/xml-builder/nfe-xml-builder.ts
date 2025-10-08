@@ -420,7 +420,6 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     this.data.infNFe.$ = {
       Id: `${this.root}${Id}`,
       versao: this.data.infNFe.$.versao,
-      pk_nItem: this.data.infNFe.$.pk_nItem,
     };
   }
 }
