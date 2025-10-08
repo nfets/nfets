@@ -1,8 +1,14 @@
 {
   "name": "@nfets/nfe",
   "version": "0.0.1",
+  "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nfets/nfets.git",
+    "directory": "packages/nfe"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "test": "jest --config jest.config.ts --passWithNoTests",

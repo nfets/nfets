@@ -1,5 +1,7 @@
 # 📚 Documentation
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
 [Versão em Português](./README.md)
 
 Welcome to nfets documentation! This folder contains important files about project governance, contribution, and support.
@@ -44,6 +46,7 @@ Welcome to nfets documentation! This folder contains important files about proje
 
 ### Others
 
+- **[LICENSE](./LICENSE)** - MIT License
 - **[CODEOWNERS](./CODEOWNERS)** - Code area owners
 - **[PULL_REQUEST_TEMPLATE.md](./PULL_REQUEST_TEMPLATE.md)** - PR template
 - **[ISSUE_TEMPLATE/](./ISSUE_TEMPLATE/)** - Issue templates
