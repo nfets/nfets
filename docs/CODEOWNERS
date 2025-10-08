@@ -1,0 +1,39 @@
+# This file defines code owners for the nfets repository
+# Each line is a file pattern followed by one or more owners
+#
+# Learn more: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+* @lidani
+* @iaaanz
+
+# Core package
+/packages/core/ @lidani
+
+# NFe package
+/packages/nfe/ @lidani
+
+# Validators package
+/packages/validators/ @lidani
+
+# Documentation
+/docs/ @lidani
+*.md @lidani
+
+# CI/CD and configuration files
+/.github/ @lidani
+*.yml @lidani
+*.yaml @lidani
+*.json @lidani
+
+# Security-sensitive files
+/docs/SECURITY.md @lidani
+/docs/CODE_OF_CONDUCT.md @lidani
+
+# Build configuration
+/build/ @lidani
+*.gyp @lidani
+Makefile @lidani
+
+# Native addons
+/addons/ @lidani

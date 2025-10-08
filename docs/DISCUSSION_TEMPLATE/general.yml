@@ -1,0 +1,55 @@
+title: "[Discussion]: "
+labels: ["discussion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 💬 Discussão Geral / General Discussion
+
+        Inicie uma conversa sobre qualquer tópico relacionado ao nfets!
+        Start a conversation about any topic related to nfets!
+
+  - type: textarea
+    id: topic
+    attributes:
+      label: Tópico / Topic
+      description: Sobre o que você gostaria de discutir? / What would you like to discuss?
+      placeholder: Gostaria de discutir... / I'd like to discuss...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Categoria / Category
+      description: Qual categoria melhor descreve esta discussão? / Which category best describes this discussion?
+      options:
+        - 📋 Geral - General
+        - 🏗️ Arquitetura - Architecture
+        - 💡 Brainstorm - Brainstorming
+        - 🔮 Futuro do Projeto - Project Future
+        - 📚 Documentação - Documentation
+        - 🎓 Aprendizado - Learning
+        - 🤝 Colaboração - Collaboration
+        - 🌍 Comunidade - Community
+        - ⚡️ Performance - Performance
+        - 🔒 Segurança - Security
+        - 🧪 Testes - Testing
+        - Outro - Other
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto / Context
+      description: Forneça contexto adicional se necessário / Provide additional context if needed
+      placeholder: Contexto relevante... / Relevant context...
+
+  - type: textarea
+    id: questions
+    attributes:
+      label: Perguntas / Questions
+      description: Existem perguntas específicas que você gostaria de fazer? / Are there specific questions you'd like to ask?
+      placeholder: |
+        1.
+        2.
+        3.

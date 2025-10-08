@@ -1,0 +1,104 @@
+name: ✨ Feature Request / Solicitar Funcionalidade
+description: Sugira uma nova funcionalidade para o projeto / Suggest a new feature for the project
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por sugerir uma nova funcionalidade!
+        Thank you for suggesting a new feature!
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema / Problem
+      description: Qual problema esta funcionalidade resolveria? / What problem would this feature solve?
+      placeholder: Eu sempre tenho dificuldade em... / I always have difficulty with...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solução Proposta / Proposed Solution
+      description: Descreva a solução que você gostaria de ver / Describe the solution you'd like to see
+      placeholder: Seria ótimo se pudéssemos... / It would be great if we could...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas Consideradas / Alternatives Considered
+      description: Descreva soluções alternativas que você considerou / Describe alternative solutions you've considered
+      placeholder: Eu pensei em usar... mas... / I thought about using... but...
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Exemplo de Uso / Usage Example
+      description: Como você usaria esta funcionalidade? / How would you use this feature?
+      render: typescript
+      placeholder: |
+        // Exemplo de como a API poderia funcionar
+        // Example of how the API could work
+        import { NewFeature } from '@nfets/core';
+
+        const feature = new NewFeature();
+        feature.doSomething();
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridade / Priority
+      description: Quão importante é esta funcionalidade para você? / How important is this feature to you?
+      options:
+        - Baixa / Low - Seria legal ter / Would be nice to have
+        - Média / Medium - Importante mas não urgente / Important but not urgent
+        - Alta / High - Precisamos disso em breve / We need this soon
+        - Crítica / Critical - Bloqueador / Blocker
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Escopo / Scope
+      description: Qual área do projeto esta funcionalidade afetaria? / Which area of the project would this feature affect?
+      options:
+        - Core - Funcionalidades principais / Core functionality
+        - NFe/NFCe - Notas fiscais eletrônicas / Electronic invoices
+        - Validators - Validadores / Validators
+        - Documentation - Documentação / Documentation
+        - DevEx - Experiência do desenvolvedor / Developer experience
+        - Performance - Performance / Performance
+        - Outro / Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribuição / Contribution
+      options:
+        - label: Eu estaria disposto a implementar esta funcionalidade / I would be willing to implement this feature
+          required: false
+        - label: Eu posso ajudar a testar esta funcionalidade / I can help test this feature
+          required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Contexto Adicional / Additional Context
+      description: Adicione qualquer outro contexto, screenshots ou exemplos / Add any other context, screenshots, or examples
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: Eu procurei por solicitações similares antes de criar esta / I searched for similar requests before creating this one
+          required: true
+        - label: Eu li o guia de contribuição / I have read the contribution guide
+          required: false

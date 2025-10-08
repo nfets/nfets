@@ -1,0 +1,96 @@
+title: "[Show & Tell]: "
+labels: ["show-and-tell"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎨 Mostre o que Você Construiu / Show What You Built
+
+        Compartilhe projetos, tutoriais ou integrações que você criou usando nfets!
+        Share projects, tutorials, or integrations you've created using nfets!
+
+  - type: input
+    id: title
+    attributes:
+      label: Título do Projeto / Project Title
+      description: Dê um nome ao seu projeto / Give your project a name
+      placeholder: "Exemplo: Sistema de Emissão de NFe para E-commerce"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrição / Description
+      description: O que você construiu? O que ele faz? / What did you build? What does it do?
+      placeholder: Descreva seu projeto... / Describe your project...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Tipo / Type
+      description: Que tipo de conteúdo você está compartilhando? / What type of content are you sharing?
+      options:
+        - 🚀 Projeto - Project
+        - 📚 Tutorial - Tutorial
+        - 🔌 Integração - Integration
+        - 📦 Biblioteca - Library/Package
+        - 🎥 Vídeo - Video
+        - 📝 Artigo - Article/Blog Post
+        - 🛠️ Ferramenta - Tool
+        - 💡 Exemplo - Example/Demo
+        - Outro - Other
+    validations:
+      required: true
+
+  - type: input
+    id: link
+    attributes:
+      label: Link / URL
+      description: Link para o repositório, site, artigo ou vídeo / Link to repository, website, article, or video
+      placeholder: "https://github.com/..."
+
+  - type: textarea
+    id: tech-stack
+    attributes:
+      label: Stack Tecnológica / Tech Stack
+      description: Quais tecnologias você usou? / What technologies did you use?
+      placeholder: |
+        - nfets v0.1.0
+        - Node.js 18
+        - React
+        - PostgreSQL
+        - etc...
+
+  - type: textarea
+    id: challenges
+    attributes:
+      label: Desafios e Aprendizados / Challenges and Learnings
+      description: Quais desafios você enfrentou? O que aprendeu? / What challenges did you face? What did you learn?
+      placeholder: O maior desafio foi... / The biggest challenge was...
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots ou Demos / Screenshots or Demos
+      description: Adicione imagens ou GIFs mostrando seu projeto / Add images or GIFs showing your project
+      placeholder: Cole URLs de imagens ou arraste arquivos aqui... / Paste image URLs or drag files here...
+
+  - type: checkboxes
+    id: opensource
+    attributes:
+      label: Open Source
+      options:
+        - label: Este projeto é open source / This project is open source
+          required: false
+        - label: Aceito contribuições / I accept contributions
+          required: false
+
+  - type: textarea
+    id: feedback
+    attributes:
+      label: Feedback Desejado / Desired Feedback
+      description: Existe algum feedback específico que você gostaria de receber? / Is there any specific feedback you'd like to receive?
+      placeholder: Gostaria de feedback sobre... / I'd like feedback on...

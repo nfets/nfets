@@ -1,0 +1,98 @@
+name: 🐛 Bug Report / Relatar Bug
+description: Reporte um bug para nos ajudar a melhorar / Report a bug to help us improve
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por dedicar tempo para preencher este relatório de bug!
+        Thank you for taking the time to fill out this bug report!
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrição do Bug / Bug Description
+      description: Uma descrição clara e concisa do bug / A clear and concise description of the bug
+      placeholder: O que aconteceu? / What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Passos para Reproduzir / Steps to Reproduce
+      description: Como reproduzir o problema / How to reproduce the issue
+      placeholder: |
+        1. Vá para '...'
+        2. Execute '...'
+        3. Veja o erro
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento Esperado / Expected Behavior
+      description: O que você esperava que acontecesse? / What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Comportamento Atual / Actual Behavior
+      description: O que realmente aconteceu? / What actually happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Código de Exemplo / Code Sample
+      description: Se possível, forneça um exemplo mínimo que reproduz o problema / If possible, provide a minimal example that reproduces the issue
+      render: typescript
+      placeholder: |
+        // Seu código aqui / Your code here
+        import { Signer } from '@nfets/core';
+
+        const signer = new Signer(...);
+        // ...
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Ambiente / Environment
+      description: Informações sobre seu ambiente / Information about your environment
+      value: |
+        - OS: [ex: macOS 13.0, Windows 11, Ubuntu 22.04]
+        - Node.js: [ex: 18.0.0]
+        - nfets version: [ex: 0.1.0]
+        - Package manager: [ex: pnpm 8.0.0, npm 9.0.0]
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Mensagens de Erro / Error Messages
+      description: Cole quaisquer logs ou mensagens de erro relevantes / Paste any relevant logs or error messages
+      render: shell
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Contexto Adicional / Additional Context
+      description: Adicione qualquer outro contexto sobre o problema aqui / Add any other context about the problem here
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: Eu procurei por issues similares antes de criar esta / I searched for similar issues before creating this one
+          required: true
+        - label: Eu estou usando a versão mais recente / I am using the latest version
+          required: false
+        - label: Eu li a documentação / I have read the documentation
+          required: false

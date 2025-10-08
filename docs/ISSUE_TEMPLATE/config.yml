@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 GitHub Discussions
+    url: https://github.com/nfets/nfets/discussions
+    about: Para perguntas gerais, ideias e discussões da comunidade / For general questions, ideas, and community discussions
+  - name: 📚 Documentação / Documentation
+    url: https://github.com/nfets/nfets#readme
+    about: Leia a documentação antes de abrir uma issue / Read the documentation before opening an issue
+  - name: 🔒 Reporte de Segurança / Security Report
+    url: https://github.com/nfets/nfets/security/advisories/new
+    about: Para reportar vulnerabilidades de segurança de forma privada / To privately report security vulnerabilities

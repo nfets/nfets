@@ -1,0 +1,73 @@
+title: "[Poll]: "
+labels: ["poll"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📊 Enquete / Poll
+
+        Crie uma enquete para coletar feedback da comunidade!
+        Create a poll to collect feedback from the community!
+
+        **Nota:** Após criar a discussão, adicione uma enquete usando a interface do GitHub.
+        **Note:** After creating the discussion, add a poll using GitHub's interface.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Pergunta da Enquete / Poll Question
+      description: Qual é a pergunta principal da sua enquete? / What is the main question of your poll?
+      placeholder: Qual recurso você gostaria de ver primeiro? / Which feature would you like to see first?
+    validations:
+      required: true
+
+  - type: textarea
+    id: options
+    attributes:
+      label: Opções / Options
+      description: Liste as opções da enquete (você adicionará a enquete real após criar a discussão) / List poll options (you'll add the actual poll after creating the discussion)
+      placeholder: |
+        - [ ] Opção 1 / Option 1
+        - [ ] Opção 2 / Option 2
+        - [ ] Opção 3 / Option 3
+        - [ ] Opção 4 / Option 4
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Categoria / Category
+      description: Sobre o que é esta enquete? / What is this poll about?
+      options:
+        - 🎯 Prioridades - Priorities
+        - ✨ Novos Recursos - New Features
+        - 🎨 Design/UX - Design/UX
+        - 📚 Documentação - Documentation
+        - 🏗️ Arquitetura - Architecture
+        - 🌍 Comunidade - Community
+        - 📋 Roadmap - Roadmap
+        - Outro - Other
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto / Context
+      description: Forneça contexto para ajudar as pessoas a tomar uma decisão informada / Provide context to help people make an informed decision
+      placeholder: Esta enquete ajudará a decidir... / This poll will help decide...
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impacto / Impact
+      description: Como os resultados desta enquete serão usados? / How will the results of this poll be used?
+      placeholder: Os resultados influenciarão... / The results will influence...
+
+  - type: input
+    id: deadline
+    attributes:
+      label: Prazo / Deadline
+      description: Até quando a enquete ficará aberta? / Until when will the poll be open?
+      placeholder: "ex: 7 dias / e.g., 7 days"

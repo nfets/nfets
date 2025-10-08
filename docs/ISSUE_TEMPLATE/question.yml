@@ -1,0 +1,74 @@
+name: ❓ Question / Pergunta
+description: Faça uma pergunta sobre o projeto / Ask a question about the project
+title: "[Question]: "
+labels: ["question", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Tem uma pergunta? Estamos aqui para ajudar!
+        Have a question? We're here to help!
+
+        **Nota:** Para discussões mais longas, considere usar [GitHub Discussions](https://github.com/nfets/nfets/discussions)
+        **Note:** For longer discussions, consider using [GitHub Discussions](https://github.com/nfets/nfets/discussions)
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Pergunta / Question
+      description: Qual é sua pergunta? / What's your question?
+      placeholder: Como faço para...? / How do I...?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Categoria / Category
+      description: Sobre o que é sua pergunta? / What is your question about?
+      options:
+        - Instalação / Installation - Como instalar / How to install
+        - Uso / Usage - Como usar uma funcionalidade / How to use a feature
+        - Configuração / Configuration - Como configurar / How to configure
+        - NFe/NFCe - Específico de notas fiscais / Specific to invoices
+        - Certificados / Certificates - Certificados digitais / Digital certificates
+        - Assinatura / Signing - Assinatura XML / XML signing
+        - Validação / Validation - Validação de XMLs / XML validation
+        - Transmissão / Transmission - Envio para SEFAZ / Sending to SEFAZ
+        - Arquitetura / Architecture - Arquitetura do código / Code architecture
+        - Contribuição / Contributing - Como contribuir / How to contribute
+        - Outro / Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: O que Você Já Tentou? / What Have You Tried?
+      description: Descreva o que você já tentou fazer / Describe what you've already tried
+      placeholder: Eu tentei X, Y e Z... / I tried X, Y, and Z...
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Código Relevante / Relevant Code
+      description: Se aplicável, forneça código relevante / If applicable, provide relevant code
+      render: typescript
+      placeholder: |
+        // Seu código aqui / Your code here
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto Adicional / Additional Context
+      description: Qualquer outro contexto sobre a pergunta / Any other context about the question
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: Eu procurei na documentação primeiro / I searched the documentation first
+          required: true
+        - label: Eu procurei por perguntas similares / I searched for similar questions
+          required: true

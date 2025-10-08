@@ -1,0 +1,95 @@
+name: 📚 Documentation / Documentação
+description: Reporte problemas ou melhorias na documentação / Report issues or improvements in documentation
+title: "[Docs]: "
+labels: ["documentation", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por ajudar a melhorar nossa documentação!
+        Thank you for helping improve our documentation!
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Tipo / Type
+      description: Que tipo de problema de documentação é este? / What type of documentation issue is this?
+      options:
+        - Erro / Typo - Erro de digitação ou gramatical / Spelling or grammar error
+        - Falta de clareza / Unclear - Difícil de entender / Hard to understand
+        - Faltando / Missing - Documentação ausente / Missing documentation
+        - Desatualizada / Outdated - Documentação desatualizada / Outdated documentation
+        - Exemplo incorreto / Wrong example - Exemplo que não funciona / Example that doesn't work
+        - Melhoria / Improvement - Sugestão de melhoria / Improvement suggestion
+        - Outro / Other
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: Localização / Location
+      description: Onde está o problema? (URL ou caminho do arquivo) / Where is the issue? (URL or file path)
+      placeholder: "https://github.com/nfets/nfets/blob/main/docs/README.md ou https://github.com/nfets/nfets/blob/main/packages/core/README.md"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Conteúdo Atual / Current Content
+      description: Copie o conteúdo atual que precisa ser corrigido / Copy the current content that needs to be fixed
+      render: markdown
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Qual é o Problema? / What's the Problem?
+      description: Descreva o problema com a documentação atual / Describe the problem with the current documentation
+      placeholder: A documentação diz X, mas deveria dizer Y... / The documentation says X, but it should say Y...
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested
+    attributes:
+      label: Conteúdo Sugerido / Suggested Content
+      description: Como você melhoraria isso? / How would you improve this?
+      render: markdown
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Área / Area
+      description: Qual área da documentação? / Which area of documentation?
+      options:
+        - README - README principal / Main README
+        - API - Documentação de API / API documentation
+        - Guias / Guides - Tutoriais e guias / Tutorials and guides
+        - Exemplos / Examples - Exemplos de código / Code examples
+        - Contributing - Guia de contribuição / Contributing guide
+        - Outro / Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribuição / Contribution
+      options:
+        - label: Eu posso enviar um PR com a correção / I can submit a PR with the fix
+          required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Contexto Adicional / Additional Context
+      description: Adicione qualquer outro contexto ou screenshots / Add any other context or screenshots
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: Eu procurei por issues similares antes de criar esta / I searched for similar issues before creating this one
+          required: true

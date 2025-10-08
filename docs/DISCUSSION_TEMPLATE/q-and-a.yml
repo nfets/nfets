@@ -1,0 +1,99 @@
+title: "[Q&A]: "
+labels: ["question", "q-and-a"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ❓ Perguntas e Respostas / Questions & Answers
+
+        Faça perguntas e ajude outros com suas respostas!
+        Ask questions and help others with your answers!
+
+        **Dica:** Se você encontrou a resposta para sua pergunta, marque a melhor resposta!
+        **Tip:** If you found the answer to your question, mark the best answer!
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Sua Pergunta / Your Question
+      description: Faça sua pergunta de forma clara e específica / Ask your question clearly and specifically
+      placeholder: Como faço para...? / How do I...?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Tópico / Topic
+      description: Sobre o que é sua pergunta? / What is your question about?
+      options:
+        - 🚀 Começando - Getting Started
+        - 📝 Uso Básico - Basic Usage
+        - 🔧 Configuração - Configuration
+        - 📄 NFe/NFCe - Electronic Invoices
+        - 🔐 Certificados - Certificates
+        - ✍️ Assinatura Digital - Digital Signature
+        - ✅ Validação - Validation
+        - 📡 Transmissão SEFAZ - SEFAZ Transmission
+        - 🏗️ Arquitetura - Architecture
+        - 🔌 Integração - Integration
+        - 🐛 Debugging - Debugging
+        - ⚡️ Performance - Performance
+        - 🧪 Testes - Testing
+        - 🤝 Contribuição - Contributing
+        - Outro - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-tried
+    attributes:
+      label: O que Você Já Tentou? / What Have You Tried?
+      description: Descreva as abordagens que você já tentou / Describe approaches you've already tried
+      placeholder: |
+        Eu tentei:
+        1.
+        2.
+        3.
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Código Relevante / Relevant Code
+      description: Compartilhe código relevante (se aplicável) / Share relevant code (if applicable)
+      render: typescript
+      placeholder: |
+        // Cole seu código aqui
+        // Paste your code here
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Mensagem de Erro / Error Message
+      description: Se houver erro, cole a mensagem completa / If there's an error, paste the full message
+      render: shell
+      placeholder: |
+        Error: ...
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Ambiente / Environment
+      description: Informações sobre seu ambiente / Information about your environment
+      value: |
+        - OS:
+        - Node.js:
+        - nfets version:
+        - Package manager:
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: Eu procurei na documentação / I searched the documentation
+          required: true
+        - label: Eu procurei por perguntas similares / I searched for similar questions
+          required: true
+        - label: Eu tentei resolver sozinho primeiro / I tried to solve it myself first
+          required: false

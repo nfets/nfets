@@ -1,0 +1,90 @@
+title: "[Announcement]: "
+labels: ["announcement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📢 Anúncio / Announcement
+
+        Compartilhe novidades importantes sobre o projeto nfets!
+        Share important news about the nfets project!
+
+        **Nota:** Este template é principalmente para mantenedores.
+        **Note:** This template is primarily for maintainers.
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Tipo de Anúncio / Announcement Type
+      description: Que tipo de anúncio é este? / What type of announcement is this?
+      options:
+        - 🚀 Release - New Release
+        - 🎉 Milestone - Milestone
+        - 📋 Roadmap - Roadmap Update
+        - 🔧 Mudança - Breaking Change
+        - 🎯 Evento - Event
+        - 🤝 Parceria - Partnership
+        - 👥 Equipe - Team Update
+        - 📚 Documentação - Documentation
+        - 🏆 Conquista - Achievement
+        - Outro - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: announcement
+    attributes:
+      label: Anúncio / Announcement
+      description: Compartilhe o anúncio / Share the announcement
+      placeholder: Estamos felizes em anunciar... / We're happy to announce...
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      label: Detalhes / Details
+      description: Forneça detalhes adicionais / Provide additional details
+      placeholder: |
+        ### O que mudou / What changed
+        -
+
+        ### Por que / Why
+        -
+
+        ### Próximos passos / Next steps
+        -
+
+  - type: textarea
+    id: links
+    attributes:
+      label: Links Relevantes / Relevant Links
+      description: Links para PRs, issues, docs, etc. / Links to PRs, issues, docs, etc.
+      placeholder: |
+        - [Release Notes](...)
+        - [Documentation](...)
+        - [Migration Guide](...)
+
+  - type: input
+    id: version
+    attributes:
+      label: Versão / Version
+      description: Se aplicável, qual versão? / If applicable, which version?
+      placeholder: "v0.1.0"
+
+  - type: textarea
+    id: migration
+    attributes:
+      label: Guia de Migração / Migration Guide
+      description: Se houver breaking changes, como migrar? / If there are breaking changes, how to migrate?
+      placeholder: Para migrar para esta versão... / To migrate to this version...
+
+  - type: textarea
+    id: thanks
+    attributes:
+      label: Agradecimentos / Thanks
+      description: Agradeça aos contribuidores / Thank contributors
+      placeholder: |
+        Agradecimentos especiais para:
+        - @contributor1
+        - @contributor2

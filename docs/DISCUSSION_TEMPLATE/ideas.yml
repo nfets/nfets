@@ -1,0 +1,68 @@
+title: "[Idea]: "
+labels: ["idea"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 💡 Compartilhe sua Ideia / Share Your Idea
+
+        Obrigado por compartilhar suas ideias para melhorar o nfets!
+        Thank you for sharing your ideas to improve nfets!
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: Sua Ideia / Your Idea
+      description: Descreva sua ideia de forma clara e detalhada / Describe your idea clearly and in detail
+      placeholder: Eu pensei que seria interessante se... / I thought it would be interesting if...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Categoria / Category
+      description: Em qual área sua ideia se encaixa? / What area does your idea fit into?
+      options:
+        - NFe/NFCe - Notas fiscais / Invoices
+        - NFSe - Nota fiscal de serviço / Service invoice
+        - CT-e - Conhecimento de transporte / Transportation
+        - MDF-e - Manifesto de documentos / Document manifest
+        - API/DX - Experiência do desenvolvedor / Developer experience
+        - Performance - Performance / Performance
+        - Documentação - Documentation / Documentation
+        - Ferramentas - Tooling / Tooling
+        - Comunidade - Community / Community
+        - Outro - Other / Other
+
+  - type: textarea
+    id: usecase
+    attributes:
+      label: Caso de Uso / Use Case
+      description: Como essa ideia seria usada? Quem se beneficiaria? / How would this idea be used? Who would benefit?
+      placeholder: Isso ajudaria desenvolvedores que... / This would help developers who...
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Possível Implementação / Possible Implementation
+      description: Você tem ideias de como isso poderia ser implementado? / Do you have ideas on how this could be implemented?
+      placeholder: Talvez pudéssemos... / Perhaps we could...
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Exemplos / Examples
+      description: Forneça exemplos, referências ou mockups se possível / Provide examples, references, or mockups if possible
+
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Contribuição / Contribution
+      options:
+        - label: Eu estaria disposto a trabalhar nisso / I'd be willing to work on this
+          required: false
+        - label: Eu posso ajudar a definir os requisitos / I can help define the requirements
+          required: false
+        - label: Eu conheço casos de uso reais para isso / I know real use cases for this
+          required: false

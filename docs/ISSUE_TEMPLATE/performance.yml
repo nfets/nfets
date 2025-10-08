@@ -1,0 +1,120 @@
+name: ⚡️ Performance Issue / Problema de Performance
+description: Reporte um problema de performance / Report a performance issue
+title: "[Performance]: "
+labels: ["performance", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por ajudar a melhorar a performance do nfets!
+        Thank you for helping improve nfets performance!
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrição do Problema / Issue Description
+      description: Descreva o problema de performance / Describe the performance issue
+      placeholder: A operação X está muito lenta quando... / Operation X is very slow when...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área Afetada / Affected Area
+      description: Qual área está com problema de performance? / Which area has the performance issue?
+      options:
+        - Assinatura XML / XML Signing
+        - Validação XML / XML Validation
+        - Geração de XML / XML Generation
+        - Transmissão / Transmission
+        - Cálculos / Calculations
+        - Manipulação de certificados / Certificate handling
+        - Outro / Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Código para Reproduzir / Code to Reproduce
+      description: Forneça código que demonstre o problema de performance / Provide code that demonstrates the performance issue
+      render: typescript
+      placeholder: |
+        import { Signer } from '@nfets/core';
+
+        // Código que demonstra o problema
+        // Code that demonstrates the issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: metrics
+    attributes:
+      label: Métricas / Metrics
+      description: Forneça métricas de performance (tempo de execução, uso de memória, etc.) / Provide performance metrics (execution time, memory usage, etc.)
+      placeholder: |
+        - Tempo de execução atual / Current execution time: 5s
+        - Uso de memória / Memory usage: 500MB
+        - Volume de dados / Data volume: 1000 XMLs
+        - Hardware: CPU/RAM
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Performance Esperada / Expected Performance
+      description: Qual performance você esperava? / What performance did you expect?
+      placeholder: Eu esperava que levasse menos de... / I expected it to take less than...
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Ambiente / Environment
+      description: Informações sobre seu ambiente / Information about your environment
+      value: |
+        - OS: [ex: macOS 13.0, Windows 11, Ubuntu 22.04]
+        - Node.js: [ex: 18.0.0]
+        - nfets version: [ex: 0.1.0]
+        - Hardware: [ex: CPU, RAM]
+    validations:
+      required: true
+
+  - type: textarea
+    id: profiling
+    attributes:
+      label: Dados de Profiling / Profiling Data
+      description: Se você já fez profiling, cole os resultados aqui / If you've done profiling, paste the results here
+      render: shell
+
+  - type: textarea
+    id: suggestions
+    attributes:
+      label: Sugestões / Suggestions
+      description: Você tem sugestões de como melhorar? / Do you have suggestions on how to improve?
+      placeholder: Talvez poderíamos usar cache para... / Perhaps we could use caching for...
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribuição / Contribution
+      options:
+        - label: Eu posso ajudar a implementar a otimização / I can help implement the optimization
+          required: false
+        - label: Eu posso ajudar com benchmarking / I can help with benchmarking
+          required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Contexto Adicional / Additional Context
+      description: Adicione qualquer outro contexto / Add any other context
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: Eu procurei por issues similares antes de criar esta / I searched for similar issues before creating this one
+          required: true
+        - label: Eu testei com a versão mais recente / I tested with the latest version
+          required: true
