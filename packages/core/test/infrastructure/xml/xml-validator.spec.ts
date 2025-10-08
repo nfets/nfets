@@ -13,6 +13,7 @@ describe('xml validator (unit)', () => {
     '../../../../',
     'nfe',
     'schemas',
+    'PL_009_V4',
   );
   const xml = new Xml2JsToolkit();
 

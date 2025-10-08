@@ -33,7 +33,12 @@ import { getCertificatePassword } from '@nfets/test/certificates';
 
 describe('xml builder with xml2js builder', () => {
   const toolkit: XmlToolkit = new Xml2JsToolkit();
-  const nfeNfceSchemas = path.resolve(__dirname, '../../../', 'schemas'),
+  const nfeNfceSchemas = path.resolve(
+      __dirname,
+      '../../../',
+      'schemas',
+      'PL_009_V4',
+    ),
     leiauteNFe4_00 = 'nfe_v4.00.xsd';
 
   const password = getCertificatePassword(),
