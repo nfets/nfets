@@ -1,8 +1,8 @@
 import { IsOptional, IsString } from 'class-validator';
-import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
+import { TransformDecimal } from '@nfets/core/application';
 import { RetTransp as IRetTransp } from '@nfets/nfe/entities/nfe/inf-nfe/transp';
 
-import type { DecimalValue } from '@nfets/core';
+import type { DecimalValue } from '@nfets/core/domain';
 
 export class RetTransp implements IRetTransp {
   @IsOptional()

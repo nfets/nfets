@@ -3,7 +3,11 @@
   "version": "0.0.2",
   "description": "typescript libraries for Brazilian's SEFAZ standards",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
+  "exports": {
+    ".": "./dist/src/index.js"
+  },
+  "types": "./dist/src/index.d.ts",
   "engines": {
     "pnpm": ">=9",
     "node": ">=22",
@@ -21,13 +25,19 @@
   ],
   "scripts": {
     "install": "node-gyp rebuild && pnpm build",
-    "build": "pnpm --filter @nfets/core build && pnpm --filter @nfets/validators build && pnpm --filter @nfets/nfe build",
-    "clean": "rimraf node_modules packages/{core,nfe}/node_modules"
+    "build:nfets": "tsc -p tsconfig.build.json",
+    "build": "pnpm --filter @nfets/core build && pnpm --filter !@nfets/core build",
+    "test": "pnpm --filter @nfets/* test",
+    "test:coverage": "pnpm --filter @nfets/* test:coverage --coverageReporters=\"json-summary\""
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
+    "@nfets/core": "workspace:*",
+    "@nfets/nfe": "workspace:*",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "dayjs": "^1.11.18",
     "dotenv": "^17.2.2",
     "reflect-metadata": "^0.2.2",

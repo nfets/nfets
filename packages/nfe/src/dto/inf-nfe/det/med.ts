@@ -1,7 +1,7 @@
 import { Med as IMed } from '@nfets/nfe/entities/nfe/inf-nfe/det/med';
 import { IsString } from 'class-validator';
-import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
-import type { DecimalValue } from '@nfets/core';
+import { TransformDecimal } from '@nfets/core/application';
+import type { DecimalValue } from '@nfets/core/domain';
 
 export class Med implements IMed {
   @IsString()

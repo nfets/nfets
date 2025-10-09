@@ -41,7 +41,7 @@ body:
       description: Forneça código que demonstre o problema de performance / Provide code that demonstrates the performance issue
       render: typescript
       placeholder: |
-        import { Signer } from '@nfets/core';
+        import { Signer } from '@nfets/core/application';
 
         // Código que demonstra o problema
         // Code that demonstrates the issue

@@ -2,9 +2,9 @@ import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Card, Card as ICard } from './card';
 import { DetPag as IDetPag } from '@nfets/nfe/entities/nfe/inf-nfe/pag';
-import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
+import { TransformDecimal } from '@nfets/core/application';
 
-import type { DecimalValue } from '@nfets/core';
+import type { DecimalValue } from '@nfets/core/domain';
 
 export class DetPag implements IDetPag {
   @IsOptional()

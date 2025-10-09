@@ -1,11 +1,11 @@
 import { Type } from 'class-transformer';
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
-import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
+import { TransformDecimal } from '@nfets/core/application';
 import type {
   DetExport as IDetExport,
   ExportInd as IExportInd,
 } from '@nfets/nfe/entities/nfe/inf-nfe/det/det-export';
-import type { DecimalValue } from '@nfets/core';
+import type { DecimalValue } from '@nfets/core/domain';
 
 export class ExportInd implements IExportInd {
   @IsString()

@@ -43,7 +43,7 @@ body:
       placeholder: |
         // Exemplo de como a API poderia funcionar
         // Example of how the API could work
-        import { NewFeature } from '@nfets/core';
+        import { NewFeature } from '@nfets/core/application';
 
         const feature = new NewFeature();
         feature.doSomething();
@@ -69,7 +69,6 @@ body:
       options:
         - Core - Funcionalidades principais / Core functionality
         - NFe/NFCe - Notas fiscais eletrônicas / Electronic invoices
-        - Validators - Validadores / Validators
         - Documentation - Documentação / Documentation
         - DevEx - Experiência do desenvolvedor / Developer experience
         - Performance - Performance / Performance

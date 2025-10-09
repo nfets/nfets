@@ -1,4 +1,4 @@
-import type { DecimalValue } from '@nfets/core';
+import type { DecimalValue } from '@nfets/core/domain';
 import {
   IsString,
   IsOptional,
@@ -10,8 +10,8 @@ import {
 import { Type } from 'class-transformer';
 import { DI as IDI, Adi as IAdi } from '@nfets/nfe/entities/nfe/inf-nfe/det/di';
 
-import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
-import { Case } from '@nfets/nfe/application/validator/switch-case';
+import { TransformDecimal } from '@nfets/core/application';
+import { SwitchCase } from '@nfets/core/application';
 
 export class Adi implements IAdi {
   @IsString()
@@ -59,12 +59,12 @@ export class DI implements IDI {
 
   @IsString()
   @IsOptional()
-  @Case()
+  @SwitchCase()
   public CNPJ?: string;
 
   @IsString()
   @IsOptional()
-  @Case()
+  @SwitchCase()
   public CPF?: string;
 
   @IsString()

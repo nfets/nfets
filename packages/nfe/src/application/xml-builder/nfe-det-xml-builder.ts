@@ -1,4 +1,4 @@
-import { Validates } from '@nfets/nfe/application/validator/validate';
+import { Validates } from '@nfets/core/application';
 
 import type {
   Det as IDet,

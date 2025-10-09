@@ -13,8 +13,8 @@ import type {
   Cana as ICana,
   Deduc as IDeduc,
 } from '@nfets/nfe/entities/nfe/inf-nfe/cana';
-import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
-import type { DecimalValue } from '@nfets/core';
+import { TransformDecimal } from '@nfets/core/application';
+import type { DecimalValue } from '@nfets/core/domain';
 
 export class ForDiaAttributes implements IForDiaAttributes {
   @IsString()

@@ -2,23 +2,28 @@ import axios from 'axios';
 import path from 'node:path';
 
 import {
-  Signer,
-  Decimal,
   XmlToolkit,
-  Xml2JsToolkit,
   ReadCertificateResponse,
   CertificateRepository,
+  SignatureAlgorithm,
+  NFeTsError,
+} from '@nfets/core/domain';
+
+import {
+  Decimal,
+  Xml2JsToolkit,
   NativeCertificateRepository,
   MemoryCacheAdapter,
-  SignatureAlgorithm,
-} from '@nfets/core';
+} from '@nfets/core/infrastructure';
+
+import {
+  Signer,
+  SkipAllValidations,
+  SkipValidation,
+} from '@nfets/core/application';
 
 import { NfeXmlBuilder } from '@nfets/nfe/application/xml-builder/nfe-xml-builder';
 
-import {
-  SkipAllValidations,
-  SkipValidation,
-} from '@nfets/nfe/application/validator/skip-validations';
 import type { Ide } from '@nfets/nfe/entities/nfe/inf-nfe/ide';
 import {
   createValidEmit,
@@ -90,8 +95,9 @@ describe('xml builder with xml2js builder', () => {
       .pag({} as never);
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240600000000000000550010000000011459417288" versao="[object Object]">
     <ide>
@@ -132,7 +138,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsLeft(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -166,9 +172,10 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
+    expectIsRight(xml);
 
-    expect(xml).toBeDefined();
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240600000000000000[object Object]001000000001112345678NaN" versao="4.00">
     <ide>
@@ -222,7 +229,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsLeft(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -247,8 +254,12 @@ describe('xml builder with xml2js builder', () => {
         detPag: [{ tPag: '01', vPag: Decimal.from('100').toString() }],
       });
 
-    await expect(async () => await builder.assemble()).rejects.toThrow(
-      'ide.cNF must be a string, ide.natOp must be a string, ide.serie must be a string, ide.nNF must be a string, ide.tpNF must be a string, ide.idDest must be a string, ide.cMunFG must be a string, ide.tpImp must be a string, ide.cDV must be a string, ide.tpAmb must be a string, ide.finNFe must be a string, ide.indFinal must be a string, ide.indPres must be a string, ide.procEmi must be a string, ide.verProc must be a string, emit.xNome must be a string, emit.IE must be a string, emit.CRT must be a string',
+    const xmlOrLeft = await builder.assemble();
+    expectIsLeft(xmlOrLeft);
+    expect(xmlOrLeft.value).toStrictEqual(
+      new NFeTsError(
+        'ide.cNF must be a string, ide.natOp must be a string, ide.serie must be a string, ide.nNF must be a string, ide.tpNF must be a string, ide.idDest must be a string, ide.cMunFG must be a string, ide.tpImp must be a string, ide.cDV must be a string, ide.tpAmb must be a string, ide.finNFe must be a string, ide.indFinal must be a string, ide.indPres must be a string, ide.procEmi must be a string, ide.verProc must be a string, emit.xNome must be a string, emit.IE must be a string, emit.CRT must be a string',
+      ),
     );
   });
 
@@ -306,16 +317,19 @@ describe('xml builder with xml2js builder', () => {
       .pag(createValidPag());
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<NFe xmlns="http://www.portalfiscal.inf.br/nfe">');
-    expect(xml).toContain('<infNFe');
-    expect(xml).toContain('<ide>');
-    expect(xml).toContain('<emit>');
-    expect(xml).toContain('<det nItem="1">');
-    expect(xml).toContain('<total>');
-    expect(xml).toContain('<transp>');
-    expect(xml).toContain('<pag>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain(
+      '<NFe xmlns="http://www.portalfiscal.inf.br/nfe">',
+    );
+    expect(xml.value).toContain('<infNFe');
+    expect(xml.value).toContain('<ide>');
+    expect(xml.value).toContain('<emit>');
+    expect(xml.value).toContain('<det nItem="1">');
+    expect(xml.value).toContain('<total>');
+    expect(xml.value).toContain('<transp>');
+    expect(xml.value).toContain('<pag>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -442,7 +456,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -514,9 +528,10 @@ describe('xml builder with xml2js builder', () => {
       .pag(createValidPag());
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<avulsa>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<avulsa>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -654,7 +669,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -733,9 +748,10 @@ describe('xml builder with xml2js builder', () => {
       .pag(createValidPag());
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<dest>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<dest>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -880,7 +896,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -953,9 +969,10 @@ describe('xml builder with xml2js builder', () => {
       .pag(createValidPag());
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<retirada>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<retirada>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -1094,7 +1111,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -1167,9 +1184,10 @@ describe('xml builder with xml2js builder', () => {
       .pag(createValidPag());
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<entrega>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<entrega>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -1308,7 +1326,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -1375,9 +1393,10 @@ describe('xml builder with xml2js builder', () => {
       .pag(createValidPag());
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<autXML>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<autXML>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -1510,7 +1529,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -1581,9 +1600,10 @@ describe('xml builder with xml2js builder', () => {
       .pag(createValidPag());
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<cobr>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<cobr>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -1721,7 +1741,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -1786,9 +1806,10 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infIntermed>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infIntermed>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -1919,7 +1940,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -1984,9 +2005,10 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infAdic>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infAdic>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -2117,7 +2139,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -2181,9 +2203,10 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infSolicNFF>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infSolicNFF>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -2313,7 +2336,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -2396,9 +2419,10 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<cana>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<cana>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -2542,7 +2566,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -2608,9 +2632,10 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<compra>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<compra>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -2742,7 +2767,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -2808,9 +2833,10 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<exporta>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<exporta>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -2942,7 +2968,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -3035,9 +3061,10 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infRespTec>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infRespTec>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -3190,7 +3217,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -3355,28 +3382,29 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
 
-    expect(xml).toContain('<infNFe');
-    expect(xml).toContain('<ide>');
-    expect(xml).toContain('<emit>');
-    expect(xml).toContain('<dest>');
-    expect(xml).toContain('<retirada>');
-    expect(xml).toContain('<entrega>');
-    expect(xml).toContain('<autXML>');
-    expect(xml).toContain('<det nItem="1">');
-    expect(xml).toContain('<total>');
-    expect(xml).toContain('<transp>');
-    expect(xml).toContain('<cobr>');
-    expect(xml).toContain('<pag>');
-    expect(xml).toContain('<infIntermed>');
-    expect(xml).toContain('<infAdic>');
-    expect(xml).toContain('<infSolicNFF>');
-    expect(xml).toContain('<cana>');
-    expect(xml).toContain('<compra>');
-    expect(xml).toContain('<exporta>');
-    expect(xml).toContain('<infRespTec>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toContain('<infNFe');
+    expect(xml.value).toContain('<ide>');
+    expect(xml.value).toContain('<emit>');
+    expect(xml.value).toContain('<dest>');
+    expect(xml.value).toContain('<retirada>');
+    expect(xml.value).toContain('<entrega>');
+    expect(xml.value).toContain('<autXML>');
+    expect(xml.value).toContain('<det nItem="1">');
+    expect(xml.value).toContain('<total>');
+    expect(xml.value).toContain('<transp>');
+    expect(xml.value).toContain('<cobr>');
+    expect(xml.value).toContain('<pag>');
+    expect(xml.value).toContain('<infIntermed>');
+    expect(xml.value).toContain('<infAdic>');
+    expect(xml.value).toContain('<infSolicNFF>');
+    expect(xml.value).toContain('<cana>');
+    expect(xml.value).toContain('<compra>');
+    expect(xml.value).toContain('<exporta>');
+    expect(xml.value).toContain('<infRespTec>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -3603,7 +3631,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -3672,14 +3700,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infIntermed>');
-    expect(xml).toContain('<infAdic>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infIntermed>');
+    expect(xml.value).toContain('<infAdic>');
 
-    const infIntermedIndex = xml.indexOf('<infIntermed>');
-    const infAdicIndex = xml.indexOf('<infAdic>');
+    const infIntermedIndex = xml.value.indexOf('<infIntermed>');
+    const infAdicIndex = xml.value.indexOf('<infAdic>');
     expect(infIntermedIndex).toBeLessThan(infAdicIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -3814,7 +3843,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -3882,14 +3911,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infIntermed>');
-    expect(xml).toContain('<infSolicNFF>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infIntermed>');
+    expect(xml.value).toContain('<infSolicNFF>');
 
-    const infIntermedIndex = xml.indexOf('<infIntermed>');
-    const infSolicNFFIndex = xml.indexOf('<infSolicNFF>');
+    const infIntermedIndex = xml.value.indexOf('<infIntermed>');
+    const infSolicNFFIndex = xml.value.indexOf('<infSolicNFF>');
     expect(infIntermedIndex).toBeLessThan(infSolicNFFIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -4023,7 +4053,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -4110,14 +4140,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infIntermed>');
-    expect(xml).toContain('<cana>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infIntermed>');
+    expect(xml.value).toContain('<cana>');
 
-    const infIntermedIndex = xml.indexOf('<infIntermed>');
-    const canaIndex = xml.indexOf('<cana>');
+    const infIntermedIndex = xml.value.indexOf('<infIntermed>');
+    const canaIndex = xml.value.indexOf('<cana>');
     expect(infIntermedIndex).toBeLessThan(canaIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -4265,7 +4296,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -4335,14 +4366,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infIntermed>');
-    expect(xml).toContain('<compra>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infIntermed>');
+    expect(xml.value).toContain('<compra>');
 
-    const infIntermedIndex = xml.indexOf('<infIntermed>');
-    const compraIndex = xml.indexOf('<compra>');
+    const infIntermedIndex = xml.value.indexOf('<infIntermed>');
+    const compraIndex = xml.value.indexOf('<compra>');
     expect(infIntermedIndex).toBeLessThan(compraIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -4478,7 +4510,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -4548,14 +4580,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infIntermed>');
-    expect(xml).toContain('<exporta>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infIntermed>');
+    expect(xml.value).toContain('<exporta>');
 
-    const infIntermedIndex = xml.indexOf('<infIntermed>');
-    const exportaIndex = xml.indexOf('<exporta>');
+    const infIntermedIndex = xml.value.indexOf('<infIntermed>');
+    const exportaIndex = xml.value.indexOf('<exporta>');
     expect(infIntermedIndex).toBeLessThan(exportaIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -4691,7 +4724,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -4759,14 +4792,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infAdic>');
-    expect(xml).toContain('<infSolicNFF>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infAdic>');
+    expect(xml.value).toContain('<infSolicNFF>');
 
-    const infAdicIndex = xml.indexOf('<infAdic>');
-    const infSolicNFFIndex = xml.indexOf('<infSolicNFF>');
+    const infAdicIndex = xml.value.indexOf('<infAdic>');
+    const infSolicNFFIndex = xml.value.indexOf('<infSolicNFF>');
     expect(infAdicIndex).toBeLessThan(infSolicNFFIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -4900,7 +4934,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -4987,14 +5021,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infAdic>');
-    expect(xml).toContain('<cana>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infAdic>');
+    expect(xml.value).toContain('<cana>');
 
-    const infAdicIndex = xml.indexOf('<infAdic>');
-    const canaIndex = xml.indexOf('<cana>');
+    const infAdicIndex = xml.value.indexOf('<infAdic>');
+    const canaIndex = xml.value.indexOf('<cana>');
     expect(infAdicIndex).toBeLessThan(canaIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -5142,7 +5177,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -5212,14 +5247,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infAdic>');
-    expect(xml).toContain('<compra>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infAdic>');
+    expect(xml.value).toContain('<compra>');
 
-    const infAdicIndex = xml.indexOf('<infAdic>');
-    const compraIndex = xml.indexOf('<compra>');
+    const infAdicIndex = xml.value.indexOf('<infAdic>');
+    const compraIndex = xml.value.indexOf('<compra>');
     expect(infAdicIndex).toBeLessThan(compraIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -5355,7 +5391,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -5425,14 +5461,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infAdic>');
-    expect(xml).toContain('<exporta>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infAdic>');
+    expect(xml.value).toContain('<exporta>');
 
-    const infAdicIndex = xml.indexOf('<infAdic>');
-    const exportaIndex = xml.indexOf('<exporta>');
+    const infAdicIndex = xml.value.indexOf('<infAdic>');
+    const exportaIndex = xml.value.indexOf('<exporta>');
     expect(infAdicIndex).toBeLessThan(exportaIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -5568,7 +5605,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -5654,14 +5691,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infSolicNFF>');
-    expect(xml).toContain('<cana>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infSolicNFF>');
+    expect(xml.value).toContain('<cana>');
 
-    const canaIndex = xml.indexOf('<cana>');
-    const infSolicNFFIndex = xml.indexOf('<infSolicNFF>');
+    const canaIndex = xml.value.indexOf('<cana>');
+    const infSolicNFFIndex = xml.value.indexOf('<infSolicNFF>');
     expect(canaIndex).toBeLessThan(infSolicNFFIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -5808,7 +5846,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -5877,14 +5915,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infSolicNFF>');
-    expect(xml).toContain('<compra>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infSolicNFF>');
+    expect(xml.value).toContain('<compra>');
 
-    const compraIndex = xml.indexOf('<compra>');
-    const infSolicNFFIndex = xml.indexOf('<infSolicNFF>');
+    const compraIndex = xml.value.indexOf('<compra>');
+    const infSolicNFFIndex = xml.value.indexOf('<infSolicNFF>');
     expect(compraIndex).toBeLessThan(infSolicNFFIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -6019,7 +6058,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -6107,14 +6146,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<cana>');
-    expect(xml).toContain('<compra>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<cana>');
+    expect(xml.value).toContain('<compra>');
 
-    const compraIndex = xml.indexOf('<compra>');
-    const canaIndex = xml.indexOf('<cana>');
+    const compraIndex = xml.value.indexOf('<compra>');
+    const canaIndex = xml.value.indexOf('<cana>');
     expect(compraIndex).toBeLessThan(canaIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -6263,7 +6303,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -6351,14 +6391,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<cana>');
-    expect(xml).toContain('<exporta>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<cana>');
+    expect(xml.value).toContain('<exporta>');
 
-    const exportaIndex = xml.indexOf('<exporta>');
-    const canaIndex = xml.indexOf('<cana>');
+    const exportaIndex = xml.value.indexOf('<exporta>');
+    const canaIndex = xml.value.indexOf('<cana>');
     expect(exportaIndex).toBeLessThan(canaIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -6507,7 +6548,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -6578,14 +6619,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<compra>');
-    expect(xml).toContain('<exporta>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<compra>');
+    expect(xml.value).toContain('<exporta>');
 
-    const exportaIndex = xml.indexOf('<exporta>');
-    const compraIndex = xml.indexOf('<compra>');
+    const exportaIndex = xml.value.indexOf('<exporta>');
+    const compraIndex = xml.value.indexOf('<compra>');
     expect(exportaIndex).toBeLessThan(compraIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -6722,7 +6764,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -6811,14 +6853,15 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<cana>');
-    expect(xml).toContain('<infRespTec>');
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<cana>');
+    expect(xml.value).toContain('<infRespTec>');
 
-    const canaIndex = xml.indexOf('<cana>');
-    const infRespTecIndex = xml.indexOf('<infRespTec>');
+    const canaIndex = xml.value.indexOf('<cana>');
+    const infRespTecIndex = xml.value.indexOf('<infRespTec>');
     expect(canaIndex).toBeLessThan(infRespTecIndex);
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -6968,7 +7011,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -7047,11 +7090,12 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infSolicNFF>');
-    expect(xml).toContain('<infAdic>');
-    expect(xml).toContain('<avulsa>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infSolicNFF>');
+    expect(xml.value).toContain('<infAdic>');
+    expect(xml.value).toContain('<avulsa>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -7196,7 +7240,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -7278,11 +7322,12 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
-    expect(xml).toBeDefined();
-    expect(xml).toContain('<infRespTec>');
-    expect(xml).toContain('<infAdic>');
-    expect(xml).toContain('<avulsa>');
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infRespTec>');
+    expect(xml.value).toContain('<infAdic>');
+    expect(xml.value).toContain('<avulsa>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -7430,7 +7475,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -7565,9 +7610,10 @@ describe('xml builder with xml2js builder', () => {
       });
 
     const xml = await builder.assemble();
+    expectIsRight(xml);
 
-    expect(xml).toBeDefined();
-    expect(xml).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
     <ide>
@@ -7705,7 +7751,7 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),

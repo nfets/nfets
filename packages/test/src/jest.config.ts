@@ -29,7 +29,6 @@ export default {
     '^@nfets/test/(.*)$': '<rootDir>/../test/src/$1',
     '^@nfets/core/(.*)$': '<rootDir>/../core/src/$1',
     '^@nfets/nfe/(.*)$': '<rootDir>/../nfe/src/$1',
-    '^@nfets/validators/(.*)$': '<rootDir>/../validators/src/$1',
   },
   coverageReporters: [['text', { skipFull: true }]],
   testPathIgnorePatterns: ['/node_modules/', '/coverage/', '/dist/'],

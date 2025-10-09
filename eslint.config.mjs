@@ -1,15 +1,9 @@
 import tseslint from 'typescript-eslint';
 import globals from 'globals';
 import tsParser from '@typescript-eslint/parser';
-import path from 'node:path';
 import js from '@eslint/js';
 
-import { fileURLToPath } from 'node:url';
-
 import eslintPluginPrettier from 'eslint-plugin-prettier';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export default [
   {

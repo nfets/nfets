@@ -8,6 +8,18 @@ importers:
 
   .:
     dependencies:
+      '@nfets/core':
+        specifier: workspace:*
+        version: link:packages/core
+      '@nfets/nfe':
+        specifier: workspace:*
+        version: link:packages/nfe
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
+      class-validator:
+        specifier: ^0.14.1
+        version: 0.14.2
       dayjs:
         specifier: ^1.11.18
         version: 1.11.18
@@ -115,28 +127,12 @@ importers:
       '@nfets/core':
         specifier: workspace:*
         version: link:../core
-      class-transformer:
-        specifier: ^0.5.1
-        version: 0.5.1
-      class-validator:
-        specifier: ^0.14.1
-        version: 0.14.2
     devDependencies:
       '@nfets/test':
         specifier: workspace:*
         version: link:../test
 
   packages/test: {}
-
-  packages/validators:
-    dependencies:
-      '@nfets/core':
-        specifier: workspace:*
-        version: link:../core
-    devDependencies:
-      '@nfets/test':
-        specifier: workspace:*
-        version: link:../test
 
 packages:
 

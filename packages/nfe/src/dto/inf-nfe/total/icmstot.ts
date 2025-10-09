@@ -1,8 +1,8 @@
 import { IsOptional } from 'class-validator';
 import { ICMSTot as IICMSTot } from '@nfets/nfe/entities/nfe/inf-nfe/total';
 
-import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
-import type { DecimalValue } from '@nfets/core';
+import { TransformDecimal } from '@nfets/core/application';
+import type { DecimalValue } from '@nfets/core/domain';
 
 export class ICMSTot implements IICMSTot {
   @TransformDecimal({ fixed: 2 })

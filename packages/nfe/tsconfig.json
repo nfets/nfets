@@ -2,17 +2,14 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": ".",
     "baseUrl": ".",
+    "composite": true,
     "paths": {
+      "@nfets/nfe": ["./src/index"],
       "@nfets/nfe/*": ["./src/*"],
-      "@nfets/core/*": ["../core/src/*"],
-      "@nfets/core": ["../core/src/index"]
-    },
-    "composite": true
+      "@nfets/core": ["../core/src/index"],
+      "@nfets/core/*": ["../core/src/*"]
+    }
   },
-  "references": [{ "path": "../core" }],
-  "tsc-alias": {
-    "resolveFullPaths": true
-  }
+  "include": ["src/**/*.ts", "test/**/*.ts"]
 }

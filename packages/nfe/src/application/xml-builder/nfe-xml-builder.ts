@@ -1,4 +1,6 @@
-import { type XmlToolkit, type DeepPartial, NFeTsError } from '@nfets/core';
+import { type XmlToolkit, NFeTsError } from '@nfets/core/domain';
+import { type DeepPartial, left, right } from '@nfets/core/shared';
+import { ValidateErrorsMetadata, Validates } from '@nfets/core/application';
 
 import type {
   InfNFeAttributes as IInfNFeAttributes,
@@ -27,32 +29,8 @@ import type {
   INfeXmlBuilder,
   InfNFeBuilder,
   IdeBuilder,
-  EmitBuilder,
-  DetBuilder,
-  PagBuilder,
-  AssembleNfeBuilder,
-  TranspBuilder,
-  TotalBuilder,
-  CobrBuilder,
-  InfAdicBuilder,
-  AvulsaBuilder,
-  CompraBuilder,
-  CanaBuilder,
-  InfRespTecBuilder,
-  ExportaBuilder,
-  InfIntermedBuilder,
-  InfSolicNFFBuilder,
-  RetiradaBuilder,
-  EntregaBuilder,
-  DestBuilder,
-  AutXMLBuilder,
 } from '@nfets/nfe/entities/xml-builder/nfe-xml-builder';
 import type { NFe as INFe } from '@nfets/nfe/entities/nfe/nfe';
-
-import {
-  ValidateErrorsMetadata,
-  Validates,
-} from '@nfets/nfe/application/validator/validate';
 
 import { NFe } from '@nfets/nfe/dto/nfe';
 import { InfNFeAttributes } from '@nfets/nfe/dto/inf-nfe/inf-nfe';
@@ -72,7 +50,7 @@ import {
   DefaultDetBuilderAggregator,
   type DetBuilderAggregator,
 } from '@nfets/nfe/application/aggregator/det-builder-aggregator';
-import { plainToInstance } from '@nfets/nfe/application/transform/plain-to-instance';
+import { plainToInstance } from '@nfets/core/application/validations/transformers/plain-to-instance';
 import {
   DefaultTotalBuilderAggregator,
   type TotalBuilderAggregator,
@@ -114,28 +92,21 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
   protected constructor(private readonly builder: XmlToolkit) {}
 
   @Validates(InfNFeAttributes)
-  public infNFe($: IInfNFeAttributes): IdeBuilder & InfNFeBuilder {
+  public infNFe($: IInfNFeAttributes) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.$ = $;
     return this;
   }
 
   @Validates(Ide)
-  public ide(payload: IIde): EmitBuilder & InfNFeBuilder {
+  public ide(payload: IIde) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.ide = payload;
     return this;
   }
 
   @Validates(Emit)
-  public emit(
-    payload: IEmit,
-  ): AvulsaBuilder &
-    DestBuilder &
-    RetiradaBuilder &
-    EntregaBuilder &
-    AutXMLBuilder &
-    DetBuilder {
+  public emit(payload: IEmit) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.emit = payload;
     this.fillAccessKeyIfEmpty();
@@ -143,58 +114,35 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
   }
 
   @Validates(Avulsa)
-  public avulsa(
-    payload: IAvulsa,
-  ): DestBuilder &
-    RetiradaBuilder &
-    EntregaBuilder &
-    AutXMLBuilder &
-    DetBuilder &
-    AssembleNfeBuilder {
+  public avulsa(payload: IAvulsa) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.avulsa = payload;
     return this;
   }
 
   @Validates(Dest)
-  public dest(
-    payload: IDest,
-  ): RetiradaBuilder &
-    EntregaBuilder &
-    AutXMLBuilder &
-    DetBuilder &
-    AssembleNfeBuilder {
+  public dest(payload: IDest) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.dest = payload;
     return this;
   }
 
   @Validates(Local)
-  public retirada(
-    payload: ILocal,
-  ): DestBuilder &
-    EntregaBuilder &
-    AutXMLBuilder &
-    DetBuilder &
-    AssembleNfeBuilder {
+  public retirada(payload: ILocal) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.retirada = payload;
     return this;
   }
 
   @Validates(Local)
-  public entrega(
-    payload: ILocal,
-  ): DestBuilder & AutXMLBuilder & DetBuilder & AssembleNfeBuilder {
+  public entrega(payload: ILocal) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.entrega = payload;
     return this;
   }
 
   @Validates(AutXML)
-  public autXML(
-    payload: IAutXML,
-  ): AutXMLBuilder & DetBuilder & AssembleNfeBuilder {
+  public autXML(payload: IAutXML) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.autXML ??= [] as IAutXML[];
     this.data.infNFe.autXML.push(payload);
@@ -204,7 +152,7 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
   public det<T>(
     items: [T, ...T[]],
     build: (ctx: ProdBuilder, item: T) => AssembleDetXmlBuilder,
-  ): TotalBuilder & TranspBuilder & InfNFeBuilder {
+  ) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.det = items.map((item, index) => {
       const builder = build(
@@ -217,7 +165,7 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
   }
 
   @Validates(Total)
-  public total(payload: ITotal): TranspBuilder {
+  public total(payload: ITotal) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.total = payload;
     return this;
@@ -225,7 +173,7 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
 
   public increment(
     callback: (context: DeepPartial<ITotal>) => DeepPartial<ITotal>,
-  ): TranspBuilder & TotalBuilder {
+  ) {
     this.data.infNFe ??= {} as IInfNFe;
     const result = callback(this.data.infNFe.total) as ITotal;
 
@@ -241,143 +189,92 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
   }
 
   @Validates(Transp)
-  public transp(payload: ITransp): CobrBuilder & PagBuilder {
+  public transp(payload: ITransp) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.transp = payload;
     return this;
   }
 
   @Validates(Cobr)
-  public cobr(payload: ICobr): PagBuilder {
+  public cobr(payload: ICobr) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.cobr = payload;
     return this;
   }
 
   @Validates(Pag)
-  public pag(
-    payload: IPag,
-  ): AssembleNfeBuilder &
-    AvulsaBuilder &
-    InfAdicBuilder &
-    InfRespTecBuilder &
-    InfSolicNFFBuilder &
-    CanaBuilder &
-    CompraBuilder &
-    ExportaBuilder &
-    InfIntermedBuilder {
+  public pag(payload: IPag) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.pag = payload;
     return this;
   }
 
   @Validates(InfIntermed)
-  public infIntermed(
-    payload: IInfIntermed,
-  ): AssembleNfeBuilder &
-    AvulsaBuilder &
-    InfAdicBuilder &
-    InfRespTecBuilder &
-    InfSolicNFFBuilder &
-    CanaBuilder &
-    CompraBuilder &
-    ExportaBuilder {
+  public infIntermed(payload: IInfIntermed) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.infIntermed = payload;
     return this;
   }
 
   @Validates(InfAdic)
-  public infAdic(
-    payload: IInfAdic,
-  ): AssembleNfeBuilder &
-    AvulsaBuilder &
-    InfAdicBuilder &
-    InfSolicNFFBuilder &
-    InfRespTecBuilder &
-    CanaBuilder &
-    CompraBuilder &
-    ExportaBuilder {
+  public infAdic(payload: IInfAdic) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.infAdic = payload;
     return this;
   }
 
   @Validates(Exporta)
-  public exporta(
-    payload: IExporta,
-  ): AssembleNfeBuilder &
-    AvulsaBuilder &
-    InfAdicBuilder &
-    InfSolicNFFBuilder &
-    InfRespTecBuilder &
-    CanaBuilder &
-    CompraBuilder {
+  public exporta(payload: IExporta) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.exporta = payload;
     return this;
   }
 
   @Validates(Compra)
-  public compra(
-    payload: ICompra,
-  ): AssembleNfeBuilder &
-    AvulsaBuilder &
-    InfAdicBuilder &
-    InfSolicNFFBuilder &
-    InfRespTecBuilder &
-    CanaBuilder {
+  public compra(payload: ICompra) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.compra = payload;
     return this;
   }
 
   @Validates(Cana)
-  public cana(
-    payload: ICana,
-  ): AssembleNfeBuilder &
-    AvulsaBuilder &
-    InfAdicBuilder &
-    InfSolicNFFBuilder &
-    InfRespTecBuilder {
+  public cana(payload: ICana) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.cana = payload;
     return this;
   }
 
   @Validates(InfRespTec)
-  public infRespTec(
-    payload: IInfRespTec,
-  ): AssembleNfeBuilder & AvulsaBuilder & InfAdicBuilder & InfSolicNFFBuilder {
+  public infRespTec(payload: IInfRespTec) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.infRespTec = payload;
     return this;
   }
 
   @Validates(InfSolicNFF)
-  public infSolicNFF(
-    payload: ISolicNFF,
-  ): AssembleNfeBuilder & InfAdicBuilder & AvulsaBuilder {
+  public infSolicNFF(payload: ISolicNFF) {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.infSolicNFF = payload;
     return this;
   }
 
-  public quiet(): AssembleNfeBuilder {
+  public quiet() {
     Reflect.deleteMetadata(ValidateErrorsMetadata, this);
     return this;
   }
 
-  public toObject(): NFe {
+  public toObject() {
     return plainToInstance(this.data, NFe);
   }
 
   /** @throws {NFeTsError} */
-  public assemble(): Promise<string> {
+  public async assemble() {
     const errors = this.errors();
-    if (errors) throw new NFeTsError(errors.join(', '));
+    if (errors) return left(new NFeTsError(errors.join(', ')));
     this.$total?.aggregate();
-    return this.builder.build(this.toObject(), { rootName: this.root });
+    return right(
+      await this.builder.build(this.toObject(), { rootName: this.root }),
+    );
   }
 
   private errors(): string[] | undefined {

@@ -1,4 +1,4 @@
-import { Decimal } from '@nfets/core';
+import { Decimal } from '@nfets/core/infrastructure';
 import type { Emit } from '@nfets/nfe/entities/nfe/inf-nfe/emit';
 import type { Ide } from '@nfets/nfe/entities/nfe/inf-nfe/ide';
 import type { Pag } from '@nfets/nfe/entities/nfe/inf-nfe/pag';

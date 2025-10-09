@@ -7,6 +7,7 @@ import type {
 import type { XmlToolkit } from '../../domain/entities/xml/xml-toolkit';
 import type { ReadCertificateResponse } from '../../domain/entities/certificate/certificate';
 import type { CertificateRepository } from '../../domain/repositories/certificate-repository';
+import type { SignerRepository } from '../../domain/repositories/signer-repository';
 
 import {
   DigestAlgorithm,
@@ -20,10 +21,10 @@ import {
   defaultCanonicalizeOptions,
 } from '../../domain/entities/xml/canonicalization';
 import { unreachable } from '../../shared/unreachable';
-import { type Either, left, right } from '../../shared/either';
+import { left, right } from '../../shared/either';
 import { NFeTsError } from '../../domain/errors/nfets-error';
 
-export class Signer {
+export class Signer implements SignerRepository {
   public constructor(
     private readonly toolkit: XmlToolkit,
     private readonly certificateRepository: CertificateRepository,
@@ -36,11 +37,11 @@ export class Signer {
     tag: string,
     mark: string,
     cert: ReadCertificateResponse,
-  ): Promise<Either<NFeTsError, string>> {
+  ) {
     const { privateKey, certificate } = cert;
 
     const node = this.toolkit.getNode(xml, tag);
-    if (!node) return left(new NFeTsError('Node not found'));
+    if (!node) return left(new NFeTsError(`Node ${tag} not found`));
 
     const signedInfo = await this.signedInfo(node, mark);
     const signatureOrLeft = await this.signOrLeft(signedInfo, privateKey);
@@ -83,7 +84,7 @@ export class Signer {
           $: { Algorithm: CanonicalizationMethod },
         },
         SignatureMethod: {
-          $: { Algorithm: this.method },
+          $: { Algorithm: this.signatureMethod },
         },
         Reference: {
           $: { URI: `#${this.toolkit.getAttribute(node, mark)}` },
@@ -144,7 +145,7 @@ export class Signer {
     }
   }
 
-  private get method(): SignatureMethod {
+  private get signatureMethod(): SignatureMethod {
     switch (this.algorithm) {
       case SignatureAlgorithm.SHA256:
         return SignatureMethod.RSA_SHA256;

@@ -54,7 +54,7 @@ body:
       render: typescript
       placeholder: |
         // Seu código aqui / Your code here
-        import { Signer } from '@nfets/core';
+        import { Signer } from '@nfets/core/application';
 
         const signer = new Signer(...);
         // ...

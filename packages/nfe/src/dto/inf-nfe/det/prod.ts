@@ -1,4 +1,4 @@
-import type { DecimalValue } from '@nfets/core';
+import type { DecimalValue } from '@nfets/core/domain';
 import {
   ArrayMaxSize,
   IsArray,
@@ -8,7 +8,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Prod as IProd } from '@nfets/nfe/entities/nfe/inf-nfe/det/prod';
-import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
+import { TransformDecimal } from '@nfets/core/application';
 import { Type } from 'class-transformer';
 import type { DI as IDI } from '@nfets/nfe/entities/nfe/inf-nfe/det/di';
 import type { DetExport as IDetExport } from '@nfets/nfe/entities/nfe/inf-nfe/det/det-export';
@@ -21,7 +21,7 @@ import type { Arma as IArma } from '@nfets/nfe/entities/nfe/inf-nfe/det/arma';
 import type { Comb as IComb } from '@nfets/nfe/entities/nfe/inf-nfe/det/comb';
 
 import { Rastro } from './rastro';
-import { Case } from '@nfets/nfe/application/validator/switch-case';
+import { SwitchCase } from '@nfets/core/application';
 import { DI } from './di';
 import { DetExport } from './det-export';
 import { InfProdNFF } from './infprod-nff';
@@ -173,14 +173,14 @@ export class Prod implements IProd {
   @IsObject()
   @ValidateNested()
   @Type(() => VeicProd)
-  @Case()
+  @SwitchCase()
   public veicProd?: IVeicProd;
 
   @IsOptional()
   @IsObject()
   @ValidateNested()
   @Type(() => Med)
-  @Case()
+  @SwitchCase()
   public med?: IMed;
 
   @IsOptional()
@@ -188,14 +188,14 @@ export class Prod implements IProd {
   @ValidateNested({ each: true })
   @Type(() => Arma)
   @ArrayMaxSize(500)
-  @Case()
+  @SwitchCase()
   public arma?: IArma[];
 
   @IsOptional()
   @IsObject()
   @ValidateNested()
   @Type(() => Comb)
-  @Case()
+  @SwitchCase()
   public comb?: IComb;
 
   @IsOptional()

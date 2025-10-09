@@ -1,4 +1,4 @@
-import { Decimal } from '@nfets/core';
+import { Decimal } from '@nfets/core/infrastructure';
 
 import type { INfeXmlBuilder } from '@nfets/nfe/entities/xml-builder/nfe-xml-builder';
 import type { Prod } from '@nfets/nfe/entities/nfe/inf-nfe/det/prod';

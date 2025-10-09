@@ -1,9 +1,9 @@
 import { IsOptional, IsString, Max, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Case } from '@nfets/nfe/application/validator/switch-case';
-import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
+import { SwitchCase } from '@nfets/core/application';
+import { TransformDecimal } from '@nfets/core/application';
 
-import type { DecimalValue } from '@nfets/core';
+import type { DecimalValue } from '@nfets/core/domain';
 import type {
   ICMS00 as IICMS00,
   ICMS10 as IICMS10,
@@ -553,102 +553,102 @@ export class ICMS implements IICMS {
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMS00)
-  @Case()
+  @SwitchCase()
   public ICMS00?: IICMS00;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMS10)
-  @Case()
+  @SwitchCase()
   public ICMS10?: IICMS10;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMS20)
-  @Case()
+  @SwitchCase()
   public ICMS20?: IICMS20;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMS30)
-  @Case()
+  @SwitchCase()
   public ICMS30?: IICMS30;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMS40)
-  @Case()
+  @SwitchCase()
   public ICMS40?: IICMS40;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMS51)
-  @Case()
+  @SwitchCase()
   public ICMS51?: IICMS51;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMS60)
-  @Case()
+  @SwitchCase()
   public ICMS60?: IICMS60;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMS70)
-  @Case()
+  @SwitchCase()
   public ICMS70?: IICMS70;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMS90)
-  @Case()
+  @SwitchCase()
   public ICMS90?: IICMS90;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMSPart)
-  @Case()
+  @SwitchCase()
   public ICMSPart?: IICMSPart;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMSST)
-  @Case()
+  @SwitchCase()
   public ICMSST?: IICMSST;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMSSN101)
-  @Case()
+  @SwitchCase()
   public ICMSSN101?: IICMSSN101;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMSSN102)
-  @Case()
+  @SwitchCase()
   public ICMSSN102?: IICMSSN102;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMSSN201)
-  @Case()
+  @SwitchCase()
   public ICMSSN201?: IICMSSN201;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMSSN202)
-  @Case()
+  @SwitchCase()
   public ICMSSN202?: IICMSSN202;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMSSN500)
-  @Case()
+  @SwitchCase()
   public ICMSSN500?: IICMSSN500;
 
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMSSN900)
-  @Case()
+  @SwitchCase()
   public ICMSSN900?: IICMSSN900;
 }

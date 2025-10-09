@@ -1,16 +1,16 @@
 import { IsOptional, IsString } from 'class-validator';
-import { Case } from '@nfets/nfe/application/validator/switch-case';
+import { SwitchCase } from '@nfets/core/application';
 import { Transporta as ITransporta } from '@nfets/nfe/entities/nfe/inf-nfe/transp';
 
 export class Transporta implements ITransporta {
   @IsOptional()
   @IsString()
-  @Case()
+  @SwitchCase()
   public CNPJ?: string;
 
   @IsOptional()
   @IsString()
-  @Case()
+  @SwitchCase()
   public CPF?: string;
 
   @IsOptional()

@@ -7,9 +7,9 @@ import {
   Max,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
+import { TransformDecimal } from '@nfets/core/application';
 
-import type { DecimalValue } from '@nfets/core';
+import type { DecimalValue } from '@nfets/core/domain';
 import type {
   Comb as IComb,
   CIDE as ICIDE,

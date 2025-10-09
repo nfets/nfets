@@ -7,9 +7,9 @@ import {
 import { Type } from 'class-transformer';
 import { DetPag, DetPag as IDetPag } from './det-pag';
 import { Pag as IPag } from '@nfets/nfe/entities/nfe/inf-nfe/pag';
-import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
+import { TransformDecimal } from '@nfets/core/application';
 
-import type { DecimalValue } from '@nfets/core';
+import type { DecimalValue } from '@nfets/core/domain';
 
 export class Pag implements IPag {
   @ValidateNested({ each: true })

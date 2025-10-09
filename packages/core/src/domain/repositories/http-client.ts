@@ -8,7 +8,7 @@ export interface RequestConfig {
   responseType?: ResponseType;
 }
 
-export interface AxiosResponse<T = unknown> {
+export interface HttpResponse<T = unknown> {
   data: T;
   status: number;
   statusText: string;
@@ -16,7 +16,7 @@ export interface AxiosResponse<T = unknown> {
 }
 
 export interface HttpClient {
-  get<T = unknown, R = AxiosResponse<T>>(
+  get<T = unknown, R = HttpResponse<T>>(
     url: string,
     config?: RequestConfig,
   ): Promise<R>;

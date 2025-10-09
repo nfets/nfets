@@ -67,7 +67,6 @@ This project follows the principles of:
 
 - `packages/core` - Core functionality (signing, certificates, etc.)
 - `packages/nfe` - NFe/NFCe specific implementation
-- `packages/validators` - Reusable validators
 - `packages/test` - Shared test utilities
 
 ## 🔄 Pull Request Process

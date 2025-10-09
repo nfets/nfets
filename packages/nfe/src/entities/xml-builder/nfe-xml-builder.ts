@@ -1,4 +1,5 @@
-import { type DeepPartial } from '@nfets/core';
+import type { Either, DeepPartial } from '@nfets/core/shared';
+import type { NFeTsError } from '@nfets/core/domain';
 
 import type { Ide } from '@nfets/nfe/entities/nfe/inf-nfe/ide';
 import type { InfNFeAttributes } from '@nfets/nfe/entities/nfe/inf-nfe';
@@ -179,7 +180,7 @@ export interface InfSolicNFFBuilder {
 export interface AssembleNfeBuilder {
   quiet(): AssembleNfeBuilder;
   toObject(): NFe;
-  assemble(): Promise<string>;
+  assemble(): Promise<Either<NFeTsError, string>>;
 }
 
 export interface INfeXmlBuilder

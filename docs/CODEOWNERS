@@ -13,9 +13,6 @@
 # NFe package
 /packages/nfe/ @lidani
 
-# Validators package
-/packages/validators/ @lidani
-
 # Documentation
 /docs/ @lidani
 *.md @lidani

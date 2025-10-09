@@ -4,17 +4,17 @@ import { EnderDest } from './ender-dest';
 
 import type { Dest as IDest } from '@nfets/nfe/entities/nfe/inf-nfe/dest';
 import type { EnderDest as IEnderDest } from '@nfets/nfe/entities/nfe/inf-nfe/dest';
-import { Case } from '@nfets/nfe/application/validator/switch-case';
+import { SwitchCase } from '@nfets/core/application';
 
 export class Dest implements IDest {
   @IsOptional()
   @IsString()
-  @Case()
+  @SwitchCase()
   public CNPJ?: string;
 
   @IsOptional()
   @IsString()
-  @Case()
+  @SwitchCase()
   public CPF?: string;
 
   @IsOptional()

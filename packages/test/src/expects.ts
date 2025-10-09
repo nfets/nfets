@@ -1,4 +1,4 @@
-import { type Left, type Right, type Either } from '@nfets/core/shared/either';
+import { type Left, type Right, type Either } from '@nfets/core/shared';
 
 export const expectIsRight: <L, A>(
   result: Either<L, A>,

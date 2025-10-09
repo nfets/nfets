@@ -1,4 +1,4 @@
-import type { DecimalValue } from '@nfets/core';
+import type { DecimalValue } from '@nfets/core/domain';
 import type { DI } from './di';
 import type { DetExport } from './det-export';
 import type { Rastro } from './rastro';

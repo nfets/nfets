@@ -1,4 +1,4 @@
-import type { DecimalValue } from '@nfets/core';
+import type { DecimalValue } from '@nfets/core/domain';
 
 export interface Fat {
   nFat?: string;

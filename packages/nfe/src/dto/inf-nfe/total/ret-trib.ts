@@ -1,8 +1,8 @@
 import { IsOptional } from 'class-validator';
-import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
-import { RetTrib as IRetTrib } from '@nfets/nfe/entities/nfe/inf-nfe/total';
+import { TransformDecimal } from '@nfets/core/application';
+import type { DecimalValue } from '@nfets/core/domain';
 
-import type { DecimalValue } from '@nfets/core';
+import { RetTrib as IRetTrib } from '@nfets/nfe/entities/nfe/inf-nfe/total';
 
 export class RetTrib implements IRetTrib {
   @IsOptional()

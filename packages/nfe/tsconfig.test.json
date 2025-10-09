@@ -1,9 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "rootDir": ".",
     "paths": {
+      "@nfets/nfe": ["./src/index"],
+      "@nfets/nfe/*": ["./src/*"],
+      "@nfets/core": ["../core/src/index"],
+      "@nfets/core/*": ["../core/src/*"],
       "@nfets/test/*": ["../test/src/*"]
     }
   },
-  "references": [{ "path": "../test" }]
+  "include": ["src/**/*.ts", "test/**/*.ts"]
 }

@@ -10,15 +10,15 @@ export interface SignedInfo {
   Reference: Reference;
 }
 
-export interface CanonicalizationMethod {
+interface CanonicalizationMethod {
   $: { Algorithm: 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315' };
 }
 
-export interface SignatureMethod {
+interface SignatureMethod {
   $: { Algorithm: `${EnumSignatureMethod}` };
 }
 
-export interface Reference {
+interface Reference {
   Transforms: Transforms;
   DigestMethod: DigestMethod;
   DigestValue: string;
@@ -32,19 +32,19 @@ export interface Transforms {
   ];
 }
 
-export interface Transform<T extends string> {
+interface Transform<T extends string> {
   $: { Algorithm: T };
 }
 
-export interface DigestMethod {
+interface DigestMethod {
   $: { Algorithm: `${DigestAlgorithm}` };
 }
 
-export interface KeyInfo {
+interface KeyInfo {
   X509Data: X509Data;
 }
 
-export interface X509Data {
+interface X509Data {
   X509Certificate: string;
 }
 

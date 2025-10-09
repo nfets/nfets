@@ -1,8 +1,8 @@
 import { IsOptional, IsString } from 'class-validator';
-import { TransformDecimal } from '@nfets/nfe/application/transform/decimal';
+import { TransformDecimal } from '@nfets/core/application';
 import { Vol as IVol } from '@nfets/nfe/entities/nfe/inf-nfe/transp';
 
-import type { DecimalValue } from '@nfets/core';
+import type { DecimalValue } from '@nfets/core/domain';
 
 export class Vol implements IVol {
   @IsOptional()
