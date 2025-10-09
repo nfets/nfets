@@ -1,6 +1,6 @@
 import { Decimal } from '@nfets/core/infrastructure';
 
-import type { INfeXmlBuilder } from '@nfets/nfe/entities/xml-builder/nfe-xml-builder';
+import type { INfeXmlBuilder } from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
 
 export interface TotalBuilderAggregator {
   aggregate(): void;

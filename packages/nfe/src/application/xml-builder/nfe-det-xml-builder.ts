@@ -3,39 +3,39 @@ import { Validates } from '@nfets/core/application';
 import type {
   Det as IDet,
   DetAttributes as IDetAttributes,
-} from '@nfets/nfe/entities/nfe/inf-nfe/det';
-import type { Prod as IProd } from '@nfets/nfe/entities/nfe/inf-nfe/det/prod';
-import type { Imposto as IImposto } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto';
+} from '@nfets/nfe/domain/entities/nfe/inf-nfe/det';
+import type { Prod as IProd } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/prod';
+import type { Imposto as IImposto } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto';
 import type {
   PIS as IPIS,
   PISST as IPISST,
-} from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/pis';
+} from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/pis';
 import type {
   COFINSST as ICOFINSST,
   COFINS as ICOFINS,
-} from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/cofins';
-import type { ICMS as IICMS } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/icms';
-import type { ISSQN as IISSQN } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/issqn';
-import type { IPI as IIPI } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/ipi';
-import type { ICMSUFDest as IICMSUFDest } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/icmsufdest';
-import type { II as III } from '@nfets/nfe/entities/nfe/inf-nfe/det/imposto/ii';
+} from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/cofins';
+import type { ICMS as IICMS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/icms';
+import type { ISSQN as IISSQN } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/issqn';
+import type { IPI as IIPI } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ipi';
+import type { ICMSUFDest as IICMSUFDest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/icmsufdest';
+import type { II as III } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ii';
 
 import {
   DetBuilder,
   ProdBuilder,
   INfeDetXmlBuilder,
-} from '@nfets/nfe/entities/xml-builder/nfe-det-xml-builder';
+} from '@nfets/nfe/domain/entities/xml-builder/nfe-det-xml-builder';
 
-import { Prod } from '@nfets/nfe/dto/inf-nfe/det/prod';
-import { DetAttributes } from '@nfets/nfe/dto/inf-nfe/det';
-import { Imposto } from '@nfets/nfe/dto/inf-nfe/det/imposto';
-import { IPI } from '@nfets/nfe/dto/inf-nfe/det/imposto/ipi';
-import { ICMS } from '@nfets/nfe/dto/inf-nfe/det/imposto/icms';
-import { ISSQN } from '@nfets/nfe/dto/inf-nfe/det/imposto/issqn';
-import { PIS, PISST } from '@nfets/nfe/dto/inf-nfe/det/imposto/pis';
-import { COFINS, COFINSST } from '@nfets/nfe/dto/inf-nfe/det/imposto/cofins';
-import { ICMSUFDest } from '@nfets/nfe/dto/inf-nfe/det/imposto/icmsufdest';
-import { II } from '@nfets/nfe/dto/inf-nfe/det/imposto/ii';
+import { Prod } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/prod';
+import { DetAttributes } from '@nfets/nfe/infrastructure/dto/inf-nfe/det';
+import { Imposto } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto';
+import { IPI } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto/ipi';
+import { ICMS } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto/icms';
+import { ISSQN } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto/issqn';
+import { PIS, PISST } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto/pis';
+import { COFINS, COFINSST } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto/cofins';
+import { ICMSUFDest } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto/icmsufdest';
+import { II } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto/ii';
 import { DetBuilderAggregator } from '@nfets/nfe/application/aggregator/det-builder-aggregator';
 
 export class NfeDetXmlBuilder implements INfeDetXmlBuilder {

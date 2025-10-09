@@ -1,8 +1,8 @@
 import { Decimal } from '@nfets/core/infrastructure';
-import type { Emit } from '@nfets/nfe/entities/nfe/inf-nfe/emit';
-import type { Ide } from '@nfets/nfe/entities/nfe/inf-nfe/ide';
-import type { Pag } from '@nfets/nfe/entities/nfe/inf-nfe/pag';
-import type { Transp } from '@nfets/nfe/entities/nfe/inf-nfe/transp';
+import type { Emit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
+import type { Ide } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
+import type { Pag } from '@nfets/nfe/domain/entities/nfe/inf-nfe/pag';
+import type { Transp } from '@nfets/nfe/domain/entities/nfe/inf-nfe/transp';
 
 export const createValidIde = (): Ide => ({
   cUF: '52',
