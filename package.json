@@ -24,7 +24,7 @@
     "dist"
   ],
   "scripts": {
-    "install": "node-gyp rebuild && pnpm build",
+    "install": "node-gyp rebuild && make build",
     "build:nfets": "tsc -p tsconfig.build.json",
     "build": "pnpm --filter @nfets/core build && pnpm --filter !@nfets/core build",
     "test": "pnpm --filter @nfets/* test",
