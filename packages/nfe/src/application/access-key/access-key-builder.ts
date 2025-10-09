@@ -3,7 +3,7 @@ import type {
   VerifiedAccessKey,
 } from '@nfets/nfe/entities/acess-keys/access-key';
 
-export class AccessKeyBuider {
+export class AccessKeyBuilder {
   public compile(payload: AccessKey): string {
     const cUF = payload.cUF.toString().padStart(2, '0');
     const year = payload.year.toString().padStart(2, '0');

@@ -8,5 +8,8 @@
     "./ensure-integration-tests": "./src/ensure-integration-tests.ts",
     "./expects": "./src/expects.ts",
     "./jest.config": "./src/jest.config.ts"
+  },
+  "scripts": {
+    "test:integration": "jest --config jest.config.integration.ts"
   }
 }

@@ -48,5 +48,5 @@ jobs:
       - name: run lint
         run: make lint
 
-      - name: run unit tests
+      - name: run unit/integration tests
         run: make test

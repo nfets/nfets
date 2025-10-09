@@ -1,7 +1,7 @@
-import { AccessKeyBuider } from '@nfets/nfe/application/access-key/access-key-builder';
+import { AccessKeyBuilder } from '@nfets/nfe/application/access-key/access-key-builder';
 
 describe('access key builder (unit)', () => {
-  const accessKeyBuilder = new AccessKeyBuider();
+  const accessKeyBuilder = new AccessKeyBuilder();
 
   it('should compile a valid access key with pads when using number arguments', () => {
     const accessKey = accessKeyBuilder.compile({

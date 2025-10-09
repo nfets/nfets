@@ -39,7 +39,7 @@ import { Emit } from '@nfets/nfe/dto/inf-nfe/emit';
 import { Total } from '@nfets/nfe/dto/inf-nfe/total';
 import { Pag } from '@nfets/nfe/dto/inf-nfe/pag';
 import { Transp } from '@nfets/nfe/dto/inf-nfe/transp';
-import { AccessKeyBuider } from '@nfets/nfe/application/access-key/access-key-builder';
+import { AccessKeyBuilder } from '@nfets/nfe/application/access-key/access-key-builder';
 import {
   AssembleDetXmlBuilder,
   ProdBuilder,
@@ -302,7 +302,7 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     if (this.data.infNFe?.$.Id) return;
 
     this.data.infNFe ??= {} as IInfNFe;
-    const Id = new AccessKeyBuider().compile({
+    const Id = new AccessKeyBuilder().compile({
       cUF: this.data.infNFe.ide.cUF,
       year: this.data.infNFe.ide.dhEmi.substring(2, 4),
       month: this.data.infNFe.ide.dhEmi.substring(5, 7),
