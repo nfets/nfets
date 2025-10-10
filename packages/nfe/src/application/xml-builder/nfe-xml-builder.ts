@@ -32,13 +32,13 @@ import type {
 } from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
 import type { NFe as INFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 
-import { NFe } from '@nfets/nfe/infrastructure/dto/nfe';
-import { InfNFeAttributes } from '@nfets/nfe/infrastructure/dto/inf-nfe/inf-nfe';
-import { Ide } from '@nfets/nfe/infrastructure/dto/inf-nfe/ide';
-import { Emit } from '@nfets/nfe/infrastructure/dto/inf-nfe/emit';
-import { Total } from '@nfets/nfe/infrastructure/dto/inf-nfe/total';
-import { Pag } from '@nfets/nfe/infrastructure/dto/inf-nfe/pag';
-import { Transp } from '@nfets/nfe/infrastructure/dto/inf-nfe/transp';
+import { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
+import { InfNFeAttributes } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/inf-nfe';
+import { Ide } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/ide';
+import { Emit } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/emit';
+import { Total } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/total';
+import { Pag } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/pag';
+import { Transp } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/transp';
 import { AccessKeyBuilder } from '@nfets/nfe/application/access-key/access-key-builder';
 import {
   AssembleDetXmlBuilder,
@@ -55,18 +55,18 @@ import {
   DefaultTotalBuilderAggregator,
   type TotalBuilderAggregator,
 } from '@nfets/nfe/application/aggregator/total-builder-aggregator';
-import { Cobr } from '@nfets/nfe/infrastructure/dto/inf-nfe/cobr';
-import { InfRespTec } from '@nfets/nfe/infrastructure/dto/inf-nfe/infresptec';
-import { InfSolicNFF } from '@nfets/nfe/infrastructure/dto/inf-nfe/inf-solic-nff';
-import { Avulsa } from '@nfets/nfe/infrastructure/dto/inf-nfe/avulsa';
-import { Dest } from '@nfets/nfe/infrastructure/dto/inf-nfe/dest';
-import { Local } from '@nfets/nfe/infrastructure/dto/inf-nfe/local';
-import { AutXML } from '@nfets/nfe/infrastructure/dto/inf-nfe/autxml';
-import { InfIntermed } from '@nfets/nfe/infrastructure/dto/inf-nfe/infintermed';
-import { Exporta } from '@nfets/nfe/infrastructure/dto/inf-nfe/exporta';
-import { Compra } from '@nfets/nfe/infrastructure/dto/inf-nfe/compra';
-import { InfAdic } from '@nfets/nfe/infrastructure/dto/inf-nfe/infadic';
-import { Cana } from '@nfets/nfe/infrastructure/dto/inf-nfe/cana';
+import { Cobr } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/cobr';
+import { InfRespTec } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/infresptec';
+import { InfSolicNFF } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/inf-solic-nff';
+import { Avulsa } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/avulsa';
+import { Dest } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/dest';
+import { Local } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/local';
+import { AutXML } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/autxml';
+import { InfIntermed } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/infintermed';
+import { Exporta } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/exporta';
+import { Compra } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/compra';
+import { InfAdic } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/infadic';
+import { Cana } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/cana';
 
 export class NfeXmlBuilder implements INfeXmlBuilder {
   private readonly data = {

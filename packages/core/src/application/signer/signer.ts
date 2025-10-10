@@ -38,7 +38,10 @@ export class Signer implements SignerRepository {
     mark: string,
     cert: ReadCertificateResponse,
   ) {
-    const { privateKey, certificate } = cert;
+    const {
+      privateKey,
+      certificate: { publicKey },
+    } = cert;
 
     const node = this.toolkit.getNode(xml, tag);
     if (!node) return left(new NFeTsError(`Node ${tag} not found`));
@@ -48,7 +51,7 @@ export class Signer implements SignerRepository {
     if (signatureOrLeft.isLeft()) return signatureOrLeft;
 
     const signature = signatureOrLeft.value;
-    return this.assemble(xml, signedInfo, signature, certificate);
+    return this.assemble(xml, signedInfo, signature, publicKey);
   }
 
   private async assemble(

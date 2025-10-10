@@ -2,7 +2,6 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "rootDir": "src",
-    "composite": true,
     "paths": {
       "@nfets/nfe": ["./src/index"],
       "@nfets/nfe/*": ["./src/*"],

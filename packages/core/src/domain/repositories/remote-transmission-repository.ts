@@ -1,9 +1,18 @@
 import type { Either } from '../../shared/either';
 import type { NFeTsError } from '../../domain/errors/nfets-error';
-import type { SendTransmissionPayload } from '../../domain/entities/transmission/payload';
+import type {
+  Client,
+  SendTransmissionPayload,
+  ExtractReturnType,
+} from '../../domain/entities/transmission/payload';
 
-export interface RemoteTransmissionRepository {
-  send<R, M extends string>(
-    params: SendTransmissionPayload<M>,
-  ): Promise<Either<NFeTsError, R>>;
+import type { ReadCertificateResponse } from '../../domain/entities/certificate/certificate';
+
+export interface RemoteTransmissionRepository<C extends Client> {
+  setCertificate(
+    certificate: ReadCertificateResponse,
+  ): RemoteTransmissionRepository<C>;
+  send<P extends SendTransmissionPayload<C>>(
+    params: P,
+  ): Promise<Either<NFeTsError, ExtractReturnType<C, P>>>;
 }

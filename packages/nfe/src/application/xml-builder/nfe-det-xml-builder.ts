@@ -26,16 +26,22 @@ import {
   INfeDetXmlBuilder,
 } from '@nfets/nfe/domain/entities/xml-builder/nfe-det-xml-builder';
 
-import { Prod } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/prod';
-import { DetAttributes } from '@nfets/nfe/infrastructure/dto/inf-nfe/det';
-import { Imposto } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto';
-import { IPI } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto/ipi';
-import { ICMS } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto/icms';
-import { ISSQN } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto/issqn';
-import { PIS, PISST } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto/pis';
-import { COFINS, COFINSST } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto/cofins';
-import { ICMSUFDest } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto/icmsufdest';
-import { II } from '@nfets/nfe/infrastructure/dto/inf-nfe/det/imposto/ii';
+import { Prod } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/prod';
+import { DetAttributes } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det';
+import { Imposto } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto';
+import { IPI } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/ipi';
+import { ICMS } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/icms';
+import { ISSQN } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/issqn';
+import {
+  PIS,
+  PISST,
+} from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/pis';
+import {
+  COFINS,
+  COFINSST,
+} from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/cofins';
+import { ICMSUFDest } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/icmsufdest';
+import { II } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/ii';
 import { DetBuilderAggregator } from '@nfets/nfe/application/aggregator/det-builder-aggregator';
 
 export class NfeDetXmlBuilder implements INfeDetXmlBuilder {

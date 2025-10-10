@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import crypto, { type KeyObject } from 'node:crypto';
+import crypto, { type X509Certificate, type KeyObject } from 'node:crypto';
 import forge from 'node-forge';
 
 import { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
@@ -8,10 +8,7 @@ import { left, right, type Either } from '@nfets/core/shared/either';
 import { leftFromError } from '@nfets/core/shared/left-from-error';
 import { NullCacheAdapter } from '@nfets/core/infrastructure/repositories/null-cache-adapter';
 
-import type {
-  CertificateInfo,
-  ReadCertificateResponse,
-} from '@nfets/core/domain/entities/certificate/certificate';
+import type { ReadCertificateResponse } from '@nfets/core/domain/entities/certificate/certificate';
 import type { CertificateRepository } from '@nfets/core/domain/repositories/certificate-repository';
 import type { CacheAdapter } from '@nfets/core/domain/repositories/cache-adapter';
 import type { HttpClient } from '@nfets/core/domain/repositories/http-client';
@@ -63,9 +60,11 @@ export class NativeCertificateRepository implements CertificateRepository {
       if (!privateKey)
         return left(new NFeTsError('Certificate Private Key not found'));
 
-      const ca = chain.reduce<KeyObject[]>((acc, { cert }) => {
+      const ca = chain.reduce<X509Certificate[]>((acc, { cert }) => {
         if (cert) {
-          acc.push(crypto.createPublicKey(forge.pki.certificateToPem(cert)));
+          acc.push(
+            new crypto.X509Certificate(forge.pki.certificateToPem(cert)),
+          );
         }
         return acc;
       }, []);
@@ -74,35 +73,17 @@ export class NativeCertificateRepository implements CertificateRepository {
       const pemCertificate = forge.pki.certificateToPem(certificate);
 
       const nativePrivateKey = crypto.createPrivateKey(pemPrivateKey);
-      const nativeCertificate = crypto.createPublicKey(pemCertificate);
+      const nativeCertificate = new crypto.X509Certificate(pemCertificate);
 
       return right({
         ca,
         password,
-        certificateInfo: this.getCertificateInfo(certificate),
-        certificate: nativeCertificate,
         privateKey: nativePrivateKey,
-      });
+        certificate: nativeCertificate,
+      } satisfies ReadCertificateResponse);
     } catch (e) {
       return leftFromError(e);
     }
-  }
-
-  private getCertificateInfo(certificate: forge.pki.Certificate) {
-    return {
-      version: certificate.version,
-      signatureOid: certificate.signatureOid,
-      signature: certificate.signature as string,
-      siginfo: certificate.siginfo,
-      extensions: certificate.extensions,
-      validity: {
-        notBefore: certificate.validity.notBefore,
-        notAfter: certificate.validity.notAfter,
-      },
-      subject: certificate.subject,
-      issuer: certificate.issuer,
-      serialNumber: certificate.serialNumber,
-    } satisfies CertificateInfo;
   }
 
   public async sign(
@@ -137,11 +118,7 @@ export class NativeCertificateRepository implements CertificateRepository {
 
   public getStringPrivateKey(privateKey: KeyObject): string {
     try {
-      const pem = privateKey.export({ type: 'pkcs8', format: 'pem' });
-      return pem
-        .toString()
-        .replace(/-----.*[\n]?/g, '')
-        .replace(/[\n\r]/g, '');
+      return privateKey.export({ type: 'pkcs8', format: 'pem' }).toString();
     } catch (e) {
       throw new NFeTsError('Cannot extract private key');
     }

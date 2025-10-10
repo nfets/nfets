@@ -1,9 +1,12 @@
 export type { DecimalValue } from './entities/calculator/decimal';
 export type * from './entities/certificate/certificate';
 export * from './entities/signer/algo';
+export * from './entities/brazil/state-code';
+export * from './entities/brazil/environment';
 export type * from './entities/signer/signature';
 export type * from './entities/strategies/strategy-pattern';
 export type * from './entities/transmission/payload';
+export type * from './entities/transmission/transmitter';
 export type * from './entities/xml/canonicalization';
 export type * from './entities/xml/xml-builder';
 export type * from './entities/xml/xml-parser';

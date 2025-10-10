@@ -1,54 +1,48 @@
 import { constants } from 'node:crypto';
-import { Agent as HttpsAgent, type AgentOptions } from 'node:https';
+import { Agent as HttpsAgent } from 'node:https';
 import { createClientAsync } from 'soap';
 
 import { right } from '@nfets/core/shared/either';
 import { leftFromError } from '@nfets/core/shared/left-from-error';
 
+import type { XmlToolkit } from '@nfets/core/domain';
 import type { RemoteTransmissionRepository } from '@nfets/core/domain/repositories/remote-transmission-repository';
 import type { CertificateRepository } from '@nfets/core/domain/repositories/certificate-repository';
 import type { ReadCertificateResponse } from '@nfets/core/domain/entities/certificate/certificate';
-import type { AxiosRequestConfig } from 'axios';
-import type { SendTransmissionPayload } from '@nfets/core/domain/entities/transmission/payload';
+import type {
+  Client,
+  SendTransmissionPayload,
+  ExtractReturnType,
+} from '@nfets/core/domain/entities/transmission/payload';
 
-export class SoapRemoteTransmissionRepository
-  implements RemoteTransmissionRepository
+export class SoapRemoteTransmissionRepository<C extends Client>
+  implements RemoteTransmissionRepository<C>
 {
   private declare certificate?: ReadCertificateResponse;
 
   public constructor(
+    private readonly toolkit: XmlToolkit,
     private readonly certificateRepository: CertificateRepository,
   ) {}
 
-  public async setCertificate(pfxPathOrBase64: string, password: string) {
-    const certificateOrError = await this.certificateRepository.read(
-      pfxPathOrBase64,
-      password,
-    );
-
-    if (certificateOrError.isRight()) {
-      this.certificate = certificateOrError.value;
-    }
+  public setCertificate(certificate: ReadCertificateResponse) {
+    return (this.certificate = certificate), this;
   }
 
-  protected get httpsAgent(): AgentOptions {
+  protected get httpsAgent(): HttpsAgent {
     const defaultAgentOptions = {
       rejectUnauthorized: false,
       secureOptions: constants.SSL_OP_LEGACY_SERVER_CONNECT,
     };
 
     if (!this.certificate) return new HttpsAgent({ ...defaultAgentOptions });
+
     const { ca, password, certificate, privateKey } = this.certificate;
-
-    const key = this.certificateRepository.getStringPrivateKey(privateKey);
-    const cert = this.certificateRepository.getStringPublicKey(certificate);
-    const cas = ca.map((c) => this.certificateRepository.getStringPublicKey(c));
-
     return new HttpsAgent({
-      key,
-      cert,
-      ca: cas,
       passphrase: password,
+      cert: certificate.toString(),
+      ca: ca.map((c) => c.toString()),
+      key: this.certificateRepository.getStringPrivateKey(privateKey),
       ...defaultAgentOptions,
     });
   }
@@ -59,33 +53,35 @@ export class SoapRemoteTransmissionRepository
     };
   }
 
-  async send<R, M extends string>(params: SendTransmissionPayload<M>) {
+  public async send<P extends SendTransmissionPayload<C>>(params: P) {
     try {
       const httpsAgent = this.httpsAgent;
 
       const client = await createClientAsync(`${params.url}?wsdl`, {
+        attributesKey: '$',
         wsdl_options: { httpsAgent },
       });
 
-      client.addSoapHeader(this.defaultSoapHeaders);
+      params.payload.$ = {
+        xmlns: client.wsdl.definitions.$targetNamespace as string,
+        ...(params.payload.$ as object | undefined),
+      };
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
-      const [result] = await client[params.method](params.payload, {
-        httpsAgent,
+      const _xml = await this.toolkit.build(params.payload, {
+        headless: true,
+        renderOpts: { pretty: false },
+        rootName: params.root,
       });
 
-      return right(result as R);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+      const [result] = await client[`${params.method}Async`](
+        { _xml },
+        { httpsAgent },
+      );
+
+      return right(result as ExtractReturnType<C, P>);
     } catch (e) {
       return leftFromError(e);
     }
-  }
-}
-
-declare module 'soap' {
-  interface Client {
-    nfeStatusServicoNFAsync(
-      args: { nfeDadosMsg: string },
-      opt?: AxiosRequestConfig,
-    ): Promise<unknown[]>;
   }
 }

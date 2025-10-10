@@ -24,7 +24,7 @@ import {
 
 import { NfeXmlBuilder } from '@nfets/nfe/application/xml-builder/nfe-xml-builder';
 
-import type { Ide } from '@nfets/nfe/entities/nfe/inf-nfe/ide';
+import type { Ide } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
 import {
   createValidEmit,
   createValidIde,

@@ -47,7 +47,7 @@ describe('signer (integration)', () => {
       SignatureAlgorithm.SHA1,
     );
 
-    const signature = await signer.sign('test', 'test', 'root', certificate);
+    const signature = await signer.sign('<test/>', 'test', 'root', certificate);
     expect(signature).toBeDefined();
   });
 });
