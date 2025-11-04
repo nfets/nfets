@@ -37,11 +37,11 @@ Os testes de integração validam que os pacotes publicados funcionam corretamen
 
 ```bash
 # Na raiz do projeto
-make test:integration
+make test
 
 # Ou diretamente no pacote test
 cd packages/test
-pnpm test:integration
+pnpm test
 ```
 
 ### Build completo + Testes de Integração

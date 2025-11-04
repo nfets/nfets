@@ -8,11 +8,9 @@ clean:
 
 test:
 	@pnpm test
-	@pnpm test:integration
 
 test\:coverage-summary:
 	@pnpm test:coverage
-	@pnpm test:integration
 
 build:
 	@make clean
