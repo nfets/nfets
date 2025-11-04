@@ -1,8 +1,8 @@
 import { validateSync } from 'class-validator';
 import { Local } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/local';
 
-describe('Local SwitchCase validation', () => {
-  it('should be valid when no SwitchCase property is set', () => {
+describe('Local Choice validation', () => {
+  it('should be valid when no Choice property is set', () => {
     const local = new Local();
     local.xLgr = 'Rua Teste';
     local.nro = '123';
@@ -63,7 +63,9 @@ describe('Local SwitchCase validation', () => {
     expect(
       Object.values(cpfError?.constraints ?? {}).some(
         (message) =>
-          typeof message === 'string' && message.includes('already setted'),
+          typeof message === 'string' &&
+          (message.includes('cannot be set because') ||
+            message.includes('already set')),
       ),
     ).toBe(true);
   });

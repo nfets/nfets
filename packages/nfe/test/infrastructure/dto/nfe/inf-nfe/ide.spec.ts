@@ -1,7 +1,7 @@
 import { validateSync } from 'class-validator';
 import { Ide, RefNFP } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/ide';
 
-describe('RefNFP SwitchCase validation (within Ide)', () => {
+describe('RefNFP Choice validation (within Ide)', () => {
   const createValidIde = (): Ide => {
     const ide = new Ide();
     ide.cUF = '52';
@@ -26,7 +26,7 @@ describe('RefNFP SwitchCase validation (within Ide)', () => {
     return ide;
   };
 
-  it('should be valid when RefNFP has no SwitchCase property set', () => {
+  it('should be valid when RefNFP has no Choice property set', () => {
     const ide = createValidIde();
     const refNFP = new RefNFP();
     refNFP.cUF = '52';
@@ -38,15 +38,32 @@ describe('RefNFP SwitchCase validation (within Ide)', () => {
     ide.NFref = [{ refNFP }];
 
     const errors = validateSync(ide);
-    const switchCaseErrors = errors.filter(
-      (error) =>
-        error.constraints &&
-        Object.values(error.constraints).some(
-          (message) =>
-            typeof message === 'string' && message.includes('already setted'),
-        ),
-    );
-    expect(switchCaseErrors.length).toBe(0);
+    const choiceErrors = errors
+      .flatMap((error) => {
+        const nestedErrors: typeof errors = [];
+        if (error.children) {
+          for (const child of error.children) {
+            if (child.children) {
+              nestedErrors.push(...child.children);
+            } else {
+              nestedErrors.push(child);
+            }
+          }
+        }
+        return [error, ...nestedErrors];
+      })
+      .filter(
+        (error) =>
+          error.constraints &&
+          (error.constraints.choiceGroupRequired ||
+            Object.values(error.constraints).some(
+              (message) =>
+                typeof message === 'string' &&
+                (message.includes('cannot be set because') ||
+                  message.includes('already set')),
+            )),
+      );
+    expect(choiceErrors.length).toBe(0);
   });
 
   it('should be valid when RefNFP has only CNPJ set', () => {
@@ -62,15 +79,32 @@ describe('RefNFP SwitchCase validation (within Ide)', () => {
     ide.NFref = [{ refNFP }];
 
     const errors = validateSync(ide);
-    const switchCaseErrors = errors.filter(
-      (error) =>
-        error.constraints &&
-        Object.values(error.constraints).some(
-          (message) =>
-            typeof message === 'string' && message.includes('already setted'),
-        ),
-    );
-    expect(switchCaseErrors.length).toBe(0);
+    const choiceErrors = errors
+      .flatMap((error) => {
+        const nestedErrors: typeof errors = [];
+        if (error.children) {
+          for (const child of error.children) {
+            if (child.children) {
+              nestedErrors.push(...child.children);
+            } else {
+              nestedErrors.push(child);
+            }
+          }
+        }
+        return [error, ...nestedErrors];
+      })
+      .filter(
+        (error) =>
+          error.constraints &&
+          (error.constraints.choiceGroupRequired ||
+            Object.values(error.constraints).some(
+              (message) =>
+                typeof message === 'string' &&
+                (message.includes('cannot be set because') ||
+                  message.includes('already set')),
+            )),
+      );
+    expect(choiceErrors.length).toBe(0);
   });
 
   it('should be valid when RefNFP has only CPF set', () => {
@@ -86,15 +120,32 @@ describe('RefNFP SwitchCase validation (within Ide)', () => {
     ide.NFref = [{ refNFP }];
 
     const errors = validateSync(ide);
-    const switchCaseErrors = errors.filter(
-      (error) =>
-        error.constraints &&
-        Object.values(error.constraints).some(
-          (message) =>
-            typeof message === 'string' && message.includes('already setted'),
-        ),
-    );
-    expect(switchCaseErrors.length).toBe(0);
+    const choiceErrors = errors
+      .flatMap((error) => {
+        const nestedErrors: typeof errors = [];
+        if (error.children) {
+          for (const child of error.children) {
+            if (child.children) {
+              nestedErrors.push(...child.children);
+            } else {
+              nestedErrors.push(child);
+            }
+          }
+        }
+        return [error, ...nestedErrors];
+      })
+      .filter(
+        (error) =>
+          error.constraints &&
+          (error.constraints.choiceGroupRequired ||
+            Object.values(error.constraints).some(
+              (message) =>
+                typeof message === 'string' &&
+                (message.includes('cannot be set because') ||
+                  message.includes('already set')),
+            )),
+      );
+    expect(choiceErrors.length).toBe(0);
   });
 
   it('should be invalid when RefNFP has both CNPJ and CPF set', () => {
@@ -131,7 +182,9 @@ describe('RefNFP SwitchCase validation (within Ide)', () => {
         expect(
           Object.values(cpfError?.constraints ?? {}).some(
             (message) =>
-              typeof message === 'string' && message.includes('already setted'),
+              typeof message === 'string' &&
+              (message.includes('cannot be set because') ||
+                message.includes('already set')),
           ),
         ).toBe(true);
       }

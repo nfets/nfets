@@ -18,8 +18,8 @@ import { ICMSSN202 } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto
 import { ICMSSN500 } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/icms';
 import { ICMSSN900 } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/icms';
 
-describe('ICMS SwitchCase validation', () => {
-  const switchCaseProperties = [
+describe('ICMS Choice validation', () => {
+  const choiceProperties = [
     'ICMS00',
     'ICMS10',
     'ICMS20',
@@ -39,13 +39,13 @@ describe('ICMS SwitchCase validation', () => {
     'ICMSSN900',
   ];
 
-  it('should be valid when no SwitchCase property is set', () => {
+  it('should be valid when no Choice property is set', () => {
     const icms = new ICMS();
     const errors = validateSync(icms);
     expect(errors.length).toBe(0);
   });
 
-  for (const property of switchCaseProperties) {
+  for (const property of choiceProperties) {
     it(`should be valid when only ${property} is set`, () => {
       const icms = new ICMS();
       const icmsType = getICMSType(property);
@@ -57,7 +57,7 @@ describe('ICMS SwitchCase validation', () => {
     });
   }
 
-  it('should be invalid when multiple SwitchCase properties are set', () => {
+  it('should be invalid when multiple Choice properties are set', () => {
     const icms = new ICMS();
     const icms00 = new ICMS00();
     icms00.orig = '0';
@@ -78,7 +78,9 @@ describe('ICMS SwitchCase validation', () => {
     expect(
       Object.values(icms10Error?.constraints ?? {}).some(
         (message) =>
-          typeof message === 'string' && message.includes('already setted'),
+          typeof message === 'string' &&
+          (message.includes('cannot be set because') ||
+            message.includes('already set')),
       ),
     ).toBe(true);
   });

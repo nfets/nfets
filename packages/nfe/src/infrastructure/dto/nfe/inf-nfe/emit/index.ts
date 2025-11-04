@@ -1,19 +1,18 @@
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
-import { SwitchCase } from '@nfets/core/application';
+import { Choice } from '@nfets/core/application';
 import { Type } from 'class-transformer';
 import { EnderEmit } from './ender-emit';
 
 import type { Emit as IEmit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
 
+@Choice({ properties: ['CNPJ', 'CPF'], required: true })
 export class Emit implements IEmit {
   @IsOptional()
   @IsString()
-  @SwitchCase()
   public CNPJ?: string;
 
   @IsOptional()
   @IsString()
-  @SwitchCase()
   public CPF?: string;
 
   @IsString()

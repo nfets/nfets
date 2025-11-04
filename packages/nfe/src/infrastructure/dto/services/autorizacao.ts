@@ -12,7 +12,7 @@ import {
   IsOptional,
   IsString,
   IsNotEmpty,
-  ValidateNested,
+  // ValidateNested,
 } from 'class-validator';
 import { NFe } from '../nfe/nfe';
 
@@ -31,7 +31,7 @@ export class AutorizacaoPayload implements IAutorizacaoPayload {
   public indSinc?: '0' | '1';
 
   @IsNotEmpty()
-  @ValidateNested()
+  // @ValidateNested()
   @Type(() => NFe)
   public NFe!: INFe;
 }

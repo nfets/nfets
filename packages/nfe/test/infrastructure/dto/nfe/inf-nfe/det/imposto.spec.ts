@@ -4,8 +4,8 @@ import { ICMS } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/icms
 import { ICMS00 } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/icms';
 import { ISSQN } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/issqn';
 
-describe('Imposto SwitchCase validation', () => {
-  it('should be valid when no SwitchCase property is set', () => {
+describe('Imposto Choice validation', () => {
+  it('should be valid when no Choice property is set', () => {
     const imposto = new Imposto();
     const errors = validateSync(imposto);
     expect(errors.length).toBe(0);
@@ -54,7 +54,9 @@ describe('Imposto SwitchCase validation', () => {
     expect(
       Object.values(issqnError?.constraints ?? {}).some(
         (message) =>
-          typeof message === 'string' && message.includes('already setted'),
+          typeof message === 'string' &&
+          (message.includes('cannot be set because') ||
+            message.includes('already set')),
       ),
     ).toBe(true);
   });

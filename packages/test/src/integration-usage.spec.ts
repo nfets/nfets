@@ -122,7 +122,7 @@ describe('Real-world Usage Simulation', () => {
 
       expect(core.Validates).toBeDefined();
       expect(core.TransformDecimal).toBeDefined();
-      expect(core.SwitchCase).toBeDefined();
+      expect(core.Choice).toBeDefined();
       expect(core.TransformDateString).toBeDefined();
     });
   });

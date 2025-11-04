@@ -20,8 +20,9 @@ import type { COFINSST as ICOFINSST } from '@nfets/nfe/domain/entities/nfe/inf-n
 import type { ISSQN as IISSQN } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/issqn';
 import type { ICMSUFDest as IICMSUFDest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/icmsufdest';
 
-import { SwitchCase } from '@nfets/core/application';
+import { Choice } from '@nfets/core/application';
 
+@Choice({ properties: ['ICMS', 'ISSQN'] })
 export class Imposto implements IImposto {
   @IsOptional()
   @IsNumber()
@@ -30,7 +31,6 @@ export class Imposto implements IImposto {
   @IsOptional()
   @ValidateNested()
   @Type(() => ICMS)
-  @SwitchCase()
   public ICMS?: IICMS;
 
   @IsOptional()
@@ -41,7 +41,6 @@ export class Imposto implements IImposto {
   @IsOptional()
   @ValidateNested()
   @Type(() => ISSQN)
-  @SwitchCase()
   public ISSQN?: IISSQN;
 
   @IsOptional()

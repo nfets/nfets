@@ -10,7 +10,7 @@ import {
 } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/comb';
 import { Decimal } from '@nfets/core/infrastructure';
 
-describe('Prod SwitchCase validation', () => {
+describe('Prod Choice validation', () => {
   const createValidProd = (): Prod => {
     const prod = new Prod();
     prod.cProd = '1';
@@ -30,7 +30,7 @@ describe('Prod SwitchCase validation', () => {
     return prod;
   };
 
-  it('should be valid when no SwitchCase property is set', () => {
+  it('should be valid when no Choice property is set', () => {
     const prod = createValidProd();
     const errors = validateSync(prod);
     expect(errors.length).toBe(0);
@@ -91,15 +91,19 @@ describe('Prod SwitchCase validation', () => {
     prod.arma = [arma];
 
     const errors = validateSync(prod);
-    const switchCaseErrors = errors.filter(
+    // Filter out Choice-related errors
+    const choiceErrors = errors.filter(
       (error) =>
         error.constraints &&
-        Object.values(error.constraints).some(
-          (message) =>
-            typeof message === 'string' && message.includes('already setted'),
-        ),
+        (error.constraints.choiceGroupRequired ||
+          Object.values(error.constraints).some(
+            (message) =>
+              typeof message === 'string' &&
+              (message.includes('cannot be set because') ||
+                message.includes('already set')),
+          )),
     );
-    expect(switchCaseErrors.length).toBe(0);
+    expect(choiceErrors.length).toBe(0);
   });
 
   it('should be valid when only comb is set', () => {
@@ -122,15 +126,19 @@ describe('Prod SwitchCase validation', () => {
     prod.comb = comb;
 
     const errors = validateSync(prod);
-    const switchCaseErrors = errors.filter(
+    // Filter out Choice-related errors
+    const choiceErrors = errors.filter(
       (error) =>
         error.constraints &&
-        Object.values(error.constraints).some(
-          (message) =>
-            typeof message === 'string' && message.includes('already setted'),
-        ),
+        (error.constraints.choiceGroupRequired ||
+          Object.values(error.constraints).some(
+            (message) =>
+              typeof message === 'string' &&
+              (message.includes('cannot be set because') ||
+                message.includes('already set')),
+          )),
     );
-    expect(switchCaseErrors.length).toBe(0);
+    expect(choiceErrors.length).toBe(0);
   });
 
   it('should be invalid when veicProd and med are set', () => {
@@ -177,7 +185,9 @@ describe('Prod SwitchCase validation', () => {
     expect(
       Object.values(medError?.constraints ?? {}).some(
         (message) =>
-          typeof message === 'string' && message.includes('already setted'),
+          typeof message === 'string' &&
+          (message.includes('cannot be set because') ||
+            message.includes('already set')),
       ),
     ).toBe(true);
   });

@@ -8,10 +8,12 @@ import {
   ArrayMinSize,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { DI as IDI, Adi as IAdi } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/di';
+import {
+  DI as IDI,
+  Adi as IAdi,
+} from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/di';
 
-import { TransformDecimal } from '@nfets/core/application';
-import { SwitchCase } from '@nfets/core/application';
+import { TransformDecimal, Choice } from '@nfets/core/application';
 
 export class Adi implements IAdi {
   @IsString()
@@ -31,6 +33,7 @@ export class Adi implements IAdi {
   public nDraw?: string;
 }
 
+@Choice({ properties: ['CNPJ', 'CPF'], required: true })
 export class DI implements IDI {
   @IsString()
   public nDI!: string;
@@ -59,12 +62,10 @@ export class DI implements IDI {
 
   @IsString()
   @IsOptional()
-  @SwitchCase()
   public CNPJ?: string;
 
   @IsString()
   @IsOptional()
-  @SwitchCase()
   public CPF?: string;
 
   @IsString()

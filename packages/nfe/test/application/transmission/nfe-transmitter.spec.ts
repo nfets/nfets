@@ -263,7 +263,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
         tpAmb: Environment.Homolog,
         cUF: '999' as never,
         idLote: '123',
-        NFe: {},
+        NFe: {} as never,
       });
 
       expectIsLeft(response);
@@ -292,7 +292,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
         tpAmb: Environment.Homolog,
         cUF: UF.RS,
         idLote: '123',
-        NFe: { infNFe: {} },
+        NFe: { infNFe: {} } as never,
       });
 
       expectIsRight(response);

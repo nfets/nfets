@@ -2,7 +2,7 @@ import { validateSync } from 'class-validator';
 import { Emit } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/emit';
 import { EnderEmit } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/emit/ender-emit';
 
-describe('Emit SwitchCase validation', () => {
+describe('Emit Choice validation', () => {
   const createValidEmit = (): Emit => {
     const emit = new Emit();
     emit.xNome = 'Cliente Teste';
@@ -19,48 +19,57 @@ describe('Emit SwitchCase validation', () => {
     return emit;
   };
 
-  it('should be valid when no SwitchCase property is set', () => {
+  it('should be valid when no Choice property is set', () => {
     const emit = createValidEmit();
     const errors = validateSync(emit);
-    const switchCaseErrors = errors.filter(
+    const choiceErrors = errors.filter(
       (error) =>
         error.constraints &&
-        Object.values(error.constraints).some(
-          (message) =>
-            typeof message === 'string' && message.includes('already setted'),
-        ),
+        (error.constraints.choiceGroupRequired ||
+          Object.values(error.constraints).some(
+            (message) =>
+              typeof message === 'string' &&
+              (message.includes('cannot be set because') ||
+                message.includes('already set')),
+          )),
     );
-    expect(switchCaseErrors.length).toBe(0);
+    expect(choiceErrors.length).toBe(0);
   });
 
   it('should be valid when only CNPJ is set', () => {
     const emit = createValidEmit();
     emit.CNPJ = '12345678901234';
     const errors = validateSync(emit);
-    const switchCaseErrors = errors.filter(
+    const choiceErrors = errors.filter(
       (error) =>
         error.constraints &&
-        Object.values(error.constraints).some(
-          (message) =>
-            typeof message === 'string' && message.includes('already setted'),
-        ),
+        (error.constraints.choiceGroupRequired ||
+          Object.values(error.constraints).some(
+            (message) =>
+              typeof message === 'string' &&
+              (message.includes('cannot be set because') ||
+                message.includes('already set')),
+          )),
     );
-    expect(switchCaseErrors.length).toBe(0);
+    expect(choiceErrors.length).toBe(0);
   });
 
   it('should be valid when only CPF is set', () => {
     const emit = createValidEmit();
     emit.CPF = '12345678901';
     const errors = validateSync(emit);
-    const switchCaseErrors = errors.filter(
+    const choiceErrors = errors.filter(
       (error) =>
         error.constraints &&
-        Object.values(error.constraints).some(
-          (message) =>
-            typeof message === 'string' && message.includes('already setted'),
-        ),
+        (error.constraints.choiceGroupRequired ||
+          Object.values(error.constraints).some(
+            (message) =>
+              typeof message === 'string' &&
+              (message.includes('cannot be set because') ||
+                message.includes('already set')),
+          )),
     );
-    expect(switchCaseErrors.length).toBe(0);
+    expect(choiceErrors.length).toBe(0);
   });
 
   it('should be invalid when both CNPJ and CPF are set', () => {
@@ -77,7 +86,9 @@ describe('Emit SwitchCase validation', () => {
     expect(
       Object.values(cpfError?.constraints ?? {}).some(
         (message) =>
-          typeof message === 'string' && message.includes('already setted'),
+          typeof message === 'string' &&
+          (message.includes('cannot be set because') ||
+            message.includes('already set')),
       ),
     ).toBe(true);
   });

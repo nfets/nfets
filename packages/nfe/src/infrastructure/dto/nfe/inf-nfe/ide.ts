@@ -13,7 +13,7 @@ import type {
   RefECF as IRefECF,
   NFref as INFref,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
-import { SwitchCase } from '@nfets/core/application';
+import { Choice } from '@nfets/core/application';
 
 export class RefNF implements IRefNF {
   @IsString()
@@ -35,6 +35,7 @@ export class RefNF implements IRefNF {
   public nNF!: string;
 }
 
+@Choice({ properties: ['CNPJ', 'CPF'], required: true })
 export class RefNFP implements IRefNFP {
   @IsString()
   public cUF!: string;
@@ -44,12 +45,10 @@ export class RefNFP implements IRefNFP {
 
   @IsOptional()
   @IsString()
-  @SwitchCase()
   public CNPJ?: string;
 
   @IsOptional()
   @IsString()
-  @SwitchCase()
   public CPF?: string;
 
   @IsString()

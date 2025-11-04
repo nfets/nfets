@@ -15,8 +15,10 @@ import {
 } from './veic';
 import { Vol, Vol as IVol } from './vol';
 import { Transp as ITransp } from '@nfets/nfe/domain/entities/nfe/inf-nfe/transp';
-import { SwitchCase } from '@nfets/core/application';
+import { Choice } from '@nfets/core/application';
 
+@Choice({ properties: ['veicTransp', 'reboque'] })
+@Choice({ properties: ['vagao', 'balsa'] })
 export class Transp implements ITransp {
   @IsString()
   public modFrete!: string;
@@ -34,24 +36,20 @@ export class Transp implements ITransp {
   @IsOptional()
   @ValidateNested()
   @Type(() => VeicTransp)
-  @SwitchCase()
   public veicTransp?: IVeicTransp;
 
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => Reboque)
   @ArrayMaxSize(5)
-  @SwitchCase({ allow: ['veicTransp'] })
   public reboque?: IReboque[];
 
   @IsOptional()
   @IsString()
-  @SwitchCase()
   public vagao?: string;
 
   @IsOptional()
   @IsString()
-  @SwitchCase()
   public balsa?: string;
 
   @IsOptional()

@@ -21,7 +21,7 @@ import type { Arma as IArma } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/a
 import type { Comb as IComb } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/comb';
 
 import { Rastro } from './rastro';
-import { SwitchCase } from '@nfets/core/application';
+import { Choice } from '@nfets/core/application';
 import { DI } from './di';
 import { DetExport } from './det-export';
 import { InfProdNFF } from './infprod-nff';
@@ -31,6 +31,7 @@ import { Med } from './med';
 import { Arma } from './arma';
 import { Comb } from './comb';
 
+@Choice({ properties: ['veicProd', 'med', 'arma', 'comb'] })
 export class Prod implements IProd {
   @IsString()
   public cProd!: string;
@@ -173,14 +174,12 @@ export class Prod implements IProd {
   @IsObject()
   @ValidateNested()
   @Type(() => VeicProd)
-  @SwitchCase()
   public veicProd?: IVeicProd;
 
   @IsOptional()
   @IsObject()
   @ValidateNested()
   @Type(() => Med)
-  @SwitchCase()
   public med?: IMed;
 
   @IsOptional()
@@ -188,14 +187,12 @@ export class Prod implements IProd {
   @ValidateNested({ each: true })
   @Type(() => Arma)
   @ArrayMaxSize(500)
-  @SwitchCase()
   public arma?: IArma[];
 
   @IsOptional()
   @IsObject()
   @ValidateNested()
   @Type(() => Comb)
-  @SwitchCase()
   public comb?: IComb;
 
   @IsOptional()

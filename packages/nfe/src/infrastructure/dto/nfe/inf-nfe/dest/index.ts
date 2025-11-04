@@ -4,17 +4,16 @@ import { EnderDest } from './ender-dest';
 
 import type { Dest as IDest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/dest';
 import type { EnderDest as IEnderDest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/dest';
-import { SwitchCase } from '@nfets/core/application';
+import { Choice } from '@nfets/core/application';
 
+@Choice({ properties: ['CNPJ', 'CPF'], required: true })
 export class Dest implements IDest {
   @IsOptional()
   @IsString()
-  @SwitchCase()
   public CNPJ?: string;
 
   @IsOptional()
   @IsString()
-  @SwitchCase()
   public CPF?: string;
 
   @IsOptional()

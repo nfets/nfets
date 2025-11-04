@@ -2,7 +2,7 @@ import { validateSync } from 'class-validator';
 import { DI, Adi } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/di';
 import { Decimal } from '@nfets/core/infrastructure';
 
-describe('DI SwitchCase validation', () => {
+describe('DI Choice validation', () => {
   const createValidDI = (): DI => {
     const di = new DI();
     di.nDI = '123456789';
@@ -23,7 +23,7 @@ describe('DI SwitchCase validation', () => {
     return di;
   };
 
-  it('should be valid when no SwitchCase property is set', () => {
+  it('should be valid when no Choice property is set', () => {
     const di = createValidDI();
     const errors = validateSync(di);
     expect(errors.length).toBe(0);
@@ -57,7 +57,9 @@ describe('DI SwitchCase validation', () => {
     expect(
       Object.values(cpfError?.constraints ?? {}).some(
         (message) =>
-          typeof message === 'string' && message.includes('already setted'),
+          typeof message === 'string' &&
+          (message.includes('cannot be set because') ||
+            message.includes('already set')),
       ),
     ).toBe(true);
   });
