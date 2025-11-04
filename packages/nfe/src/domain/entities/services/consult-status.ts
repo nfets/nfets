@@ -1,5 +1,4 @@
 import type { EnvironmentCode, StateCode } from '@nfets/core/domain';
-import type { BaseResponse } from '../transmission/nfe-remote-client';
 
 export interface ConsultStatusPayload {
   tpAmb: EnvironmentCode;
@@ -12,5 +11,16 @@ export interface ConsultStatusRequest {
 }
 
 export interface ConsultStatusResponse {
-  retConsStatServ: BaseResponse;
+  retConsStatServ: {
+    $: { versao: string };
+    tpAmb: string;
+    verAplic: string;
+    cStat: string;
+    xMotivo: string;
+    cUF: string;
+    dhRecbto: string;
+    tMed?: string;
+    dhRetorno?: string;
+    xObs?: string;
+  };
 }

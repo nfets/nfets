@@ -8,7 +8,7 @@ import { SoapRemoteTransmissionRepository } from '@nfets/core/infrastructure/rep
 
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
 
-import type { Client, CertificateRepository } from '@nfets/core';
+import type { Client, CertificateRepository } from '@nfets/core/domain';
 
 describe('soap remote transmission nfe (integration) (not destructive)', () => {
   const certificateFromEnvironment =

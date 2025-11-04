@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import { Decimal } from '@nfets/core';
-import type { DecimalValue } from '@nfets/core';
+import { Decimal } from '@nfets/core/infrastructure';
+import type { DecimalValue } from '@nfets/core/domain';
 import type { ValidationOptions } from 'class-validator';
 
 import { Transform } from 'class-transformer';
