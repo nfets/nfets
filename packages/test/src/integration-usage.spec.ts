@@ -6,9 +6,9 @@ import {
 
 describe('Real-world Usage Simulation', () => {
   describe('Using @nfets/core for signing', () => {
-    it('should be able to create a Signer instance', async () => {
+    it('should be able to create a XmlSigner instance', async () => {
       const corePath = path.resolve(__dirname, '../../core/dist/index.js');
-      const { Signer, NativeCertificateRepository } = await import(corePath);
+      const { XmlSigner, NativeCertificateRepository } = await import(corePath);
 
       const certificatePath = getCnpjCertificate();
       const password = getCertificatePassword();
@@ -18,7 +18,27 @@ describe('Real-world Usage Simulation', () => {
         password,
       });
 
-      const signer = new Signer(certificateRepository);
+      const signer = new XmlSigner(certificateRepository);
+
+      expect(signer).toBeDefined();
+      expect(typeof signer.sign).toBe('function');
+    });
+
+    it('should be able to create a EntitySigner instance', async () => {
+      const corePath = path.resolve(__dirname, '../../core/dist/index.js');
+      const { EntitySigner, NativeCertificateRepository } = await import(
+        corePath
+      );
+
+      const certificatePath = getCnpjCertificate();
+      const password = getCertificatePassword();
+
+      const certificateRepository = new NativeCertificateRepository({
+        pfx: certificatePath,
+        password,
+      });
+
+      const signer = new EntitySigner(certificateRepository);
 
       expect(signer).toBeDefined();
       expect(typeof signer.sign).toBe('function');
@@ -65,13 +85,15 @@ describe('Real-world Usage Simulation', () => {
       const nfetsPath = path.resolve(__dirname, '../../../dist/index.js');
       const nfets = await import(nfetsPath);
 
-      expect(nfets.Signer).toBeDefined();
+      expect(nfets.XmlSigner).toBeDefined();
+      expect(nfets.EntitySigner).toBeDefined();
       expect(nfets.NativeCertificateRepository).toBeDefined();
       expect(nfets.NfeXmlBuilder).toBeDefined();
       expect(nfets.AccessKeyBuilder).toBeDefined();
 
-      const { Signer, NfeXmlBuilder } = nfets;
-      expect(typeof Signer).toBe('function');
+      const { XmlSigner, EntitySigner, NfeXmlBuilder } = nfets;
+      expect(typeof XmlSigner).toBe('function');
+      expect(typeof EntitySigner).toBe('function');
       expect(typeof NfeXmlBuilder).toBe('function');
     });
   });
@@ -92,7 +114,7 @@ describe('Real-world Usage Simulation', () => {
         password,
       });
 
-      const signer = new core.Signer(certificateRepository);
+      const signer = new core.XmlSigner(certificateRepository);
       const nfeBuilder = new nfe.NfeXmlBuilder();
 
       expect(signer).toBeDefined();

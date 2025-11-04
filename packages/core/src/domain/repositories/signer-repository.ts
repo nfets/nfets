@@ -1,12 +1,10 @@
-import type { Either } from '@nfets/core/shared/either';
-import type { NFeTsError } from '../errors/nfets-error';
-import type { ReadCertificateResponse } from '../entities/certificate/certificate';
+import type { Signature } from '../entities/signer/signature';
 
-export interface SignerRepository {
-  sign(
-    xml: string,
-    tag: string,
-    mark: string,
-    cert: ReadCertificateResponse,
-  ): Promise<Either<NFeTsError, string>>;
+export interface SignerOptions<T = string> {
+  tag: T;
+  mark: string;
 }
+
+export type SignedEntity<T extends object> = T & {
+  Signature: Signature;
+};

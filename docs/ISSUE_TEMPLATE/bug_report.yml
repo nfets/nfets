@@ -54,9 +54,9 @@ body:
       render: typescript
       placeholder: |
         // Seu código aqui / Your code here
-        import { Signer } from '@nfets/core/application';
+        import { XmlSigner } from '@nfets/core/application';
 
-        const signer = new Signer(...);
+        const signer = new XmlSigner(...);
         // ...
 
   - type: textarea

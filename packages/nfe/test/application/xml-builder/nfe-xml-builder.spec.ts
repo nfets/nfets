@@ -17,7 +17,7 @@ import {
 } from '@nfets/core/infrastructure';
 
 import {
-  Signer,
+  XmlSigner,
   SkipAllValidations,
   SkipValidation,
 } from '@nfets/core/application';
@@ -49,7 +49,7 @@ describe('xml builder with xml2js builder', () => {
   const password = getCertificatePassword(),
     validCnpjPfxCertificate = getCnpjCertificate();
 
-  let signer: Signer;
+  let signer: XmlSigner;
   let certificate: ReadCertificateResponse;
   let certificateRepository: CertificateRepository;
 
@@ -64,7 +64,7 @@ describe('xml builder with xml2js builder', () => {
       password,
     );
 
-    signer = new Signer(
+    signer = new XmlSigner(
       toolkit,
       certificateRepository,
       SignatureAlgorithm.SHA1,
@@ -138,7 +138,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsLeft(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -229,7 +233,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsLeft(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -456,7 +464,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -669,7 +681,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -896,7 +912,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -1111,7 +1131,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -1326,7 +1350,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -1529,7 +1557,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -1741,7 +1773,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -1940,7 +1976,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -2139,7 +2179,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -2336,7 +2380,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -2566,7 +2614,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -2767,7 +2819,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -2968,7 +3024,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -3217,7 +3277,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -3631,7 +3695,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -3843,7 +3911,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -4053,7 +4125,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -4296,7 +4372,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -4510,7 +4590,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -4724,7 +4808,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -4934,7 +5022,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -5177,7 +5269,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -5391,7 +5487,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -5605,7 +5705,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -5846,7 +5950,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -6058,7 +6166,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -6303,7 +6415,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -6548,7 +6664,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -6764,7 +6884,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -7011,7 +7135,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -7240,7 +7368,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -7475,7 +7607,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
@@ -7751,7 +7887,11 @@ describe('xml builder with xml2js builder', () => {
   </infNFe>
 </NFe>`);
 
-    const signed = await signer.sign(xml.value, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),

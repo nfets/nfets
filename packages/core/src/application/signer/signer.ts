@@ -5,9 +5,7 @@ import type {
   Transforms,
 } from '../../domain/entities/signer/signature';
 import type { XmlToolkit } from '../../domain/entities/xml/xml-toolkit';
-import type { ReadCertificateResponse } from '../../domain/entities/certificate/certificate';
 import type { CertificateRepository } from '../../domain/repositories/certificate-repository';
-import type { SignerRepository } from '../../domain/repositories/signer-repository';
 
 import {
   DigestAlgorithm,
@@ -21,97 +19,56 @@ import {
   defaultCanonicalizeOptions,
 } from '../../domain/entities/xml/canonicalization';
 import { unreachable } from '../../shared/unreachable';
-import { left, right } from '../../shared/either';
-import { NFeTsError } from '../../domain/errors/nfets-error';
 
-export class Signer implements SignerRepository {
+export abstract class Signer {
   public constructor(
-    private readonly toolkit: XmlToolkit,
-    private readonly certificateRepository: CertificateRepository,
-    private readonly algorithm: SignatureAlgorithm = SignatureAlgorithm.SHA1,
-    private readonly canonical: CanonicalizeOptions = defaultCanonicalizeOptions,
+    protected readonly toolkit: XmlToolkit,
+    protected readonly certificateRepository: CertificateRepository,
+    protected readonly algorithm: SignatureAlgorithm = SignatureAlgorithm.SHA1,
+    protected readonly canonical: CanonicalizeOptions = defaultCanonicalizeOptions,
   ) {}
 
-  public async sign(
-    xml: string,
-    tag: string,
-    mark: string,
-    cert: ReadCertificateResponse,
-  ) {
-    const {
-      privateKey,
-      certificate: { publicKey },
-    } = cert;
-
-    const node = this.toolkit.getNode(xml, tag);
-    if (!node) return left(new NFeTsError(`Node ${tag} not found`));
-
-    const signedInfo = await this.signedInfo(node, mark);
-    const signatureOrLeft = await this.signOrLeft(signedInfo, privateKey);
-    if (signatureOrLeft.isLeft()) return signatureOrLeft;
-
-    const signature = signatureOrLeft.value;
-    return this.assemble(xml, signedInfo, signature, publicKey);
-  }
-
-  private async assemble(
-    xml: string,
-    signedInfo: string,
-    signature: string,
+  protected assemble(
+    SignedInfo: SignedInfo,
+    SignatureValue: string,
     certificate: KeyObject,
   ) {
     const X509Certificate =
       this.certificateRepository.getStringPublicKey(certificate);
 
-    const SignedInfo = await this.toolkit.parse<SignedInfo>(signedInfo, {
-      xmlns: false,
-    });
-
-    const Signature = await this.toolkit.build(
-      {
-        $: { xmlns: SignatureNamespace },
-        SignedInfo: SignedInfo,
-        SignatureValue: signature,
-        KeyInfo: { X509Data: { X509Certificate } },
-      } satisfies Signature,
-      { rootName: 'Signature' },
-    );
-
-    return right(this.toolkit.appendNode(xml, Signature));
+    return {
+      $: { xmlns: SignatureNamespace },
+      SignedInfo,
+      SignatureValue,
+      KeyInfo: { X509Data: { X509Certificate } },
+    } satisfies Signature;
   }
 
-  private async signedInfo(node: string, mark: string): Promise<string> {
-    return await this.toolkit.build(
-      {
-        CanonicalizationMethod: {
-          $: { Algorithm: CanonicalizationMethod },
-        },
-        SignatureMethod: {
-          $: { Algorithm: this.signatureMethod },
-        },
-        Reference: {
-          $: { URI: `#${this.toolkit.getAttribute(node, mark)}` },
-          Transforms: this.transforms,
-          DigestMethod: { $: { Algorithm: this.digestAlgorithm } },
-          DigestValue: this.digest(node),
-        },
-      } satisfies SignedInfo,
-      { rootName: 'SignedInfo' },
-    );
+  protected signedInfo(node: string, mark: string) {
+    return {
+      CanonicalizationMethod: {
+        $: { Algorithm: CanonicalizationMethod },
+      },
+      SignatureMethod: {
+        $: { Algorithm: this.signatureMethod },
+      },
+      Reference: {
+        $: { URI: `#${this.toolkit.getAttribute(node, mark)}` },
+        Transforms: this.transforms,
+        DigestMethod: { $: { Algorithm: this.digestAlgorithm } },
+        DigestValue: this.digest(node),
+      },
+    } satisfies SignedInfo;
   }
 
   private digest(node: string): string {
     return this.toolkit.digest(node, this.algorithm, this.canonical);
   }
 
-  private async signOrLeft(signedInfo: string, privateKey: KeyObject) {
-    const SignedInfo = await this.toolkit.parse<SignedInfo>(signedInfo, {
-      xmlns: false,
-    });
-
+  protected async signOrLeft(signedInfo: SignedInfo, privateKey: KeyObject) {
     const content = this.toolkit.canonicalize(
       await this.toolkit.build(
-        { $: { xmlns: SignatureNamespace }, ...SignedInfo },
+        { $: { xmlns: SignatureNamespace }, ...signedInfo },
         { rootName: 'SignedInfo' },
       ),
       this.canonical,

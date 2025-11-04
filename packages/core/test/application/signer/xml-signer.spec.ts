@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import { Signer } from '@nfets/core/application/signer/signer';
-import { Xml2JsToolkit } from '@nfets/core/index';
+import { XmlSigner } from '../../../src/application/signer/xml-signer';
+import { NFeTsError, Xml2JsToolkit } from '@nfets/core/index';
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
 import { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
 import { NativeCertificateRepository } from '@nfets/core/infrastructure/repositories/native-certificate-repository';
@@ -14,9 +14,9 @@ import {
 import type { CertificateRepository } from '@nfets/core/domain/repositories/certificate-repository';
 import type { XmlToolkit } from '@nfets/core/domain/entities/xml/xml-toolkit';
 
-import { expectIsRight } from '@nfets/test/expects';
+import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
 
-describe('signer (integration)', () => {
+describe('xml signer (integration)', () => {
   let certificate: ReadCertificateResponse | undefined;
   const toolkit: XmlToolkit = new Xml2JsToolkit();
   let certificateRepository: CertificateRepository;
@@ -39,20 +39,28 @@ describe('signer (integration)', () => {
     certificate = certificateOrError.value;
   });
 
-  it('should generate a valid signature', async () => {
+  it('should return left when node is not found', async () => {
     if (certificate === undefined) return;
-    const signer = new Signer(
+    const signer = new XmlSigner(
       toolkit,
       certificateRepository,
       SignatureAlgorithm.SHA1,
     );
 
-    const signature = await signer.sign('<test/>', 'test', 'root', certificate);
-    expect(signature).toBeDefined();
+    const signature = await signer.sign(
+      '<test/>',
+      { tag: 'test', mark: 'root' },
+      certificate,
+    );
+
+    expectIsLeft(signature);
+    expect(signature.value).toStrictEqual(
+      new NFeTsError('Node test not found'),
+    );
   });
 });
 
-describe('signer (unit)', () => {
+describe('xml signer (unit)', () => {
   const password = getCertificatePassword(),
     validCnpjPfxCertificate = getCnpjCertificate();
 
@@ -313,13 +321,17 @@ describe('signer (unit)', () => {
   </infNFe>
 </NFe>`;
 
-    const signer = new Signer(
+    const signer = new XmlSigner(
       toolkit,
       certificateRepository,
       SignatureAlgorithm.SHA1,
     );
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expect(signed.value).toBeDefined();
 
@@ -587,13 +599,17 @@ describe('signer (unit)', () => {
   </infNFe>
 </NFe>`;
 
-    const signer = new Signer(
+    const signer = new XmlSigner(
       toolkit,
       certificateRepository,
       SignatureAlgorithm.SHA256,
     );
 
-    const signed = await signer.sign(xml, 'infNFe', 'Id', certificate);
+    const signed = await signer.sign(
+      xml,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
     expectIsRight(signed);
     expect(signed.value).toBeDefined();
 

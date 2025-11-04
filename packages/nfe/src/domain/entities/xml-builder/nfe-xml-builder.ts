@@ -179,7 +179,7 @@ export interface InfSolicNFFBuilder {
 
 export interface AssembleNfeBuilder {
   quiet(): AssembleNfeBuilder;
-  toObject(): NFe;
+  toObject(): Either<NFeTsError, NFe>;
   assemble(): Promise<Either<NFeTsError, string>>;
 }
 

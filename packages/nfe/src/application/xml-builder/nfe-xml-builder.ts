@@ -264,16 +264,18 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
   }
 
   public toObject() {
-    return plainToInstance(this.data, NFe);
+    const errors = this.errors();
+    if (errors) return left(new NFeTsError(errors.join(', ')));
+    this.$total?.aggregate();
+    return right(plainToInstance(this.data, NFe));
   }
 
   /** @throws {NFeTsError} */
   public async assemble() {
-    const errors = this.errors();
-    if (errors) return left(new NFeTsError(errors.join(', ')));
-    this.$total?.aggregate();
+    const resultOrLeft = this.toObject();
+    if (resultOrLeft.isLeft()) return resultOrLeft;
     return right(
-      await this.builder.build(this.toObject(), { rootName: this.root }),
+      await this.builder.build(resultOrLeft.value, { rootName: this.root }),
     );
   }
 
