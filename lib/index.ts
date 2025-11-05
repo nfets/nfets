@@ -1,2 +1,2 @@
-export * from '@nfets/core';
-export * from '@nfets/nfe';
+export * from '../packages/core';
+export * from '../packages/nfe';
