@@ -82,7 +82,7 @@ describe('Real-world Usage Simulation', () => {
 
   describe('Using full nfets package', () => {
     it('should have all exports available from single import', async () => {
-      const nfetsPath = path.resolve(__dirname, '../../../dist/index.js');
+      const nfetsPath = path.resolve(__dirname, '../../../dist/index.cjs');
       const nfets = await import(nfetsPath);
 
       expect(nfets.XmlSigner).toBeDefined();

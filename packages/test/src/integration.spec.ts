@@ -3,7 +3,7 @@ import path from 'node:path';
 describe('Package Integration Tests', () => {
   describe('nfets (full package)', () => {
     it('should export all core modules', async () => {
-      const nfetsPath = path.resolve(__dirname, '../../../dist/index.js');
+      const nfetsPath = path.resolve(__dirname, '../../../dist/index.cjs');
       const nfets = await import(nfetsPath);
 
       expect(nfets).toHaveProperty('Signer');
@@ -12,7 +12,7 @@ describe('Package Integration Tests', () => {
     });
 
     it('should export all nfe modules', async () => {
-      const nfetsPath = path.resolve(__dirname, '../../../dist/index.js');
+      const nfetsPath = path.resolve(__dirname, '../../../dist/index.cjs');
       const nfets = await import(nfetsPath);
 
       expect(nfets).toHaveProperty('NfeXmlBuilder');
