@@ -28,6 +28,7 @@
     "build:nfets": "tsc -p tsconfig.build.json",
     "build": "pnpm --filter @nfets/core build && pnpm --filter !@nfets/core build",
     "test": "pnpm --filter @nfets/* test",
+    "typecheck": "pnpm --filter @nfets/* typecheck",
     "test:coverage": "pnpm --filter @nfets/* test:coverage --coverageReporters=\"json-summary\""
   },
   "publishConfig": {

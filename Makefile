@@ -9,6 +9,9 @@ clean:
 test:
 	@pnpm test
 
+typecheck:
+	@pnpm typecheck
+
 test\:coverage-summary:
 	@pnpm test:coverage
 

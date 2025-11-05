@@ -1,7 +1,6 @@
 import { validateSync } from 'class-validator';
 import { Transp } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/transp';
 import { VeicTransp } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/transp/veic';
-import { Reboque } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/transp/veic';
 
 describe('Transp Choice validation', () => {
   it('should be valid when no Choice property is set', () => {
