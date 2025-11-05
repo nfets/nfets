@@ -1,0 +1,81 @@
+name: CD
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if should skip (dependabot)
+        id: should-skip
+        run: |
+          ACTOR="${{ github.actor }}"
+          AUTHOR_NAME="${{ github.event.head_commit.author.name }}"
+          AUTHOR_EMAIL="${{ github.event.head_commit.author.email }}"
+          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+
+          SKIP=false
+
+          if [[ -n "$AUTHOR_NAME" && "$AUTHOR_NAME" == *"dependabot"* ]]; then
+            SKIP=true
+          elif [[ -n "$AUTHOR_EMAIL" && "$AUTHOR_EMAIL" == *"dependabot"* ]]; then
+            SKIP=true
+          elif [[ "$ACTOR" == *"dependabot"* ]]; then
+            SKIP=true
+          elif [[ -n "$COMMIT_MESSAGE" && ("$COMMIT_MESSAGE" == *"dependabot"* || "$COMMIT_MESSAGE" == *"build(deps)"*) ]]; then
+            SKIP=true
+          fi
+
+          if [ "$SKIP" = true ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get next version
+        if: steps.should-skip.outputs.skip != 'true'
+        id: version
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -z "$LATEST_TAG" ]; then
+            CURRENT_VERSION=$(jq -r '.version' package.json)
+            echo "No tags found, using package.json version: $CURRENT_VERSION"
+          else
+            CURRENT_VERSION="${LATEST_TAG#v}"
+            echo "Latest tag: $LATEST_TAG, version: $CURRENT_VERSION"
+          fi
+
+          IFS='.' read -r -a VERSION_PARTS <<< "$CURRENT_VERSION"
+          MAJOR="${VERSION_PARTS[0]:-0}"
+          MINOR="${VERSION_PARTS[1]:-0}"
+          PATCH="${VERSION_PARTS[2]:-0}"
+
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
+
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "tag=v$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create and push tag
+        if: steps.should-skip.outputs.skip != 'true'
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          VERSION="${{ steps.version.outputs.version }}"
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists, skipping..."
+            exit 0
+          fi
+
+          git tag -a "$TAG" -m "Release $VERSION"
+          git push origin "$TAG"
