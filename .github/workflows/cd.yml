@@ -85,3 +85,16 @@ jobs:
 
           git tag -a "$TAG" -m "Release $VERSION"
           git push origin "$TAG"
+
+      - name: Create release
+        if: steps.should-skip.outputs.skip != 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          VERSION="${{ steps.version.outputs.version }}"
+
+          gh release create "$TAG" \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="${GITHUB_REPOSITORY#*/} $VERSION" \
+              --generate-notes
