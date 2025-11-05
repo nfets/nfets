@@ -172,7 +172,7 @@ describe('xml builder with xml2js builder', () => {
       .det([] as never, () => void 0 as never)
       .transp({ modFrete: '9' })
       .pag({
-        detPag: [{ tPag: '01', vPag: Decimal.from('100').toString() }],
+        detPag: [{ tPag: '01', vPag: Decimal.from('100') }],
       });
 
     const xml = await builder.assemble();
