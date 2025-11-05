@@ -1,6 +1,6 @@
 {
   "name": "nfets",
-  "version": "0.0.2",
+  "version": "0.0.0",
   "description": "typescript libraries for Brazilian's SEFAZ standards",
   "type": "module",
   "main": "dist/src/index.js",
