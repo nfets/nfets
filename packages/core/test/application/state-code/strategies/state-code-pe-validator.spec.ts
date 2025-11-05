@@ -7,6 +7,16 @@ describe('StateCodePeValidator', () => {
     expect(validator.execute('032141840')).toBe(true);
   });
 
+  it('should invalidate IE with wrong check digit when r1 === 0 or 1', () => {
+    // Test that the r1 === 0 or 1 branch is executed
+    expect(validator.execute('000000001')).toBe(false);
+  });
+
+  it('should invalidate IE with wrong check digit when r2 === 0 or 1', () => {
+    // Test that the r2 === 0 or 1 branch is executed
+    expect(validator.execute('000000010')).toBe(false);
+  });
+
   it('should invalidate IE with incorrect check digit', () => {
     expect(validator.execute('032141841')).toBe(false);
   });

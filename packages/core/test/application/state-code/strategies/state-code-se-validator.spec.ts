@@ -7,6 +7,11 @@ describe('StateCodeSeValidator', () => {
     expect(validator.execute('271234563')).toBe(true);
   });
 
+  it('should invalidate IE with wrong check digit when digit === 10 or 11', () => {
+    // Test that the digit === 10 or 11 branch is executed
+    expect(validator.execute('270000001')).toBe(false);
+  });
+
   it('should invalidate IE with incorrect check digit', () => {
     expect(validator.execute('271234564')).toBe(false);
   });

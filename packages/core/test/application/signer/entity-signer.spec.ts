@@ -671,4 +671,32 @@ describe('entity signer (unit)', () => {
       signed.value.Signature.SignedInfo.Reference.DigestMethod.$,
     ).toStrictEqual({ Algorithm: 'http://www.w3.org/2001/04/xmlenc#sha256' });
   });
+
+  describe('unreachable algorithm cases', () => {
+    it('should handle invalid algorithm by using unreachable', async () => {
+      if (certificate === undefined) return;
+
+      const signer = new EntitySigner(
+        toolkit,
+        certificateRepository,
+        'INVALID' as never,
+      );
+
+      const entity = await toolkit.parse<{
+        $: { xmlns: string };
+        infNFe: unknown;
+      }>(`<?xml version="1.0" encoding="UTF-8"?>
+<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+  <infNFe Id="test" versao="4.00">
+    <ide>
+      <cUF>42</cUF>
+    </ide>
+  </infNFe>
+</NFe>`);
+
+      await expect(
+        signer.sign(entity, { tag: 'infNFe', mark: 'Id' }, certificate),
+      ).rejects.toThrow("Didn't expect to get here");
+    });
+  });
 });

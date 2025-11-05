@@ -1,0 +1,43 @@
+import axios from 'axios';
+import { ReadCertificateFromPfx } from '@nfets/core/application/certificate/from-pfx';
+import { NativeCertificateRepository } from '@nfets/core/infrastructure/repositories/native-certificate-repository';
+import { MemoryCacheAdapter } from '@nfets/core/infrastructure/repositories/memory-cache-adapter';
+import { expectIsRight, expectIsLeft } from '@nfets/test/expects';
+import {
+  getCertificatePassword,
+  getCnpjCertificate,
+} from '@nfets/test/certificates';
+
+describe('read certificate from pfx (unit)', () => {
+  const password = getCertificatePassword();
+  const validCnpjPfxCertificate = getCnpjCertificate();
+
+  const certificateRepository = new NativeCertificateRepository(
+    axios.create(),
+    new MemoryCacheAdapter(),
+  );
+
+  const readCertificateFromPfx = new ReadCertificateFromPfx(
+    certificateRepository,
+  );
+
+  it('should successfully read a valid certificate', async () => {
+    const result = await readCertificateFromPfx.execute(
+      validCnpjPfxCertificate,
+      password,
+    );
+
+    expectIsRight(result);
+    expect(result.value.certificate).toBeDefined();
+    expect(result.value.privateKey).toBeDefined();
+  });
+
+  it('should return left when certificate is invalid', async () => {
+    const result = await readCertificateFromPfx.execute(
+      'invalid-path',
+      'invalid-password',
+    );
+
+    expectIsLeft(result);
+  });
+});

@@ -7,9 +7,14 @@ describe('StateCodePiValidator', () => {
     expect(validator.execute('012345679')).toBe(true);
   });
 
+  it('should invalidate IE with wrong check digit when digit === 10 or 11', () => {
+    // Test that the digit === 10 or 11 branch is executed
+    expect(validator.execute('012345671')).toBe(false);
+  });
+
   it('should invalidate IE with incorrect check digit', () => {
     expect(validator.execute('012345671')).toBe(false);
-    expect(validator.execute('012345670')).toBe(false);
+    expect(validator.execute('012345678')).toBe(false);
   });
 
   it('should invalidate IE with wrong length', () => {

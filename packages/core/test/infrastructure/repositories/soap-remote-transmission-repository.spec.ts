@@ -51,6 +51,19 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
     }
   });
 
+  describe('without certificate', () => {
+    it('should create https agent without certificate', () => {
+      const transmissionWithoutCert = new TestSoapRemoteTransmissionRepository(
+        toolkit,
+        repository,
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const agent = (transmissionWithoutCert as any).httpsAgent;
+      expect(agent).toBeDefined();
+    });
+  });
+
   it('should return schema failed when payload is invalid', async () => {
     const response = await transmission.send({
       root: 'nfeDadosMsg',

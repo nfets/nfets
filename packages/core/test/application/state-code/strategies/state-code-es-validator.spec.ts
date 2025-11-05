@@ -7,6 +7,10 @@ describe('StateCodeEsValidator', () => {
     expect(validator.execute('999999990')).toBe(true);
   });
 
+  it('should validate IE with remainder < 2 (digit === 0)', () => {
+    expect(validator.execute('999999990')).toBe(true);
+  });
+
   it('should invalidate IE with incorrect check digit', () => {
     expect(validator.execute('999999991')).toBe(false);
   });

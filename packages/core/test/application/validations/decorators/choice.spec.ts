@@ -221,4 +221,42 @@ describe('Choice decorator', () => {
       expect(errors).toHaveLength(0);
     });
   });
+
+  describe('required choice group', () => {
+    // Note: @IsOptional() is needed to allow undefined values for @IsString()
+    // The choiceGroupRequired validator uses always: true, so it will run
+    // even when properties are undefined, ensuring at least one is provided.
+    @Choice({ properties: ['CPF', 'CNPJ'], required: true })
+    class RequiredPerson {
+      @IsOptional()
+      @IsString()
+      public CPF?: string;
+
+      @IsOptional()
+      @IsString()
+      public CNPJ?: string;
+    }
+
+    it('should pass validation when first property is provided in required group', async () => {
+      const person = new RequiredPerson();
+      person.CPF = '12345678901';
+
+      const errors = await validate(person, {
+        skipMissingProperties: false,
+        forbidNonWhitelisted: false,
+      });
+      expect(errors).toHaveLength(0);
+    });
+
+    it('should pass validation when second property is provided in required group', async () => {
+      const person = new RequiredPerson();
+      person.CNPJ = '12345678000190';
+
+      const errors = await validate(person, {
+        skipMissingProperties: false,
+        forbidNonWhitelisted: false,
+      });
+      expect(errors).toHaveLength(0);
+    });
+  });
 });

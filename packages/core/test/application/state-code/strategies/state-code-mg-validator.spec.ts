@@ -7,6 +7,11 @@ describe('StateCodeMgValidator', () => {
     expect(validator.execute('0623079040081')).toBe(true);
   });
 
+  it('should invalidate IE with wrong check digit when remainder < 2', () => {
+    // Test that the remainder < 2 branch is executed
+    expect(validator.execute('0623000000001')).toBe(false);
+  });
+
   it('should invalidate IE with incorrect check digit', () => {
     expect(validator.execute('0623079040082')).toBe(false);
   });
