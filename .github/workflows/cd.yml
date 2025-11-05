@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   create-tag:
@@ -40,6 +41,23 @@ jobs:
           else
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
+
+      - uses: actions/setup-node@v4
+        if: steps.should-skip.outputs.skip != 'true'
+        with:
+          node-version: 22.x
+
+      - name: Install system dependencies
+        if: steps.should-skip.outputs.skip != 'true'
+        run: sudo apt update && sudo apt install -y libxml2-dev
+
+      - name: Install pnpm
+        if: steps.should-skip.outputs.skip != 'true'
+        run: npm install -g pnpm
+
+      - name: Install packages
+        if: steps.should-skip.outputs.skip != 'true'
+        run: pnpm install
 
       - name: Get next version
         if: steps.should-skip.outputs.skip != 'true'
@@ -98,3 +116,15 @@ jobs:
               --repo="$GITHUB_REPOSITORY" \
               --title="${GITHUB_REPOSITORY#*/} $VERSION" \
               --generate-notes
+
+      - name: Update package.json version
+        if: steps.should-skip.outputs.skip != 'true'
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          jq --arg version "$VERSION" '.version = $version' package.json > .package.json && mv .package.json package.json
+
+      - name: Publish to npm
+        if: steps.should-skip.outputs.skip != 'true'
+        run: pnpm publish --no-git-checks
+        env:
+          NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
