@@ -29,6 +29,6 @@ jobs:
       - name: install packages
         run: pnpm install
 
-      - run: pnpm publish
+      - run: pnpm publish --no-git-checks
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
