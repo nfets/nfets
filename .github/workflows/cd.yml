@@ -46,6 +46,8 @@ jobs:
         if: steps.should-skip.outputs.skip != 'true'
         with:
           node-version: 22.x
+          registry-url: "https://registry.npmjs.org"
+          always-auth: true
 
       - name: Install system dependencies
         if: steps.should-skip.outputs.skip != 'true'
@@ -127,4 +129,4 @@ jobs:
         if: steps.should-skip.outputs.skip != 'true'
         run: pnpm publish --no-git-checks
         env:
-          NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
