@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-[Versão em Português](./README.md)
+[Versão em Português](../README.md)
 
 Welcome to nfets documentation! This folder contains important files about project governance, contribution, and support.
 
@@ -60,7 +60,7 @@ Several documents are available in Portuguese (PT-BR) and English (EN):
 
 ## 🔗 Useful Links
 
-- [Main README](./README.md)
+- [Main README](../README.md)
 - [Source Code](../packages/)
 - [Issues](https://github.com/nfets/nfets/issues)
 - [Discussions](https://github.com/nfets/nfets/discussions)

@@ -10,7 +10,7 @@ Obrigado por usar nfets! Se você precisa de ajuda, aqui estão algumas opções
 
 Antes de pedir ajuda, verifique nossa documentação:
 
-- [README Principal](./README.md)
+- [README Principal](../README.md)
 - [Guia de Contribuição](./CONTRIBUTING.md)
 - [Exemplos de Uso](../packages/)
 
@@ -19,11 +19,13 @@ Antes de pedir ajuda, verifique nossa documentação:
 ### GitHub Discussions
 
 Para perguntas gerais, discussões e compartilhamento de ideias:
+
 - [Discussions](https://github.com/nfets/nfets/discussions)
 
 ### Issues
 
 Para reportar bugs ou solicitar features:
+
 - [Abrir uma Issue](https://github.com/nfets/nfets/issues/new/choose)
 - Use os templates apropriados
 - Forneça o máximo de detalhes possível
@@ -73,4 +75,3 @@ Para questões específicas que não se encaixam nas categorias acima, você pod
 ---
 
 **Nota**: Este é um projeto open source mantido por voluntários. Por favor, seja paciente e respeitoso ao solicitar ajuda.
-

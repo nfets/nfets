@@ -135,7 +135,7 @@ make test:coverage-summary
 
 Se tiver dúvidas, consulte:
 
-- [Documentação](./README.md)
+- [Documentação](../README.md)
 - [Issues abertas](https://github.com/nfets/nfets/issues)
 - [Discussions](https://github.com/nfets/nfets/discussions)
 

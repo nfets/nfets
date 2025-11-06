@@ -30,7 +30,7 @@ body:
     attributes:
       label: Localização / Location
       description: Onde está o problema? (URL ou caminho do arquivo) / Where is the issue? (URL or file path)
-      placeholder: "https://github.com/nfets/nfets/blob/main/docs/README.md ou https://github.com/nfets/nfets/blob/main/packages/core/README.md"
+      placeholder: "https://github.com/nfets/nfets/blob/main/README.md
     validations:
       required: true
 
