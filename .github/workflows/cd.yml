@@ -9,7 +9,7 @@ permissions:
   id-token: write
 
 jobs:
-  create-tag:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -47,7 +47,6 @@ jobs:
         with:
           node-version: 22.x
           registry-url: "https://registry.npmjs.org"
-          always-auth: true
 
       - name: Install system dependencies
         if: steps.should-skip.outputs.skip != 'true'
@@ -55,7 +54,9 @@ jobs:
 
       - name: Install pnpm
         if: steps.should-skip.outputs.skip != 'true'
-        run: npm install -g pnpm
+        run: |
+          npm install -g npm@latest
+          npm install -g pnpm
 
       - name: Install packages
         if: steps.should-skip.outputs.skip != 'true'
@@ -125,13 +126,10 @@ jobs:
           VERSION="${{ steps.version.outputs.version }}"
           jq --arg version "$VERSION" '.version = $version' package.json > .package.json && mv .package.json package.json
 
-      - name: Configure npm authentication
+      - name: Publish to npm using Trusted Publishing
         if: steps.should-skip.outputs.skip != 'true'
         run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
-          echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
-          echo "always-auth=true" >> ~/.npmrc
-
-      - name: Publish to npm
-        if: steps.should-skip.outputs.skip != 'true'
-        run: pnpm publish --no-git-checks
+          # Ensure npm is authenticated via OIDC (Trusted Publishing)
+          # setup-node should configure this automatically with id-token: write permission
+          # pnpm will use npm's authentication
+          pnpm publish --no-git-checks
