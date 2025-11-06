@@ -51,13 +51,6 @@ Bem-vindo à documentação do nfets! Esta pasta contém arquivos importantes so
 - **[PULL_REQUEST_TEMPLATE.md](./docs/PULL_REQUEST_TEMPLATE.md)** - Template para PRs
 - **[ISSUE_TEMPLATE/](./docs/ISSUE_TEMPLATE/)** - Templates para issues
 
-## 🌍 Traduções
-
-Vários documentos estão disponíveis em português (PT-BR) e inglês (EN):
-
-- `ARQUIVO.md` - Versão em português
-- `ARQUIVO.en.md` - English version
-
 ## 🔗 Links Úteis
 
 - [Código Fonte](./packages/)
@@ -66,7 +59,7 @@ Vários documentos estão disponíveis em português (PT-BR) e inglês (EN):
 
 ## 📋 Certificados
 
-A pasta `certificates/` contém documentação sobre como gerar certificados para testes.
+A pasta `docs/certificates/` contém documentação sobre como gerar certificados para testes.
 
 ---
 

@@ -36,6 +36,8 @@ jobs:
             SKIP=true
           elif [[ -n "$COMMIT_MESSAGE_SINGLE" && ("$COMMIT_MESSAGE_SINGLE" == *"dependabot"* || "$COMMIT_MESSAGE_SINGLE" == *"build(deps)"*) ]]; then
             SKIP=true
+          elif [[ -n "$COMMIT_MESSAGE_SINGLE" && ("$COMMIT_MESSAGE_SINGLE" == *"[skip-cd]"*) ]]; then
+            SKIP=true
           fi
 
           if [ "$SKIP" = true ]; then
