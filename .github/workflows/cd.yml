@@ -18,11 +18,13 @@ jobs:
 
       - name: Check if should skip (dependabot)
         id: should-skip
+        env:
+          ACTOR: ${{ github.actor }}
+          AUTHOR_NAME: ${{ github.event.head_commit.author.name }}
+          AUTHOR_EMAIL: ${{ github.event.head_commit.author.email }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
-          ACTOR="${{ github.actor }}"
-          AUTHOR_NAME="${{ github.event.head_commit.author.name }}"
-          AUTHOR_EMAIL="${{ github.event.head_commit.author.email }}"
-          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+          COMMIT_MESSAGE_SINGLE=$(echo "$COMMIT_MESSAGE" | tr '\n' ' ')
 
           SKIP=false
 
@@ -32,7 +34,7 @@ jobs:
             SKIP=true
           elif [[ "$ACTOR" == *"dependabot"* ]]; then
             SKIP=true
-          elif [[ -n "$COMMIT_MESSAGE" && ("$COMMIT_MESSAGE" == *"dependabot"* || "$COMMIT_MESSAGE" == *"build(deps)"*) ]]; then
+          elif [[ -n "$COMMIT_MESSAGE_SINGLE" && ("$COMMIT_MESSAGE_SINGLE" == *"dependabot"* || "$COMMIT_MESSAGE_SINGLE" == *"build(deps)"*) ]]; then
             SKIP=true
           fi
 
