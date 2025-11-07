@@ -104,16 +104,8 @@ export class NativeCertificateRepository implements CertificateRepository {
     }
   }
 
-  public getStringPublicKey(certificate: KeyObject): string {
-    try {
-      const pem = certificate.export({ type: 'spki', format: 'pem' });
-      return pem
-        .toString()
-        .replace(/-----.*[\n]?/g, '')
-        .replace(/[\n\r]/g, '');
-    } catch (e) {
-      throw new NFeTsError('Cannot extract public key from certificate');
-    }
+  public getStringCertificate(certificate: X509Certificate): string {
+    return certificate.raw.toString('base64');
   }
 
   public getStringPrivateKey(privateKey: KeyObject): string {

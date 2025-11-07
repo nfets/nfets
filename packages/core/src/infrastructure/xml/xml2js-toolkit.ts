@@ -98,6 +98,12 @@ export class Xml2JsToolkit implements XmlToolkit {
     return element ? this.clear(XmlDsig.Stringify(element)) : null;
   }
 
+  public getFirstNode(xml: string): string | null {
+    const parsed = XmlDsig.Parse(xml);
+    const element = parsed.documentElement.firstChild;
+    return element ? this.clear(XmlDsig.Stringify(element)) : null;
+  }
+
   public getAttribute(xml: string, tag: string): string | null {
     const parsed = XmlDsig.Parse(xml);
     return parsed.documentElement.getAttribute(tag);

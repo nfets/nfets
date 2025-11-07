@@ -20,6 +20,7 @@ export interface XmlToolkit {
     options?: CanonicalizeOptions,
   ): string;
   getNode(xml: string, tag: string): string | null;
+  getFirstNode(xml: string): string | null;
   getAttribute(xml: string, tag: string): string | null;
   appendNode(xml: string, node: string): string;
 }

@@ -11,12 +11,8 @@ export class XmlSigner extends Signer {
     options: SignerOptions,
     cert: ReadCertificateResponse,
   ) {
-    const {
-      privateKey,
-      certificate: { publicKey },
-    } = cert;
-
     const { tag, mark } = options;
+    const { privateKey, certificate } = cert;
 
     const node = this.toolkit.getNode(xml, tag);
     if (!node) return left(new NFeTsError(`Node ${tag} not found`));
@@ -26,7 +22,7 @@ export class XmlSigner extends Signer {
     if (signatureOrLeft.isLeft()) return signatureOrLeft;
 
     const Signature = await this.toolkit.build(
-      this.assemble(signedInfo, signatureOrLeft.value, publicKey),
+      this.assemble(signedInfo, signatureOrLeft.value, certificate),
       { rootName: 'Signature' },
     );
 

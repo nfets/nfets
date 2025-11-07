@@ -1,4 +1,4 @@
-import type { KeyObject } from 'node:crypto';
+import type { KeyObject, X509Certificate } from 'node:crypto';
 import type {
   Signature,
   SignedInfo,
@@ -31,10 +31,10 @@ export abstract class Signer {
   protected assemble(
     SignedInfo: SignedInfo,
     SignatureValue: string,
-    certificate: KeyObject,
+    certificate: X509Certificate,
   ) {
     const X509Certificate =
-      this.certificateRepository.getStringPublicKey(certificate);
+      this.certificateRepository.getStringCertificate(certificate);
 
     return {
       $: { xmlns: SignatureNamespace },

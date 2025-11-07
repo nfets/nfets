@@ -11,17 +11,13 @@ interface Namespaced {
 }
 
 export class EntitySigner extends Signer {
-  public async sign<T extends Namespaced, K extends keyof T = keyof T>(
+  public async sign<T extends object, K extends keyof T = keyof T>(
     content: T,
     options: SignerOptions<K>,
     cert: ReadCertificateResponse,
   ): Promise<Either<NFeTsError, SignedEntity<T>>> {
-    const {
-      privateKey,
-      certificate: { publicKey },
-    } = cert;
-
     const { tag, mark } = options;
+    const { privateKey, certificate } = cert;
 
     if (!content[tag]) {
       return left(new NFeTsError(`Node ${String(tag)} not found`));
@@ -41,16 +37,20 @@ export class EntitySigner extends Signer {
     result.Signature = this.assemble(
       signedInfo,
       signatureOrLeft.value,
-      publicKey,
+      certificate,
     );
 
     return right(result);
   }
 
-  private ns(content: Namespaced, tag: string) {
-    const { $, ...element } = content[tag] as Namespaced;
+  private ns(content: object, tag: string) {
+    const xmlns = (content as Namespaced).$.xmlns;
+    const {
+      $: { xmlns: _, ...$ },
+      ...element
+    } = (content as Namespaced)[tag] as Namespaced;
     return {
-      $: { ...$, xmlns: content.$.xmlns },
+      $: { xmlns, ...$ },
       ...element,
     };
   }

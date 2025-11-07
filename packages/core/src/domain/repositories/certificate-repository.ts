@@ -1,4 +1,4 @@
-import type { KeyObject } from 'node:crypto';
+import type { KeyObject, X509Certificate } from 'node:crypto';
 
 import type { Either } from '@nfets/core/shared/either';
 import type { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
@@ -15,6 +15,6 @@ export interface CertificateRepository {
     privateKey: KeyObject,
     algorithm: SignatureAlgorithm,
   ): Promise<Either<NFeTsError, string>>;
-  getStringPublicKey(certificate: KeyObject): string;
+  getStringCertificate(certificate: X509Certificate): string;
   getStringPrivateKey(privateKey: KeyObject): string;
 }

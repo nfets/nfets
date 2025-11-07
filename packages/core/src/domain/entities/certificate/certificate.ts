@@ -6,3 +6,14 @@ export interface ReadCertificateResponse {
   certificate: X509Certificate;
   privateKey: KeyObject;
 }
+
+export interface CertificateInfo {
+  CNPJ?: string;
+  CPF?: string;
+  O?: string;
+  C?: string;
+  ST?: string;
+  L?: string;
+  CN?: string;
+  OU?: string;
+}
