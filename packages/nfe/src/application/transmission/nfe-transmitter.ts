@@ -96,6 +96,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
+      xsd: 'consStatServ_v4.00.xsd',
       payload: {
         consStatServ: this.payload(data, service.version),
       },
@@ -131,6 +132,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
+      xsd: 'inutNFe_v4.00.xsd',
       payload: {
         inutNFe: this.payload(
           { infInut: { $: { Id }, ...data } },
@@ -156,6 +158,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
+      xsd: 'consSitNFe_v4.00.xsd',
       payload: {
         consSitNFe: this.payload(data, service.version),
       },
@@ -171,9 +174,12 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     const data = payloadOrError.value;
     const service = this.service({ ...data, service: 'NfeAutorizacao' });
 
+    // TODO: support gzipped payload
+
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
+      xsd: 'enviNFe_v4.00.xsd',
       payload: {
         enviNFe: this.payload(data, service.version),
       },
@@ -192,6 +198,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
+      xsd: 'consReciNFe_v4.00.xsd',
       payload: {
         consReciNFe: this.payload(data, service.version),
       },
@@ -208,6 +215,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
+      xsd: 'envEvento_v4.00.xsd',
       payload: {
         envEvento: this.payload(data, service.version),
       },
@@ -237,6 +245,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
+      xsd: 'ConsCad_v4.00.xsd',
       payload: {
         ConsCad: this.payload(data, service.version),
       },

@@ -3,9 +3,10 @@ import type { ProtNFe } from './consulta-protocolo';
 import type { NFe } from '../nfe/nfe';
 
 export interface AutorizacaoPayload {
-  tpAmb: EnvironmentCode;
-  cUF: StateCode;
+  cUF?: StateCode;
+  tpAmb?: EnvironmentCode;
   idLote: string;
+  gzipped?: boolean;
   indSinc?: '0' | '1';
   NFe: NFe;
 }
