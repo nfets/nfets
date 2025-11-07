@@ -8,8 +8,8 @@ req_extensions = v3_req
 C = BR
 ST = São Paulo
 L = São Paulo
-O = EXAMPLE COMPANY LTDA
-OU = EXAMPLE COMPANY TI
+O = ICP-Brasil
+OU = Certificado PJ A1
 CN = 79.839.601/0001-42
 emailAddress = email@example.com
 
@@ -22,7 +22,7 @@ keyUsage = keyCertSign, cRLSign
 basicConstraints = CA:FALSE
 keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 subjectAltName = @alt_names
-2.16.76.1.3.3 = ASN1:UTF8String:79839601000142
 
 [ alt_names ]
 email = email@example.com
+otherName.1 = 2.16.76.1.3.3;UTF8:79839601000142

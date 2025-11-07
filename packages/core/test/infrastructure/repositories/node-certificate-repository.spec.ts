@@ -31,27 +31,27 @@ describe('node certificate repository (unit)', () => {
     expect(certificateInfo.subject).toEqual(`C=BR
 ST=SÃ£o Paulo
 L=SÃ£o Paulo
-O=EXAMPLE COMPANY LTDA
-OU=EXAMPLE COMPANY TI
+O=ICP-Brasil
+OU=Certificado PJ A1
 CN=79.839.601/0001-42
 emailAddress=email@example.com`);
-    expect(certificateInfo.subjectAltName).toEqual(`email:email@example.com`);
+    expect(certificateInfo.subjectAltName).toContain(`email:email@example.com`);
     expect(certificateInfo.issuer).toEqual(`C=BR
 ST=SÃ£o Paulo
 L=SÃ£o Paulo
-O=EXAMPLE COMPANY LTDA
-OU=EXAMPLE COMPANY TI
+O=ICP-Brasil
+OU=Certificado PJ A1
 CN=79.839.601/0001-42
 emailAddress=email@example.com`);
 
     expect(certificateInfo.serialNumber).toEqual(
-      '4A543B2792CD38D8C80D1DAB57C7B034D0E88D79',
+      '41CCFE9C1EEAC1B02664CF77AAE42F6E64A117B4',
     );
     expect(certificateInfo.validFromDate).toEqual(
-      new Date('2025-02-12T16:45:36.000Z'),
+      new Date('2025-11-06T16:02:26.000Z'),
     );
     expect(certificateInfo.validToDate).toEqual(
-      new Date('2035-02-10T16:45:36.000Z'),
+      new Date('2035-11-04T16:02:26.000Z'),
     );
   });
 
@@ -64,29 +64,27 @@ emailAddress=email@example.com`);
     expect(certificateInfo.subject).toEqual(`C=BR
 ST=SÃ£o Paulo
 L=SÃ£o Paulo
-O=JOÃ\x83O DA SILVA
-OU=JOÃ\x83O DA SILVA
+O=ICP-Brasil
+OU=Certificado PF A1
 CN=610.947.300-68
-emailAddress=email@example.com
-2.16.76.1.3.3=79839601000142`);
-    expect(certificateInfo.subjectAltName).toEqual(`email:email@example.com`);
+emailAddress=email@example.com`);
+    expect(certificateInfo.subjectAltName).toContain(`email:email@example.com`);
     expect(certificateInfo.issuer).toEqual(`C=BR
 ST=SÃ£o Paulo
 L=SÃ£o Paulo
-O=JOÃ\x83O DA SILVA
-OU=JOÃ\x83O DA SILVA
+O=ICP-Brasil
+OU=Certificado PF A1
 CN=610.947.300-68
-emailAddress=email@example.com
-2.16.76.1.3.3=79839601000142`);
+emailAddress=email@example.com`);
 
     expect(certificateInfo.serialNumber).toEqual(
-      '52A80489F00B125FD5A748C4A23BF5FDA558F0CB',
+      '29914D22ADF9A65E8B24AC2B3673F5FFE2C9678A',
     );
     expect(certificateInfo.validFromDate).toEqual(
-      new Date('2025-02-12T16:37:07.000Z'),
+      new Date('2025-11-06T16:02:33.000Z'),
     );
     expect(certificateInfo.validToDate).toEqual(
-      new Date('2035-02-10T16:37:07.000Z'),
+      new Date('2035-11-04T16:02:33.000Z'),
     );
   });
 
@@ -181,26 +179,28 @@ emailAddress=email@example.com
     expectIsLeft(signResult);
   });
 
-  it('should get string public key from certificate', async () => {
+  it('should get string certificate from certificate', async () => {
     const result = await repository.read(validCnpjPfxCertificate, password);
     expectIsRight(result);
 
-    const publicKey = repository.getStringPublicKey(
-      result.value.certificate.publicKey,
+    const certificateString = repository.getStringCertificate(
+      result.value.certificate,
     );
-    expect(publicKey).toBeDefined();
-    expect(typeof publicKey).toBe('string');
-    expect(publicKey.length).toBeGreaterThan(0);
+    expect(certificateString).toBeDefined();
+    expect(typeof certificateString).toBe('string');
+    expect(certificateString.length).toBeGreaterThan(0);
   });
 
-  it('should throw error when getting public key fails', () => {
+  it('should throw error when getting certificate fails', () => {
     const invalidCert = {
-      export: () => {
-        throw new Error('test');
+      raw: {
+        toString: (_?: string) => {
+          throw new Error('test');
+        },
       },
     } as never;
     expect(() => {
-      repository.getStringPublicKey(invalidCert);
+      repository.getStringCertificate(invalidCert);
     }).toThrow(NFeTsError);
   });
 
