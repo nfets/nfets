@@ -47,7 +47,7 @@ export interface Ide {
   cMunFG: string;
   tpImp: string;
   tpEmis: string;
-  cDV: string;
+  cDV?: string;
   tpAmb: string;
   finNFe: string;
   indFinal: string;

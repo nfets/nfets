@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { constants } from 'node:crypto';
 import { Agent as HttpsAgent } from 'node:https';
 import { createClientAsync } from 'soap';
@@ -72,6 +73,13 @@ export class SoapRemoteTransmissionRepository<C extends Client>
         renderOpts: { pretty: false },
         rootName: params.root,
       });
+
+      const node = this.toolkit.getFirstNode(_xml) ?? '',
+        directory = path.dirname(params.xsd),
+        xsd = params.xsd;
+
+      const validOrLeft = await this.toolkit.validate(node, directory, xsd);
+      if (validOrLeft.isLeft()) return validOrLeft;
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
       const [result] = await client[`${params.method}Async`](

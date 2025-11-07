@@ -16,6 +16,7 @@ export type SendTransmissionPayload<C extends Client> = {
     url: string;
     method: M;
     root: string;
+    xsd: string;
     payload: Parameters<C[M]>[0];
   };
 }[KnownKeys<C> & string];

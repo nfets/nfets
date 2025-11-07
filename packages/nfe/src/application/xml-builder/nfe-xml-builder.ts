@@ -1,4 +1,4 @@
-import { type XmlToolkit, NFeTsError } from '@nfets/core/domain';
+import { type XmlToolkit, Environment, NFeTsError } from '@nfets/core/domain';
 import { type DeepPartial, left, right } from '@nfets/core/shared';
 import { ValidateErrorsMetadata, Validates } from '@nfets/core/application';
 
@@ -267,6 +267,7 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     const errors = this.errors();
     if (errors) return left(new NFeTsError(errors.join(', ')));
     this.$total?.aggregate();
+    this.assertHomologValidations();
     return right(plainToInstance(this.data, NFe));
   }
 
@@ -277,6 +278,14 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     return right(
       await this.builder.build(resultOrLeft.value, { rootName: this.root }),
     );
+  }
+
+  private assertHomologValidations(): void {
+    if (this.data.infNFe?.ide.tpAmb !== Environment.Homolog) return;
+
+    if (this.data.infNFe.dest)
+      this.data.infNFe.dest.xNome =
+        'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL' as const;
   }
 
   private errors(): string[] | undefined {
@@ -316,6 +325,7 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
       cNF: this.data.infNFe.ide.cNF,
     });
 
+    this.data.infNFe.ide.cDV = Id.slice(-1);
     this.data.infNFe.$ = {
       Id: `${this.root}${Id}`,
       versao: this.data.infNFe.$.versao,

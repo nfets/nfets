@@ -46,6 +46,7 @@ import type {
 
 import type WSNFE_4_00_MOD55 from '../../../services/wsnfe_4.00_mod55';
 import type webservices from '@nfets/nfe/domain/entities/services/webservices';
+import type { Schema } from './schemas';
 
 export type WrapRequest<K extends string, T> = Record<K, T>;
 
@@ -87,6 +88,7 @@ export type ServiceOptions<
 
 export interface NfeTransmitterOptions extends TransmitterOptions {
   cUF: StateCode;
+  schema?: Schema;
   tpAmb: EnvironmentCode;
 }
 

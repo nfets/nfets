@@ -13,6 +13,7 @@
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "test": "jest --config jest.config.ts --passWithNoTests",
+    "test:integration": "jest --config jest.config.integration.ts --passWithNoTests",
     "test:coverage": "pnpm test --coverage"
   },
   "dependencies": {

@@ -77,6 +77,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
       expect(mockRepository.send).toHaveBeenCalledWith({
         root: 'nfeDadosMsg',
         url: expect.stringContaining('nfe'),
+        xsd: expect.stringContaining('consStatServ_v4.00.xsd'),
         payload: {
           consStatServ: expect.objectContaining({
             $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
@@ -191,6 +192,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
         },
         root: 'nfeDadosMsg',
         url: 'https://nfe-homologacao.sefazrs.rs.gov.br/ws/nfeinutilizacao/nfeinutilizacao4.asmx',
+        xsd: expect.stringContaining('inutNFe_v4.00.xsd'),
         method: 'nfeInutilizacaoNF',
       });
     });
@@ -245,6 +247,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
       expect(mockRepository.send).toHaveBeenCalledWith({
         root: 'nfeDadosMsg',
         url: expect.stringContaining('nfe'),
+        xsd: expect.stringContaining('consSitNFe_v4.00.xsd'),
         payload: {
           consSitNFe: expect.objectContaining({
             $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
@@ -299,6 +302,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
       expect(mockRepository.send).toHaveBeenCalledWith({
         root: 'nfeDadosMsg',
         url: expect.stringContaining('nfe'),
+        xsd: expect.stringContaining('enviNFe_v4.00.xsd'),
         payload: {
           enviNFe: expect.objectContaining({
             $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
@@ -341,6 +345,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
       expect(mockRepository.send).toHaveBeenCalledWith({
         root: 'nfeDadosMsg',
         url: expect.stringContaining('nfe'),
+        xsd: expect.stringContaining('consReciNFe_v4.00.xsd'),
         payload: {
           consReciNFe: expect.objectContaining({
             $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
@@ -412,6 +417,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
       expect(mockRepository.send).toHaveBeenCalledWith({
         root: 'nfeDadosMsg',
         url: expect.stringContaining('nfe'),
+        xsd: expect.stringContaining('envEvento_v4.00.xsd'),
         payload: {
           envEvento: expect.objectContaining({
             $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '1.00' },
@@ -473,6 +479,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
       expect(mockRepository.send).toHaveBeenCalledWith({
         root: 'nfeDadosMsg',
         url: expect.anything(),
+        xsd: expect.stringContaining('ConsCad_v4.00.xsd'),
         payload: {
           ConsCad: expect.objectContaining({
             $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '2.00' },
@@ -522,6 +529,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
       expect(mockRepository.send).toHaveBeenCalledWith({
         root: 'nfeDadosMsg',
         url: expect.anything(),
+        xsd: expect.stringContaining('ConsCad_v4.00.xsd'),
         payload: {
           ConsCad: expect.objectContaining({
             $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '2.00' },

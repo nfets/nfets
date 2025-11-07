@@ -31,6 +31,10 @@ import { ConsultaCadastroPayload } from '@nfets/nfe/infrastructure/dto/services/
 
 import WSNFE_4_00_MOD55 from '../../services/wsnfe_4.00_mod55';
 import webservices from '@nfets/nfe/domain/entities/services/webservices';
+import path from 'node:path';
+import schemas, {
+  directory,
+} from '@nfets/nfe/domain/entities/transmission/schemas';
 
 export class NfeRemoteTransmitter implements NfeTransmitter {
   public constructor(
@@ -47,6 +51,8 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     if (certificate) {
       this.remoteTransmissionRepository.setCertificate(certificate);
     }
+
+    this.options.schema ??= schemas.PL_009_V4;
 
     return this;
   }
@@ -87,6 +93,10 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return { $: { xmlns: this.xmlns, versao: version }, ...payload };
   }
 
+  private xsd(name: string) {
+    return path.resolve(directory, this.options.schema as string, name);
+  }
+
   @Validates(ConsultStatusPayload)
   public async consultStatus(payload: IConsultStatusPayload) {
     const payloadOrError = this.validate(payload);
@@ -96,7 +106,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
-      xsd: 'consStatServ_v4.00.xsd',
+      xsd: this.xsd('consStatServ_v4.00.xsd'),
       payload: {
         consStatServ: this.payload(data, service.version),
       },
@@ -132,7 +142,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
-      xsd: 'inutNFe_v4.00.xsd',
+      xsd: this.xsd('inutNFe_v4.00.xsd'),
       payload: {
         inutNFe: this.payload(
           { infInut: { $: { Id }, ...data } },
@@ -158,7 +168,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
-      xsd: 'consSitNFe_v4.00.xsd',
+      xsd: this.xsd('consSitNFe_v4.00.xsd'),
       payload: {
         consSitNFe: this.payload(data, service.version),
       },
@@ -179,7 +189,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
-      xsd: 'enviNFe_v4.00.xsd',
+      xsd: this.xsd('enviNFe_v4.00.xsd'),
       payload: {
         enviNFe: this.payload(data, service.version),
       },
@@ -198,7 +208,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
-      xsd: 'consReciNFe_v4.00.xsd',
+      xsd: this.xsd('consReciNFe_v4.00.xsd'),
       payload: {
         consReciNFe: this.payload(data, service.version),
       },
@@ -215,7 +225,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
-      xsd: 'envEvento_v4.00.xsd',
+      xsd: this.xsd('envEvento_v4.00.xsd'),
       payload: {
         envEvento: this.payload(data, service.version),
       },
@@ -245,7 +255,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
-      xsd: 'ConsCad_v4.00.xsd',
+      xsd: this.xsd('ConsCad_v4.00.xsd'),
       payload: {
         ConsCad: this.payload(data, service.version),
       },

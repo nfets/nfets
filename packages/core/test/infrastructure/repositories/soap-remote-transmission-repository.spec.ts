@@ -1,4 +1,5 @@
-import { expectIsRight } from '@nfets/test/expects';
+import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
+import path from 'node:path';
 import axios from 'axios';
 
 import { Xml2JsToolkit } from '@nfets/core/infrastructure/xml/xml2js-toolkit';
@@ -9,6 +10,7 @@ import { SoapRemoteTransmissionRepository } from '@nfets/core/infrastructure/rep
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
 
 import type { Client, CertificateRepository } from '@nfets/core/domain';
+import { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
 
 describe('soap remote transmission nfe (integration) (not destructive)', () => {
   const certificateFromEnvironment =
@@ -64,9 +66,14 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
     });
   });
 
-  it('should return schema failed when payload is invalid', async () => {
+  it('should not return schema failed when payload is invalid, due the xsd validation', async () => {
     const response = await transmission.send({
       root: 'nfeDadosMsg',
+      xsd: path.resolve(
+        __dirname,
+        '../../../../nfe/schemas/PL_009_V4',
+        'consStatServ_v4.00.xsd',
+      ),
       payload: {
         consStatServ: {
           $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
@@ -77,13 +84,13 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
       url: 'https://nfe-homologacao.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx',
     });
 
-    expectIsRight(response);
-    expect(response.value).toMatchObject({
-      retConsStatServ: {
-        cStat: '215',
-        xMotivo: 'Rejeicao: Falha no schema XML',
-      },
-    });
+    expectIsLeft(response);
+    expect(response.value).toStrictEqual(
+      new NFeTsError(
+        `Invalid xml schema: Element '{http://www.portalfiscal.inf.br/nfe}someInvalidTag': This element is not expected. Expected is ( {http://www.portalfiscal.inf.br/nfe}tpAmb ).
+`,
+      ),
+    );
   });
 
   it('should return rejection result when payload is invalid and valid xml content', async () => {
@@ -96,6 +103,11 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
 
     const response = await transmission.send({
       root: 'nfeDadosMsg',
+      xsd: path.resolve(
+        __dirname,
+        '../../../../nfe/schemas/PL_009_V4',
+        'consStatServ_v4.00.xsd',
+      ),
       payload: { consStatServ },
       method: 'nfeStatusServicoNF',
       url: 'https://nfe-homologacao.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx',
@@ -122,6 +134,11 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
     const response = await transmission.send({
       root: 'nfeDadosMsg',
       payload: { consStatServ },
+      xsd: path.resolve(
+        __dirname,
+        '../../../../nfe/schemas/PL_009_V4',
+        'consStatServ_v4.00.xsd',
+      ),
       method: 'nfeStatusServicoNF',
       url: 'https://nfe-homologacao.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx',
     });

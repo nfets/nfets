@@ -13,7 +13,7 @@ import type {
   RefECF as IRefECF,
   NFref as INFref,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
-import { Choice } from '@nfets/core/application';
+import { Choice, TransformDateString } from '@nfets/core/application';
 
 export class RefNF implements IRefNF {
   @IsString()
@@ -123,11 +123,11 @@ export class Ide implements IIde {
   @IsString()
   public nNF!: string;
 
-  @IsString()
+  @TransformDateString({ format: 'YYYY-MM-DD[T]HH:mm:ssZ' })
   public dhEmi!: string;
 
   @IsOptional()
-  @IsString()
+  @TransformDateString({ format: 'YYYY-MM-DD[T]HH:mm:ssZ' })
   public dhSaiEnt?: string;
 
   @IsString()
@@ -146,7 +146,8 @@ export class Ide implements IIde {
   public tpEmis!: string;
 
   @IsString()
-  public cDV!: string;
+  @IsOptional()
+  public cDV?: string = '' as const;
 
   @IsString()
   public tpAmb!: string;

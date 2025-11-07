@@ -195,7 +195,7 @@ emailAddress=email@example.com`);
     const invalidCert = {
       raw: {
         toString: (_?: string) => {
-          throw new Error('test');
+          throw new NFeTsError('test');
         },
       },
     } as never;
