@@ -6,8 +6,10 @@ export interface TotalBuilderAggregator {
   aggregate(): void;
 }
 
-export class DefaultTotalBuilderAggregator implements TotalBuilderAggregator {
-  public constructor(private readonly builder: INfeXmlBuilder) {}
+export class DefaultTotalBuilderAggregator<T extends object>
+  implements TotalBuilderAggregator
+{
+  public constructor(private readonly builder: INfeXmlBuilder<T>) {}
 
   public aggregate(): void {
     const zero = Decimal.from(0);

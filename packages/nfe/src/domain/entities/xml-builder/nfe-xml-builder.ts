@@ -10,7 +10,6 @@ import type { AssembleDetXmlBuilder, ProdBuilder } from './nfe-det-xml-builder';
 import type { Total as ITotal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
 import type { Transp as ITransp } from '@nfets/nfe/domain/entities/nfe/inf-nfe/transp';
 import type { Cobr as ICobr } from '@nfets/nfe/domain/entities/nfe/inf-nfe/cobr';
-import type { NFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 import type { InfIntermed as IInfIntermed } from '@nfets/nfe/domain/entities/nfe/inf-nfe/infintermed';
 import type { Exporta as IExporta } from '@nfets/nfe/domain/entities/nfe/inf-nfe/exporta';
 import type { Compra as ICompra } from '@nfets/nfe/domain/entities/nfe/inf-nfe/compra';
@@ -22,184 +21,187 @@ import type { Avulsa as IAvulsa } from '@nfets/nfe/domain/entities/nfe/inf-nfe/a
 import type { Local as ILocal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/local';
 import type { AutXML as IAutXML } from '@nfets/nfe/domain/entities/nfe/inf-nfe/autxml';
 
-export interface InfNFeBuilder {
-  infNFe(payload: InfNFeAttributes): IdeBuilder;
+export interface InfNFeBuilder<T extends object> {
+  infNFe(payload: InfNFeAttributes): IdeBuilder<T>;
 }
 
-export interface IdeBuilder {
-  ide(payload: Ide): EmitBuilder;
+export interface IdeBuilder<T extends object> {
+  ide(payload: Ide): EmitBuilder<T>;
 }
 
-export interface EmitBuilder {
+export interface EmitBuilder<T extends object> {
   emit(
     payload: IEmit,
-  ): AvulsaBuilder &
-    DestBuilder &
-    RetiradaBuilder &
-    EntregaBuilder &
-    AutXMLBuilder &
-    DetBuilder;
+  ): AvulsaBuilder<T> &
+    DestBuilder<T> &
+    RetiradaBuilder<T> &
+    EntregaBuilder<T> &
+    AutXMLBuilder<T> &
+    DetBuilder<T>;
 }
 
-export interface AvulsaBuilder {
+export interface AvulsaBuilder<T extends object> {
   avulsa(
     payload: IAvulsa,
-  ): DestBuilder &
-    RetiradaBuilder &
-    EntregaBuilder &
-    AutXMLBuilder &
-    DetBuilder;
+  ): DestBuilder<T> &
+    RetiradaBuilder<T> &
+    EntregaBuilder<T> &
+    AutXMLBuilder<T> &
+    DetBuilder<T>;
 }
 
-export interface DestBuilder {
+export interface DestBuilder<T extends object> {
   dest(
     payload: IDest,
-  ): RetiradaBuilder & EntregaBuilder & AutXMLBuilder & DetBuilder;
+  ): RetiradaBuilder<T> & EntregaBuilder<T> & AutXMLBuilder<T> & DetBuilder<T>;
 }
 
-export interface RetiradaBuilder {
+export interface RetiradaBuilder<T extends object> {
   retirada(
     payload: ILocal,
-  ): DestBuilder & EntregaBuilder & AutXMLBuilder & DetBuilder;
+  ): DestBuilder<T> & EntregaBuilder<T> & AutXMLBuilder<T> & DetBuilder<T>;
 }
 
-export interface EntregaBuilder {
-  entrega(payload: ILocal): DestBuilder & AutXMLBuilder & DetBuilder;
+export interface EntregaBuilder<T extends object> {
+  entrega(payload: ILocal): DestBuilder<T> & AutXMLBuilder<T> & DetBuilder<T>;
 }
 
-export interface AutXMLBuilder {
-  autXML(payload: IAutXML): AutXMLBuilder & DetBuilder;
+export interface AutXMLBuilder<T extends object> {
+  autXML(payload: IAutXML): AutXMLBuilder<T> & DetBuilder<T>;
 }
 
-export interface DetBuilder {
-  det<T>(
-    items: [T, ...T[]],
-    build: (ctx: ProdBuilder, item: T) => AssembleDetXmlBuilder,
-  ): TotalBuilder & TranspBuilder;
+export interface DetBuilder<T extends object> {
+  det<D>(
+    items: [D, ...D[]],
+    build: (ctx: ProdBuilder, item: D) => AssembleDetXmlBuilder,
+  ): TotalBuilder<T> & TranspBuilder<T>;
 }
 
-export interface TotalBuilder {
-  total(payload: ITotal): TranspBuilder;
+export interface TotalBuilder<T extends object> {
+  total(payload: ITotal): TranspBuilder<T>;
   increment(
     callback: (context: DeepPartial<ITotal>) => DeepPartial<ITotal>,
-  ): TranspBuilder;
+  ): TranspBuilder<T>;
 }
 
-export interface TranspBuilder {
-  transp(payload: ITransp): CobrBuilder & PagBuilder;
+export interface TranspBuilder<T extends object> {
+  transp(payload: ITransp): CobrBuilder<T> & PagBuilder<T>;
 }
 
-export interface CobrBuilder {
-  cobr(payload: ICobr): PagBuilder;
+export interface CobrBuilder<T extends object> {
+  cobr(payload: ICobr): PagBuilder<T>;
 }
 
-export interface PagBuilder {
+export interface PagBuilder<T extends object> {
   pag(
     payload: IPag,
-  ): AssembleNfeBuilder &
-    AvulsaBuilder &
-    InfAdicBuilder &
-    InfSolicNFFBuilder &
-    CanaBuilder &
-    CompraBuilder &
-    ExportaBuilder &
-    InfRespTecBuilder &
-    InfIntermedBuilder;
+  ): AssembleNfeBuilder<T> &
+    AvulsaBuilder<T> &
+    InfAdicBuilder<T> &
+    InfSolicNFFBuilder<T> &
+    CanaBuilder<T> &
+    CompraBuilder<T> &
+    ExportaBuilder<T> &
+    InfRespTecBuilder<T> &
+    InfIntermedBuilder<T>;
 }
 
-export interface InfIntermedBuilder {
+export interface InfIntermedBuilder<T extends object> {
   infIntermed(
     payload: IInfIntermed,
-  ): AssembleNfeBuilder &
-    AvulsaBuilder &
-    InfAdicBuilder &
-    InfSolicNFFBuilder &
-    CanaBuilder &
-    CompraBuilder &
-    InfRespTecBuilder &
-    ExportaBuilder;
+  ): AssembleNfeBuilder<T> &
+    AvulsaBuilder<T> &
+    InfAdicBuilder<T> &
+    InfSolicNFFBuilder<T> &
+    CanaBuilder<T> &
+    CompraBuilder<T> &
+    InfRespTecBuilder<T> &
+    ExportaBuilder<T>;
 }
 
-export interface InfAdicBuilder {
+export interface InfAdicBuilder<T extends object> {
   infAdic(
     payload: IInfAdic,
-  ): AssembleNfeBuilder &
-    AvulsaBuilder &
-    InfAdicBuilder &
-    InfSolicNFFBuilder &
-    InfRespTecBuilder &
-    CanaBuilder &
-    CompraBuilder &
-    ExportaBuilder;
+  ): AssembleNfeBuilder<T> &
+    AvulsaBuilder<T> &
+    InfAdicBuilder<T> &
+    InfSolicNFFBuilder<T> &
+    InfRespTecBuilder<T> &
+    CanaBuilder<T> &
+    CompraBuilder<T> &
+    ExportaBuilder<T>;
 }
-export interface ExportaBuilder {
+export interface ExportaBuilder<T extends object> {
   exporta(
     payload: IExporta,
-  ): AssembleNfeBuilder &
-    AvulsaBuilder &
-    InfAdicBuilder &
-    InfSolicNFFBuilder &
-    InfRespTecBuilder &
-    CanaBuilder &
-    CompraBuilder;
+  ): AssembleNfeBuilder<T> &
+    AvulsaBuilder<T> &
+    InfAdicBuilder<T> &
+    InfSolicNFFBuilder<T> &
+    InfRespTecBuilder<T> &
+    CanaBuilder<T> &
+    CompraBuilder<T>;
 }
 
-export interface CompraBuilder {
+export interface CompraBuilder<T extends object> {
   compra(
     payload: ICompra,
-  ): AssembleNfeBuilder &
-    AvulsaBuilder &
-    InfAdicBuilder &
-    InfSolicNFFBuilder &
-    InfRespTecBuilder &
-    CanaBuilder;
+  ): AssembleNfeBuilder<T> &
+    AvulsaBuilder<T> &
+    InfAdicBuilder<T> &
+    InfSolicNFFBuilder<T> &
+    InfRespTecBuilder<T> &
+    CanaBuilder<T>;
 }
 
-export interface CanaBuilder {
+export interface CanaBuilder<T extends object> {
   cana(
     payload: ICana,
-  ): AssembleNfeBuilder &
-    AvulsaBuilder &
-    InfAdicBuilder &
-    InfSolicNFFBuilder &
-    InfRespTecBuilder;
+  ): AssembleNfeBuilder<T> &
+    AvulsaBuilder<T> &
+    InfAdicBuilder<T> &
+    InfSolicNFFBuilder<T> &
+    InfRespTecBuilder<T>;
 }
 
-export interface InfRespTecBuilder {
+export interface InfRespTecBuilder<T extends object> {
   infRespTec(
     payload: IInfRespTec,
-  ): AssembleNfeBuilder & AvulsaBuilder & InfAdicBuilder & InfSolicNFFBuilder;
+  ): AssembleNfeBuilder<T> &
+    AvulsaBuilder<T> &
+    InfAdicBuilder<T> &
+    InfSolicNFFBuilder<T>;
 }
 
-export interface InfSolicNFFBuilder {
+export interface InfSolicNFFBuilder<T extends object> {
   infSolicNFF(
     payload: ISolicNFF,
-  ): AssembleNfeBuilder & InfAdicBuilder & AvulsaBuilder;
+  ): AssembleNfeBuilder<T> & InfAdicBuilder<T> & AvulsaBuilder<T>;
 }
 
-export interface AssembleNfeBuilder {
-  quiet(): AssembleNfeBuilder;
-  toObject(): Either<NFeTsError, NFe>;
+export interface AssembleNfeBuilder<T extends object> {
+  quiet(): AssembleNfeBuilder<T>;
+  toObject(): Either<NFeTsError, T>;
   assemble(): Promise<Either<NFeTsError, string>>;
 }
 
-export interface INfeXmlBuilder
-  extends InfNFeBuilder,
-    IdeBuilder,
-    DetBuilder,
-    DestBuilder,
-    RetiradaBuilder,
-    EntregaBuilder,
-    AutXMLBuilder,
-    TotalBuilder,
-    TranspBuilder,
-    PagBuilder,
-    InfIntermedBuilder,
-    ExportaBuilder,
-    CompraBuilder,
-    CanaBuilder,
-    InfRespTecBuilder,
-    InfSolicNFFBuilder,
-    InfAdicBuilder,
-    AvulsaBuilder,
-    AssembleNfeBuilder {}
+export interface INfeXmlBuilder<T extends object>
+  extends InfNFeBuilder<T>,
+    IdeBuilder<T>,
+    DetBuilder<T>,
+    DestBuilder<T>,
+    RetiradaBuilder<T>,
+    EntregaBuilder<T>,
+    AutXMLBuilder<T>,
+    TotalBuilder<T>,
+    TranspBuilder<T>,
+    PagBuilder<T>,
+    InfIntermedBuilder<T>,
+    ExportaBuilder<T>,
+    CompraBuilder<T>,
+    CanaBuilder<T>,
+    InfRespTecBuilder<T>,
+    InfSolicNFFBuilder<T>,
+    InfAdicBuilder<T>,
+    AvulsaBuilder<T>,
+    AssembleNfeBuilder<T> {}
