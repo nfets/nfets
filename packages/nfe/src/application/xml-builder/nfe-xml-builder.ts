@@ -29,6 +29,8 @@ import type {
   INfeXmlBuilder,
   InfNFeBuilder,
   IdeBuilder,
+  TotalBuilder,
+  TranspBuilder,
 } from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
 import type { NFe as INFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 
@@ -68,13 +70,19 @@ import { Compra } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/compra';
 import { InfAdic } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/infadic';
 import { Cana } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/cana';
 
-export class NfeXmlBuilder implements INfeXmlBuilder {
+export class NfeXmlBuilder<T extends object = INFe>
+  implements INfeXmlBuilder<T>
+{
   private readonly data = {
     $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
     infNFe: {
       total: { ICMSTot: {} },
     },
   } as Partial<INFe>;
+
+  protected get entity(): new () => T {
+    return NFe as new () => T;
+  }
 
   protected readonly root = 'NFe';
 
@@ -85,7 +93,9 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
 
   protected readonly nfeDetXmlBuilder = NfeDetXmlBuilder.create(this.$det);
 
-  public static create(builder: XmlToolkit): InfNFeBuilder & IdeBuilder {
+  public static create<T extends object = INFe>(
+    builder: XmlToolkit,
+  ): InfNFeBuilder<T> & IdeBuilder<T> {
     return new this(builder);
   }
 
@@ -149,10 +159,10 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     return this;
   }
 
-  public det<T>(
-    items: [T, ...T[]],
-    build: (ctx: ProdBuilder, item: T) => AssembleDetXmlBuilder,
-  ) {
+  public det<D>(
+    items: [D, ...D[]],
+    build: (ctx: ProdBuilder, item: D) => AssembleDetXmlBuilder,
+  ): TotalBuilder<T> & TranspBuilder<T> {
     this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.det = items.map((item, index) => {
       const builder = build(
@@ -268,7 +278,7 @@ export class NfeXmlBuilder implements INfeXmlBuilder {
     if (errors) return left(new NFeTsError(errors.join(', ')));
     this.$total?.aggregate();
     this.assertHomologValidations();
-    return right(plainToInstance(this.data, NFe));
+    return right(plainToInstance<T>(this.data, this.entity));
   }
 
   /** @throws {NFeTsError} */

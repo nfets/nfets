@@ -9,8 +9,10 @@ export interface DetBuilderAggregator {
   icms(payload: ICMS): void;
 }
 
-export class DefaultDetBuilderAggregator implements DetBuilderAggregator {
-  public constructor(private readonly builder: INfeXmlBuilder) {}
+export class DefaultDetBuilderAggregator<T extends object>
+  implements DetBuilderAggregator
+{
+  public constructor(private readonly builder: INfeXmlBuilder<T>) {}
 
   public prod(payload: Prod): void {
     const zero = Decimal.from(0);
