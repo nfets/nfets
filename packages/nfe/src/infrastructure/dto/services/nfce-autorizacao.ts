@@ -3,14 +3,17 @@ import {
   Environment,
   type EnvironmentCode,
   type StateCode,
+  type SignedEntity,
 } from '@nfets/core/domain';
-import type { NFe as INFe } from '@nfets/nfe/domain/entities/nfe/nfe';
+import type { NFCe as INFCe } from '@nfets/nfe/domain/entities/nfe/nfce';
 import type { AutorizacaoPayload as IAutorizacaoPayload } from '@nfets/nfe/domain/entities/services/autorizacao';
 import { Type } from 'class-transformer';
 import { IsEnum, IsOptional, IsString, IsNotEmpty } from 'class-validator';
-import { NFe } from '../nfe/nfe';
+import { NFCe } from '../nfe/nfce';
 
-export class AutorizacaoPayload implements IAutorizacaoPayload {
+export class NfceAutorizacaoPayload
+  implements IAutorizacaoPayload<SignedEntity<NFCe>>
+{
   @IsEnum(Environment)
   @IsOptional()
   public tpAmb?: EnvironmentCode;
@@ -30,6 +33,6 @@ export class AutorizacaoPayload implements IAutorizacaoPayload {
   public indSinc = '0' as const;
 
   @IsNotEmpty()
-  @Type(() => NFe)
-  public NFe!: INFe;
+  @Type(() => NFCe)
+  public NFe!: SignedEntity<INFCe>;
 }

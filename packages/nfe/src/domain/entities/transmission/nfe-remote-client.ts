@@ -44,47 +44,13 @@ import type {
   ConsultaCadastroResponse,
 } from '../services/consulta-cadastro';
 
-import type WSNFE_4_00_MOD55 from '../../../services/wsnfe_4.00_mod55';
-import type webservices from '@nfets/nfe/domain/entities/services/webservices';
 import type { Schema } from './schemas';
+import type { ServiceOptions } from './services';
 
-export type WrapRequest<K extends string, T> = Record<K, T>;
-
-type WebserviceForState<S extends StateCode> =
-  S extends keyof typeof webservices ? (typeof webservices)[S] : never;
-
-type ServicesForState<
-  S extends StateCode,
-  E extends EnvironmentCode,
-> = WebserviceForState<S> extends keyof typeof WSNFE_4_00_MOD55
-  ? E extends keyof (typeof WSNFE_4_00_MOD55)[WebserviceForState<S>]
-    ? keyof (typeof WSNFE_4_00_MOD55)[WebserviceForState<S>][E]
-    : never
-  : never;
-
-export interface BaseResponse {
-  $: { versao: string };
-  tpAmb: string;
-  verAplic: string;
-  cStat: string;
-  xMotivo: string;
-  dhRecbto: string;
-  tMed: string;
-}
-
-export interface Service {
+interface Service {
   url: string;
   version: string;
 }
-
-export type ServiceOptions<
-  S extends StateCode = StateCode,
-  E extends EnvironmentCode = EnvironmentCode,
-> = {
-  cUF?: S;
-  tpAmb?: E;
-  service: ServicesForState<S, E>;
-};
 
 export interface NfeTransmitterOptions extends TransmitterOptions {
   cUF: StateCode;
@@ -93,8 +59,13 @@ export interface NfeTransmitterOptions extends TransmitterOptions {
 }
 
 export interface NfeTransmitter extends Transmitter<NfeRemoteClient> {
-  service<S extends StateCode, E extends EnvironmentCode>(
-    options: ServiceOptions<S, E>,
+  service<
+    WS extends Record<string, unknown>,
+    O extends Record<string, unknown>,
+    S extends StateCode,
+    E extends EnvironmentCode,
+  >(
+    options: ServiceOptions<WS, O, S, E>,
   ): Service;
   configure(options: NfeTransmitterOptions): NfeTransmitter;
   consultStatus(

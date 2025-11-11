@@ -24,4 +24,10 @@ When you intentionally need to authorize an NF-e in the homologation environment
 DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-transmitter -t 'autorizacao' '{"serie":"69","nNF":"1504","IE":"261471520","enderEmit":{"CEP":"89700903","cMun":"4204301"}}'
 ```
 
+When you intentionally need to authorize an NFC-e in the homologation environment, run from the repository root with the flag scoped to that single command:
+
+```bash
+DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfce-transmitter -t 'autorizacao' '{"serie":"69","nNF":"1504","IE":"261471520","enderEmit":{"CEP":"89700903","cMun":"4204301"}}'
+```
+
 Double-check every argument (especially the certificate, IE, and address data) before executing, and remember that each run will leave a real NF-e in the homologation environment.

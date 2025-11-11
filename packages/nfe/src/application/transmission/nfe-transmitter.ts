@@ -1,7 +1,9 @@
+import path from 'node:path';
 import {
   NFeTsError,
   UF,
   type RemoteTransmissionRepository,
+  type SignedEntity,
 } from '@nfets/core/domain';
 import type { StateCode, EnvironmentCode } from '@nfets/core/domain';
 import { ValidateErrorsMetadata, Validates } from '@nfets/core/application';
@@ -11,8 +13,8 @@ import type {
   NfeRemoteClient,
   NfeTransmitter,
   NfeTransmitterOptions,
-  ServiceOptions,
 } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
+import type { ServiceOptions } from '@nfets/nfe/domain/entities/transmission/services';
 import type { ConsultStatusPayload as IConsultStatusPayload } from '@nfets/nfe/domain/entities/services/consult-status';
 import type { InutilizacaoPayload as IInutilizacaoPayload } from '@nfets/nfe/domain/entities/services/inutilizacao';
 import type { ConsultaProtocoloPayload as IConsultaProtocoloPayload } from '@nfets/nfe/domain/entities/services/consulta-protocolo';
@@ -20,28 +22,29 @@ import type { AutorizacaoPayload as IAutorizacaoPayload } from '@nfets/nfe/domai
 import type { RetAutorizacaoPayload as IRetAutorizacaoPayload } from '@nfets/nfe/domain/entities/services/ret-autorizacao';
 import type { EventoPayload as IEventoPayload } from '@nfets/nfe/domain/entities/services/evento';
 import type { ConsultaCadastroPayload as IConsultaCadastroPayload } from '@nfets/nfe/domain/entities/services/consulta-cadastro';
+import type { NFe as INFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 
 import { ConsultStatusPayload } from '@nfets/nfe/infrastructure/dto/services/consult-status';
 import { InutilizacaoPayload } from '@nfets/nfe/infrastructure/dto/services/inutilizacao';
 import { ConsultaProtocoloPayload } from '@nfets/nfe/infrastructure/dto/services/consulta-protocolo';
-import { AutorizacaoPayload } from '@nfets/nfe/infrastructure/dto/services/autorizacao';
+import { NfeAutorizacaoPayload } from '../../infrastructure/dto/services/nfe-autorizacao';
 import { RetAutorizacaoPayload } from '@nfets/nfe/infrastructure/dto/services/ret-autorizacao';
 import { EventoPayload } from '@nfets/nfe/infrastructure/dto/services/evento';
 import { ConsultaCadastroPayload } from '@nfets/nfe/infrastructure/dto/services/consulta-cadastro';
 
-import WSNFE_4_00_MOD55 from '../../services/wsnfe_4.00_mod55';
-import webservices from '@nfets/nfe/domain/entities/services/webservices';
-import path from 'node:path';
+import WSNFE_4_00_MOD55 from '../../services/wsnfe_4.00-mod55';
+import webservices from '../../services/webservices-mod55';
+
 import schemas, {
   directory,
 } from '@nfets/nfe/domain/entities/transmission/schemas';
 
 export class NfeRemoteTransmitter implements NfeTransmitter {
   public constructor(
-    private readonly remoteTransmissionRepository: RemoteTransmissionRepository<NfeRemoteClient>,
+    protected readonly remoteTransmissionRepository: RemoteTransmissionRepository<NfeRemoteClient>,
   ) {}
 
-  private options: NfeTransmitterOptions = {} as NfeTransmitterOptions;
+  protected options: NfeTransmitterOptions = {} as NfeTransmitterOptions;
   protected readonly xmlns = 'http://www.portalfiscal.inf.br/nfe';
 
   public configure(options: NfeTransmitterOptions) {
@@ -57,12 +60,15 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this;
   }
 
-  public service<S extends StateCode, E extends EnvironmentCode>(
-    options: ServiceOptions<S, E>,
-  ) {
+  public service<
+    WS extends Record<string, unknown> = typeof webservices,
+    O extends Record<string, unknown> = typeof WSNFE_4_00_MOD55,
+    S extends StateCode = StateCode,
+    E extends EnvironmentCode = EnvironmentCode,
+  >(options: ServiceOptions<WS, O, S, E>) {
     const cUF = options.cUF ?? this.options.cUF;
     const tpAmb = options.tpAmb ?? this.options.tpAmb;
-    const webservice = webservices[cUF];
+    const webservice = webservices[cUF as keyof typeof webservices];
     const environments = WSNFE_4_00_MOD55[webservice];
     const services = environments[tpAmb] as Record<
       string,
@@ -71,13 +77,13 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return services[options.service as string];
   }
 
-  private errors(): string[] | undefined {
+  protected errors(): string[] | undefined {
     return Reflect.getMetadata(ValidateErrorsMetadata, this) as
       | string[]
       | undefined;
   }
 
-  private validate<T extends object>(payload: T) {
+  protected validate<T extends object>(payload: T) {
     try {
       const errors = this.errors();
       if (errors) return left(new NFeTsError(errors.join(', ')));
@@ -89,11 +95,11 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     }
   }
 
-  private payload<T extends object>(payload: T, version: string) {
+  protected payload<T extends object>(payload: T, version: string) {
     return { $: { xmlns: this.xmlns, versao: version }, ...payload };
   }
 
-  private xsd(name: string) {
+  protected xsd(name: string) {
     return path.resolve(directory, this.options.schema as string, name);
   }
 
@@ -176,8 +182,8 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     });
   }
 
-  @Validates(AutorizacaoPayload)
-  public async autorizacao(payload: IAutorizacaoPayload) {
+  @Validates(NfeAutorizacaoPayload)
+  public async autorizacao(payload: IAutorizacaoPayload<SignedEntity<INFe>>) {
     const payloadOrError = this.validate(payload);
     if (payloadOrError.isLeft()) return payloadOrError;
 

@@ -24,4 +24,10 @@ Quando for realmente necessário autorizar uma NF-e na homologação, execute a 
 DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-transmitter -t 'autorizacao' '{"serie":"69","nNF":"1504","IE":"261471520","enderEmit":{"CEP":"89700903","cMun":"4204301"}}'
 ```
 
+Quando for realmente necessário autorizar uma NFC-e na homologação, execute a partir da raiz do repositório, limitando o flag a este comando:
+
+```bash
+DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfce-transmitter -t 'autorizacao' '{"serie":"69","nNF":"1504","IE":"261471520","enderEmit":{"CEP":"89700903","cMun":"4204301"}}'
+```
+
 Revise cada argumento (especialmente certificado, IE e dados de endereço) antes de rodar, e lembre que toda execução deixará uma NF-e registrada no ambiente de homologação.
