@@ -18,7 +18,8 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      NFETS_ADDONS_DIR: "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/build/Release"
+      NFETS_ADDONS_DIR: "${{ github.workspace }}/build/Release"
+      NFETS_NFE_SCHEMAS_DIR: "${{ github.workspace }}/packages/nfe/schemas"
 
     steps:
       - uses: actions/checkout@v4
