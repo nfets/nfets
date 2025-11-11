@@ -73,7 +73,7 @@ import { Cana } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/cana';
 export class NfeXmlBuilder<T extends object = INFe>
   implements INfeXmlBuilder<T>
 {
-  private readonly data = {
+  protected readonly data = {
     $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
     infNFe: {
       total: { ICMSTot: {} },
@@ -290,12 +290,14 @@ export class NfeXmlBuilder<T extends object = INFe>
     );
   }
 
-  private assertHomologValidations(): void {
-    if (this.data.infNFe?.ide.tpAmb !== Environment.Homolog) return;
+  protected assertHomologValidations(): boolean {
+    if (this.data.infNFe?.ide.tpAmb !== Environment.Homolog) return false;
 
     if (this.data.infNFe.dest)
       this.data.infNFe.dest.xNome =
         'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL' as const;
+
+    return true;
   }
 
   private errors(): string[] | undefined {
