@@ -52,10 +52,16 @@ interface Service {
   version: string;
 }
 
+export interface ContingencyOptions {
+  dhCont?: string;
+  xJust?: string;
+}
+
 export interface NfeTransmitterOptions extends TransmitterOptions {
   cUF: StateCode;
   schema?: Schema;
   tpAmb: EnvironmentCode;
+  contingency?: ContingencyOptions;
 }
 
 export interface NfeTransmitter extends Transmitter<NfeRemoteClient> {
