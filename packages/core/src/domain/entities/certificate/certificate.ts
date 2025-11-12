@@ -1,5 +1,10 @@
 import type { KeyObject, X509Certificate } from 'node:crypto';
 
+export interface ReadCertificateRequest {
+  pfxPathOrBase64: string;
+  password: string;
+}
+
 export interface ReadCertificateResponse {
   password: string;
   ca: X509Certificate[];

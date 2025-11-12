@@ -22,10 +22,10 @@ describe('ASN1 (unit)', () => {
   const asn1 = new ASN1();
 
   it('should extract certificate info from CNPJ certificate', async () => {
-    const result = await certificateRepository.read(
-      validCnpjPfxCertificate,
+    const result = await certificateRepository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
       password,
-    );
+    });
     expectIsRight(result);
 
     const certificateInfo = asn1.extractCertificateInfo(
@@ -44,10 +44,10 @@ describe('ASN1 (unit)', () => {
   });
 
   it('should extract certificate info from CPF certificate', async () => {
-    const result = await certificateRepository.read(
-      validCpfPfxCertificate,
+    const result = await certificateRepository.read({
+      pfxPathOrBase64: validCpfPfxCertificate,
       password,
-    );
+    });
     expectIsRight(result);
 
     const certificateInfo = asn1.extractCertificateInfo(
@@ -69,10 +69,10 @@ describe('ASN1 (unit)', () => {
   });
 
   it('should handle certificate with CN containing colon', async () => {
-    const result = await certificateRepository.read(
-      validCnpjPfxCertificate,
+    const result = await certificateRepository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
       password,
-    );
+    });
     expectIsRight(result);
 
     const mockSubject = result.value.certificate.subject.replace(

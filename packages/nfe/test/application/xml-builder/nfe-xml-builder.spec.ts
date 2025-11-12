@@ -55,10 +55,10 @@ describe('xml builder with xml2js builder', () => {
       new MemoryCacheAdapter(),
     );
 
-    const certificateOrError = await certificateRepository.read(
-      validCnpjPfxCertificate,
+    const certificateOrError = await certificateRepository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
       password,
-    );
+    });
 
     signer = new XmlSigner(
       toolkit,

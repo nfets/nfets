@@ -22,10 +22,10 @@ describe('read certificate from pfx (unit)', () => {
   );
 
   it('should successfully read a valid certificate', async () => {
-    const result = await readCertificateFromPfx.execute(
-      validCnpjPfxCertificate,
+    const result = await readCertificateFromPfx.execute({
+      pfxPathOrBase64: validCnpjPfxCertificate,
       password,
-    );
+    });
 
     expectIsRight(result);
     expect(result.value.certificate).toBeDefined();
@@ -33,10 +33,10 @@ describe('read certificate from pfx (unit)', () => {
   });
 
   it('should return left when certificate is invalid', async () => {
-    const result = await readCertificateFromPfx.execute(
-      'invalid-path',
-      'invalid-password',
-    );
+    const result = await readCertificateFromPfx.execute({
+      pfxPathOrBase64: 'invalid-path',
+      password: 'invalid-password',
+    });
 
     expectIsLeft(result);
   });
