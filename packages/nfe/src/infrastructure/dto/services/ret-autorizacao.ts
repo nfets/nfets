@@ -1,5 +1,5 @@
 import {
-  UF,
+  StateCodes,
   Environment,
   type EnvironmentCode,
   type StateCode,
@@ -11,7 +11,7 @@ export class RetAutorizacaoPayload implements IRetAutorizacaoPayload {
   @IsEnum(Environment)
   public tpAmb?: EnvironmentCode;
 
-  @IsEnum(UF)
+  @IsEnum(StateCodes)
   public cUF?: StateCode;
 
   @IsString()

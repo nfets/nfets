@@ -1,5 +1,5 @@
 import {
-  UF,
+  StateCodes,
   Environment,
   type CertificateRepository,
   type StateCode,
@@ -56,7 +56,7 @@ describe('soap nfe remote transmission (integration) (not destructive)', () => {
     );
 
     transmission.configure({
-      cUF: UF.SC,
+      cUF: StateCodes.SC,
       certificate: result.isRight() ? result.value : void 0,
       tpAmb: Environment.Homolog,
     });
@@ -78,7 +78,7 @@ describe('soap nfe remote transmission (integration) (not destructive)', () => {
 
   it('it should return "Servico em Operacao" when cStat is "107"', async () => {
     const response = await transmission.consultStatus({
-      cUF: UF.SC,
+      cUF: StateCodes.SC,
       tpAmb: Environment.Homolog,
     });
 
@@ -89,7 +89,7 @@ describe('soap nfe remote transmission (integration) (not destructive)', () => {
       verAplic: 'RS202401251654',
       cStat: '107',
       xMotivo: 'Servico em Operacao',
-      cUF: UF.SC,
+      cUF: StateCodes.SC,
       dhRecbto: expect.any(String),
       tMed: '1',
     });
@@ -134,7 +134,7 @@ describe('soap nfe remote transmission (integration) (destructive)', () => {
     }
 
     transmission.configure({
-      cUF: UF.SC,
+      cUF: StateCodes.SC,
       certificate: result.isRight() ? result.value : void 0,
       tpAmb: Environment.Homolog,
     });
@@ -182,7 +182,7 @@ describe('soap nfe remote transmission (integration) (destructive)', () => {
       const builder = NfeXmlBuilder.create(toolkit)
         .infNFe({ versao: '4.00' })
         .ide({
-          cUF: UF[ufAcronym],
+          cUF: StateCodes[ufAcronym],
           cNF: new Date().getTime().toString().slice(0, 8),
           natOp: 'Venda de mercadoria',
           mod: args.mod ?? '55',

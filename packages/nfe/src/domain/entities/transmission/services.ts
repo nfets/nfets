@@ -1,11 +1,16 @@
-import type { EnvironmentCode, StateAcronym, StateCode, UF } from '@nfets/core';
+import type {
+  EnvironmentCode,
+  StateAcronym,
+  StateCode,
+  StateCodes,
+} from '@nfets/core';
 
 type WebserviceForState<
   WS extends Record<string, unknown>,
   S extends StateCode,
 > = S extends keyof WS ? WS[S] : never;
 
-type UfMap = typeof UF;
+type UfMap = typeof StateCodes;
 
 type StateAcronymFromCode<S extends StateCode> = {
   [K in keyof UfMap]: S extends UfMap[K] ? Extract<K, StateAcronym> : never;

@@ -1,5 +1,5 @@
 import {
-  UF,
+  StateCodes,
   Environment,
   type EnvironmentCode,
   type StateCode,
@@ -22,7 +22,7 @@ export class InutilizacaoPayload implements IInutilizacaoPayload {
   @IsOptional()
   public xServ = 'INUTILIZAR' as const;
 
-  @IsEnum(UF)
+  @IsEnum(StateCodes)
   public cUF!: StateCode;
 
   @IsString()
@@ -57,4 +57,3 @@ export class InutilizacaoPayload implements IInutilizacaoPayload {
   @MaxLength(255)
   public xJust!: string;
 }
-

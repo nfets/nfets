@@ -1,7 +1,7 @@
 import path from 'node:path';
 import {
   NFeTsError,
-  UF,
+  StateCodes,
   type RemoteTransmissionRepository,
   type SignedEntity,
 } from '@nfets/core/domain';
@@ -254,7 +254,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     }
 
     const service = this.service({
-      cUF: UF[data.UF],
+      cUF: StateCodes[data.UF],
       service: 'NfeConsultaCadastro',
     });
 

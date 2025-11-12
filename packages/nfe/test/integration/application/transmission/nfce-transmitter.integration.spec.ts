@@ -1,5 +1,5 @@
 import {
-  UF,
+  StateCodes,
   Environment,
   type CertificateRepository,
   type StateAcronym,
@@ -68,7 +68,7 @@ describe('soap nfce remote transmission (integration) (destructive)', () => {
     }
 
     transmission.configure({
-      cUF: UF.SC,
+      cUF: StateCodes.SC,
       certificate: result.isRight() ? result.value : void 0,
       tpAmb: Environment.Homolog,
       qrCode: {
@@ -120,7 +120,7 @@ describe('soap nfce remote transmission (integration) (destructive)', () => {
       const builder = NfceXmlBuilder.create(toolkit)
         .infNFe({ versao: '4.00' })
         .ide({
-          cUF: UF[ufAcronym],
+          cUF: StateCodes[ufAcronym],
           cNF: new Date().getTime().toString().slice(0, 8),
           natOp: 'Venda de mercadoria',
           mod: args.mod ?? '65',
