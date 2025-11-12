@@ -26,7 +26,7 @@ import { ServiceOptions } from '@nfets/nfe/domain/entities/transmission/services
 import { NfceQrcode } from './nfce-qrcode';
 import { left } from '@nfets/core/shared/either';
 
-import type { Either } from '@nfets/core/shared';
+import { unreachable, type Either } from '@nfets/core/shared';
 import type { AutorizacaoPayload as IAutorizacaoPayload } from '@nfets/nfe/domain/entities/services/autorizacao';
 import type { AutorizacaoResponse } from '@nfets/nfe/domain/entities/services/autorizacao';
 
@@ -91,20 +91,33 @@ export class NfceRemoteTransmitter
   }
 
   private async infNfeSupl(payload: IAutorizacaoPayload<NFCe>) {
-    const certificate = this.options.certificate;
-    if (!certificate) return left(new NFeTsError('Certificate not found'));
-
-    const qrCodeOptions = this.options.qrCode;
+    const options = this.options.qrCode;
     const service = this.service({ ...payload, service: 'NfeConsultaQR' });
-    const version = qrCodeOptions.version ?? (service.version as '200' | '300');
+    options.version ??= service.version as '200' | '300';
 
-    return await this.qrCode.execute(payload.NFe, {
-      version,
-      urlConsult: this.getUrlConsult(payload),
-      urlService: service.url,
-      CSC: qrCodeOptions.version !== '300' ? qrCodeOptions.CSC : '',
-      CSCId: qrCodeOptions.version !== '300' ? qrCodeOptions.CSCId : '',
-      certificate,
-    });
+    switch (options.version) {
+      case '200':
+        return await this.qrCode.execute(payload.NFe, {
+          version: options.version,
+          urlConsult: this.getUrlConsult(payload),
+          urlService: service.url,
+          CSC: options.CSC,
+          CSCId: options.CSCId,
+        });
+      case '300': {
+        if (!this.options.certificate)
+          return left(
+            new NFeTsError('Certificate is required in QRCode version 3.00'),
+          );
+        return await this.qrCode.execute(payload.NFe, {
+          version: options.version,
+          certificate: this.options.certificate,
+          urlConsult: this.getUrlConsult(payload),
+          urlService: service.url,
+        });
+      }
+      default:
+        return unreachable(options.version as never);
+    }
   }
 }
