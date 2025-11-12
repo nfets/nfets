@@ -26,9 +26,6 @@ export class NfeAutorizacaoPayload
   public idLote!: string;
 
   @IsOptional()
-  public gzipped?: boolean;
-
-  @IsOptional()
   @IsEnum(['0', '1'])
   public indSinc = '0' as const;
 

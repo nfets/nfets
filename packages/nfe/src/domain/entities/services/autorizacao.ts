@@ -10,7 +10,6 @@ export interface AutorizacaoPayload<E extends object = NFe> {
   cUF?: StateCode;
   tpAmb?: EnvironmentCode;
   idLote: string;
-  gzipped?: boolean;
   indSinc?: '0' | '1';
   NFe: SignedEntity<E>;
 }
