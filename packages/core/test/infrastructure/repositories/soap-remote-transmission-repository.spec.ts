@@ -43,10 +43,10 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
       repository,
     );
 
-    const result = await repository.read(
-      certificateFromEnvironment.certificatePath,
-      certificateFromEnvironment.password,
-    );
+    const result = await repository.read({
+      pfxPathOrBase64: certificateFromEnvironment.certificatePath,
+      password: certificateFromEnvironment.password,
+    });
 
     if (result.isRight()) {
       transmission.setCertificate(result.value);

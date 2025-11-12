@@ -23,7 +23,10 @@ describe('node certificate repository (unit)', () => {
   );
 
   it('should sucessfully read a valid CNPJ certificate', async () => {
-    const result = await repository.read(validCnpjPfxCertificate, password);
+    const result = await repository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
+      password,
+    });
     expectIsRight(result);
 
     const { certificate: certificateInfo } = result.value;
@@ -56,7 +59,10 @@ emailAddress=email@example.com`);
   });
 
   it('should sucessfully read a valid CPF certificate', async () => {
-    const result = await repository.read(validCpfPfxCertificate, password);
+    const result = await repository.read({
+      pfxPathOrBase64: validCpfPfxCertificate,
+      password,
+    });
     expectIsRight(result);
 
     const { certificate: certificateInfo } = result.value;
@@ -89,28 +95,37 @@ emailAddress=email@example.com`);
   });
 
   it('should return left when certificate path is invalid', async () => {
-    const result = await repository.read('invalid-path.pfx', 'password');
+    const result = await repository.read({
+      pfxPathOrBase64: 'invalid-path.pfx',
+      password: 'password',
+    });
     expectIsLeft(result);
   });
 
   it('should return left when password is incorrect', async () => {
-    const result = await repository.read(
-      validCnpjPfxCertificate,
-      'wrong-password',
-    );
+    const result = await repository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
+      password: 'wrong-password',
+    });
     expectIsLeft(result);
   });
 
   it('should handle base64 certificate', async () => {
     const pfxBuffer = fs.readFileSync(validCnpjPfxCertificate);
     const base64 = pfxBuffer.toString('base64');
-    const result = await repository.read(base64, password);
+    const result = await repository.read({
+      pfxPathOrBase64: base64,
+      password,
+    });
     expectIsRight(result);
   });
 
   it('should handle absolute path', async () => {
     const absolutePath = path.resolve(validCnpjPfxCertificate);
-    const result = await repository.read(absolutePath, password);
+    const result = await repository.read({
+      pfxPathOrBase64: absolutePath,
+      password,
+    });
     expectIsRight(result);
   });
 
@@ -121,16 +136,16 @@ emailAddress=email@example.com`);
       cache,
     );
 
-    const result1 = await cachedRepository.read(
-      validCnpjPfxCertificate,
+    const result1 = await cachedRepository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
       password,
-    );
+    });
     expectIsRight(result1);
 
-    const result2 = await cachedRepository.read(
-      validCnpjPfxCertificate,
+    const result2 = await cachedRepository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
       password,
-    );
+    });
     expectIsRight(result2);
 
     expect(result1.value.certificate.serialNumber).toBe(
@@ -139,7 +154,10 @@ emailAddress=email@example.com`);
   });
 
   it('should sign content with SHA1', async () => {
-    const result = await repository.read(validCnpjPfxCertificate, password);
+    const result = await repository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
+      password,
+    });
     expectIsRight(result);
 
     const signResult = await repository.sign(
@@ -153,7 +171,10 @@ emailAddress=email@example.com`);
   });
 
   it('should sign content with SHA256', async () => {
-    const result = await repository.read(validCnpjPfxCertificate, password);
+    const result = await repository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
+      password,
+    });
     expectIsRight(result);
 
     const signResult = await repository.sign(
@@ -167,7 +188,10 @@ emailAddress=email@example.com`);
   });
 
   it('should return left when signing fails', async () => {
-    const result = await repository.read(validCnpjPfxCertificate, password);
+    const result = await repository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
+      password,
+    });
     expectIsRight(result);
 
     const invalidKey = result.value.certificate;
@@ -180,7 +204,10 @@ emailAddress=email@example.com`);
   });
 
   it('should get string certificate from certificate', async () => {
-    const result = await repository.read(validCnpjPfxCertificate, password);
+    const result = await repository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
+      password,
+    });
     expectIsRight(result);
 
     const certificateString = repository.getStringCertificate(
@@ -205,7 +232,10 @@ emailAddress=email@example.com`);
   });
 
   it('should get string private key from certificate', async () => {
-    const result = await repository.read(validCnpjPfxCertificate, password);
+    const result = await repository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
+      password,
+    });
     expectIsRight(result);
 
     const privateKey = repository.getStringPrivateKey(result.value.privateKey);
@@ -215,7 +245,10 @@ emailAddress=email@example.com`);
   });
 
   it('should throw error when getting private key fails', async () => {
-    const result = await repository.read(validCnpjPfxCertificate, password);
+    const result = await repository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
+      password,
+    });
     expectIsRight(result);
 
     const invalidKey = {
@@ -243,10 +276,10 @@ emailAddress=email@example.com`);
         new MemoryCacheAdapter(),
       );
 
-      const result = await remoteRepository.read(
-        'https://example.com/certificate.pfx',
+      const result = await remoteRepository.read({
+        pfxPathOrBase64: 'https://example.com/certificate.pfx',
         password,
-      );
+      });
 
       expect(mockGet).toHaveBeenCalled();
       expectIsRight(result);
@@ -264,10 +297,10 @@ emailAddress=email@example.com`);
         new MemoryCacheAdapter(),
       );
 
-      const result = await remoteRepository.read(
-        'https://example.com/certificate.pfx',
+      const result = await remoteRepository.read({
+        pfxPathOrBase64: 'https://example.com/certificate.pfx',
         password,
-      );
+      });
 
       expectIsLeft(result);
       expect(result.value.message).toContain('Network error');

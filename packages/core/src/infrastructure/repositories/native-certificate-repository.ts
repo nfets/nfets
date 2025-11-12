@@ -8,7 +8,10 @@ import { left, right, type Either } from '@nfets/core/shared/either';
 import { leftFromError } from '@nfets/core/shared/left-from-error';
 import { NullCacheAdapter } from '@nfets/core/infrastructure/repositories/null-cache-adapter';
 
-import type { ReadCertificateResponse } from '@nfets/core/domain/entities/certificate/certificate';
+import type {
+  ReadCertificateRequest,
+  ReadCertificateResponse,
+} from '@nfets/core/domain/entities/certificate/certificate';
 import type { CertificateRepository } from '@nfets/core/domain/repositories/certificate-repository';
 import type { CacheAdapter } from '@nfets/core/domain/repositories/cache-adapter';
 import type { HttpClient } from '@nfets/core/domain/repositories/http-client';
@@ -22,14 +25,11 @@ export class NativeCertificateRepository implements CertificateRepository {
   ) {}
 
   public async read(
-    pfxPathOrBase64: string,
-    password: string,
+    request: ReadCertificateRequest,
   ): Promise<Either<NFeTsError, ReadCertificateResponse>> {
     try {
-      const pfxBufferOrError = await this.getPfxBuffer(
-        pfxPathOrBase64,
-        password,
-      );
+      const { password } = request;
+      const pfxBufferOrError = await this.getPfxBuffer(request);
 
       if (pfxBufferOrError.isLeft()) return pfxBufferOrError;
 
@@ -117,9 +117,9 @@ export class NativeCertificateRepository implements CertificateRepository {
   }
 
   private async getPfxBuffer(
-    pfxPathOrBase64: string,
-    password: string,
+    request: ReadCertificateRequest,
   ): Promise<Either<NFeTsError, Buffer>> {
+    const { pfxPathOrBase64, password } = request;
     const key = this.getCacheKey(pfxPathOrBase64, password);
 
     const cached = await this.cache.get<Buffer>(key);
