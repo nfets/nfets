@@ -190,8 +190,6 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     const data = payloadOrError.value;
     const service = this.service({ ...data, service: 'NfeAutorizacao' });
 
-    // TODO: support gzipped payload
-
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,

@@ -33,7 +33,7 @@ export const Validates = <T extends object>(klass: new () => T) => {
     _target: object,
     property: string | symbol,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    descriptor: TypedPropertyDescriptor<(payload: T, ...args: object[]) => any>,
+    descriptor: TypedPropertyDescriptor<(payload: T, ...args: any[]) => any>,
   ) => {
     const original = descriptor.value;
 
