@@ -1,5 +1,5 @@
 import {
-  UF,
+  StateCodes,
   Environment,
   NFeTsError,
   type RemoteTransmissionRepository,
@@ -23,7 +23,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
 
     transmission = new NfeRemoteTransmitter(mockRepository);
     transmission.configure({
-      cUF: UF.RS,
+      cUF: StateCodes.RS,
       tpAmb: Environment.Homolog,
       certificate: {} as never,
     });
@@ -43,7 +43,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
 
     it('should return left when tpAmb is invalid', async () => {
       const response = await transmission.consultStatus({
-        cUF: UF.RS,
+        cUF: StateCodes.RS,
         tpAmb: '5' as never,
       });
 
@@ -69,7 +69,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
       mockRepository.send.mockResolvedValue(right(mockResponse));
 
       const response = await transmission.consultStatus({
-        cUF: UF.RS,
+        cUF: StateCodes.RS,
         tpAmb: Environment.Homolog,
       });
 
@@ -82,7 +82,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
           consStatServ: expect.objectContaining({
             $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
             tpAmb: Environment.Homolog,
-            cUF: UF.RS,
+            cUF: StateCodes.RS,
           }),
         },
         method: 'nfeStatusServicoNF',
@@ -96,7 +96,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
     it('should return left when payload is invalid', async () => {
       const response = await transmission.inutilizacao({
         tpAmb: Environment.Homolog,
-        cUF: UF.RS,
+        cUF: StateCodes.RS,
         ano: '2024',
         CNPJ: '12345',
         mod: '55',
@@ -113,7 +113,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
     it('should return left when justification is too short', async () => {
       const response = await transmission.inutilizacao({
         tpAmb: Environment.Homolog,
-        cUF: UF.RS,
+        cUF: StateCodes.RS,
         ano: '24',
         CNPJ: '12345678901234',
         mod: '55',
@@ -156,7 +156,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
 
       const payload = {
         tpAmb: Environment.Homolog,
-        cUF: UF.RS,
+        cUF: StateCodes.RS,
         ano: '24',
         CNPJ: '12345678901234',
         mod: '55',
@@ -179,7 +179,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
             infInut: expect.objectContaining({
               $: { Id: 'ID43241234567890123455001000000001000000010' },
               tpAmb: Environment.Homolog,
-              cUF: UF.RS,
+              cUF: StateCodes.RS,
               ano: '24',
               CNPJ: '12345678901234',
               mod: '55',
@@ -293,7 +293,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
 
       const response = await transmission.autorizacao({
         tpAmb: Environment.Homolog,
-        cUF: UF.RS,
+        cUF: StateCodes.RS,
         idLote: '123',
         NFe: { infNFe: {} } as never,
       });
@@ -307,7 +307,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
           enviNFe: expect.objectContaining({
             $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
             tpAmb: Environment.Homolog,
-            cUF: UF.RS,
+            cUF: StateCodes.RS,
             idLote: '123',
             NFe: { infNFe: {} },
           }),
@@ -337,7 +337,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
 
       const response = await transmission.retAutorizacao({
         tpAmb: Environment.Homolog,
-        cUF: UF.RS,
+        cUF: StateCodes.RS,
         nRec: '432400000000001',
       });
 
@@ -350,7 +350,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
           consReciNFe: expect.objectContaining({
             $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
             tpAmb: Environment.Homolog,
-            cUF: UF.RS,
+            cUF: StateCodes.RS,
             nRec: '432400000000001',
           }),
         },
@@ -363,7 +363,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
     it('should return left when idLote is invalid', async () => {
       const response = await transmission.recepcaoEvento({
         tpAmb: Environment.Homolog,
-        cUF: UF.RS,
+        cUF: StateCodes.RS,
         idLote: 'abc',
         evento: {} as never,
       });
@@ -408,7 +408,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
 
       const response = await transmission.recepcaoEvento({
         tpAmb: Environment.Homolog,
-        cUF: UF.RS,
+        cUF: StateCodes.RS,
         idLote: '123',
         evento,
       });
@@ -422,7 +422,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
           envEvento: expect.objectContaining({
             $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '1.00' },
             tpAmb: Environment.Homolog,
-            cUF: UF.RS,
+            cUF: StateCodes.RS,
             idLote: '123',
             evento,
           }),
@@ -548,7 +548,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
       mockRepository.send.mockResolvedValue(left(error));
 
       const response = await transmission.consultStatus({
-        cUF: UF.RS,
+        cUF: StateCodes.RS,
         tpAmb: Environment.Homolog,
       });
 

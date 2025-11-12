@@ -1,5 +1,5 @@
 import {
-  UF,
+  StateCodes,
   Environment,
   type EnvironmentCode,
   type StateCode,
@@ -21,7 +21,7 @@ export class ConsultStatusPayload implements IConsultStatusPayload {
   @IsEnum(Environment)
   public tpAmb!: EnvironmentCode;
 
-  @IsEnum(UF)
+  @IsEnum(StateCodes)
   public cUF!: StateCode;
 
   @IsOptional()

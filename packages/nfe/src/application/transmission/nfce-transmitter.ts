@@ -3,7 +3,7 @@ import {
   EnvironmentCode,
   NFeTsError,
   RemoteTransmissionRepository,
-  UF,
+  StateCodes,
   StateAcronym,
   SignedEntity,
 } from '@nfets/core/domain';
@@ -64,8 +64,8 @@ export class NfceRemoteTransmitter
     >;
     const service = services[options.service as string];
     if (service) return service;
-    const real = Object.keys(UF).find(
-      (acronym) => UF[acronym as StateAcronym] === cUF,
+    const real = Object.keys(StateCodes).find(
+      (acronym) => StateCodes[acronym as StateAcronym] === cUF,
     ) as StateAcronym;
     return WSNFE_4_00_MOD65[real][tpAmb][
       options.service as keyof (typeof WSNFE_4_00_MOD65)[StateAcronym][EnvironmentCode]

@@ -1,4 +1,4 @@
-export const UF = {
+export const StateCodes = {
   AC: '12',
   AL: '27',
   AM: '13',
@@ -28,5 +28,7 @@ export const UF = {
   TO: '17',
 } as const;
 
-export type StateCode = (typeof UF)[keyof typeof UF];
-export type StateAcronym = keyof typeof UF;
+export const StateAcronyms = Object.keys(StateCodes) as StateAcronym[];
+
+export type StateCode = (typeof StateCodes)[keyof typeof StateCodes];
+export type StateAcronym = keyof typeof StateCodes;

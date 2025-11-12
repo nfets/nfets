@@ -1,5 +1,5 @@
 import {
-  UF,
+  StateCodes,
   Environment,
   type EnvironmentCode,
   type StateCode,
@@ -14,7 +14,7 @@ export class EventoPayload implements IEventoPayload {
   @IsEnum(Environment)
   public tpAmb!: EnvironmentCode;
 
-  @IsEnum(UF)
+  @IsEnum(StateCodes)
   public cUF!: StateCode;
 
   @IsString()

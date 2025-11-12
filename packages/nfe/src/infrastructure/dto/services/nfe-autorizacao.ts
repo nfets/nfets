@@ -1,5 +1,5 @@
 import {
-  UF,
+  StateCodes,
   Environment,
   type EnvironmentCode,
   type StateCode,
@@ -18,7 +18,7 @@ export class NfeAutorizacaoPayload
   @IsOptional()
   public tpAmb?: EnvironmentCode;
 
-  @IsEnum(UF)
+  @IsEnum(StateCodes)
   @IsOptional()
   public cUF?: StateCode;
 
