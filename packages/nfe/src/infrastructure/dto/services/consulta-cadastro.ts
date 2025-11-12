@@ -1,4 +1,4 @@
-import { type StateAcronym, StateCodes } from '@nfets/core/domain';
+import { type StateAcronym, StateAcronyms } from '@nfets/core/domain';
 import { Choice } from '@nfets/core/application';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 import type { ConsultaCadastroPayload as IConsultaCadastroPayload } from '@nfets/nfe/domain/entities/services/consulta-cadastro';
@@ -9,7 +9,7 @@ export class ConsultaCadastroPayload implements IConsultaCadastroPayload {
   public xServ = 'CONS-CAD' as const;
 
   @IsString()
-  @IsIn(Object.keys(StateCodes))
+  @IsIn(Object.values(StateAcronyms))
   public UF!: StateAcronym;
 
   @IsOptional()
