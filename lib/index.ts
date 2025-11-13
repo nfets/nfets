@@ -1,2 +1,2 @@
-export * from '../packages/core';
-export * from '../packages/nfe';
+export * from './core';
+export * from './nfe';
