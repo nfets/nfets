@@ -3,6 +3,7 @@ import type {
   EnvironmentCode,
   NFeTsError,
   RequestConfig,
+  SignedEntity,
   StateCode,
   Transmitter,
   TransmitterOptions,
@@ -46,6 +47,7 @@ import type {
 
 import type { Schema } from './schemas';
 import type { ServiceOptions } from './services';
+import type { NFe } from '../nfe/nfe';
 
 interface Service {
   url: string;
@@ -53,8 +55,8 @@ interface Service {
 }
 
 export interface ContingencyOptions {
-  dhCont?: string;
-  xJust?: string;
+  xJust: string;
+  dhCont: string;
 }
 
 export interface NfeTransmitterOptions extends TransmitterOptions {
@@ -84,7 +86,7 @@ export interface NfeTransmitter extends Transmitter<NfeRemoteClient> {
     payload: ConsultaProtocoloPayload,
   ): Promise<Either<NFeTsError, ConsultaProtocoloResponse>>;
   autorizacao(
-    payload: AutorizacaoPayload,
+    payload: AutorizacaoPayload<SignedEntity<NFe>>,
   ): Promise<Either<NFeTsError, AutorizacaoResponse>>;
   retAutorizacao(
     payload: RetAutorizacaoPayload,
@@ -111,7 +113,7 @@ export interface NfeRemoteClient extends Client {
     opt?: RequestConfig,
   ): Promise<ConsultaProtocoloResponse>;
   nfeAutorizacaoLote(
-    args: AutorizacaoRequest,
+    args: AutorizacaoRequest<SignedEntity<NFe>>,
     opt?: RequestConfig,
   ): Promise<AutorizacaoResponse>;
   nfeRetAutorizacaoLote(

@@ -27,7 +27,7 @@ export class NfeAutorizacaoPayload
 
   @IsOptional()
   @IsEnum(['0', '1'])
-  public indSinc = '0' as const;
+  public indSinc = '1' as const;
 
   @IsNotEmpty()
   @Type(() => NFe)
