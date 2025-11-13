@@ -21,3 +21,14 @@ export const expectIsLeft: <L, A>(
     throw e;
   }
 };
+
+export const expectNotNull: <A>(value: A) => asserts value is NonNullable<A> = (
+  value,
+) => {
+  try {
+    expect(value).not.toBeNull();
+  } catch (e) {
+    console.error('Error expecting value is not null:', value);
+    throw e;
+  }
+};
