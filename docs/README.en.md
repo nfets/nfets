@@ -6,6 +6,10 @@
 
 Welcome to nfets documentation! This folder contains important files about project governance, contribution, and support.
 
+## Practical Examples
+
+- **[authorizing-a-nfe.md](../packages/nfe/examples/authorizing-a-nfe.md)** - Complete guide about how to authorize a NF-e at Sefaz servers
+
 ## 📄 Available Files
 
 ### For Contributors

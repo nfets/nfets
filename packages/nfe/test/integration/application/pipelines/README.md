@@ -21,7 +21,13 @@ Se o objetivo for apenas validar o fluxo básico, prefira o conjunto não destru
 Quando for realmente necessário autorizar uma NF-e na homologação, execute a partir da raiz do repositório, limitando o flag a este comando:
 
 ```bash
-DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-transmitter -t 'autorizacao' '{"serie":"69","nNF":"1504","IE":"261471520","enderEmit":{"CEP":"89700903","cMun":"4204301"}}'
+DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline.integration -t 'should authorize a nfe' '{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}'
+```
+
+Quando for realmente necessário autorizar uma NF-e na contingência, execute a partir da raiz do repositório, limitando o flag a este comando:
+
+```bash
+DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline.integration -t 'should authorize a contingency nfe' '{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}'
 ```
 
 Quando for realmente necessário autorizar uma NFC-e na homologação, execute a partir da raiz do repositório, limitando o flag a este comando:
