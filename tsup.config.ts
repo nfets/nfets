@@ -16,5 +16,5 @@ export default defineConfig({
   entry: ['lib/index.ts', 'lib/core/index.ts', 'lib/nfe/index.ts'],
   dts: { entry: ['lib/index.ts', 'lib/core/index.ts', 'lib/nfe/index.ts'] },
   watch: false,
-  sourcemap: 'inline',
+  sourcemap: false,
 });
