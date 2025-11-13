@@ -12,7 +12,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
-    "test": "NODE_OPTIONS=--openssl-legacy-provider jest --config jest.config.ts --passWithNoTests",
+    "test": "NODE_OPTIONS=\"--openssl-legacy-provider --localstorage-file=/tmp/jest-localstorage.json\" jest --config jest.config.ts --passWithNoTests",
     "test:coverage": "pnpm test --coverage"
   },
   "dependencies": {
