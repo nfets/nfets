@@ -14,6 +14,7 @@ import type {
   NfceQrcodeOptionsBase,
 } from '@nfets/nfe/domain/entities/transmission/nfce-remote-client';
 import type { NFCe as INFCe } from '@nfets/nfe/domain/entities/nfe/nfce';
+import { TpEmis } from '@nfets/nfe/domain';
 
 export class NfceQrcode {
   public constructor(
@@ -69,7 +70,7 @@ export class NfceQrcode {
       Id = entity.infNFe.$.Id?.substring(3),
       version = Number.parseInt(v ?? '') / 100;
 
-    if (entity.infNFe.ide.tpEmis !== '9') {
+    if (entity.infNFe.ide.tpEmis !== TpEmis.OFFLINE) {
       return `${Id}|${version}|${tpAmb}|${CSCId}`;
     }
 
@@ -114,7 +115,7 @@ export class NfceQrcode {
     const Id = entity.infNFe.$.Id?.substring(3),
       version = Number.parseInt(options.version) / 100;
 
-    if (entity.infNFe.ide.tpEmis !== '9') {
+    if (entity.infNFe.ide.tpEmis !== TpEmis.OFFLINE) {
       return right(`${url}${Id}|${version}|${tpAmb}`);
     }
 
