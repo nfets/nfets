@@ -23,6 +23,7 @@ import {
 } from '@nfets/core/application';
 
 import { NfeXmlBuilder } from '@nfets/nfe/application/xml-builder/nfe-xml-builder';
+import { AccessKeyBuilder } from '@nfets/nfe/application/access-key/access-key-builder';
 
 import type { Ide } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
 import {
@@ -32,10 +33,15 @@ import {
   createValidPag,
   createValidTransp,
 } from '../../../test/fixtures/data';
-import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
+import {
+  expectIsLeft,
+  expectIsRight,
+  expectNotNull,
+} from '@nfets/test/expects';
 import { getCnpjCertificate } from '@nfets/test/certificates';
 import { getCertificatePassword } from '@nfets/test/certificates';
 import { directory } from '@nfets/nfe/domain/entities/transmission/schemas';
+import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 
 describe('xml builder with xml2js builder', () => {
   const toolkit: XmlToolkit = new Xml2JsToolkit();
@@ -7652,7 +7658,7 @@ describe('xml builder with xml2js builder', () => {
         idDest: '2',
         cMunFG: '5212501',
         tpImp: '1',
-        tpEmis: '1',
+        tpEmis: TpEmis.Normal,
         cDV: '5',
         tpAmb: '2',
         finNFe: '1',
@@ -7894,5 +7900,866 @@ describe('xml builder with xml2js builder', () => {
     expectIsRight(
       await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
     );
+  });
+
+  it('should stay without contingency when tpEmis="1" and xJust is not provided and dhCont is not provided', () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide({ ...createValidIde(), tpEmis: TpEmis.Normal })
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const entityOrLeft = builder.toObject();
+    expectIsRight(entityOrLeft);
+
+    const nfe = entityOrLeft.value;
+    expect(nfe.infNFe.ide.tpEmis).toBe(TpEmis.Normal);
+    expect(nfe.infNFe.ide.xJust).toBeUndefined();
+    expect(nfe.infNFe.ide.dhCont).toBeUndefined();
+
+    const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
+    expectNotNull(accessKey);
+
+    const decompiled = new AccessKeyBuilder().decompile(accessKey);
+    expect(decompiled?.tpEmis).toBe('1');
+  });
+
+  it('should toggle to contingency when tpEmis="1" and xJust is provided and dhCont is not provided', () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide({
+        ...createValidIde(),
+        tpEmis: TpEmis.Normal,
+        xJust: 'SEFAZ fora do Ar...',
+      })
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const entityOrLeft = builder.toObject();
+    expectIsRight(entityOrLeft);
+
+    const nfe = entityOrLeft.value;
+    expect(nfe.infNFe.ide.tpEmis).toBe(TpEmis.SVCRS);
+    expect(nfe.infNFe.ide.xJust).toBe('SEFAZ fora do Ar...');
+    expect(nfe.infNFe.ide.dhCont).toBeDefined();
+
+    const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
+    expectNotNull(accessKey);
+
+    const decompiled = new AccessKeyBuilder().decompile(accessKey);
+    expect(decompiled?.tpEmis).toBe('7');
+  });
+
+  it('should toggle to contingency when tpEmis="1" and xJust is not provided and dhCont is provided', () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide({
+        ...createValidIde(),
+        tpEmis: TpEmis.Normal,
+        dhCont: '2025-11-13T10:00:00Z',
+      })
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const entityOrLeft = builder.toObject();
+    expectIsRight(entityOrLeft);
+
+    const nfe = entityOrLeft.value;
+    expect(nfe.infNFe.ide.tpEmis).toBe(TpEmis.SVCRS);
+    expect(nfe.infNFe.ide.xJust).toBe('SEFAZ fora do Ar');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:00:00+00:00');
+
+    const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
+    expectNotNull(accessKey);
+
+    const decompiled = new AccessKeyBuilder().decompile(accessKey);
+    expect(decompiled?.tpEmis).toBe('7');
+  });
+
+  it('should toggle to contingency when tpEmis="1" and both xJust and dhCont are provided', () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide({
+        ...createValidIde(),
+        tpEmis: TpEmis.Normal,
+        xJust: 'Contingência manual',
+        dhCont: '2025-11-13T10:10:00Z',
+      })
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const entityOrLeft = builder.toObject();
+    expectIsRight(entityOrLeft);
+
+    const nfe = entityOrLeft.value;
+    expect(nfe.infNFe.ide.tpEmis).toBe(TpEmis.SVCRS);
+    expect(nfe.infNFe.ide.xJust).toBe('Contingência manual');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:10:00+00:00');
+
+    const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
+    expectNotNull(accessKey);
+
+    const decompiled = new AccessKeyBuilder().decompile(accessKey);
+    expect(decompiled?.tpEmis).toBe('7');
+  });
+
+  it('should toggle to contingency when tpEmis="6" and xJust is not provided and dhCont is not provided', () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide({
+        ...createValidIde(),
+        tpEmis: TpEmis.SVCAN,
+      })
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const entityOrLeft = builder.toObject();
+    expectIsRight(entityOrLeft);
+
+    const nfe = entityOrLeft.value;
+    expect(nfe.infNFe.ide.tpEmis).toBe('6');
+    expect(nfe.infNFe.ide.xJust).toBe('SEFAZ fora do Ar');
+    expect(nfe.infNFe.ide.dhCont).toBeDefined();
+
+    const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
+    expectNotNull(accessKey);
+
+    const decompiled = new AccessKeyBuilder().decompile(accessKey);
+    expect(decompiled?.tpEmis).toBe('6');
+  });
+
+  it('should toggle to contingency when tpEmis="6" and xJust is provided and dhCont is not provided', () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide({
+        ...createValidIde(),
+        tpEmis: TpEmis.SVCAN,
+        xJust: 'SEFAZ fora do Ar...',
+      })
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const entityOrLeft = builder.toObject();
+    expectIsRight(entityOrLeft);
+
+    const nfe = entityOrLeft.value;
+    expect(nfe.infNFe.ide.tpEmis).toBe('6');
+    expect(nfe.infNFe.ide.xJust).toBe('SEFAZ fora do Ar...');
+    expect(nfe.infNFe.ide.dhCont).toBeDefined();
+
+    const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
+    expectNotNull(accessKey);
+
+    const decompiled = new AccessKeyBuilder().decompile(accessKey);
+    expect(decompiled?.tpEmis).toBe('6');
+  });
+
+  it('should toggle to contingency when tpEmis="6" and xJust is not provided and dhCont is provided', () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide({
+        ...createValidIde(),
+        tpEmis: TpEmis.SVCAN,
+        dhCont: '2025-11-13T10:10:00Z',
+      })
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const entityOrLeft = builder.toObject();
+    expectIsRight(entityOrLeft);
+
+    const nfe = entityOrLeft.value;
+    expect(nfe.infNFe.ide.tpEmis).toBe('6');
+    expect(nfe.infNFe.ide.xJust).toBe('SEFAZ fora do Ar');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:10:00+00:00');
+
+    const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
+    expectNotNull(accessKey);
+
+    const decompiled = new AccessKeyBuilder().decompile(accessKey);
+    expect(decompiled?.tpEmis).toBe('6');
+  });
+
+  it('should toggle to contingency when tpEmis="6" and both xJust and dhCont are provided', () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide({
+        ...createValidIde(),
+        tpEmis: TpEmis.SVCAN,
+        xJust: 'Contingência manual',
+        dhCont: '2025-11-13T10:10:00Z',
+      })
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const entityOrLeft = builder.toObject();
+    expectIsRight(entityOrLeft);
+
+    const nfe = entityOrLeft.value;
+    expect(nfe.infNFe.ide.tpEmis).toBe('6');
+    expect(nfe.infNFe.ide.xJust).toBe('Contingência manual');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:10:00+00:00');
+
+    const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
+    expectNotNull(accessKey);
+
+    const decompiled = new AccessKeyBuilder().decompile(accessKey);
+    expect(decompiled?.tpEmis).toBe('6');
+  });
+
+  it('should toggle to contingency when tpEmis="7" and xJust is not provided and dhCont is not provided', () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide({
+        ...createValidIde(),
+        tpEmis: TpEmis.SVCRS,
+      })
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const entityOrLeft = builder.toObject();
+    expectIsRight(entityOrLeft);
+
+    const nfe = entityOrLeft.value;
+    expect(nfe.infNFe.ide.tpEmis).toBe('7');
+    expect(nfe.infNFe.ide.xJust).toBe('SEFAZ fora do Ar');
+    expect(nfe.infNFe.ide.dhCont).toBeDefined();
+
+    const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
+    expectNotNull(accessKey);
+
+    const decompiled = new AccessKeyBuilder().decompile(accessKey);
+    expect(decompiled?.tpEmis).toBe('7');
+  });
+
+  it('should toggle to contingency when tpEmis="7" and xJust is provided and dhCont is not provided', () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide({
+        ...createValidIde(),
+        tpEmis: TpEmis.SVCRS,
+        xJust: 'SEFAZ fora do Ar...',
+      })
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const entityOrLeft = builder.toObject();
+    expectIsRight(entityOrLeft);
+
+    const nfe = entityOrLeft.value;
+    expect(nfe.infNFe.ide.tpEmis).toBe('7');
+    expect(nfe.infNFe.ide.xJust).toBe('SEFAZ fora do Ar...');
+    expect(nfe.infNFe.ide.dhCont).toBeDefined();
+
+    const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
+    expectNotNull(accessKey);
+
+    const decompiled = new AccessKeyBuilder().decompile(accessKey);
+    expect(decompiled?.tpEmis).toBe('7');
+  });
+
+  it('should toggle to contingency when tpEmis="7" and xJust is not provided and dhCont is provided', () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide({
+        ...createValidIde(),
+        tpEmis: TpEmis.SVCRS,
+        dhCont: '2025-11-13T10:10:00Z',
+      })
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const entityOrLeft = builder.toObject();
+    expectIsRight(entityOrLeft);
+
+    const nfe = entityOrLeft.value;
+    expect(nfe.infNFe.ide.tpEmis).toBe('7');
+    expect(nfe.infNFe.ide.xJust).toBe('SEFAZ fora do Ar');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:10:00+00:00');
+
+    const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
+    expectNotNull(accessKey);
+
+    const decompiled = new AccessKeyBuilder().decompile(accessKey);
+    expect(decompiled?.tpEmis).toBe('7');
+  });
+
+  it('should toggle to contingency when tpEmis="7" and both xJust and dhCont are provided', () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide({
+        ...createValidIde(),
+        tpEmis: TpEmis.SVCRS,
+        xJust: 'Contingência manual',
+        dhCont: '2025-11-13T10:10:00Z',
+      })
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const entityOrLeft = builder.toObject();
+    expectIsRight(entityOrLeft);
+
+    const nfe = entityOrLeft.value;
+    expect(nfe.infNFe.ide.tpEmis).toBe('7');
+    expect(nfe.infNFe.ide.xJust).toBe('Contingência manual');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:10:00+00:00');
+
+    const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
+    expectNotNull(accessKey);
+
+    const decompiled = new AccessKeyBuilder().decompile(accessKey);
+    expect(decompiled?.tpEmis).toBe('7');
   });
 });

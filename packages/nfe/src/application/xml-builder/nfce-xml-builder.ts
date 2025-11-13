@@ -10,6 +10,7 @@ import { NFCe } from '@nfets/nfe/infrastructure/dto/nfe/nfce';
 import type { NFCe as INFCe } from '@nfets/nfe/domain/entities/nfe/nfce';
 import type { XmlToolkit } from '@nfets/core/domain';
 import type { InfNFeSupl as IInfNFeSupl } from '@nfets/nfe/domain/entities/nfe/inf-nfe-supl';
+import type { ContingencyOptions } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
 
 export class NfceXmlBuilder<T extends object = INFCe>
   extends NfeXmlBuilder<T>
@@ -21,7 +22,7 @@ export class NfceXmlBuilder<T extends object = INFCe>
       total: { ICMSTot: {} },
     },
     infNFeSupl: {} as IInfNFeSupl,
-  } as Partial<INFCe>;
+  } as const as INFCe;
 
   protected override get entity() {
     return NFCe as new () => T;
@@ -29,17 +30,16 @@ export class NfceXmlBuilder<T extends object = INFCe>
 
   public static override create<T extends object = INFCe>(
     builder: XmlToolkit,
+    contingency?: ContingencyOptions,
   ): InfNFeBuilder<T> & IdeBuilder<T> {
-    return new this(builder);
+    return new this(builder, contingency);
   }
 
   protected override assertHomologValidations(): boolean {
     if (!super.assertHomologValidations()) return false;
 
-    if (this.data.infNFe?.det[0].prod) {
-      this.data.infNFe.det[0].prod.xProd =
-        'NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL' as const;
-    }
+    this.data.infNFe.det[0].prod.xProd =
+      'NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL' as const;
 
     return true;
   }

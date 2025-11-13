@@ -21,6 +21,7 @@ import { expectIsRight } from '@nfets/test/expects';
 import { ASN1, EntitySigner } from '@nfets/core/application';
 import axios from 'axios';
 
+import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 import type { Emit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
 import type { Ide } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
 
@@ -58,10 +59,10 @@ describe('soap nfce remote transmission (integration) (destructive)', () => {
       qrCode,
     );
 
-    const result = await repository.read(
-      certificateFromEnvironment.certificatePath,
-      certificateFromEnvironment.password,
-    );
+    const result = await repository.read({
+      pfxPathOrBase64: certificateFromEnvironment.certificatePath,
+      password: certificateFromEnvironment.password,
+    });
 
     if (result.isRight()) {
       certificateResponse = result.value;
@@ -131,7 +132,7 @@ describe('soap nfce remote transmission (integration) (destructive)', () => {
           idDest: '1',
           cMunFG: args.enderEmit?.cMun ?? '',
           tpImp: '4',
-          tpEmis: '1',
+          tpEmis: TpEmis.Normal,
           tpAmb: Environment.Homolog,
           finNFe: '1',
           indFinal: '1',

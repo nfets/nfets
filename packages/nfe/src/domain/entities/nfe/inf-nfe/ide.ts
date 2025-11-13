@@ -1,3 +1,5 @@
+import type { StateCode, EnvironmentCode } from '@nfets/core/domain';
+import type { TpEmis } from '../../constants/tp-emis';
 export interface RefNF {
   cUF: string;
   AAMM: string;
@@ -34,7 +36,7 @@ export interface NFref {
 }
 
 export interface Ide {
-  cUF: string;
+  cUF: StateCode;
   cNF: string;
   natOp: string;
   mod: string;
@@ -46,9 +48,9 @@ export interface Ide {
   idDest: string;
   cMunFG: string;
   tpImp: string;
-  tpEmis: string;
+  tpEmis: TpEmis;
   cDV?: string;
-  tpAmb: string;
+  tpAmb: EnvironmentCode;
   finNFe: string;
   indFinal: string;
   indPres: string;

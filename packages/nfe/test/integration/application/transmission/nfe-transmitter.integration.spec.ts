@@ -24,6 +24,7 @@ import axios from 'axios';
 
 import type { Emit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
 import type { Ide } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
+import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 
 const SEFAZ_TIMEOUT_SC = 60 * 1000;
 
@@ -50,10 +51,10 @@ describe('soap nfe remote transmission (integration) (not destructive)', () => {
       ),
     );
 
-    const result = await repository.read(
-      certificateFromEnvironment.certificatePath,
-      certificateFromEnvironment.password,
-    );
+    const result = await repository.read({
+      pfxPathOrBase64: certificateFromEnvironment.certificatePath,
+      password: certificateFromEnvironment.password,
+    });
 
     transmission.configure({
       cUF: StateCodes.SC,
@@ -124,10 +125,10 @@ describe('soap nfe remote transmission (integration) (destructive)', () => {
       ),
     );
 
-    const result = await repository.read(
-      certificateFromEnvironment.certificatePath,
-      certificateFromEnvironment.password,
-    );
+    const result = await repository.read({
+      pfxPathOrBase64: certificateFromEnvironment.certificatePath,
+      password: certificateFromEnvironment.password,
+    });
 
     if (result.isRight()) {
       certificateResponse = result.value;
@@ -193,7 +194,7 @@ describe('soap nfe remote transmission (integration) (destructive)', () => {
           idDest: '2',
           cMunFG: args.enderEmit?.cMun ?? '',
           tpImp: '1',
-          tpEmis: '1',
+          tpEmis: TpEmis.Normal,
           tpAmb: Environment.Homolog,
           finNFe: '1',
           indFinal: '1',

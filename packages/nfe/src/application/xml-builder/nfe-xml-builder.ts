@@ -2,10 +2,7 @@ import { type XmlToolkit, Environment, NFeTsError } from '@nfets/core/domain';
 import { type DeepPartial, left, right } from '@nfets/core/shared';
 import { ValidateErrorsMetadata, Validates } from '@nfets/core/application';
 
-import type {
-  InfNFeAttributes as IInfNFeAttributes,
-  InfNFe as IInfNFe,
-} from '@nfets/nfe/domain/entities/nfe/inf-nfe';
+import type { InfNFeAttributes as IInfNFeAttributes } from '@nfets/nfe/domain/entities/nfe/inf-nfe';
 import type { Ide as IIde } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
 import type { Cobr as ICobr } from '@nfets/nfe/domain/entities/nfe/inf-nfe/cobr';
 import type { Emit as IEmit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
@@ -69,6 +66,9 @@ import { Exporta } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/exporta';
 import { Compra } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/compra';
 import { InfAdic } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/infadic';
 import { Cana } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/cana';
+import { ContingencyOptions } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
+import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
+import webservices from '@nfets/nfe/services/contingency-webservices-mod55';
 
 export class NfeXmlBuilder<T extends object = INFe>
   implements INfeXmlBuilder<T>
@@ -78,7 +78,7 @@ export class NfeXmlBuilder<T extends object = INFe>
     infNFe: {
       total: { ICMSTot: {} },
     },
-  } as Partial<INFe>;
+  } as const as INFe;
 
   protected get entity(): new () => T {
     return NFe as new () => T;
@@ -95,65 +95,60 @@ export class NfeXmlBuilder<T extends object = INFe>
 
   public static create<T extends object = INFe>(
     builder: XmlToolkit,
+    contingency?: ContingencyOptions,
   ): InfNFeBuilder<T> & IdeBuilder<T> {
-    return new this(builder);
+    return new this(builder, contingency);
   }
 
-  protected constructor(private readonly builder: XmlToolkit) {}
+  protected constructor(
+    protected readonly builder: XmlToolkit,
+    protected contingency?: ContingencyOptions,
+  ) {}
 
   @Validates(InfNFeAttributes)
   public infNFe($: IInfNFeAttributes) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.$ = $;
     return this;
   }
 
   @Validates(Ide)
   public ide(payload: IIde) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.ide = payload;
     return this;
   }
 
   @Validates(Emit)
   public emit(payload: IEmit) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.emit = payload;
-    this.fillAccessKeyIfEmpty();
     return this;
   }
 
   @Validates(Avulsa)
   public avulsa(payload: IAvulsa) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.avulsa = payload;
     return this;
   }
 
   @Validates(Dest)
   public dest(payload: IDest) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.dest = payload;
     return this;
   }
 
   @Validates(Local)
   public retirada(payload: ILocal) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.retirada = payload;
     return this;
   }
 
   @Validates(Local)
   public entrega(payload: ILocal) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.entrega = payload;
     return this;
   }
 
   @Validates(AutXML)
   public autXML(payload: IAutXML) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.autXML ??= [] as IAutXML[];
     this.data.infNFe.autXML.push(payload);
     return this;
@@ -163,7 +158,6 @@ export class NfeXmlBuilder<T extends object = INFe>
     items: [D, ...D[]],
     build: (ctx: ProdBuilder, item: D) => AssembleDetXmlBuilder,
   ): TotalBuilder<T> & TranspBuilder<T> {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.det = items.map((item, index) => {
       const builder = build(
         this.nfeDetXmlBuilder.det({ nItem: (index + 1).toString() }),
@@ -176,7 +170,6 @@ export class NfeXmlBuilder<T extends object = INFe>
 
   @Validates(Total)
   public total(payload: ITotal) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.total = payload;
     return this;
   }
@@ -184,7 +177,6 @@ export class NfeXmlBuilder<T extends object = INFe>
   public increment(
     callback: (context: DeepPartial<ITotal>) => DeepPartial<ITotal>,
   ) {
-    this.data.infNFe ??= {} as IInfNFe;
     const result = callback(this.data.infNFe.total) as ITotal;
 
     this.data.infNFe.total = {
@@ -200,70 +192,60 @@ export class NfeXmlBuilder<T extends object = INFe>
 
   @Validates(Transp)
   public transp(payload: ITransp) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.transp = payload;
     return this;
   }
 
   @Validates(Cobr)
   public cobr(payload: ICobr) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.cobr = payload;
     return this;
   }
 
   @Validates(Pag)
   public pag(payload: IPag) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.pag = payload;
     return this;
   }
 
   @Validates(InfIntermed)
   public infIntermed(payload: IInfIntermed) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.infIntermed = payload;
     return this;
   }
 
   @Validates(InfAdic)
   public infAdic(payload: IInfAdic) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.infAdic = payload;
     return this;
   }
 
   @Validates(Exporta)
   public exporta(payload: IExporta) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.exporta = payload;
     return this;
   }
 
   @Validates(Compra)
   public compra(payload: ICompra) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.compra = payload;
     return this;
   }
 
   @Validates(Cana)
   public cana(payload: ICana) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.cana = payload;
     return this;
   }
 
   @Validates(InfRespTec)
   public infRespTec(payload: IInfRespTec) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.infRespTec = payload;
     return this;
   }
 
   @Validates(InfSolicNFF)
   public infSolicNFF(payload: ISolicNFF) {
-    this.data.infNFe ??= {} as IInfNFe;
     this.data.infNFe.infSolicNFF = payload;
     return this;
   }
@@ -278,6 +260,8 @@ export class NfeXmlBuilder<T extends object = INFe>
     if (errors) return left(new NFeTsError(errors.join(', ')));
     this.$total?.aggregate();
     this.assertHomologValidations();
+    this.assertContingencyModes();
+    this.fillAccessKeyIfEmpty();
     return right(plainToInstance<T>(this.data, this.entity));
   }
 
@@ -291,13 +275,45 @@ export class NfeXmlBuilder<T extends object = INFe>
   }
 
   protected assertHomologValidations(): boolean {
-    if (this.data.infNFe?.ide.tpAmb !== Environment.Homolog) return false;
+    if (this.data.infNFe.ide.tpAmb !== Environment.Homolog) return false;
 
     if (this.data.infNFe.dest)
       this.data.infNFe.dest.xNome =
         'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL' as const;
 
     return true;
+  }
+
+  protected assertContingencyModes(): void {
+    if (this.contingency === void 0) {
+      return this.automaticallyInferContingencyMode();
+    }
+
+    this.data.infNFe.ide.dhCont ??= this.contingency.dhCont;
+    this.data.infNFe.ide.xJust ??= this.contingency.xJust;
+
+    const { cUF, tpEmis } = this.data.infNFe.ide;
+    if (tpEmis !== TpEmis.Normal) return;
+
+    const contingency = webservices[cUF];
+    switch (contingency) {
+      case 'SVCAN':
+        return (this.data.infNFe.ide.tpEmis = TpEmis.SVCAN), void 0;
+      case 'SVCRS':
+        return (this.data.infNFe.ide.tpEmis = TpEmis.SVCRS), void 0;
+    }
+  }
+
+  protected automaticallyInferContingencyMode(): void {
+    const { xJust, dhCont, tpEmis } = this.data.infNFe.ide;
+    if (!xJust && !dhCont && tpEmis === TpEmis.Normal) return;
+
+    this.contingency = {
+      xJust: xJust ?? 'SEFAZ fora do Ar',
+      dhCont: dhCont ?? new Date().toISOString(),
+    } satisfies ContingencyOptions;
+
+    return this.assertContingencyModes();
   }
 
   private errors(): string[] | undefined {
@@ -322,9 +338,8 @@ export class NfeXmlBuilder<T extends object = INFe>
   }
 
   private fillAccessKeyIfEmpty(): void {
-    if (this.data.infNFe?.$.Id) return;
+    if (this.data.infNFe.$.Id) return;
 
-    this.data.infNFe ??= {} as IInfNFe;
     const Id = new AccessKeyBuilder().compile({
       cUF: this.data.infNFe.ide.cUF,
       year: this.data.infNFe.ide.dhEmi.substring(2, 4),

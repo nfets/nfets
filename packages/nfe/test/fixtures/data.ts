@@ -3,6 +3,7 @@ import type { Emit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
 import type { Ide } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
 import type { Pag } from '@nfets/nfe/domain/entities/nfe/inf-nfe/pag';
 import type { Transp } from '@nfets/nfe/domain/entities/nfe/inf-nfe/transp';
+import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 
 export const createValidIde = (): Ide => ({
   cUF: '52',
@@ -17,7 +18,7 @@ export const createValidIde = (): Ide => ({
   idDest: '2',
   cMunFG: '5212501',
   tpImp: '1',
-  tpEmis: '1',
+  tpEmis: TpEmis.Normal,
   cDV: '5',
   tpAmb: '2',
   finNFe: '1',

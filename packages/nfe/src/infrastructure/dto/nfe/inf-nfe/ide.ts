@@ -1,6 +1,7 @@
 import {
   ArrayMaxSize,
   IsArray,
+  IsEnum,
   IsOptional,
   IsString,
   ValidateNested,
@@ -14,6 +15,8 @@ import type {
   NFref as INFref,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
 import { Choice, TransformDateString } from '@nfets/core/application';
+import type { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
+import { type StateCode, type EnvironmentCode, StateCodes } from '@nfets/core';
 
 export class RefNF implements IRefNF {
   @IsString()
@@ -105,8 +108,8 @@ export class NFref implements INFref {
 }
 
 export class Ide implements IIde {
-  @IsString()
-  public cUF!: string;
+  @IsEnum(StateCodes)
+  public cUF!: StateCode;
 
   @IsString()
   public cNF!: string;
@@ -143,14 +146,14 @@ export class Ide implements IIde {
   public tpImp!: string;
 
   @IsString()
-  public tpEmis!: string;
+  public tpEmis!: TpEmis;
 
   @IsString()
   @IsOptional()
   public cDV?: string = '' as const;
 
   @IsString()
-  public tpAmb!: string;
+  public tpAmb!: EnvironmentCode;
 
   @IsString()
   public finNFe!: string;
@@ -173,6 +176,7 @@ export class Ide implements IIde {
 
   @IsOptional()
   @IsString()
+  @TransformDateString({ format: 'YYYY-MM-DD[T]HH:mm:ssZ' })
   public dhCont?: string;
 
   @IsOptional()
