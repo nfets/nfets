@@ -21,7 +21,13 @@ If you only need to validate the happy-path flow, prefer running the non-destruc
 When you intentionally need to authorize an NF-e in the homologation environment, run from the repository root with the flag scoped to that single command:
 
 ```bash
-DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-transmitter -t 'autorizacao' '{"serie":"69","nNF":"1504","IE":"261471520","enderEmit":{"CEP":"89700903","cMun":"4204301"}}'
+DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline.integration -t 'should authorize a nfe' '{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}'
+```
+
+When you intentionally need to authorize an NF-e in the contingency environment, run from the repository root with the flag scoped to that single command:
+
+```bash
+DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline.integration -t 'should authorize a contingency nfe' '{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}'
 ```
 
 When you intentionally need to authorize an NFC-e in the homologation environment, run from the repository root with the flag scoped to that single command:
