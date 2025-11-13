@@ -1,6 +1,6 @@
 export type * from './entities/access-keys/access-key';
 
-export type * from './entities/constants/tp-emis';
+export * from './entities/constants/tp-emis';
 
 export type * from './entities/nfe/nfe';
 export type * from './entities/nfe/nfce';
