@@ -14,7 +14,10 @@ import type {
   NfeTransmitter,
   NfeTransmitterOptions,
 } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
-import type { ServiceOptions } from '@nfets/nfe/domain/entities/transmission/services';
+import type {
+  ServiceOptions,
+  Webservice,
+} from '@nfets/nfe/domain/entities/transmission/services';
 import type { ConsultStatusPayload as IConsultStatusPayload } from '@nfets/nfe/domain/entities/services/consult-status';
 import type { InutilizacaoPayload as IInutilizacaoPayload } from '@nfets/nfe/domain/entities/services/inutilizacao';
 import type { ConsultaProtocoloPayload as IConsultaProtocoloPayload } from '@nfets/nfe/domain/entities/services/consulta-protocolo';
@@ -34,6 +37,7 @@ import { ConsultaCadastroPayload } from '@nfets/nfe/infrastructure/dto/services/
 
 import WSNFE_4_00_MOD55 from '../../services/wsnfe_4.00-mod55';
 import webservices from '../../services/webservices-mod55';
+import contingency from '../../services/contingency-webservices-mod55';
 
 import schemas, {
   directory,
@@ -68,12 +72,13 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
   >(options: ServiceOptions<WS, O, S, E>) {
     const cUF = options.cUF ?? this.options.cUF;
     const tpAmb = options.tpAmb ?? this.options.tpAmb;
-    const webservice = webservices[cUF as keyof typeof webservices];
+
+    const webservice = this.options.contingency
+      ? contingency[cUF]
+      : webservices[cUF];
+
     const environments = WSNFE_4_00_MOD55[webservice];
-    const services = environments[tpAmb] as Record<
-      string,
-      { url: string; method: string; operation: string; version: string }
-    >;
+    const services = environments[tpAmb] as Record<string, Webservice>;
     return services[options.service as string];
   }
 
@@ -243,6 +248,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     if (payloadOrError.isLeft()) return payloadOrError;
     const data = payloadOrError.value;
 
+    // TODO: let class validator handle this
     if (!data.CNPJ && !data.CPF && !data.IE) {
       return left(
         new NFeTsError(

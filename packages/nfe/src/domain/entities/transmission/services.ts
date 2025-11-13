@@ -16,6 +16,13 @@ type StateAcronymFromCode<S extends StateCode> = {
   [K in keyof UfMap]: S extends UfMap[K] ? Extract<K, StateAcronym> : never;
 }[keyof UfMap];
 
+export interface Webservice {
+  url: string;
+  method: string;
+  operation: string;
+  version: string;
+}
+
 export type GroupServicesForState<
   WS extends Record<string, unknown>,
   O extends Record<string, unknown>,

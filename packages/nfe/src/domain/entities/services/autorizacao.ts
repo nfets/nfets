@@ -1,21 +1,16 @@
-import type {
-  EnvironmentCode,
-  SignedEntity,
-  StateCode,
-} from '@nfets/core/domain';
+import type { EnvironmentCode, StateCode } from '@nfets/core/domain';
 import type { ProtNFe } from './consulta-protocolo';
-import type { NFe } from '../nfe/nfe';
 
-export interface AutorizacaoPayload<E extends object = NFe> {
+export interface AutorizacaoPayload<E extends object> {
   cUF?: StateCode;
   tpAmb?: EnvironmentCode;
-  idLote: string;
+  idLote?: string;
   indSinc?: '0' | '1';
-  NFe: SignedEntity<E>;
+  NFe: E;
 }
 
-export interface AutorizacaoRequest {
-  enviNFe: AutorizacaoPayload;
+export interface AutorizacaoRequest<E extends object> {
+  enviNFe: AutorizacaoPayload<E>;
 }
 
 export interface AutorizacaoResponse {

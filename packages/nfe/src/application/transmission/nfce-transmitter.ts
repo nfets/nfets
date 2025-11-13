@@ -22,7 +22,10 @@ import { NfeRemoteTransmitter } from './nfe-transmitter';
 import { NfceAutorizacaoPayload } from '@nfets/nfe/infrastructure/dto/services/nfce-autorizacao';
 import { Validates } from '@nfets/core/application';
 import { NFCe } from '@nfets/nfe/infrastructure/dto/nfe/nfce';
-import { ServiceOptions } from '@nfets/nfe/domain/entities/transmission/services';
+import {
+  ServiceOptions,
+  Webservice,
+} from '@nfets/nfe/domain/entities/transmission/services';
 import { NfceQrcode } from './nfce-qrcode';
 import { left } from '@nfets/core/shared/either';
 
@@ -59,8 +62,7 @@ export class NfceRemoteTransmitter
     const environments = WSNFE_4_00_MOD65[webservice];
     const services = environments[tpAmb] as Record<
       string,
-      | { url: string; method: string; operation: string; version: string }
-      | undefined
+      Webservice | undefined
     >;
     const service = services[options.service as string];
     if (service) return service;
@@ -90,7 +92,7 @@ export class NfceRemoteTransmitter
     ];
   }
 
-  private async infNfeSupl(payload: IAutorizacaoPayload<NFCe>) {
+  private async infNfeSupl(payload: IAutorizacaoPayload<SignedEntity<NFCe>>) {
     const options = this.options.qrCode;
     const service = this.service({ ...payload, service: 'NfeConsultaQR' });
     options.version ??= service.version as '200' | '300';
