@@ -2,14 +2,14 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "lib",
+    "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "@nfets/nfe": ["./packages/nfe/dist/index"],
-      "@nfets/nfe/*": ["./packages/nfe/dist/*"],
-      "@nfets/core": ["./packages/core/dist/index"],
-      "@nfets/core/*": ["./packages/core/dist/*"]
+      "@nfets/nfe": ["./packages/nfe/src/index"],
+      "@nfets/nfe/*": ["./packages/nfe/src/*"],
+      "@nfets/core": ["./packages/core/src/index"],
+      "@nfets/core/*": ["./packages/core/src/*"]
     }
   },
-  "include": ["lib/**/*.ts"]
+  "include": ["lib/**/*.ts", "packages/**/*.ts"]
 }

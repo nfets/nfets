@@ -6,6 +6,10 @@
 
 Bem-vindo à documentação do nfets! Esta pasta contém arquivos importantes sobre governança, contribuição e suporte do projeto.
 
+## Exemplos práticos de uso
+
+- **[autorizando-uma-nfe.md](./packages/nfe/examples/authorizing-a-nfe.md)** - Guia completo sobre como autorizar uma NF-e na SEFAZ
+
 ## 📄 Arquivos Disponíveis
 
 ### Para Contribuidores

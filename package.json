@@ -3,13 +3,23 @@
   "version": "0.0.0",
   "description": "typescript libraries for Brazilian's SEFAZ standards",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "types": "dist/index.d.ts",
+      "import": "dist/index.mjs",
+      "require": "dist/index.cjs"
+    },
+    "./nfe": {
+      "types": "dist/nfe/index.d.ts",
+      "import": "dist/nfe/index.mjs",
+      "require": "dist/nfe/index.cjs"
+    },
+    "./core": {
+      "types": "dist/core/index.d.ts",
+      "import": "dist/core/index.mjs",
+      "require": "dist/core/index.cjs"
     }
   },
   "engines": {
@@ -26,7 +36,8 @@
   },
   "files": [
     "dist",
-    "build/Release/xml_validator.node"
+    "build/Release/xml_validator.node",
+    "packages/nfe/schemas"
   ],
   "scripts": {
     "install": "node-gyp rebuild && make build",
