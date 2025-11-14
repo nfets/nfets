@@ -11,6 +11,7 @@ import type { NFCe as INFCe } from '@nfets/nfe/domain/entities/nfe/nfce';
 import type { XmlToolkit } from '@nfets/core/domain';
 import type { InfNFeSupl as IInfNFeSupl } from '@nfets/nfe/domain/entities/nfe/inf-nfe-supl';
 import type { ContingencyOptions } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
+import { TpEmis } from '@nfets/nfe/domain';
 
 export class NfceXmlBuilder<T extends object = INFCe>
   extends NfeXmlBuilder<T>
@@ -42,5 +43,19 @@ export class NfceXmlBuilder<T extends object = INFCe>
       'NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL' as const;
 
     return true;
+  }
+
+  protected override assertContingencyModes(): void {
+    if (this.contingency === void 0) {
+      return this.automaticallyInferContingencyMode();
+    }
+
+    this.data.infNFe.ide.dhCont ??= this.contingency.dhCont;
+    this.data.infNFe.ide.xJust ??= this.contingency.xJust;
+
+    const { tpEmis } = this.data.infNFe.ide;
+    if (tpEmis !== TpEmis.Normal) return;
+
+    return (this.data.infNFe.ide.tpEmis = TpEmis.OFFLINE), void 0;
   }
 }
