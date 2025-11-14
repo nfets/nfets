@@ -2,7 +2,7 @@ import { IsOptional, IsString } from 'class-validator';
 import { Choice } from '@nfets/core/application';
 import { Local as ILocal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/local';
 
-@Choice({ properties: ['CNPJ', 'CPF'] })
+@Choice<ILocal>({ properties: ['CNPJ', 'CPF'] })
 export class Local implements ILocal {
   @IsOptional()
   @IsString()

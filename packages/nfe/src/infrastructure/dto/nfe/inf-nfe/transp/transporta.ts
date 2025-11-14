@@ -2,7 +2,7 @@ import { IsOptional, IsString } from 'class-validator';
 import { Choice } from '@nfets/core/application';
 import { Transporta as ITransporta } from '@nfets/nfe/domain/entities/nfe/inf-nfe/transp';
 
-@Choice({ properties: ['CNPJ', 'CPF'] })
+@Choice<ITransporta>({ properties: ['CNPJ', 'CPF'] })
 export class Transporta implements ITransporta {
   @IsOptional()
   @IsString()

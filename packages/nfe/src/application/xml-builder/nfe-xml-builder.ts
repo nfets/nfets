@@ -262,7 +262,9 @@ export class NfeXmlBuilder<T extends object = INFe>
     this.assertHomologValidations();
     this.assertContingencyModes();
     this.fillAccessKeyIfEmpty();
-    return right(plainToInstance<T>(this.data, this.entity));
+    return right(
+      plainToInstance<T>(this.data, this.entity, { clearEmptyValues: true }),
+    );
   }
 
   /** @throws {NFeTsError} */

@@ -248,15 +248,6 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     if (payloadOrError.isLeft()) return payloadOrError;
     const data = payloadOrError.value;
 
-    // TODO: let class validator handle this
-    if (!data.CNPJ && !data.CPF && !data.IE) {
-      return left(
-        new NFeTsError(
-          'consultaCadastro: At least one identification field (CNPJ, CPF, or IE) must be provided',
-        ),
-      );
-    }
-
     const service = this.service({
       cUF: StateCodes[data.UF],
       service: 'NfeConsultaCadastro',

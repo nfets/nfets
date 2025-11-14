@@ -8,10 +8,10 @@ describe('Dest Choice validation', () => {
     return dest;
   };
 
-  it('should be valid when no Choice property is set', () => {
+  it('should be invalid when no Choice property is set', () => {
     const dest = createValidDest();
     const errors = validateSync(dest);
-    expect(errors.length).toBe(0);
+    expect(errors.length).toBe(1);
   });
 
   it('should be valid when only CNPJ is set', () => {

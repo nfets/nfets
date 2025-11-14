@@ -38,7 +38,7 @@ export class RefNF implements IRefNF {
   public nNF!: string;
 }
 
-@Choice({ properties: ['CNPJ', 'CPF'], required: true })
+@Choice<IRefNFP>({ properties: ['CNPJ', 'CPF'], required: true })
 export class RefNFP implements IRefNFP {
   @IsString()
   public cUF!: string;
@@ -48,11 +48,11 @@ export class RefNFP implements IRefNFP {
 
   @IsOptional()
   @IsString()
-  public CNPJ?: string;
+  public CNPJ?: string = '' as const;
 
   @IsOptional()
   @IsString()
-  public CPF?: string;
+  public CPF?: string = '' as const;
 
   @IsString()
   public IE!: string;

@@ -3,7 +3,10 @@ import { Choice } from '@nfets/core/application';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 import type { ConsultaCadastroPayload as IConsultaCadastroPayload } from '@nfets/nfe/domain/entities/services/consulta-cadastro';
 
-@Choice({ properties: ['IE', 'CNPJ', 'CPF'], required: true })
+@Choice<IConsultaCadastroPayload>({
+  properties: ['IE', 'CNPJ', 'CPF'],
+  required: true,
+})
 export class ConsultaCadastroPayload implements IConsultaCadastroPayload {
   @IsOptional()
   public xServ = 'CONS-CAD' as const;
@@ -14,13 +17,13 @@ export class ConsultaCadastroPayload implements IConsultaCadastroPayload {
 
   @IsOptional()
   @IsString()
-  public IE?: string;
+  public IE?: string = '' as const;
 
   @IsOptional()
   @IsString()
-  public CNPJ?: string;
+  public CNPJ?: string = '' as const;
 
   @IsOptional()
   @IsString()
-  public CPF?: string;
+  public CPF?: string = '' as const;
 }

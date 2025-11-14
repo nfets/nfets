@@ -439,6 +439,10 @@ describe('NfeRemoteTransmitter (unit)', () => {
       });
 
       expectIsLeft(response);
+      expect(response.value).toBeInstanceOf(NFeTsError);
+      expect(response.value.message).toContain(
+        'consultaCadastro.You must provide a value for one of the following properties: IE, CNPJ, CPF',
+      );
     });
 
     it('should call repository with correct payload when valid with CNPJ', async () => {

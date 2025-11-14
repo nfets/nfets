@@ -6,22 +6,30 @@ import {
   type ValidationArguments,
 } from 'class-validator';
 
-interface ChoiceGroup {
-  properties: [string, ...string[]];
+interface ChoiceGroup<P extends string | number | symbol> {
+  properties: [P, ...P[]];
   required?: boolean;
 }
 
-export interface ChoiceOptions extends ValidationOptions, ChoiceGroup {}
+export interface ChoiceOptions<P extends string | number | symbol>
+  extends ValidationOptions,
+    ChoiceGroup<P> {}
 
 const CHOICE_METADATA_KEY = Symbol('choice');
 
-export const Choice = (options: ChoiceOptions): ClassDecorator => {
+const isEmpty = (value: unknown): value is undefined =>
+  value === undefined || value === null || value === '';
+
+export const Choice = <T extends object>(
+  options: ChoiceOptions<keyof T>,
+): ClassDecorator => {
   return (target) => {
+    type Group = ChoiceGroup<keyof T>;
     const { properties, required = false, ...validationOptions } = options;
 
     const existingGroups =
       (Reflect.getMetadata(CHOICE_METADATA_KEY, target) as
-        | ChoiceGroup[]
+        | Group[]
         | undefined) ?? [];
 
     const newGroup = { properties, required };
@@ -33,16 +41,16 @@ export const Choice = (options: ChoiceOptions): ClassDecorator => {
       registerDecorator({
         name: 'choice',
         target: target,
-        propertyName: propertyName,
+        propertyName: propertyName as string,
         options: validationOptions,
         validator: {
           validate(value: unknown, args: ValidationArguments) {
-            const instance = args.object;
-            const propertyName = args.property;
+            const instance = args.object as Record<keyof T, unknown>;
+            const propertyName = args.property as keyof T;
             const allGroups = Reflect.getMetadata(
               CHOICE_METADATA_KEY,
               target,
-            ) as ChoiceGroup[] | undefined;
+            ) as Group[] | undefined;
 
             if (!allGroups) return true;
 
@@ -51,35 +59,21 @@ export const Choice = (options: ChoiceOptions): ClassDecorator => {
             );
 
             if (!group) return true;
-
-            const isEmpty = value === undefined || value === null;
-            if (isEmpty) return true;
+            if (isEmpty(value)) return true;
 
             for (const otherProperty of group.properties) {
               if (otherProperty === propertyName) continue;
 
-              const otherValue = (instance as Record<string, unknown>)[
-                otherProperty
-              ];
-
-              const otherIsEmpty =
-                otherValue === undefined || otherValue === null;
-
-              if (!otherIsEmpty) return false;
+              const otherValue = instance[otherProperty];
+              if (!isEmpty(otherValue)) return false;
             }
 
             for (const otherGroup of allGroups) {
               if (otherGroup === group) continue;
 
               for (const otherGroupProperty of otherGroup.properties) {
-                const otherGroupValue = (instance as Record<string, unknown>)[
-                  otherGroupProperty
-                ];
-
-                const otherGroupIsEmpty =
-                  otherGroupValue === undefined || otherGroupValue === null;
-
-                if (!otherGroupIsEmpty) return false;
+                const otherGroupValue = instance[otherGroupProperty];
+                if (!isEmpty(otherGroupValue)) return false;
               }
             }
 
@@ -89,22 +83,24 @@ export const Choice = (options: ChoiceOptions): ClassDecorator => {
             const allGroups = Reflect.getMetadata(
               CHOICE_METADATA_KEY,
               target,
-            ) as ChoiceGroup[] | undefined;
+            ) as Group[] | undefined;
 
             if (!allGroups) return `${args.property} validation error`;
 
             const group = allGroups.find((g) =>
-              g.properties.includes(args.property),
+              g.properties.includes(args.property as keyof T),
             );
 
             if (!group) return `${args.property} validation error`;
 
-            const instance = args.object as Record<string, unknown>;
+            const instance = args.object as Record<keyof T, unknown>;
 
             for (const prop of group.properties) {
               const value = instance[prop];
-              if (!!value && prop !== args.property) {
-                return `${args.property} cannot be set because ${prop} is already set. Only one property from this choice group is allowed.`;
+              if (!isEmpty(value) && prop !== args.property) {
+                return `${args.property} cannot be set because ${
+                  prop as string
+                } is already set. Only one property from this choice group is allowed.`;
               }
             }
 
@@ -113,8 +109,10 @@ export const Choice = (options: ChoiceOptions): ClassDecorator => {
 
               for (const otherProp of otherGroup.properties) {
                 const otherValue = instance[otherProp];
-                if (otherValue !== undefined && otherValue !== null) {
-                  return `${args.property} cannot be set because ${otherProp} from a different choice group is already set.`;
+                if (!isEmpty(otherValue)) {
+                  return `${args.property} cannot be set because ${
+                    otherProp as string
+                  } from a different choice group is already set.`;
                 }
               }
             }
@@ -130,30 +128,29 @@ export const Choice = (options: ChoiceOptions): ClassDecorator => {
         registerDecorator({
           name: 'choiceGroupRequired',
           target: target,
-          propertyName: propertyName,
+          propertyName: propertyName as string,
           options: {
             ...validationOptions,
             always: true,
           },
           validator: {
             validate(_, args: ValidationArguments) {
-              const instance = args.object as Record<string, unknown>;
+              const instance = args.object as Record<keyof T, unknown>;
               const allGroups = Reflect.getMetadata(
                 CHOICE_METADATA_KEY,
                 target,
-              ) as ChoiceGroup[] | undefined;
+              ) as Group[] | undefined;
 
               if (!allGroups) return true;
-
               const currentGroup = allGroups.find((g) =>
-                g.properties.includes(args.property),
+                g.properties.includes(args.property as keyof T),
               );
 
               if (!currentGroup?.required) return true;
 
               for (const prop of currentGroup.properties) {
                 const propValue = instance[prop];
-                if (propValue !== undefined && propValue !== null) return true;
+                if (!isEmpty(propValue)) return true;
               }
 
               return args.property !== currentGroup.properties[0];
@@ -162,14 +159,14 @@ export const Choice = (options: ChoiceOptions): ClassDecorator => {
               const allGroups = Reflect.getMetadata(
                 CHOICE_METADATA_KEY,
                 target,
-              ) as ChoiceGroup[] | undefined;
+              ) as Group[] | undefined;
 
               if (!allGroups) {
                 return 'At least one property from a choice group must be provided';
               }
 
               const group = allGroups.find((g) =>
-                g.properties.includes(_args.property),
+                g.properties.includes(_args.property as keyof T),
               );
 
               if (!group) {
