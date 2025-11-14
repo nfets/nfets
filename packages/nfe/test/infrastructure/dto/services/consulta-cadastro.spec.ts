@@ -2,12 +2,12 @@ import { validateSync } from 'class-validator';
 import { ConsultaCadastroPayload } from '@nfets/nfe/infrastructure/dto/services/consulta-cadastro';
 
 describe('ConsultaCadastroPayload Choice validation', () => {
-  it('should be valid when no Choice property is set', () => {
+  it('should be invalid when no Choice property is set', () => {
     const payload = new ConsultaCadastroPayload();
     payload.UF = 'GO';
 
     const errors = validateSync(payload);
-    expect(errors.length).toBe(0);
+    expect(errors.length).toBe(1);
   });
 
   it('should be valid when only CNPJ is set', () => {

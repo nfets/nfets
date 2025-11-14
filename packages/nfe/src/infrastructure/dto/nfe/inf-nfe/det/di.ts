@@ -33,7 +33,7 @@ export class Adi implements IAdi {
   public nDraw?: string;
 }
 
-@Choice({ properties: ['CNPJ', 'CPF'], required: true })
+@Choice<IDI>({ properties: ['CNPJ', 'CPF'], required: true })
 export class DI implements IDI {
   @IsString()
   public nDI!: string;
@@ -62,11 +62,11 @@ export class DI implements IDI {
 
   @IsString()
   @IsOptional()
-  public CNPJ?: string;
+  public CNPJ?: string = '' as const;
 
   @IsString()
   @IsOptional()
-  public CPF?: string;
+  public CPF?: string = '' as const;
 
   @IsString()
   @IsOptional()

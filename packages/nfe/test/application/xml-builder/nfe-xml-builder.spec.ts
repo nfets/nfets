@@ -171,7 +171,7 @@ describe('xml builder with xml2js builder', () => {
         tpEmis: '1',
         cNF: '12345678',
       } as never)
-      .emit({ xNome: 'xD', IE: '', CRT: '' } as never)
+      .emit({ xNome: 'xD', IE: 'xD', CRT: 'xD', CPF: '00000000000' } as never)
       .det([] as never, () => void 0 as never)
       .transp({ modFrete: '9' })
       .pag({
@@ -198,9 +198,10 @@ describe('xml builder with xml2js builder', () => {
       <cDV>N</cDV>
     </ide>
     <emit>
+      <CPF>00000000000</CPF>
       <xNome>xD</xNome>
-      <IE/>
-      <CRT/>
+      <IE>xD</IE>
+      <CRT>xD</CRT>
     </emit>
     <total>
       <ICMSTot>
@@ -270,7 +271,7 @@ describe('xml builder with xml2js builder', () => {
     expectIsLeft(xmlOrLeft);
     expect(xmlOrLeft.value).toStrictEqual(
       new NFeTsError(
-        'ide.cNF must be a string, ide.natOp must be a string, ide.serie must be a string, ide.nNF must be a string, ide.tpNF must be a string, ide.idDest must be a string, ide.cMunFG must be a string, ide.tpImp must be a string, ide.tpAmb must be a string, ide.finNFe must be a string, ide.indFinal must be a string, ide.indPres must be a string, ide.procEmi must be a string, ide.verProc must be a string, emit.xNome must be a string, emit.IE must be a string, emit.CRT must be a string',
+        'ide.cNF must be a string, ide.natOp must be a string, ide.serie must be a string, ide.nNF must be a string, ide.tpNF must be a string, ide.idDest must be a string, ide.cMunFG must be a string, ide.tpImp must be a string, ide.tpAmb must be a string, ide.finNFe must be a string, ide.indFinal must be a string, ide.indPres must be a string, ide.procEmi must be a string, ide.verProc must be a string, emit.You must provide a value for one of the following properties: CNPJ, CPF, emit.xNome must be a string, emit.IE must be a string, emit.CRT must be a string',
       ),
     );
   });

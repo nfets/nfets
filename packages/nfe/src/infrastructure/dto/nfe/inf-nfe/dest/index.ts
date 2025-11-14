@@ -6,15 +6,15 @@ import type { Dest as IDest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/dest'
 import type { EnderDest as IEnderDest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/dest';
 import { Choice } from '@nfets/core/application';
 
-@Choice({ properties: ['CNPJ', 'CPF'], required: true })
+@Choice<IDest>({ properties: ['CNPJ', 'CPF'], required: true })
 export class Dest implements IDest {
   @IsOptional()
   @IsString()
-  public CNPJ?: string;
+  public CNPJ?: string = '' as const;
 
   @IsOptional()
   @IsString()
-  public CPF?: string;
+  public CPF?: string = '' as const;
 
   @IsOptional()
   @IsString()

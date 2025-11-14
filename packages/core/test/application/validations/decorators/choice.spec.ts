@@ -10,11 +10,11 @@ describe('Choice decorator', () => {
     class Person {
       @IsOptional()
       @IsString()
-      public CPF?: string;
+      public CPF?: string = '' as const;
 
       @IsOptional()
       @IsString()
-      public CNPJ?: string;
+      public CNPJ?: string = '' as const;
     }
 
     it('should pass validation when CPF is provided', async () => {
@@ -171,12 +171,12 @@ describe('Choice decorator', () => {
       @IsOptional()
       @ValidateNested()
       @Type(() => NestedObject)
-      public obj1?: NestedObject;
+      public obj1?: NestedObject = null as unknown as NestedObject;
 
       @IsOptional()
       @ValidateNested()
       @Type(() => NestedObject)
-      public obj2?: NestedObject;
+      public obj2?: NestedObject = null as unknown as NestedObject;
     }
 
     it('should pass validation when obj1 is provided', async () => {
@@ -230,11 +230,11 @@ describe('Choice decorator', () => {
     class RequiredPerson {
       @IsOptional()
       @IsString()
-      public CPF?: string;
+      public CPF?: string = '' as const;
 
       @IsOptional()
       @IsString()
-      public CNPJ?: string;
+      public CNPJ?: string = '' as const;
     }
 
     it('should pass validation when first property is provided in required group', async () => {

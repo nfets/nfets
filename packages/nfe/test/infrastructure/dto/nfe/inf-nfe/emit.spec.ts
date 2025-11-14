@@ -19,7 +19,7 @@ describe('Emit Choice validation', () => {
     return emit;
   };
 
-  it('should be valid when no Choice property is set', () => {
+  it('should be invalid when no Choice property is set', () => {
     const emit = createValidEmit();
     const errors = validateSync(emit);
     const choiceErrors = errors.filter(
@@ -33,7 +33,7 @@ describe('Emit Choice validation', () => {
                 message.includes('already set')),
           )),
     );
-    expect(choiceErrors.length).toBe(0);
+    expect(choiceErrors.length).toBe(1);
   });
 
   it('should be valid when only CNPJ is set', () => {

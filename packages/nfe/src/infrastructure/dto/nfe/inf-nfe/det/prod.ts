@@ -31,7 +31,7 @@ import { Med } from './med';
 import { Arma } from './arma';
 import { Comb } from './comb';
 
-@Choice({ properties: ['veicProd', 'med', 'arma', 'comb'] })
+@Choice<IProd>({ properties: ['veicProd', 'med', 'arma', 'comb'] })
 export class Prod implements IProd {
   @IsString()
   public cProd!: string;

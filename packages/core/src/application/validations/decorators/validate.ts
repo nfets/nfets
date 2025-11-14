@@ -2,7 +2,10 @@ import 'reflect-metadata';
 
 import { validateSync, type ValidationError } from 'class-validator';
 import { SkipValidationMetadata } from './skip-validations';
-import { plainToInstance } from '../transformers/plain-to-instance';
+import {
+  clearEmptyValues,
+  plainToInstance,
+} from '../transformers/plain-to-instance';
 
 export const ValidateErrorsMetadata = '__ValidateErrors__';
 
@@ -58,6 +61,7 @@ export const Validates = <T extends object>(klass: new () => T) => {
       const [payload, ...rest] = args;
       const instance = plainToInstance<T>(payload, klass);
       const errors = validateSync(instance, { whitelist: true });
+      clearEmptyValues(instance);
 
       if (errors.length) {
         const current = (Reflect.getMetadata(ValidateErrorsMetadata, this) ??

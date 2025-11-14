@@ -22,7 +22,7 @@ import type { ICMSUFDest as IICMSUFDest } from '@nfets/nfe/domain/entities/nfe/i
 
 import { Choice } from '@nfets/core/application';
 
-@Choice({ properties: ['ICMS', 'ISSQN'] })
+@Choice<IImposto>({ properties: ['ICMS', 'ISSQN'] })
 export class Imposto implements IImposto {
   @IsOptional()
   @IsNumber()

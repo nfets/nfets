@@ -5,15 +5,15 @@ import { EnderEmit } from './ender-emit';
 
 import type { Emit as IEmit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
 
-@Choice({ properties: ['CNPJ', 'CPF'], required: true })
+@Choice<IEmit>({ properties: ['CNPJ', 'CPF'], required: true })
 export class Emit implements IEmit {
   @IsOptional()
   @IsString()
-  public CNPJ?: string;
+  public CNPJ?: string = '' as const;
 
   @IsOptional()
   @IsString()
-  public CPF?: string;
+  public CPF?: string = '' as const;
 
   @IsString()
   public xNome!: string;

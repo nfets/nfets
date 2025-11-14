@@ -17,8 +17,8 @@ import { Vol, Vol as IVol } from './vol';
 import { Transp as ITransp } from '@nfets/nfe/domain/entities/nfe/inf-nfe/transp';
 import { Choice } from '@nfets/core/application';
 
-@Choice({ properties: ['veicTransp', 'reboque'] })
-@Choice({ properties: ['vagao', 'balsa'] })
+@Choice<ITransp>({ properties: ['veicTransp', 'reboque'] })
+@Choice<ITransp>({ properties: ['vagao', 'balsa'] })
 export class Transp implements ITransp {
   @IsString()
   public modFrete!: string;

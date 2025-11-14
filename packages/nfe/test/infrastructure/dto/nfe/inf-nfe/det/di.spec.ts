@@ -23,10 +23,10 @@ describe('DI Choice validation', () => {
     return di;
   };
 
-  it('should be valid when no Choice property is set', () => {
+  it('should be invalid when no Choice property is set', () => {
     const di = createValidDI();
     const errors = validateSync(di);
-    expect(errors.length).toBe(0);
+    expect(errors.length).toBe(1);
   });
 
   it('should be valid when only CNPJ is set', () => {

@@ -30,7 +30,9 @@ describe('plainToInstance transformer (unit)', () => {
   describe('with undefined values', () => {
     it('should remove undefined values from instance', () => {
       const plain = { name: 'John', age: 30, optional: undefined };
-      const instance = plainToInstance(plain, TestClass);
+      const instance = plainToInstance(plain, TestClass, {
+        clearEmptyValues: true,
+      });
 
       expect(instance.name).toBe('John');
       expect(instance.age).toBe(30);
@@ -47,7 +49,9 @@ describe('plainToInstance transformer (unit)', () => {
         value: 'test',
         nested: { prop: undefined },
       };
-      const instance = plainToInstance(plain, NestedClass);
+      const instance = plainToInstance(plain, NestedClass, {
+        clearEmptyValues: true,
+      });
 
       expect(instance.value).toBe('test');
       expect(instance.nested).toBeDefined();
@@ -83,7 +87,9 @@ describe('plainToInstance transformer (unit)', () => {
         name: 'John',
         nested: { value: 'test', optional: undefined },
       };
-      const instance = plainToInstance(plain, ParentClass);
+      const instance = plainToInstance(plain, ParentClass, {
+        clearEmptyValues: true,
+      });
 
       expect(instance.nested).toBeInstanceOf(NestedClass);
       expect(instance.nested.value).toBe('test');
@@ -109,7 +115,9 @@ describe('plainToInstance transformer (unit)', () => {
           },
         },
       };
-      const instance = plainToInstance(plain, DeepNestedClass);
+      const instance = plainToInstance(plain, DeepNestedClass, {
+        clearEmptyValues: true,
+      });
 
       expect(instance.level1).toBeDefined();
       expect(instance.level1?.level2).toBeDefined();
