@@ -1,4 +1,6 @@
+import type { Signature } from '@nfets/core';
 import {
+  Allow,
   IsNotEmpty,
   IsNotEmptyObject,
   IsObject,
@@ -31,4 +33,7 @@ export class NFe implements INFe {
   @Type(() => InfNFe)
   @ValidateNested()
   public infNFe!: IInfNFe;
+
+  @Allow()
+  public Signature?: Signature;
 }
