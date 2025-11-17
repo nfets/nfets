@@ -1,50 +1,13 @@
-import axios from 'axios';
-
-import type {
-  CacheAdapter,
-  CertificateRepository,
-  HttpClient,
-  ReadCertificateRequest,
-  RemoteTransmissionRepository,
-  XmlToolkit,
-} from '@nfets/core/domain';
-import {
-  Xml2JsToolkit,
-  NativeCertificateRepository,
-  SoapRemoteTransmissionRepository,
-  MemoryCacheAdapter,
-} from '@nfets/core/infrastructure';
-import { EntitySigner } from '@nfets/core/application';
-
 import type {
   ContingencyOptions,
-  NfeRemoteClient,
   NfeTransmitterOptions,
 } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
 import type { AutorizacaoPayload as IAutorizacaoPayload } from '@nfets/nfe/domain/entities/services/autorizacao';
 import type { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
-import { NfeRemoteTransmitter } from '../transmission/nfe-transmitter';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
+import { Pipeline } from './pipeline';
 
-export class NfeAuthorizerPipeline {
-  protected readonly http: HttpClient = axios.create();
-
-  protected readonly toolkit: XmlToolkit = new Xml2JsToolkit();
-
-  protected readonly caching: CacheAdapter = new MemoryCacheAdapter();
-
-  protected readonly certificates: CertificateRepository =
-    new NativeCertificateRepository(this.http, this.caching);
-
-  protected readonly soap: RemoteTransmissionRepository<NfeRemoteClient> =
-    new SoapRemoteTransmissionRepository(this.toolkit, this.certificates);
-
-  protected readonly transmitter = new NfeRemoteTransmitter(this.soap);
-
-  protected readonly signer = new EntitySigner(this.toolkit, this.certificates);
-
-  public constructor(protected readonly certificate: ReadCertificateRequest) {}
-
+export class NfeAuthorizerPipeline extends Pipeline {
   public async execute(
     payload: IAutorizacaoPayload<NFe>,
     options?: Pick<NfeTransmitterOptions, 'schema'>,
