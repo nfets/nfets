@@ -217,7 +217,7 @@ describe('xml builder with xml2js builder', () => {
     const nfe = entityOrLeft.value;
     expect(nfe.infNFe.ide.tpEmis).toBe('9');
     expect(nfe.infNFe.ide.xJust).toBe('SEFAZ fora do Ar');
-    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:00:00+00:00');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T07:00:00-03:00');
 
     const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
     expectNotNull(accessKey);
@@ -290,7 +290,7 @@ describe('xml builder with xml2js builder', () => {
     const nfe = entityOrLeft.value;
     expect(nfe.infNFe.ide.tpEmis).toBe('9');
     expect(nfe.infNFe.ide.xJust).toBe('Contingência manual');
-    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:10:00+00:00');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T07:10:00-03:00');
 
     const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
     expectNotNull(accessKey);
@@ -505,7 +505,7 @@ describe('xml builder with xml2js builder', () => {
     const nfe = entityOrLeft.value;
     expect(nfe.infNFe.ide.tpEmis).toBe('9');
     expect(nfe.infNFe.ide.xJust).toBe('SEFAZ fora do Ar');
-    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:10:00+00:00');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T07:10:00-03:00');
 
     const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
     expectNotNull(accessKey);
@@ -578,7 +578,7 @@ describe('xml builder with xml2js builder', () => {
     const nfe = entityOrLeft.value;
     expect(nfe.infNFe.ide.tpEmis).toBe('9');
     expect(nfe.infNFe.ide.xJust).toBe('Contingência manual');
-    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:10:00+00:00');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T07:10:00-03:00');
 
     const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
     expectNotNull(accessKey);

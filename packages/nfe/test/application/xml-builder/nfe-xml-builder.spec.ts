@@ -86,7 +86,7 @@ describe('xml builder with xml2js builder', () => {
         mod: '55',
         serie: 1,
         nNF: 1,
-        dhEmi: '2024-06-12T09:55:26+00:00',
+        dhEmi: '2024-06-12T06:55:26-03:00',
         cUF: '52',
         tpEmis: '1',
         cNF: '45941728',
@@ -108,7 +108,7 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>1</serie>
       <nNF>1</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
       <tpEmis>1</tpEmis>
       <cDV>8</cDV>
     </ide>
@@ -164,7 +164,7 @@ describe('xml builder with xml2js builder', () => {
       .infNFe({ versao: '4.00' })
       .ide({
         mod: { invalid: 'model' } as never,
-        dhEmi: '2024-06-12T09:55:26+00:00',
+        dhEmi: '2024-06-12T06:55:26-03:00',
         serie: 1,
         nNF: 1,
         cUF: '52',
@@ -193,7 +193,7 @@ describe('xml builder with xml2js builder', () => {
       </mod>
       <serie>1</serie>
       <nNF>1</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
       <tpEmis>1</tpEmis>
       <cDV>N</cDV>
     </ide>
@@ -254,7 +254,7 @@ describe('xml builder with xml2js builder', () => {
       .infNFe({ versao: '4.00' })
       .ide({
         mod: '55',
-        dhEmi: '2024-06-12T09:55:26+00:00',
+        dhEmi: '2024-06-12T06:55:26-03:00',
         cUF: '52',
         serie: 1,
         nNF: 1,
@@ -352,8 +352,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -558,8 +558,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -782,8 +782,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -1007,8 +1007,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -1226,8 +1226,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -1439,8 +1439,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -1650,8 +1650,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -1860,8 +1860,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -2063,8 +2063,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -2265,8 +2265,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -2485,8 +2485,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -2702,8 +2702,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -2907,8 +2907,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -3139,8 +3139,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -3483,8 +3483,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -3791,8 +3791,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -4006,8 +4006,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -4239,8 +4239,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -4469,8 +4469,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -4687,8 +4687,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -4903,8 +4903,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -5136,8 +5136,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -5366,8 +5366,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -5584,8 +5584,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -5818,8 +5818,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -6046,8 +6046,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -6281,8 +6281,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -6530,8 +6530,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -6762,8 +6762,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -7000,8 +7000,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -7238,8 +7238,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -7474,8 +7474,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -7653,8 +7653,8 @@ describe('xml builder with xml2js builder', () => {
         mod: '55',
         serie: '99',
         nNF: '8018',
-        dhEmi: '2024-06-12T09:55:26+00:00',
-        dhSaiEnt: '2024-06-12T09:57:56+00:00',
+        dhEmi: '2024-06-12T06:55:26-03:00',
+        dhSaiEnt: '2024-06-12T06:57:56-03:00',
         tpNF: '1',
         idDest: '2',
         cMunFG: '5212501',
@@ -7764,8 +7764,8 @@ describe('xml builder with xml2js builder', () => {
       <mod>55</mod>
       <serie>99</serie>
       <nNF>8018</nNF>
-      <dhEmi>2024-06-12T09:55:26+00:00</dhEmi>
-      <dhSaiEnt>2024-06-12T09:57:56+00:00</dhSaiEnt>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
       <tpNF>1</tpNF>
       <idDest>2</idDest>
       <cMunFG>5212501</cMunFG>
@@ -8106,7 +8106,7 @@ describe('xml builder with xml2js builder', () => {
     const nfe = entityOrLeft.value;
     expect(nfe.infNFe.ide.tpEmis).toBe(TpEmis.SVCRS);
     expect(nfe.infNFe.ide.xJust).toBe('SEFAZ fora do Ar');
-    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:00:00+00:00');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T07:00:00-03:00');
 
     const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
     expectNotNull(accessKey);
@@ -8179,7 +8179,7 @@ describe('xml builder with xml2js builder', () => {
     const nfe = entityOrLeft.value;
     expect(nfe.infNFe.ide.tpEmis).toBe(TpEmis.SVCRS);
     expect(nfe.infNFe.ide.xJust).toBe('Contingência manual');
-    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:10:00+00:00');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T07:10:00-03:00');
 
     const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
     expectNotNull(accessKey);
@@ -8394,7 +8394,7 @@ describe('xml builder with xml2js builder', () => {
     const nfe = entityOrLeft.value;
     expect(nfe.infNFe.ide.tpEmis).toBe('6');
     expect(nfe.infNFe.ide.xJust).toBe('SEFAZ fora do Ar');
-    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:10:00+00:00');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T07:10:00-03:00');
 
     const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
     expectNotNull(accessKey);
@@ -8467,7 +8467,7 @@ describe('xml builder with xml2js builder', () => {
     const nfe = entityOrLeft.value;
     expect(nfe.infNFe.ide.tpEmis).toBe('6');
     expect(nfe.infNFe.ide.xJust).toBe('Contingência manual');
-    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:10:00+00:00');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T07:10:00-03:00');
 
     const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
     expectNotNull(accessKey);
@@ -8682,7 +8682,7 @@ describe('xml builder with xml2js builder', () => {
     const nfe = entityOrLeft.value;
     expect(nfe.infNFe.ide.tpEmis).toBe('7');
     expect(nfe.infNFe.ide.xJust).toBe('SEFAZ fora do Ar');
-    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:10:00+00:00');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T07:10:00-03:00');
 
     const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
     expectNotNull(accessKey);
@@ -8755,7 +8755,7 @@ describe('xml builder with xml2js builder', () => {
     const nfe = entityOrLeft.value;
     expect(nfe.infNFe.ide.tpEmis).toBe('7');
     expect(nfe.infNFe.ide.xJust).toBe('Contingência manual');
-    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T10:10:00+00:00');
+    expect(nfe.infNFe.ide.dhCont).toBe('2025-11-13T07:10:00-03:00');
 
     const accessKey = nfe.infNFe.$.Id?.replace('NFe', '');
     expectNotNull(accessKey);
