@@ -362,8 +362,6 @@ describe('NfeRemoteTransmitter (unit)', () => {
   describe('recepcaoEvento', () => {
     it('should return left when idLote is invalid', async () => {
       const response = await transmission.recepcaoEvento({
-        tpAmb: Environment.Homolog,
-        cUF: StateCodes.RS,
         idLote: 'abc',
         evento: {} as never,
       });
@@ -381,14 +379,14 @@ describe('NfeRemoteTransmitter (unit)', () => {
           cOrgao: '43',
           cStat: '128',
           xMotivo: 'Lote de Evento Processado',
-          retEvento: [],
+          retEvento: {},
         },
       };
 
-      mockRepository.send.mockResolvedValue(right(mockResponse));
+      mockRepository.send.mockResolvedValue(right(mockResponse as never));
 
       const evento = {
-        $: { versao: '1.00' },
+        $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
         infEvento: {
           $: { Id: 'ID1101004324001' },
           cOrgao: '43',
@@ -396,8 +394,8 @@ describe('NfeRemoteTransmitter (unit)', () => {
           CNPJ: '12345678901234',
           chNFe: '43240112345678901234550010000000011000000011',
           dhEvento: '2024-01-01T10:00:00-03:00',
-          tpEvento: '110110',
-          nSeqEvento: '1',
+          tpEvento: '110111',
+          nSeqEvento: 1,
           verEvento: '1.00',
           detEvento: {
             $: { versao: '1.00' },
@@ -407,24 +405,26 @@ describe('NfeRemoteTransmitter (unit)', () => {
       };
 
       const response = await transmission.recepcaoEvento({
-        tpAmb: Environment.Homolog,
-        cUF: StateCodes.RS,
         idLote: '123',
-        evento,
+        evento: evento as never,
       });
 
       expectIsRight(response);
       expect(mockRepository.send).toHaveBeenCalledWith({
         root: 'nfeDadosMsg',
         url: expect.stringContaining('nfe'),
-        xsd: expect.stringContaining('envEvento_v4.00.xsd'),
+        xsd: expect.stringContaining('envEvento_v1.00.xsd'),
         payload: {
           envEvento: expect.objectContaining({
             $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '1.00' },
-            tpAmb: Environment.Homolog,
-            cUF: StateCodes.RS,
             idLote: '123',
-            evento,
+            evento: expect.objectContaining({
+              ...evento,
+              $: {
+                xmlns: 'http://www.portalfiscal.inf.br/nfe',
+                versao: '1.00',
+              },
+            }),
           }),
         },
         method: 'nfeRecepcaoEvento',
