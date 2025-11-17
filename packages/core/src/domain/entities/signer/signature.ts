@@ -4,6 +4,10 @@ import type {
   SignatureNamespace,
 } from './algo';
 
+export type Namespaced<T extends object = object> = T & {
+  $?: { xmlns: string };
+};
+
 export interface SignedInfo {
   CanonicalizationMethod: CanonicalizationMethod;
   SignatureMethod: SignatureMethod;

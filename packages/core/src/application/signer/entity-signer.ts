@@ -3,12 +3,11 @@ import type { ReadCertificateResponse } from '../../domain/entities/certificate/
 import { type Either, left, right } from '../../shared/either';
 import { NFeTsError } from '../../domain/errors/nfets-error';
 import { Signer } from './signer';
-import type { SignedEntity, SignerOptions } from '@nfets/core/domain';
-
-interface Namespaced {
-  $: { xmlns: string };
-  [key: string]: unknown;
-}
+import type {
+  Namespaced,
+  SignedEntity,
+  SignerOptions,
+} from '@nfets/core/domain';
 
 export class EntitySigner extends Signer {
   public async sign<T extends object, K extends keyof T = keyof T>(
@@ -23,7 +22,7 @@ export class EntitySigner extends Signer {
       return left(new NFeTsError(`Node ${String(tag)} not found`));
     }
 
-    const node = await this.toolkit.build(this.ns(content, String(tag)), {
+    const node = await this.toolkit.build(this.ns(content, tag), {
       headless: true,
       rootName: String(tag),
       renderOpts: { pretty: false },
@@ -43,12 +42,10 @@ export class EntitySigner extends Signer {
     return right(result);
   }
 
-  private ns(content: object, tag: string) {
-    const xmlns = (content as Namespaced).$.xmlns;
-    const {
-      $: { xmlns: _, ...$ },
-      ...element
-    } = (content as Namespaced)[tag] as Namespaced;
+  private ns<T extends object>(content: Namespaced<T>, tag: keyof T) {
+    const xmlns = content.$?.xmlns;
+    const { $: _, ...element } = content[tag] as Namespaced<T>;
+    const { xmlns: __, ...$ } = _ ?? {};
     return {
       $: { xmlns, ...$ },
       ...element,

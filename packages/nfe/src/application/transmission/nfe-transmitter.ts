@@ -4,6 +4,7 @@ import {
   StateCodes,
   type RemoteTransmissionRepository,
   type SignedEntity,
+  type Namespaced,
 } from '@nfets/core/domain';
 import type { StateCode, EnvironmentCode } from '@nfets/core/domain';
 import { ValidateErrorsMetadata, Validates } from '@nfets/core/application';
@@ -23,7 +24,7 @@ import type { InutilizacaoPayload as IInutilizacaoPayload } from '@nfets/nfe/dom
 import type { ConsultaProtocoloPayload as IConsultaProtocoloPayload } from '@nfets/nfe/domain/entities/services/consulta-protocolo';
 import type { AutorizacaoPayload as IAutorizacaoPayload } from '@nfets/nfe/domain/entities/services/autorizacao';
 import type { RetAutorizacaoPayload as IRetAutorizacaoPayload } from '@nfets/nfe/domain/entities/services/ret-autorizacao';
-import type { EventoPayload as IEventoPayload } from '@nfets/nfe/domain/entities/services/evento';
+import type { EventoRequest } from '@nfets/nfe/domain/entities/services/evento';
 import type { ConsultaCadastroPayload as IConsultaCadastroPayload } from '@nfets/nfe/domain/entities/services/consulta-cadastro';
 import type { NFe as INFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 
@@ -52,7 +53,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
   protected readonly xmlns = 'http://www.portalfiscal.inf.br/nfe';
 
   public configure(options: NfeTransmitterOptions) {
-    this.options = options;
+    this.options = { ...this.options, ...options };
     const { certificate } = this.options;
 
     if (certificate) {
@@ -100,8 +101,9 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     }
   }
 
-  protected payload<T extends object>(payload: T, version: string) {
-    return { $: { xmlns: this.xmlns, versao: version }, ...payload };
+  protected ns<T extends object>(payload: Namespaced<T>, version: string) {
+    const $ = (payload.$ ?? {}) as { xmlns: string; versao: string };
+    return ($.xmlns = this.xmlns), ($.versao = version), { ...payload, $ };
   }
 
   protected xsd(name: string) {
@@ -119,7 +121,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       url: service.url,
       xsd: this.xsd('consStatServ_v4.00.xsd'),
       payload: {
-        consStatServ: this.payload(data, service.version),
+        consStatServ: this.ns(data, service.version),
       },
       method: 'nfeStatusServicoNF',
     });
@@ -155,10 +157,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       url: service.url,
       xsd: this.xsd('inutNFe_v4.00.xsd'),
       payload: {
-        inutNFe: this.payload(
-          { infInut: { $: { Id }, ...data } },
-          service.version,
-        ),
+        inutNFe: this.ns({ infInut: { $: { Id }, ...data } }, service.version),
       },
       method: 'nfeInutilizacaoNF',
     });
@@ -181,7 +180,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       url: service.url,
       xsd: this.xsd('consSitNFe_v4.00.xsd'),
       payload: {
-        consSitNFe: this.payload(data, service.version),
+        consSitNFe: this.ns(data, service.version),
       },
       method: 'nfeConsultaNF',
     });
@@ -200,7 +199,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       url: service.url,
       xsd: this.xsd('enviNFe_v4.00.xsd'),
       payload: {
-        enviNFe: this.payload(data, service.version),
+        enviNFe: this.ns(data, service.version),
       },
       method: 'nfeAutorizacaoLote',
     });
@@ -219,24 +218,25 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       url: service.url,
       xsd: this.xsd('consReciNFe_v4.00.xsd'),
       payload: {
-        consReciNFe: this.payload(data, service.version),
+        consReciNFe: this.ns(data, service.version),
       },
       method: 'nfeRetAutorizacaoLote',
     });
   }
 
-  @Validates(EventoPayload)
-  public async recepcaoEvento(payload: IEventoPayload) {
+  @Validates<EventoRequest<unknown>['envEvento']>(EventoPayload)
+  public async recepcaoEvento<T>(payload: EventoRequest<T>['envEvento']) {
     const payloadOrError = this.validate(payload);
     if (payloadOrError.isLeft()) return payloadOrError;
     const data = payloadOrError.value;
-    const service = this.service({ ...data, service: 'RecepcaoEvento' });
+    const service = this.service({ service: 'RecepcaoEvento' });
+    data.evento = this.ns(data.evento, service.version);
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
-      xsd: this.xsd('envEvento_v4.00.xsd'),
+      xsd: this.xsd('envEvento_v1.00.xsd'),
       payload: {
-        envEvento: this.payload(data, service.version),
+        envEvento: this.ns(data, service.version),
       },
       method: 'nfeRecepcaoEvento',
     });
@@ -258,7 +258,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       url: service.url,
       xsd: this.xsd('ConsCad_v4.00.xsd'),
       payload: {
-        ConsCad: this.payload(data, service.version),
+        ConsCad: this.ns(data, service.version),
       },
       method: 'consultaCadastro',
     });
