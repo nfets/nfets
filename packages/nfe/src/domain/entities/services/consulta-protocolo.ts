@@ -64,7 +64,7 @@ export interface RetEventoItem {
 
 export interface ProcEventoNFe {
   $: { versao: string };
-  evento: EventoItem;
+  evento: EventoItem<unknown>;
   retEvento: RetEventoItem;
 }
 
