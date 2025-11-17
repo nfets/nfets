@@ -91,8 +91,8 @@ export interface NfeTransmitter extends Transmitter<NfeRemoteClient> {
   retAutorizacao(
     payload: RetAutorizacaoPayload,
   ): Promise<Either<NFeTsError, RetAutorizacaoResponse>>;
-  recepcaoEvento(
-    payload: EventoPayload,
+  recepcaoEvento<T>(
+    payload: EventoPayload<T>,
   ): Promise<Either<NFeTsError, EventoResponse>>;
   consultaCadastro(
     payload: ConsultaCadastroPayload,
@@ -120,8 +120,8 @@ export interface NfeRemoteClient extends Client {
     args: RetAutorizacaoRequest,
     opt?: RequestConfig,
   ): Promise<RetAutorizacaoResponse>;
-  nfeRecepcaoEvento(
-    args: EventoRequest,
+  nfeRecepcaoEvento<T>(
+    args: EventoRequest<T>,
     opt?: RequestConfig,
   ): Promise<EventoResponse>;
   consultaCadastro(

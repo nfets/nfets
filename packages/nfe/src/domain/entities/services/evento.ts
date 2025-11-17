@@ -1,34 +1,68 @@
-import type { EnvironmentCode, StateCode } from '@nfets/core/domain';
+import type { EnvironmentCode, Signature, StateCode } from '@nfets/core/domain';
+import type { TpEvent } from '../constants/tp-event';
 
-export interface EventoPayload {
-  tpAmb: EnvironmentCode;
-  cUF: StateCode;
+export interface EventoPayload<T> {
   idLote: string;
-  evento: EventoItem | EventoItem[];
+  evento: EventoItem<T>;
 }
 
-export interface EventoItem {
+export interface EventoLotePayload<T> {
+  idLote: string;
+  evento: EventoItem<T>[];
+}
+
+export interface InfEventoAttributes {
+  Id: string;
+}
+
+export interface InfEvento<T> {
+  $: InfEventoAttributes;
+  cOrgao: StateCode;
+  tpAmb: EnvironmentCode;
+  CNPJ?: string;
+  CPF?: string;
+  chNFe: string;
+  dhEvento: string;
+  tpEvento: TpEvent;
+  nSeqEvento: number;
+  verEvento: string;
+  detEvento: T;
+}
+
+export interface EventoItemAttributes {
+  xmlns: string;
+}
+
+export interface EventoItem<T> {
+  $: EventoItemAttributes;
+  infEvento: InfEvento<T>;
+}
+
+export interface EventoRequest<T> {
+  envEvento: EventoPayload<{ descEvento: string } & T>;
+}
+
+export interface RetEvento {
   $: { versao: string };
   infEvento: {
-    $: { Id: string };
-    cOrgao: string;
+    $?: { Id?: string };
     tpAmb: string;
-    CNPJ?: string;
-    CPF?: string;
-    chNFe: string;
-    dhEvento: string;
-    tpEvento: string;
-    nSeqEvento: string;
-    verEvento: string;
-    detEvento: {
-      $: { versao: string };
-      [key: string]: unknown;
-    };
+    verAplic: string;
+    cOrgao: string;
+    cStat: string;
+    xMotivo: string;
+    chNFe?: string;
+    tpEvento?: string;
+    xEvento?: string;
+    nSeqEvento?: string;
+    cOrgaoAutor?: string;
+    CNPJDest?: string;
+    CPFDest?: string;
+    emailDest?: string;
+    dhRegEvento: string;
+    nProt?: string;
   };
-}
-
-export interface EventoRequest {
-  envEvento: EventoPayload;
+  Signature?: Signature;
 }
 
 export interface EventoResponse {
@@ -40,26 +74,19 @@ export interface EventoResponse {
     cOrgao: string;
     cStat: string;
     xMotivo: string;
-    retEvento?: {
-      $: { versao: string };
-      infEvento: {
-        tpAmb: string;
-        verAplic: string;
-        cOrgao: string;
-        cStat: string;
-        xMotivo: string;
-        chNFe?: string;
-        tpEvento?: string;
-        xEvento?: string;
-        nSeqEvento?: string;
-        cOrgaoAutor?: string;
-        CNPJDest?: string;
-        CPFDest?: string;
-        emailDest?: string;
-        dhRegEvento: string;
-        nProt?: string;
-        $?: { Id?: string };
-      };
-    }[];
+    retEvento?: RetEvento;
+  };
+}
+
+export interface EventoLoteResponse {
+  retEnvEvento: {
+    $: { versao: string };
+    idLote: string;
+    tpAmb: string;
+    verAplic: string;
+    cOrgao: string;
+    cStat: string;
+    xMotivo: string;
+    retEvento?: RetEvento[];
   };
 }
