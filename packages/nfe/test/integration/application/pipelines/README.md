@@ -33,7 +33,19 @@ DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-authorizer-pip
 Quando for realmente necessário autorizar uma NFC-e na homologação, execute a partir da raiz do repositório, limitando o flag a este comando:
 
 ```bash
-DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfce-transmitter -t 'autorizacao' '{"serie":"69","nNF":"1504","IE":"261471520","enderEmit":{"CEP":"89700903","cMun":"4204301"}}'
+DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfce-transmitter -t 'autorizacao' '{"serie":"69","nNF":"1504","IE":"","enderEmit":{"CEP":"89700903","cMun":"4204301"}}'
+```
+
+Quando for realmente necessário cancelar uma NF-e na homologação, execute a partir da raiz do repositório, limitando o flag a este comando:
+
+```bash
+DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-nfce-cancel-pipeline -t 'should cancel a nfe' '{"chNFe":"","nProt":"","xJust":"Cancelamento de NFe em homologação"}'
+```
+
+Quando for realmente necessário inutilizar um intervalo de NF-e na homologação, execute a partir da raiz do repositório, limitando o flag a este comando:
+
+```bash
+DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-nfce-void-range-pipeline -t 'should void a range of nfe' '{"UF":"","mod":"55","serie":"69","nNFIni":"1504","nNFFin":"1504","xJust":"Inutilização de NFe em homologação"}'
 ```
 
 Revise cada argumento (especialmente certificado, IE e dados de endereço) antes de rodar, e lembre que toda execução deixará uma NF-e registrada no ambiente de homologação.

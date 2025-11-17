@@ -15,8 +15,6 @@ import { Pipeline } from './pipeline';
 import { EventoItem } from '@nfets/nfe/infrastructure/dto/services/evento';
 
 export abstract class EventPipeline extends Pipeline {
-  protected readonly xmlns = 'http://www.portalfiscal.inf.br/nfe';
-
   protected async event<T>(
     tpEvento: TpEvent,
     payload: Pick<

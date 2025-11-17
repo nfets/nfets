@@ -1,11 +1,8 @@
 import type { EnvironmentCode, StateCode } from '@nfets/core/domain';
 
-export interface InutilizacaoPayload {
+export interface VoidRangePayload {
   tpAmb?: EnvironmentCode;
-  xServ?: 'INUTILIZAR';
-  cUF?: StateCode;
-  ano: string;
-  CNPJ: string;
+  ano?: string;
   mod: string;
   serie: string;
   nNFIni: string;
@@ -13,13 +10,36 @@ export interface InutilizacaoPayload {
   xJust: string;
 }
 
+export interface InfInutAttributes {
+  Id: string;
+}
+
+export interface InfInut {
+  $: InfInutAttributes;
+  tpAmb?: EnvironmentCode;
+  xServ?: 'INUTILIZAR';
+  cUF?: StateCode;
+  ano: string;
+  CNPJ?: string;
+  CPF?: string;
+  mod: string;
+  serie: string;
+  nNFIni: string;
+  nNFFin: string;
+  xJust: string;
+}
+
+export interface InutNFeAttributes {
+  xmlns: string;
+}
+
+export interface InutilizacaoPayload {
+  $: InutNFeAttributes;
+  infInut: InfInut;
+}
+
 export interface InutilizacaoRequest {
-  inutNFe: {
-    $: { versao: string };
-    infInut: InutilizacaoPayload & {
-      $: { Id: string };
-    };
-  };
+  inutNFe: InutilizacaoPayload;
 }
 
 export interface InutilizacaoResponse {
