@@ -17,6 +17,7 @@ import type { CacheAdapter } from '@nfets/core/domain/repositories/cache-adapter
 import type { HttpClient } from '@nfets/core/domain/repositories/http-client';
 
 import { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
+import { ASN1 } from '@nfets/core/application';
 
 export class NativeCertificateRepository implements CertificateRepository {
   public constructor(
@@ -102,6 +103,10 @@ export class NativeCertificateRepository implements CertificateRepository {
     } catch (e) {
       return Promise.resolve(leftFromError(e));
     }
+  }
+
+  public getCertificateInfo(certificate: X509Certificate) {
+    return new ASN1().extractCertificateInfo(certificate);
   }
 
   public getStringCertificate(certificate: X509Certificate): string {
