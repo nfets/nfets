@@ -131,33 +131,15 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
   public async inutilizacao(payload: IInutilizacaoPayload) {
     const payloadOrError = this.validate(payload);
     if (payloadOrError.isLeft()) return payloadOrError;
-
+    const { cUF, tpAmb } = payloadOrError.value.infInut;
     const data = payloadOrError.value;
-    const service = this.service({
-      cUF: data.cUF,
-      tpAmb: data.tpAmb,
-      service: 'NfeInutilizacao',
-    });
-
-    const Id = [
-      'ID',
-      data.cUF,
-      data.ano.substring(0, 2),
-      data.CNPJ.padStart(14, '0'),
-      data.mod,
-      data.serie.padStart(3, '0'),
-      data.nNFIni.padStart(9, '0'),
-      data.nNFFin.padStart(9, '0'),
-    ].join('');
-
-    // TODO: support inutilização CPF (MT)?
-
+    const service = this.service({ cUF, tpAmb, service: 'NfeInutilizacao' });
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
       xsd: this.xsd('inutNFe_v4.00.xsd'),
       payload: {
-        inutNFe: this.ns({ infInut: { $: { Id }, ...data } }, service.version),
+        inutNFe: this.ns(data, service.version),
       },
       method: 'nfeInutilizacaoNF',
     });

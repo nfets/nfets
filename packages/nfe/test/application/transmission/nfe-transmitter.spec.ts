@@ -104,7 +104,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
         nNFIni: '1',
         nNFFin: '10',
         xJust: 'Justificativa teste',
-      });
+      } as never);
 
       expectIsLeft(response);
       expect(response.value).toBeInstanceOf(NFeTsError);
@@ -112,15 +112,19 @@ describe('NfeRemoteTransmitter (unit)', () => {
 
     it('should return left when justification is too short', async () => {
       const response = await transmission.inutilizacao({
-        tpAmb: Environment.Homolog,
-        cUF: StateCodes.RS,
-        ano: '24',
-        CNPJ: '12345678901234',
-        mod: '55',
-        serie: '1',
-        nNFIni: '1',
-        nNFFin: '10',
-        xJust: 'Curta',
+        $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
+        infInut: {
+          $: { Id: 'ID43241234567890123455001000000001000000010' },
+          tpAmb: Environment.Homolog,
+          cUF: StateCodes.RS,
+          ano: '24',
+          CNPJ: '12345678901234',
+          mod: '55',
+          serie: '1',
+          nNFIni: '1',
+          nNFFin: '10',
+          xJust: 'Curta',
+        },
       });
 
       expectIsLeft(response);
@@ -155,15 +159,19 @@ describe('NfeRemoteTransmitter (unit)', () => {
       mockRepository.send.mockResolvedValue(right(mockResponse));
 
       const payload = {
-        tpAmb: Environment.Homolog,
-        cUF: StateCodes.RS,
-        ano: '24',
-        CNPJ: '12345678901234',
-        mod: '55',
-        serie: '1',
-        nNFIni: '1',
-        nNFFin: '10',
-        xJust: 'Justificativa de teste para inutilizacao de numeros',
+        $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
+        infInut: {
+          $: { Id: 'ID43241234567890123455001000000001000000010' },
+          tpAmb: Environment.Homolog,
+          cUF: StateCodes.RS,
+          ano: '24',
+          CNPJ: '12345678901234',
+          mod: '55',
+          serie: '1',
+          nNFIni: '1',
+          nNFFin: '10',
+          xJust: 'Justificativa de teste para inutilizacao de numeros',
+        },
       };
 
       const response = await transmission.inutilizacao(payload);
