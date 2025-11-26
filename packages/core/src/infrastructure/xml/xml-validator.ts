@@ -1,11 +1,8 @@
-import path from 'node:path';
+import { createRequire } from 'node:module';
+import { addon } from '@nfets/core/shared/addon';
+const require = createRequire(import.meta.url);
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const validator = require(path.join(
-  process.env.NFETS_ADDONS_DIR ?? '',
-  'xml_validator.node',
-)) as XmlValidator;
-
+const validator = require(addon('xml_validator.node')) as XmlValidator;
 export default validator;
 
 declare interface XmlValidator {
