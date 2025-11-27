@@ -75,10 +75,9 @@ export class SoapRemoteTransmissionRepository<C extends Client>
       });
 
       const node = this.toolkit.getFirstNode(_xml) ?? '',
-        directory = path.dirname(params.xsd),
         xsd = params.xsd;
 
-      const validOrLeft = await this.toolkit.validate(node, directory, xsd);
+      const validOrLeft = await this.toolkit.validate(node, xsd);
       if (validOrLeft.isLeft()) return validOrLeft;
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call

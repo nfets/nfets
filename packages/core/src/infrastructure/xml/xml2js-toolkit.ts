@@ -36,17 +36,9 @@ export class Xml2JsToolkit implements XmlToolkit {
     });
   }
 
-  public async validate(
-    xml: string,
-    xsdPathReference: string,
-    xsdFilename: string,
-  ) {
+  public async validate(xml: string, xsd: string) {
     try {
-      await validator.validate(
-        xml,
-        xsdPathReference,
-        fs.readFileSync(path.resolve(xsdPathReference, xsdFilename), 'utf8'),
-      );
+      await validator.validate(xml, xsd);
       return right();
     } catch (e) {
       return leftFromError(e);

@@ -15,11 +15,7 @@ declare interface XmlValidator {
    * @returns `true` if xml is valid
    * @throws throws exception when xml does not follow the xsd schema
    */
-  validate(
-    xml: string,
-    xsd: string,
-    xsdPathReference: string,
-  ): Promise<boolean>;
+  validate(xml: string, xsd: string): Promise<boolean>;
 
   /**
    * validates a xml content against a xsd content
@@ -30,5 +26,5 @@ declare interface XmlValidator {
    * @returns `true` if xml is valid
    * @throws throws exception when xml does not follow the xsd schema
    */
-  validateSync(xml: string, xsd: string, xsdPathReference: string): boolean;
+  validateSync(xml: string, xsd: string): boolean;
 }
