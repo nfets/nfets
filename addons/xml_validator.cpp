@@ -7,6 +7,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <libgen.h>
+#include <stdio.h>
+#include <sys/stat.h>
 
 struct AsyncWorkData
 {
@@ -16,7 +19,6 @@ struct AsyncWorkData
 
   char *xmlStr;
   char *xsdPath;
-  char *xsdStr;
   char *error;
 
   bool result;
@@ -52,7 +54,7 @@ void validationErrorCallback(void *ctx, const char *msg, ...)
   }
 }
 
-bool validate_xml(const char *xmlStr, const char *xsdPath, const char *xsdStr, char *err, size_t size)
+bool validate_xml(const char *xmlStr, const char *xsdFilePath, char *err, size_t size)
 {
 
   if (xmlStr == NULL || strlen(xmlStr) == 0)
@@ -61,9 +63,55 @@ bool validate_xml(const char *xmlStr, const char *xsdPath, const char *xsdStr, c
     return false;
   }
 
-  if (access(xsdPath, F_OK) == 0 && access(xsdPath, X_OK) == 0)
+  if (xsdFilePath == NULL || strlen(xsdFilePath) == 0)
   {
-    chdir(xsdPath);
+    snprintf(err, size, "Please provide a valid existing xsd path");
+    return false;
+  }
+
+  char *xsdPath = strdup(xsdFilePath);
+  if (xsdPath != NULL)
+  {
+    char *xsdDir = dirname(xsdPath);
+    if (xsdDir != NULL && access(xsdDir, F_OK) == 0)
+    {
+      chdir(xsdDir);
+    }
+    free(xsdPath);
+  }
+
+  FILE *file = fopen(xsdFilePath, "rb");
+  if (file == NULL)
+  {
+    snprintf(err, size, "Cannot open XSD file: %s", xsdFilePath);
+    return false;
+  }
+
+  struct stat fileStat;
+  if (fstat(fileno(file), &fileStat) != 0)
+  {
+    fclose(file);
+    snprintf(err, size, "Cannot get file size for XSD: %s", xsdFilePath);
+    return false;
+  }
+
+  size_t fileSize = fileStat.st_size;
+  char *xsdStr = (char *)malloc(fileSize);
+  if (xsdStr == NULL)
+  {
+    fclose(file);
+    snprintf(err, size, "Memory allocation failed for XSD file");
+    return false;
+  }
+
+  size_t bytesRead = fread(xsdStr, 1, fileSize, file);
+  fclose(file);
+
+  if (bytesRead != fileSize)
+  {
+    free(xsdStr);
+    snprintf(err, size, "Error reading XSD file: %s", xsdFilePath);
+    return false;
   }
 
   ValidationError validationErrorCtx;
@@ -76,7 +124,7 @@ bool validate_xml(const char *xmlStr, const char *xsdPath, const char *xsdStr, c
     return false;
   }
 
-  xmlSchemaParserCtxtPtr schemaParserCtxt = xmlSchemaNewMemParserCtxt(xsdStr, strlen(xsdStr));
+  xmlSchemaParserCtxtPtr schemaParserCtxt = xmlSchemaNewMemParserCtxt(xsdStr, fileSize);
   if (!schemaParserCtxt)
   {
     snprintf(err, size, "Error creating XSD parser context");
@@ -125,6 +173,8 @@ bool validate_xml(const char *xmlStr, const char *xsdPath, const char *xsdStr, c
   xmlSchemaFreeValidCtxt(validCtxt);
   xmlSchemaFreeParserCtxt(schemaParserCtxt);
 
+  free(xsdStr);
+
   return result;
 }
 
@@ -134,7 +184,7 @@ void async_validate_xml(napi_env env, void *_data)
   char err[1024] = "";
 
   data->result = validate_xml(
-      data->xmlStr, data->xsdPath, data->xsdStr,
+      data->xmlStr, data->xsdPath,
       err, sizeof(err));
 
   data->error = strdup(err);
@@ -163,40 +213,37 @@ void complete_async_validate_xml(napi_env env, napi_status status, void *_data)
   delete data;
 }
 
-int extract_args(napi_env env, napi_callback_info info, char **xmlStr, char **xsdPath, char **xsdStr, char *err)
+int extract_args(napi_env env, napi_callback_info info, char **xmlStr, char **xsdPath, char *err, size_t errSize)
 {
-  size_t argc = 3;
-  napi_value args[3];
+  size_t argc = 2;
+  napi_value args[2];
   napi_get_cb_info(env, info, &argc, args, NULL, NULL);
 
-  if (argc < 3)
+  if (argc < 2)
   {
     snprintf(
-        err, sizeof(err),
-        "You must provide 3 arguments: `xml content`, `xsdPathReferences` and `xsd content`");
+        err, errSize,
+        "You must provide 2 arguments: `xml content` and `xsd path`");
 
     return 1;
   }
 
-  size_t xmlLen, xsdPathLen, xsdLen;
+  size_t xmlLen, xsdLen;
   napi_get_value_string_utf8(env, args[0], NULL, 0, &xmlLen);
-  napi_get_value_string_utf8(env, args[1], NULL, 0, &xsdPathLen);
-  napi_get_value_string_utf8(env, args[2], NULL, 0, &xsdLen);
+  napi_get_value_string_utf8(env, args[1], NULL, 0, &xsdLen);
 
   *xmlStr = (char *)malloc(xmlLen + 1);
-  *xsdPath = (char *)malloc(xsdPathLen + 1);
-  *xsdStr = (char *)malloc(xsdLen + 1);
+  *xsdPath = (char *)malloc(xsdLen + 1);
 
   napi_get_value_string_utf8(env, args[0], *xmlStr, xmlLen + 1, NULL);
-  napi_get_value_string_utf8(env, args[1], *xsdPath, xsdPathLen + 1, NULL);
-  napi_get_value_string_utf8(env, args[2], *xsdStr, xsdLen + 1, NULL);
+  napi_get_value_string_utf8(env, args[1], *xsdPath, xsdLen + 1, NULL);
 
   return 0;
 }
 
 napi_value AsyncValidateXml(napi_env env, napi_callback_info info)
 {
-  char *xmlStr, *xsdPath, *xsdStr;
+  char *xmlStr, *xsdPath;
 
   napi_value promise;
   AsyncWorkData *data = new AsyncWorkData();
@@ -211,7 +258,7 @@ napi_value AsyncValidateXml(napi_env env, napi_callback_info info)
   }
 
   char err[1024] = "";
-  if (extract_args(env, info, &xmlStr, &xsdPath, &xsdStr, err) != 0)
+  if (extract_args(env, info, &xmlStr, &xsdPath, err, sizeof(err)) != 0)
   {
     napi_value error;
     napi_create_string_utf8(env, err, sizeof(err), &error);
@@ -222,7 +269,6 @@ napi_value AsyncValidateXml(napi_env env, napi_callback_info info)
 
   data->xmlStr = xmlStr;
   data->xsdPath = xsdPath;
-  data->xsdStr = xsdStr;
 
   napi_value resource_name;
   napi_create_string_utf8(env, "AsyncValidateXml", -1, &resource_name);
@@ -261,20 +307,19 @@ napi_value AsyncValidateXml(napi_env env, napi_callback_info info)
 
 napi_value ValidateXml(napi_env env, napi_callback_info info)
 {
-  char *xmlStr, *xsdPath, *xsdStr;
+  char *xmlStr, *xsdPath;
   char err[1024] = "";
 
-  if (extract_args(env, info, &xmlStr, &xsdPath, &xsdStr, err) != 0)
+  if (extract_args(env, info, &xmlStr, &xsdPath, err, sizeof(err)) != 0)
   {
     napi_throw_error(env, NULL, err);
     return NULL;
   }
 
-  bool valid = validate_xml(xmlStr, xsdPath, xsdStr, err, sizeof(err));
+  bool valid = validate_xml(xmlStr, xsdPath, err, sizeof(err));
 
   free(xmlStr);
   free(xsdPath);
-  free(xsdStr);
 
   if (!valid)
   {

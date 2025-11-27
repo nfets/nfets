@@ -45,8 +45,7 @@ import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 
 describe('xml builder with xml2js builder', () => {
   const toolkit: XmlToolkit = new Xml2JsToolkit();
-  const nfeNfceSchemas = path.resolve(directory, 'PL_009_V4'),
-    leiauteNFe4_00 = 'nfe_v4.00.xsd';
+  const leiauteNFe4_00 = path.resolve(directory, 'PL_009_V4', 'nfe_v4.00.xsd');
 
   const password = getCertificatePassword(),
     validCnpjPfxCertificate = getCnpjCertificate();
@@ -147,9 +146,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsLeft(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsLeft(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should ignores only one method validation and consequently gets a invalid xml...', async () => {
@@ -244,9 +241,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsLeft(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsLeft(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should throw exception when assemble an invalid nfe xml', async () => {
@@ -475,9 +470,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with avulsa element', async () => {
@@ -692,9 +685,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with dest element', async () => {
@@ -923,9 +914,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with retirada element', async () => {
@@ -1142,9 +1131,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with entrega element', async () => {
@@ -1361,9 +1348,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with 2x autXML element', async () => {
@@ -1568,9 +1553,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with cobr element', async () => {
@@ -1784,9 +1767,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infIntermed element after pag', async () => {
@@ -1987,9 +1968,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infAdic element after pag', async () => {
@@ -2190,9 +2169,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infSolicNFF element after pag', async () => {
@@ -2391,9 +2368,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with cana element after pag', async () => {
@@ -2625,9 +2600,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with compra element after pag', async () => {
@@ -2830,9 +2803,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with exporta element after pag', async () => {
@@ -3035,9 +3006,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infRespTec element after cana', async () => {
@@ -3288,9 +3257,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with multiple optional elements in correct order', async () => {
@@ -3706,9 +3673,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infIntermed and infAdic after pag', async () => {
@@ -3922,9 +3887,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infIntermed and infSolicNFF after pag', async () => {
@@ -4136,9 +4099,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infIntermed and cana after pag', async () => {
@@ -4383,9 +4344,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infIntermed and compra after pag', async () => {
@@ -4601,9 +4560,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infIntermed and exporta after pag', async () => {
@@ -4819,9 +4776,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infAdic and infSolicNFF after pag', async () => {
@@ -5033,9 +4988,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infAdic and cana after pag', async () => {
@@ -5280,9 +5233,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infAdic and compra after pag', async () => {
@@ -5498,9 +5449,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infAdic and exporta after pag', async () => {
@@ -5716,9 +5665,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infSolicNFF and cana after pag', async () => {
@@ -5961,9 +5908,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infSolicNFF and compra after pag', async () => {
@@ -6177,9 +6122,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with cana and compra after pag', async () => {
@@ -6426,9 +6369,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with cana and exporta after pag', async () => {
@@ -6675,9 +6616,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with compra and exporta after pag', async () => {
@@ -6895,9 +6834,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with cana and infRespTec after pag', async () => {
@@ -7146,9 +7083,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infSolicNFF, infAdic and avulsa after pag', async () => {
@@ -7379,9 +7314,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build NFe with infRespTec, infAdic and avulsa after pag', async () => {
@@ -7618,9 +7551,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should build a valid nfe xml with correct order and without undefined values', async () => {
@@ -7898,9 +7829,7 @@ describe('xml builder with xml2js builder', () => {
       certificate,
     );
     expectIsRight(signed);
-    expectIsRight(
-      await toolkit.validate(signed.value, nfeNfceSchemas, leiauteNFe4_00),
-    );
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
   it('should stay without contingency when tpEmis="1" and xJust is not provided and dhCont is not provided', () => {

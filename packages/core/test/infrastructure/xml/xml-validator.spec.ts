@@ -17,24 +17,31 @@ describe('xml validator (unit)', () => {
   );
   const xml = new Xml2JsToolkit();
 
-  it('should return left when 3 args was not provided', async () => {
+  it('should return left when xml content is not provided', async () => {
     await expect(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (xml as any).validate(null, null) as Either<NFeTsError, void>,
+      (xml as any).validate(null) as Either<NFeTsError, void>,
     ).resolves.toStrictEqual(
-      left(
-        new NFeTsError(
-          'The "paths[1]" argument must be of type string. Received undefined',
-        ),
-      ),
+      left(new NFeTsError('Please provide a valid xml content')),
+    );
+  });
+
+  it('should return left when xsd path is not provided', async () => {
+    await expect(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (xml as any).validate(
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        null,
+      ) as Either<NFeTsError, void>,
+    ).resolves.toStrictEqual(
+      left(new NFeTsError('Please provide a valid existing xsd path')),
     );
   });
 
   it('should return left when xml content is empty', async () => {
     const result = await xml.validate(
       '',
-      nfeNfceSchemas,
-      'consStatServ_v4.00.xsd',
+      `${nfeNfceSchemas}/consStatServ_v4.00.xsd`,
     );
 
     expectIsLeft(result);
@@ -46,8 +53,7 @@ describe('xml validator (unit)', () => {
   it('should return left when xml content is invalid', async () => {
     const result = await xml.validate(
       'asiofhasiofh',
-      nfeNfceSchemas,
-      'consStatServ_v4.00.xsd',
+      `${nfeNfceSchemas}/consStatServ_v4.00.xsd`,
     );
 
     expectIsLeft(result);
@@ -62,8 +68,7 @@ asiofhasiofh
   it('should return left when xml content is invalid but has a valid opening tag', async () => {
     const result = await xml.validate(
       '<?xml version="1.0" encoding="UTF-8"?>asiofhasiofh',
-      nfeNfceSchemas,
-      'consStatServ_v4.00.xsd',
+      `${nfeNfceSchemas}/consStatServ_v4.00.xsd`,
     );
 
     expectIsLeft(result);
@@ -78,8 +83,7 @@ asiofhasiofh
   it('should return left when xml content is invalid but has a valid opening tag without a valid closing tag', async () => {
     const result = await xml.validate(
       '<?xml version="1.0" encoding="UTF-8"?><hello>world',
-      nfeNfceSchemas,
-      'consStatServ_v4.00.xsd',
+      `${nfeNfceSchemas}/consStatServ_v4.00.xsd`,
     );
 
     expectIsLeft(result);
@@ -102,8 +106,7 @@ asiofhasiofh
 
     const result = await xml.validate(
       consStatServ,
-      nfeNfceSchemas,
-      'consStatServ_v4.00.xsd',
+      `${nfeNfceSchemas}/consStatServ_v4.00.xsd`,
     );
 
     expectIsLeft(result);
@@ -127,8 +130,7 @@ asiofhasiofh
 
     const result = await xml.validate(
       consStatServ,
-      nfeNfceSchemas,
-      'consStatServ_v4.00.xsd',
+      `${nfeNfceSchemas}/consStatServ_v4.00.xsd`,
     );
 
     expectIsRight(result);

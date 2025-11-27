@@ -8,11 +8,7 @@ import type { SignatureAlgorithm } from '../signer/algo';
 export interface XmlToolkit {
   parse<T>(xml: string, options?: ParserOptions): Promise<T>;
   build(object: object, options?: BuilderOptions): Promise<string>;
-  validate(
-    xml: string,
-    xsdPathReference: string,
-    xsdFilename: string,
-  ): Promise<Either<NFeTsError, void>>;
+  validate(xml: string, xsd: string): Promise<Either<NFeTsError, void>>;
   canonicalize(xml: string, options?: CanonicalizeOptions): string;
   digest(
     xml: string,
