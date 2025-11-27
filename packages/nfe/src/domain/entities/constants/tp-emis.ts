@@ -1,5 +1,6 @@
 export enum TpEmis {
   Normal = '1',
+  EPEC = '4',
   SVCAN = '6',
   SVCRS = '7',
   OFFLINE = '9',
