@@ -1,8 +1,6 @@
-import { createRequire } from 'node:module';
 import { addon } from '@nfets/core/shared/addon';
-const require = createRequire(import.meta.url);
 
-const validator = require(addon('xml_validator.node')) as XmlValidator;
+const validator = addon<XmlValidator>('xml_validator.node');
 export default validator;
 
 declare interface XmlValidator {
