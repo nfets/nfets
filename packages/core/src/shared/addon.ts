@@ -13,7 +13,7 @@ export const addon = <T>(bin: string): T => {
     return exportRequireModule<T>(join(process.env.NFETS_ADDONS_DIR, bin));
   }
 
-  const current = dirname(import.meta.filename);
+  const current = __filename; // TODO: support ESM + CJS
 
   const root = resolve(current, '../../../../');
   const build = join(root, 'build', 'Release', bin);

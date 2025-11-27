@@ -3,6 +3,7 @@ export type * from './entities/certificate/certificate';
 export * from './entities/signer/algo';
 export * from './entities/brazil/state-code';
 export * from './entities/brazil/environment';
+export * from './entities/brazil/timezone';
 export type * from './entities/signer/signature';
 export type * from './entities/strategies/strategy-pattern';
 export type * from './entities/transmission/payload';
