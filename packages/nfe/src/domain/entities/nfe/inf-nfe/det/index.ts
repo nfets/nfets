@@ -4,7 +4,7 @@ import type { Imposto } from './imposto';
 import type { ObsItem } from './obs-item';
 
 export interface DetAttributes {
-  nItem?: string;
+  nItem: string;
 }
 
 export interface Det {
