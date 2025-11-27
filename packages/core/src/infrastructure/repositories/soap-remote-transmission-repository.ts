@@ -1,4 +1,3 @@
-import path from 'node:path';
 import { constants } from 'node:crypto';
 import { Agent as HttpsAgent } from 'node:https';
 import { createClientAsync } from 'soap';

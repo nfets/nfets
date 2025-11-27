@@ -1,5 +1,3 @@
-import fs from 'node:fs';
-import path from 'node:path';
 import crypto from 'node:crypto';
 
 import * as Xml2js from 'xml2js';
