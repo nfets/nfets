@@ -1,4 +1,5 @@
 import type { DecimalValue } from '@nfets/core/domain';
+import type { TPag } from '../../constants/tpag';
 
 export interface Card {
   cNPJ?: string;
@@ -8,7 +9,7 @@ export interface Card {
 
 export interface DetPag {
   indPag?: string;
-  tPag: string;
+  tPag: TPag;
   vPag: DecimalValue;
   card?: Card;
   xPag?: string;

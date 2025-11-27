@@ -1,0 +1,48 @@
+export const TPags = {
+  Dinheiro: '01',
+  Cheque: '02',
+  CartaoDeCredito: '03',
+  CartaoDeDebito: '04',
+  CartaoDaLoja: '05',
+  ValeAlimentacao: '10',
+  ValeRefeicao: '11',
+  ValePresente: '12',
+  ValeCombustivel: '13',
+  BoletoBancario: '15',
+  DepositoBancario: '16',
+  PIXDinamico: '17',
+  TransferenciaBancaria: '18',
+  ProgramaFidelidade: '19',
+  PIXEstatico: '20',
+  CreditoEmLoja: '21',
+  PagamentoNaoInformado: '22',
+  SemPagamento: '90',
+  PagamentoPosterior: '91',
+  Outros: '99',
+} as const;
+
+export const TPagLabels = {
+  [TPags.Dinheiro]: 'Dinheiro',
+  [TPags.Cheque]: 'Cheque',
+  [TPags.CartaoDeCredito]: 'Cartão de Crédito',
+  [TPags.CartaoDeDebito]: 'Cartão de Débito',
+  [TPags.CartaoDaLoja]: 'Cartão da Loja/Outros Crediários',
+  [TPags.ValeAlimentacao]: 'Vale Alimentação',
+  [TPags.ValeRefeicao]: 'Vale Refeição',
+  [TPags.ValePresente]: 'Vale Presente',
+  [TPags.ValeCombustivel]: 'Vale Combustível',
+  [TPags.BoletoBancario]: 'Boleto Bancário',
+  [TPags.DepositoBancario]: 'Depósito Bancário',
+  [TPags.PIXDinamico]: 'Pagamento Instantâneo (PIX) - Dinâmico',
+  [TPags.TransferenciaBancaria]: 'Transferência bancária, Carteira Digital',
+  [TPags.ProgramaFidelidade]: 'Programa fidelidade, Cashback, Créd Virt',
+  [TPags.PIXEstatico]: 'Pagamento Instantâneo (PIX) - Estático',
+  [TPags.CreditoEmLoja]: 'Crédito em Loja',
+  [TPags.PagamentoNaoInformado]:
+    'Pagamento Eletrônico não Informado - falha de hardware do sistema emissor',
+  [TPags.SemPagamento]: 'Sem pagamento',
+  [TPags.PagamentoPosterior]: 'Pagamento Posterior',
+  [TPags.Outros]: 'Outros',
+} as const;
+
+export type TPag = (typeof TPags)[keyof typeof TPags];
