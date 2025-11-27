@@ -5,6 +5,7 @@ import { DetPag as IDetPag } from '@nfets/nfe/domain/entities/nfe/inf-nfe/pag';
 import { TransformDecimal } from '@nfets/core/application';
 
 import type { DecimalValue } from '@nfets/core/domain';
+import type { TPag } from '@nfets/nfe/domain/entities/constants/tpag';
 
 export class DetPag implements IDetPag {
   @IsOptional()
@@ -12,7 +13,7 @@ export class DetPag implements IDetPag {
   public indPag?: string;
 
   @IsString()
-  public tPag!: string;
+  public tPag!: TPag;
 
   @TransformDecimal({ fixed: 2 })
   public vPag!: DecimalValue;
