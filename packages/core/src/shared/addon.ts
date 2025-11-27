@@ -1,23 +1,29 @@
 import { join, dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
 
-export const addon = (bin: string) => {
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
+const exportRequireModule = <T>(module: string): T => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return require(module) as T;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
+export const addon = <T>(bin: string): T => {
   if (process.env.NFETS_ADDONS_DIR) {
-    return join(process.env.NFETS_ADDONS_DIR, bin);
+    return exportRequireModule<T>(join(process.env.NFETS_ADDONS_DIR, bin));
   }
 
-  const current = dirname(fileURLToPath(import.meta.url));
+  const current = dirname(import.meta.filename);
 
   const root = resolve(current, '../../../../');
   const build = join(root, 'build', 'Release', bin);
 
-  if (existsSync(build)) return build;
+  if (existsSync(build)) return exportRequireModule<T>(build);
   let search = current;
 
   for (let i = 0; i < 10; i++) {
     const candidate = join(search, 'build', 'Release', bin);
-    if (existsSync(candidate)) return candidate;
+    if (existsSync(candidate)) return exportRequireModule<T>(candidate);
 
     const parent = dirname(search);
     if (parent === search) break;
