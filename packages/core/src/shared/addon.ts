@@ -1,10 +1,10 @@
 import { join, dirname, resolve } from 'node:path';
 import { existsSync } from 'node:fs';
+import { getCurrentFile, getRequireFn } from './resolve-requires';
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 const exportRequireModule = <T>(module: string): T => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  return require(module) as T;
+  return getRequireFn()(module) as T;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
@@ -13,7 +13,7 @@ export const addon = <T>(bin: string): T => {
     return exportRequireModule<T>(join(process.env.NFETS_ADDONS_DIR, bin));
   }
 
-  const current = __filename; // TODO: support ESM + CJS
+  const current = getCurrentFile();
 
   const root = resolve(current, '../../../../');
   const build = join(root, 'build', 'Release', bin);
