@@ -86,7 +86,7 @@ export class FiscalMessages implements Builder {
   public height(): number {
     this.setup();
 
-    const heights = [];
+    const heights = [0.5];
     const { left, right } = this.builder.pageMargins();
     const width = this.builder.pageWidth() - left - right;
 

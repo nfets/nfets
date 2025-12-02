@@ -12,7 +12,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
-    "test": "NODE_OPTIONS=\"--localstorage-file=/tmp/jest-localstorage.json\" jest --config jest.config.ts --passWithNoTests",
+    "test": "NODE_OPTIONS=\"--experimental-vm-modules --localstorage-file=/tmp/jest-localstorage.json\" jest --config jest.config.ts --passWithNoTests",
     "test:integration": "jest --config jest.config.integration.ts --passWithNoTests",
     "test:coverage": "pnpm test --coverage",
     "dev:danfce": "tsx watch src/application/printable-documents/dev-server.ts"
