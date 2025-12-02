@@ -32,3 +32,24 @@ export const expectNotNull: <A>(value: A) => asserts value is NonNullable<A> = (
     throw e;
   }
 };
+
+export const expectInOrder = (text: string) => {
+  let current = 0;
+
+  const matcher = {
+    index: () => current,
+    toContain: (substring: string) => {
+      const remainingText = text.slice(current);
+      const index = remainingText.indexOf(substring);
+
+      if (index === -1) {
+        return expect(remainingText).toContain(substring), matcher;
+      }
+
+      current += index + substring.length;
+      return matcher;
+    },
+  };
+
+  return matcher;
+};
