@@ -39,7 +39,7 @@ DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","enderEmit"
 When you intentionally need to cancel an NF-e in the homologation environment, run from the repository root with the flag scoped to that single command:
 
 ```bash
-DESTRUCTIVE_TESTS=1 TEST_PAYLOAD= '{"chNFe":"","nProt":"","xJust":"Cancelamento de NFe em homologação"}' pnpm --filter @nfets/nfe test:integration nfe-nfce-cancel-pipeline -t 'should cancel a nfe'
+DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"chNFe":"","nProt":"","xJust":"Cancelamento de NFe em homologação"}' pnpm --filter @nfets/nfe test:integration nfe-nfce-cancel-pipeline -t 'should cancel a nfe'
 ```
 
 When you intentionally need to void a range of NF-e in the homologation environment, run from the repository root with the flag scoped to that single command:
