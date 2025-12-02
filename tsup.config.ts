@@ -1,5 +1,20 @@
 import { defineConfig } from 'tsup';
 
+const addDayjsPluginExtensions = () =>
+  ({
+    name: 'add-dayjs-plugin-extensions',
+    renderChunk(this: { format: string }, code: string) {
+      if (this.format !== 'esm') return { code, map: null };
+      code = code
+        .replace(/(['"])dayjs\/plugin\/utc\1/g, '$1dayjs/plugin/utc.js$1')
+        .replace(
+          /(['"])dayjs\/plugin\/timezone\1/g,
+          '$1dayjs/plugin/timezone.js$1',
+        );
+      return { code, map: null };
+    },
+  } as const);
+
 export default defineConfig({
   outDir: 'dist',
   clean: true,
@@ -13,9 +28,14 @@ export default defineConfig({
   target: 'node22',
   platform: 'node',
   minify: true,
+  esbuildOptions(options) {
+    options.banner = {
+      js: "import { createRequire } from 'module'; const require = createRequire(import.meta.url);",
+    };
+  },
   entry: ['lib/index.ts', 'lib/core/index.ts', 'lib/nfe/index.ts'],
   dts: { entry: ['lib/index.ts', 'lib/core/index.ts', 'lib/nfe/index.ts'] },
   watch: false,
   sourcemap: false,
-  external: ['dayjs', 'dayjs/plugin/utc', 'dayjs/plugin/timezone'],
+  plugins: [addDayjsPluginExtensions()],
 });
