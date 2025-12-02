@@ -17,4 +17,5 @@ export default defineConfig({
   dts: { entry: ['lib/index.ts', 'lib/core/index.ts', 'lib/nfe/index.ts'] },
   watch: false,
   sourcemap: false,
+  external: ['dayjs', 'dayjs/plugin/utc', 'dayjs/plugin/timezone'],
 });
