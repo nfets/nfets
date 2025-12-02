@@ -61,7 +61,7 @@ describe('nfe authorizer pipeline (integration) (destructive)', () => {
         }[],
       ];
 
-      const args = JSON.parse(process.argv.at(-1) ?? '{}') as Partial<
+      const args = JSON.parse(process.env.TEST_PAYLOAD ?? '{}') as Partial<
         Emit & Ide
       >;
       const ufAcronym = (args.enderEmit?.UF ?? '') as StateAcronym;
@@ -226,7 +226,7 @@ describe('nfe authorizer pipeline (integration) (destructive)', () => {
         }[],
       ];
 
-      const args = JSON.parse(process.argv.at(-1) ?? '{}') as Partial<
+      const args = JSON.parse(process.env.TEST_PAYLOAD ?? '{}') as Partial<
         Emit & Ide
       >;
       const ufAcronym = (args.enderEmit?.UF ?? '') as StateAcronym;

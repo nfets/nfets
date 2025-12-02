@@ -113,7 +113,7 @@ describe('soap nfce remote transmission (integration) (destructive)', () => {
       const info = new ASN1().extractCertificateInfo(
         certificateResponse.certificate,
       );
-      const args = JSON.parse(process.argv.at(-1) ?? '{}') as Partial<
+      const args = JSON.parse(process.env.TEST_PAYLOAD ?? '{}') as Partial<
         Emit & Ide
       >;
       const ufAcronym = (args.enderEmit?.UF ?? info.ST ?? '') as StateAcronym;

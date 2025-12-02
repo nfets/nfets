@@ -26,7 +26,7 @@ describe('nfe nfce void range (inutilização) pipeline (integration) (destructi
   it(
     'should void a range of nfe',
     async () => {
-      const args = JSON.parse(process.argv.at(-1) ?? '{}') as {
+      const args = JSON.parse(process.env.TEST_PAYLOAD ?? '{}') as {
         UF: StateAcronym;
         mod: string;
         serie: string;

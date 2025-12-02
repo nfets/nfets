@@ -21,31 +21,31 @@ If you only need to validate the happy-path flow, prefer running the non-destruc
 When you intentionally need to authorize an NF-e in the homologation environment, run from the repository root with the flag scoped to that single command:
 
 ```bash
-DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline.integration -t 'should authorize a nfe' '{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}'
+DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}' pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline.integration -t 'should authorize a nfe'
 ```
 
 When you intentionally need to authorize an NF-e in the contingency environment, run from the repository root with the flag scoped to that single command:
 
 ```bash
-DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline.integration -t 'should authorize a contingency nfe' '{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}'
+DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}' pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline.integration -t 'should authorize a contingency nfe'
 ```
 
 When you intentionally need to authorize an NFC-e in the homologation environment, run from the repository root with the flag scoped to that single command:
 
 ```bash
-DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfce-transmitter -t 'autorizacao' '{"serie":"69","nNF":"1504","IE":"","enderEmit":{"CEP":"89700903","cMun":"4204301"}}'
+DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","enderEmit":{"CEP":"89700903","cMun":"4204301"}}' pnpm --filter @nfets/nfe test:integration nfce-transmitter -t 'autorizacao'
 ```
 
 When you intentionally need to cancel an NF-e in the homologation environment, run from the repository root with the flag scoped to that single command:
 
 ```bash
-DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-nfce-cancel-pipeline -t 'should cancel a nfe' '{"chNFe":"","nProt":"","xJust":"Cancelamento de NFe em homologação"}'
+DESTRUCTIVE_TESTS=1 TEST_PAYLOAD= '{"chNFe":"","nProt":"","xJust":"Cancelamento de NFe em homologação"}' pnpm --filter @nfets/nfe test:integration nfe-nfce-cancel-pipeline -t 'should cancel a nfe'
 ```
 
 When you intentionally need to void a range of NF-e in the homologation environment, run from the repository root with the flag scoped to that single command:
 
 ```bash
-DESTRUCTIVE_TESTS=1 pnpm --filter @nfets/nfe test:integration nfe-nfce-void-range-pipeline -t 'should void a range of nfe' '{"UF":"","mod":"55","serie":"69","nNFIni":"1504","nNFFin":"1504","xJust":"Inutilização de NFe em homologação"}'
+DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"UF":"","mod":"55","serie":"69","nNFIni":"1504","nNFFin":"1504","xJust":"Inutilização de NFe em homologação"}' pnpm --filter @nfets/nfe test:integration nfe-nfce-void-range-pipeline -t 'should void a range of nfe'
 ```
 
 Double-check every argument (especially the certificate, IE, and address data) before executing, and remember that each run will leave a real NF-e in the homologation environment.

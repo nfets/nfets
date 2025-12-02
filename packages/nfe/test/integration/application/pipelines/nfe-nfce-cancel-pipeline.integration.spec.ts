@@ -26,7 +26,7 @@ describe('nfe nfce cancel pipeline (integration) (destructive)', () => {
   it(
     'should cancel a nfe',
     async () => {
-      const args = JSON.parse(process.argv.at(-1) ?? '{}') as {
+      const args = JSON.parse(process.env.TEST_PAYLOAD ?? '{}') as {
         chNFe: string;
         xJust: string;
         nProt: string;
