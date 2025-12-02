@@ -10,7 +10,7 @@ export default {
   maxWorkers: '90%',
   maxConcurrency: 5,
   passWithNoTests: true,
-  detectOpenHandles: true,
+  detectOpenHandles: false,
   forceExit: true,
   testRegex: '.*\\.spec\\.ts$',
   coverageThreshold: {
