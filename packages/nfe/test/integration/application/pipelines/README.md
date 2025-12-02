@@ -39,7 +39,7 @@ DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","enderEmit"
 Quando for realmente necessário cancelar uma NF-e na homologação, execute a partir da raiz do repositório, limitando o flag a este comando:
 
 ```bash
-DESTRUCTIVE_TESTS=1 TEST_PAYLOAD= '{"chNFe":"","nProt":"","xJust":"Cancelamento de NFe em homologação"}' pnpm --filter @nfets/nfe test:integration nfe-nfce-cancel-pipeline -t 'should cancel a nfe'
+DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"chNFe":"","nProt":"","xJust":"Cancelamento de NFe em homologação"}' pnpm --filter @nfets/nfe test:integration nfe-nfce-cancel-pipeline -t 'should cancel a nfe'
 ```
 
 Quando for realmente necessário inutilizar um intervalo de NF-e na homologação, execute a partir da raiz do repositório, limitando o flag a este comando:
