@@ -66,6 +66,10 @@ jobs:
         if: steps.should-skip.outputs.skip != 'true'
         run: pnpm install
 
+      - name: build package
+        if: steps.should-skip.outputs.skip != 'true'
+        run: make build
+
       - name: Get next version
         if: steps.should-skip.outputs.skip != 'true'
         id: version

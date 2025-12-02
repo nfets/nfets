@@ -17,4 +17,4 @@ test\:coverage-summary:
 
 build:
 	@make clean
-	@pnpm build && pnpm build:nfets
+	@pnpm build

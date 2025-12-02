@@ -47,7 +47,7 @@ pnpm test
 ### Build completo + Testes de Integração
 
 ```bash
-make build:test
+make build && make test
 ```
 
 Este comando:

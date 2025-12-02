@@ -40,9 +40,7 @@
     "packages/nfe/schemas"
   ],
   "scripts": {
-    "install": "node-gyp rebuild && make build",
-    "build:nfets": "tsup --config tsup.config.ts",
-    "build": "pnpm --filter @nfets/core build && pnpm --filter !@nfets/core build",
+    "build": "node-gyp rebuild && pnpm --filter !@nfets/test build && tsup --config tsup.config.ts",
     "test": "pnpm --filter @nfets/* test",
     "typecheck": "pnpm --filter @nfets/* typecheck",
     "test:coverage": "pnpm --filter @nfets/* test:coverage --coverageReporters=\"json-summary\""
