@@ -173,9 +173,6 @@ describe('Package Integration Tests', () => {
       expect(packageJson.exports).toBeDefined();
       expect(packageJson.exports['.']).toBeDefined();
       expect(packageJson.main).toBeDefined();
-
-      expect(packageJson.dependencies['@nfets/core']).toBe('workspace:*');
-      expect(packageJson.dependencies['@nfets/nfe']).toBe('workspace:*');
     });
   });
 });

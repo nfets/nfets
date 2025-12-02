@@ -8,12 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@nfets/core':
-        specifier: workspace:*
-        version: link:packages/core
-      '@nfets/nfe':
-        specifier: workspace:*
-        version: link:packages/nfe
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
