@@ -17,7 +17,7 @@ jobs:
           fetch-depth: 0
 
       - id: should-skip-cd
-        uses: ./.github/actions/should-skip-cd.yaml
+        uses: ./.github/actions/should-skip-cd
 
       - if: steps.should-skip-cd.outputs.skip == 'true'
         run: |
@@ -72,7 +72,7 @@ jobs:
           fetch-depth: 0
 
       - id: setup-environment
-        uses: ./.github/actions/setup-environment.yaml
+        uses: ./.github/actions/setup-environment
         with:
           os: ${{ matrix.os }}
           architecture: ${{ matrix.arch }}
@@ -128,10 +128,10 @@ jobs:
           fetch-depth: 0
 
       - id: should-skip-cd
-        uses: ./.github/actions/should-skip-cd.yaml
+        uses: ./.github/actions/should-skip-cd
 
       - id: setup-environment
-        uses: ./.github/actions/setup-environment.yaml
+        uses: ./.github/actions/setup-environment
         if: steps.should-skip-cd.outputs.skip != 'true'
         with:
           os: ${{ matrix.os }}
