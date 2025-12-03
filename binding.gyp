@@ -8,10 +8,14 @@
       "conditions": [
         ["OS=='win'", {
           "include_dirs": [
-            "<!@(node -e \"console.log(process.env.LIBXML2_DIR || 'C:/vcpkg/installed/x86-windows/include')\")"
+            "C:\\msys64\\usr\\include",
+            "C:\\msys64\\usr\\include\\libxml2"
+          ],
+          "library_dirs": [
+            "C:\\msys64\\usr\\lib"
           ],
           "libraries": [
-            "<!@(node -e \"console.log(process.env.LIBXML2_LIB || 'C:/vcpkg/installed/x86-windows/lib/xml2.lib')\")"
+            "libxml2.dll.a"
           ],
           "defines": [
             "WIN32"

@@ -130,42 +130,10 @@ jobs:
           architecture: ${{ matrix.arch }}
           node-version: 22.x
 
-      - name: Debug environment variables (Windows)
-        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && matrix.os == 'windows-latest'
-        shell: bash
-        run: |
-          echo "LIBXML2_DIR: $LIBXML2_DIR"
-          echo "LIBXML2_LIB: $LIBXML2_LIB"
-
-          if [ -n "$LIBXML2_DIR" ]; then
-            echo "LIBXML2_DIR is set"
-            if [ -d "$LIBXML2_DIR" ]; then
-              echo "LIBXML2_DIR exists"
-              ls -la "$LIBXML2_DIR" | head -10
-            else
-              echo "LIBXML2_DIR does not exist"
-            fi
-          else
-            echo "LIBXML2_DIR is not set"
-          fi
-
-          if [ -n "$LIBXML2_LIB" ]; then
-            echo "LIBXML2_LIB is set"
-            if [ -f "$LIBXML2_LIB" ]; then
-              echo "LIBXML2_LIB exists"
-            else
-              echo "LIBXML2_LIB does not exist"
-            fi
-          else
-            echo "LIBXML2_LIB is not set"
-          fi
-
       - name: Build native addon
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
         shell: bash
         run: |
-          echo "LIBXML2_DIR: $LIBXML2_DIR"
-          echo "LIBXML2_LIB: $LIBXML2_LIB"
           npx --yes node-gyp rebuild --arch=${{ matrix.arch }}
 
       - name: Verify binaries

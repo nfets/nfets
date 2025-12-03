@@ -5,11 +5,86 @@
 #include "libxml/xmlversion.h"
 
 #include <string.h>
-#include <unistd.h>
 #include <stdlib.h>
-#include <libgen.h>
 #include <stdio.h>
 #include <sys/stat.h>
+
+#ifdef _WIN32
+#include <io.h>
+#include <direct.h>
+#include <windows.h>
+#ifndef F_OK
+#define F_OK 0
+#endif
+#define access _access
+#define chdir _chdir
+#define fileno _fileno
+
+static char* dirname_win(char* path) {
+  if (path == NULL) {
+    return NULL;
+  }
+
+  if (*path == '\0') {
+    path[0] = '.';
+    path[1] = '\0';
+    return path;
+  }
+
+  size_t len = strlen(path);
+  while (len > 0 && (path[len - 1] == '\\' || path[len - 1] == '/')) {
+    len--;
+    path[len] = '\0';
+  }
+
+  if (len == 0) {
+    path[0] = '.';
+    path[1] = '\0';
+    return path;
+  }
+
+  if (len == 2 && path[1] == ':') {
+    path[2] = '\\';
+    path[3] = '\0';
+    return path;
+  }
+
+  char* last_backslash = strrchr(path, '\\');
+  char* last_slash = strrchr(path, '/');
+  char* last_sep = NULL;
+  if (last_backslash != NULL && last_slash != NULL) {
+    last_sep = (last_backslash > last_slash) ? last_backslash : last_slash;
+  } else if (last_backslash != NULL) {
+    last_sep = last_backslash;
+  } else if (last_slash != NULL) {
+    last_sep = last_slash;
+  }
+
+  if (last_sep == NULL) {
+    path[0] = '.';
+    path[1] = '\0';
+    return path;
+  }
+
+  if (last_sep == path || (last_sep == path + 2 && path[1] == ':')) {
+    last_sep[1] = '\0';
+    return path;
+  }
+
+  if (path[0] == '\\' && path[1] == '\\' && last_sep == path + 1) {
+    last_sep[1] = '\0';
+    return path;
+  }
+
+  *last_sep = '\0';
+  return path;
+}
+
+#define dirname dirname_win
+#else
+#include <unistd.h>
+#include <libgen.h>
+#endif
 
 struct AsyncWorkData
 {
