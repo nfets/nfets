@@ -28,11 +28,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - id: should-skip-cd
+      - name: Check if CD should be skipped
+        id: should-skip-cd
         uses: ./.github/actions/should-skip-cd
 
-      - id: get-artifact-name
+      - name: Get artifact name
+        id: get-artifact-name
         if: steps.should-skip-cd.outputs.skip != 'true'
+        shell: bash
         run: |
           if [ "${{ matrix.os }}" == "ubuntu-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
             echo "artifact_name=xml_validator-linux-x64" >> $GITHUB_OUTPUT
@@ -47,7 +50,8 @@ jobs:
             exit 1
           fi
 
-      - id: check-artifact-expiration
+      - name: Check if artifact is expired
+        id: check-artifact-expiration
         if: steps.should-skip-cd.outputs.skip != 'true'
         run: |
           ARTIFACT_NAME="${{ steps.get-artifact-name.outputs.artifact_name }}"
@@ -77,7 +81,8 @@ jobs:
             fi
           fi
 
-      - id: check-changes-or-artifact-expired
+      - name: Check if changes or artifact is expired
+        id: check-changes-or-artifact-expired
         if: steps.should-skip-cd.outputs.skip != 'true'
         run: |
           LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
@@ -106,14 +111,16 @@ jobs:
             echo "skip=true" >> $GITHUB_OUTPUT
           fi
 
-      - uses: ./.github/actions/setup-environment
+      - name: Setup environment for ia32 (windows x86)
+        uses: ./.github/actions/setup-environment
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && matrix.arch == 'ia32'
         with:
           os: ${{ matrix.os }}
           architecture: x86
           node-version: 22.x
 
-      - uses: ./.github/actions/setup-environment
+      - name: Setup environment
+        uses: ./.github/actions/setup-environment
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && matrix.arch != 'ia32'
         with:
           os: ${{ matrix.os }}
@@ -140,7 +147,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.get-artifact-name.outputs.artifact_name }}
-          path: build/Release/*.node
+          path: build/Release/${{ steps.get-artifact-name.outputs.artifact_name }}.node
           retention-days: 90
 
   build-and-deploy:
@@ -157,21 +164,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - id: should-skip-cd
+      - name: Check if CD should be skipped
+        id: should-skip-cd
         uses: ./.github/actions/should-skip-cd
 
-      - uses: ./.github/actions/setup-environment
+      - name: Setup environment
+        uses: ./.github/actions/setup-environment
         if: steps.should-skip-cd.outputs.skip != 'true'
         with:
           os: ${{ matrix.os }}
           architecture: ${{ matrix.arch }}
           node-version: 22.x
 
-      - name: build package
+      - name: Build package
         if: steps.should-skip-cd.outputs.skip != 'true'
         run: make build
 
-      - name: Get next version
+      - name: Get next version for release
         if: steps.should-skip-cd.outputs.skip != 'true'
         id: version
         run: |
@@ -196,16 +205,22 @@ jobs:
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "tag=v$NEW_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Configure git
+      - name: Configure Git
         if: steps.should-skip-cd.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - uses: actions/download-artifact@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         if: steps.should-skip-cd.outputs.skip != 'true'
         with:
           path: build/addons
+
+      - name: ls -la build/addons
+        if: steps.should-skip-cd.outputs.skip != 'true'
+        run: |
+          ls -la build/addons
 
       # - name: Create and push tag
       #   if: steps.should-skip-cd.outputs.skip != 'true'
