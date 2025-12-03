@@ -20,17 +20,17 @@ runs:
         registry-url: "https://registry.npmjs.org"
 
     - name: Install Linux packages
-      if: contains('${{ inputs.os }}', 'ubuntu')
+      if: contains(inputs.os, 'ubuntu')
       run: sudo apt update && sudo apt install -y libxml2-dev
       shell: bash
 
     - name: Install macOS packages
-      if: contains('${{ inputs.os }}', 'macos')
+      if: contains(inputs.os, 'macos')
       run: brew install libxml2 pkg-config
       shell: bash
 
     - name: Install Windows packages
-      if: contains('${{ inputs.os }}', 'windows')
+      if: contains(inputs.os, 'windows')
       run: choco install libxml2
       shell: bash
 
