@@ -37,15 +37,30 @@ runs:
         update: true
         msystem: MINGW64
         location: "C:\\msys64"
-        install: libxml2-devel
+        install: |
+          mingw-w64-x86_64-libxml2
+          mingw-w64-i686-libxml2
 
-    - run: dir C:\\msys64\\msys64\\usr
+    - name: Setup MinGW environment for Windows
+      if: contains(inputs.os, 'windows')
+      shell: pwsh
+      run: |
+        $MINGW64_BIN = "C:\msys64\mingw64\bin"
+        $MINGW32_BIN = "C:\msys64\mingw32\bin"
+        $env:PATH = "$MINGW64_BIN;$MINGW32_BIN;$env:PATH"
+        echo "PATH=$env:PATH" >> $env:GITHUB_ENV
+
+        # Configure node-gyp to use MinGW
+        echo "npm_config_msvs_version=" >> $env:GITHUB_ENV
+        echo "CC=$MINGW64_BIN\gcc.exe" >> $env:GITHUB_ENV
+        echo "CXX=$MINGW64_BIN\g++.exe" >> $env:GITHUB_ENV
+
+    - run: dir C:\\msys64\\mingw64\\lib
+      if: contains(inputs.os, 'windows')
       shell: pwsh
 
-    - run: dir C:\\msys64\\msys64\\usr\\include
-      shell: pwsh
-
-    - run: dir C:\\msys64\\msys64\\usr\\lib
+    - run: dir C:\\msys64\\mingw64\\include\\libxml2
+      if: contains(inputs.os, 'windows')
       shell: pwsh
 
     # - name: Install Windows packages
