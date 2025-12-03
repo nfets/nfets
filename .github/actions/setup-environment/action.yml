@@ -36,14 +36,29 @@ runs:
       with:
         update: true
         msystem: CLANG64
-        install: libxml2
+        install: libxml2-devel
 
-    - run: Get-ChildItem -Path "C:\msys64" -Recurse -Depth 5
+    - run: Get-ChildItem -Path "C:\msys64" -Recurse -Depth 3
       continue-on-error: true
       if: contains(inputs.os, 'windows')
       shell: pwsh
 
-    - run: Get-ChildItem -Path "C:\" -Recurse -Depth 2
+    - run: Get-ChildItem -Path "C:\msys64\usr" -Recurse -Depth 3
+      continue-on-error: true
+      if: contains(inputs.os, 'windows')
+      shell: pwsh
+
+    - run: Get-ChildItem -Path "C:\msys64\msys64\usr" -Recurse -Depth 3
+      continue-on-error: true
+      if: contains(inputs.os, 'windows')
+      shell: pwsh
+
+    - run: Get-ChildItem -Path "C:\msys64\clang64\usr" -Recurse -Depth 3
+      continue-on-error: true
+      if: contains(inputs.os, 'windows')
+      shell: pwsh
+
+    - run: Get-ChildItem -Path "C:\msys64\clang64\include" -Recurse -Depth 3
       continue-on-error: true
       if: contains(inputs.os, 'windows')
       shell: pwsh
