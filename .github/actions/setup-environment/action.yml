@@ -36,7 +36,7 @@ runs:
       with:
         update: true
         msystem: UCRT64
-        install: mingw-w64-ucrt-x86_64-libxml2 mingw-w64-ucrt-i686-libxml2 libxml2
+        install: mingw-w64-ucrt-x86_64-libxml2 libxml2
 
     - run: Get-ChildItem -Path "C:\msys64\ucrt64" -Recurse -Depth 4
       continue-on-error: true
