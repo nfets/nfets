@@ -19,16 +19,19 @@ runs:
         node-version: ${{ inputs.node-version }}
         registry-url: "https://registry.npmjs.org"
 
-    - run: sudo apt update && sudo apt install -y libxml2-dev
+    - name: Install Linux packages
       if: contains('${{ inputs.os }}', 'ubuntu')
+      run: sudo apt update && sudo apt install -y libxml2-dev
       shell: bash
 
-    - run: brew install libxml2 pkg-config
+    - name: Install macOS packages
       if: contains('${{ inputs.os }}', 'macos')
+      run: brew install libxml2 pkg-config
       shell: bash
 
-    - run: choco install libxml2
+    - name: Install Windows packages
       if: contains('${{ inputs.os }}', 'windows')
+      run: choco install libxml2
       shell: bash
 
     - name: Install pnpm
