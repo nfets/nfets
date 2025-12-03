@@ -29,35 +29,17 @@ runs:
       run: brew install libxml2 pkg-config
       shell: bash
 
-    - name: Install Windows packages
+    - name: Install Windows packages (x64 and x86)
       id: msys2
       if: contains(inputs.os, 'windows')
       uses: msys2/setup-msys2@v2
       with:
         update: true
-        msystem: MINGW64
-        location: "C:\\msys64"
-        install: |
-          mingw-w64-x86_64-libxml2
-          mingw-w64-i686-libxml2
+        msystem: UCRT64
+        install: libxml2-devel
 
-    - name: Setup MinGW environment for Windows
-      if: contains(inputs.os, 'windows')
-      shell: pwsh
-      run: |
-        $MINGW64_BIN = "C:\msys64\msys64\usr\bin"
-        $env:PATH = "$MINGW64_BIN;$env:PATH"
-        echo "PATH=$env:PATH" >> $env:GITHUB_ENV
-
-    - run: dir C:\\msys64\\msys64\\usr\\lib
-      if: contains(inputs.os, 'windows')
-      shell: pwsh
-
-    - run: dir C:\\msys64\\msys64\\usr\\include
-      if: contains(inputs.os, 'windows')
-      shell: pwsh
-
-    - run: dir C:\\msys64\\msys64\\usr\\include\\libxml2
+    - run: Get-ChildItem -Path "C:\msys64" -Recurse -Depth 2
+      continue-on-error: true
       if: contains(inputs.os, 'windows')
       shell: pwsh
 
