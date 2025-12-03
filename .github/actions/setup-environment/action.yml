@@ -51,11 +51,28 @@ runs:
         $LIBXML2_DIR = "$VCPKG_ROOT\installed\$TRIPLET\include"
         $LIBXML2_LIB = "$VCPKG_ROOT\installed\$TRIPLET\lib\xml2.lib"
 
+        if (-not (Test-Path "$LIBXML2_DIR\libxml\parser.h")) {
+          Write-Error "libxml2 headers not found at $LIBXML2_DIR\libxml\parser.h"
+          Write-Host "Contents of $LIBXML2_DIR:"
+          Get-ChildItem $LIBXML2_DIR -ErrorAction SilentlyContinue | Select-Object -First 10
+          exit 1
+        }
+
+        if (-not (Test-Path $LIBXML2_LIB)) {
+          Write-Error "libxml2 library not found at $LIBXML2_LIB"
+          Write-Host "Contents of $VCPKG_ROOT\installed\$TRIPLET\lib:"
+          Get-ChildItem "$VCPKG_ROOT\installed\$TRIPLET\lib" -ErrorAction SilentlyContinue | Select-Object -First 10
+          exit 1
+        }
+
         Write-Host "Setting LIBXML2_DIR=$LIBXML2_DIR"
         Write-Host "Setting LIBXML2_LIB=$LIBXML2_LIB"
 
-        "LIBXML2_DIR=$LIBXML2_DIR" | Out-File -FilePath $env:GITHUB_ENV -Append
-        "LIBXML2_LIB=$LIBXML2_LIB" | Out-File -FilePath $env:GITHUB_ENV -Append
+        $LIBXML2_DIR_NORMALIZED = $LIBXML2_DIR -replace '\\', '/'
+        $LIBXML2_LIB_NORMALIZED = $LIBXML2_LIB -replace '\\', '/'
+
+        "LIBXML2_DIR=$LIBXML2_DIR_NORMALIZED" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "LIBXML2_LIB=$LIBXML2_LIB_NORMALIZED" | Out-File -FilePath $env:GITHUB_ENV -Append
 
     - name: Install pnpm
       run: |
