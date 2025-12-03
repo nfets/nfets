@@ -51,18 +51,55 @@ runs:
         $LIBXML2_DIR = "$VCPKG_ROOT\installed\$TRIPLET\include"
         $LIBXML2_LIB = "$VCPKG_ROOT\installed\$TRIPLET\lib\xml2.lib"
 
-        if (-not (Test-Path "$LIBXML2_DIR\libxml\parser.h")) {
-          Write-Error "libxml2 headers not found at $LIBXML2_DIR\libxml\parser.h"
-          Write-Host "Contents of ${LIBXML2_DIR}:"
-          Get-ChildItem $LIBXML2_DIR -ErrorAction SilentlyContinue | Select-Object -First 10
-          exit 1
+        # Check what's actually in the include directory
+        Write-Host "Checking contents of ${LIBXML2_DIR}:"
+        if (Test-Path $LIBXML2_DIR) {
+          Get-ChildItem $LIBXML2_DIR -ErrorAction SilentlyContinue | Select-Object -First 20 | ForEach-Object { Write-Host "  $($_.Name)" }
+        } else {
+          Write-Host "  Directory does not exist"
         }
 
+        # Find parser.h - it should be in libxml subdirectory
+        # The include path should be set so that #include <libxml/parser.h> works
+        $PARSER_H_PATH = "$LIBXML2_DIR\libxml\parser.h"
+        if (-not (Test-Path $PARSER_H_PATH)) {
+          # Search for parser.h recursively
+          $FOUND_PARSER = Get-ChildItem -Path $LIBXML2_DIR -Filter "parser.h" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($FOUND_PARSER) {
+            Write-Host "Found parser.h at: $($FOUND_PARSER.FullName)"
+            # parser.h should be in a libxml subdirectory
+            # LIBXML2_DIR should point to the directory that contains the libxml subdirectory
+            if ($FOUND_PARSER.Directory.Name -eq "libxml") {
+              # parser.h is in libxml subdirectory, so parent is the include dir
+              $LIBXML2_DIR = $FOUND_PARSER.Directory.Parent.FullName
+              Write-Host "Updated LIBXML2_DIR to: $LIBXML2_DIR"
+            } else {
+              Write-Error "parser.h found but not in expected libxml subdirectory. Found at: $($FOUND_PARSER.FullName)"
+              exit 1
+            }
+          } else {
+            Write-Error "libxml2 headers not found. Searched for parser.h in $LIBXML2_DIR"
+            Write-Host "Contents of ${LIBXML2_DIR}:"
+            Get-ChildItem $LIBXML2_DIR -ErrorAction SilentlyContinue | Select-Object -First 20
+            exit 1
+          }
+        } else {
+          Write-Host "Found parser.h at expected location: $PARSER_H_PATH"
+        }
+
+        # Verify library exists
         if (-not (Test-Path $LIBXML2_LIB)) {
-          Write-Error "libxml2 library not found at $LIBXML2_LIB"
-          Write-Host "Contents of ${VCPKG_ROOT}\installed\${TRIPLET}\lib:"
-          Get-ChildItem "$VCPKG_ROOT\installed\$TRIPLET\lib" -ErrorAction SilentlyContinue | Select-Object -First 10
-          exit 1
+          # Try to find xml2.lib
+          $FOUND_LIB = Get-ChildItem -Path "$VCPKG_ROOT\installed\$TRIPLET\lib" -Filter "xml2.lib" -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($FOUND_LIB) {
+            $LIBXML2_LIB = $FOUND_LIB.FullName
+            Write-Host "Found xml2.lib at: $LIBXML2_LIB"
+          } else {
+            Write-Error "libxml2 library not found at $LIBXML2_LIB"
+            Write-Host "Contents of ${VCPKG_ROOT}\installed\${TRIPLET}\lib:"
+            Get-ChildItem "$VCPKG_ROOT\installed\$TRIPLET\lib" -ErrorAction SilentlyContinue | Select-Object -First 20
+            exit 1
+          }
         }
 
         Write-Host "Setting LIBXML2_DIR=$LIBXML2_DIR"
