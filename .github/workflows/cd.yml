@@ -53,6 +53,7 @@ jobs:
       - name: Check if artifact is expired
         id: check-artifact-expiration
         if: steps.should-skip-cd.outputs.skip != 'true'
+        shell: bash
         run: |
           ARTIFACT_NAME="${{ steps.get-artifact-name.outputs.artifact_name }}"
 
@@ -84,6 +85,7 @@ jobs:
       - name: Check if changes or artifact is expired
         id: check-changes-or-artifact-expired
         if: steps.should-skip-cd.outputs.skip != 'true'
+        shell: bash
         run: |
           LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
 
@@ -131,11 +133,13 @@ jobs:
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
         env:
           npm_config_arch: ${{ matrix.arch }}
+        shell: bash
         run: |
           pnpm node-gyp rebuild --arch=${{ matrix.arch }}
 
       - name: Verify binaries
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
+        shell: bash
         run: |
           files=$(ls build/Release/*.node || echo "")
           for file in $files; do
