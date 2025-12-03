@@ -100,14 +100,14 @@ jobs:
 
       - id: get-artifact-name
         run: |
-          if [ "${{ matrix.os }}" == "ubuntu-latest" && "${{ matrix.arch }}" == "x64" ]; then
-            echo "artifact_name=xml_validator-linux-x64" >> $GITHUB_OUTPUT
-          elif [ "${{ matrix.os }}" == "windows-latest" && "${{ matrix.arch }}" == "ia32" ]; then
-            echo "artifact_name=xml_validator-win32-ia32" >> $GITHUB_OUTPUT
-          elif [ "${{ matrix.os }}" == "macos-latest" && "${{ matrix.arch }}" == "arm64" ]; then
-            echo "artifact_name=xml_validator-macos-arm64" >> $GITHUB_OUTPUT
-          elif [ "${{ matrix.os }}" == "macos-latest" && "${{ matrix.arch }}" == "x64" ]; then
-            echo "artifact_name=xml_validator-macos-x64" >> $GITHUB_OUTPUT
+          if [ "${{ matrix.os }}" == "ubuntu-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
+            echo "artifact_name=xml_validator-linux-x64.node" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.os }}" == "windows-latest" ] && [ "${{ matrix.arch }}" == "ia32" ]; then
+            echo "artifact_name=xml_validator-win32-ia32.node" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.os }}" == "macos-latest" ] && [ "${{ matrix.arch }}" == "arm64" ]; then
+            echo "artifact_name=xml_validator-macos-arm64.node" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.os }}" == "macos-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
+            echo "artifact_name=xml_validator-macos-x64.node" >> $GITHUB_OUTPUT
           else
             echo "Unsupported platform: ${{ matrix.os }} ${{ matrix.arch }}"
             exit 1
