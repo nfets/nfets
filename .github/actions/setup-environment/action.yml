@@ -21,17 +21,22 @@ runs:
 
     - run: sudo apt update && sudo apt install -y libxml2-dev
       if: contains('${{ inputs.os }}', 'ubuntu')
+      shell: bash
 
     - run: brew install libxml2 pkg-config
       if: contains('${{ inputs.os }}', 'macos')
+      shell: bash
 
     - run: choco install libxml2
       if: contains('${{ inputs.os }}', 'windows')
+      shell: bash
 
     - name: Install pnpm
       run: |
         npm install -g npm@latest
         npm install -g pnpm
+      shell: bash
 
     - name: Install packages
       run: pnpm install --frozen-lockfile
+      shell: bash
