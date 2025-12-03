@@ -17,10 +17,10 @@ jobs:
           # - os: ubuntu-latest
           #   arch: x64
           - os: windows-latest
-            arch: ia32
+            arch: x64
           # - os: macos-latest
           #   arch: arm64
-          # - os: macos-latest
+          # - os: macos-15-intel
           #   arch: x64
 
     runs-on: ${{ matrix.os }}
@@ -40,8 +40,8 @@ jobs:
         run: |
           if [ "${{ matrix.os }}" == "ubuntu-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
             echo "artifact_name=xml_validator-linux-x64" >> $GITHUB_OUTPUT
-          elif [ "${{ matrix.os }}" == "windows-latest" ] && [ "${{ matrix.arch }}" == "ia32" ]; then
-            echo "artifact_name=xml_validator-win32-ia32" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.os }}" == "windows-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
+            echo "artifact_name=xml_validator-win32-x64" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.os }}" == "macos-latest" ] && [ "${{ matrix.arch }}" == "arm64" ]; then
             echo "artifact_name=xml_validator-macos-arm64" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.os }}" == "macos-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
@@ -114,17 +114,9 @@ jobs:
             echo "skip=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Setup environment for ia32 (windows x86)
-        uses: ./.github/actions/setup-environment
-        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && matrix.arch == 'ia32'
-        with:
-          os: ${{ matrix.os }}
-          architecture: x86
-          node-version: 22.x
-
       - name: Setup environment
         uses: ./.github/actions/setup-environment
-        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && matrix.arch != 'ia32'
+        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
         with:
           os: ${{ matrix.os }}
           architecture: ${{ matrix.arch }}
@@ -233,7 +225,7 @@ jobs:
         run: |
           ARTIFACTS=(
             "xml_validator-linux-x64"
-            "xml_validator-win32-ia32"
+            "xml_validator-win32-x64"
             "xml_validator-macos-arm64"
             "xml_validator-macos-x64"
           )

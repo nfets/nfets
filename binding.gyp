@@ -8,11 +8,11 @@
       "conditions": [
         ["OS=='win'", {
           "include_dirs": [
-            "C:\\msys64\\clang64\\include",
-            "C:\\msys64\\clang64\\include\\libxml2"
+            "C:\\msys64\\ucrt64\\include",
+            "C:\\msys64\\ucrt64\\include\\libxml2"
           ],
           "library_dirs": [
-            "C:\\msys64\\clang64\\lib"
+            "C:\\msys64\\ucrt64\\lib"
           ],
           "libraries": [
             "libxml2.dll.a"
@@ -21,9 +21,6 @@
             "WIN32"
           ],
           "conditions": [
-            ["target_arch=='ia32'", {
-              "product_name": "xml_validator-win32-ia32"
-            }],
             ["target_arch=='x64'", {
               "product_name": "xml_validator-win32-x64"
             }],

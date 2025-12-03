@@ -29,36 +29,15 @@ runs:
       run: brew install libxml2 pkg-config
       shell: bash
 
-    - name: Install Windows packages (x64 and x86)
-      id: msys2
+    - name: Install Windows packages
       if: contains(inputs.os, 'windows')
       uses: msys2/setup-msys2@v2
       with:
         update: true
-        msystem: CLANG64
-        install: libxml2-devel
+        msystem: UCRT64
+        install: mingw-w64-ucrt-x86_64-gcc libxml2-devel
 
     - run: Get-ChildItem -Path "C:\msys64" -Recurse -Depth 3
-      continue-on-error: true
-      if: contains(inputs.os, 'windows')
-      shell: pwsh
-
-    - run: Get-ChildItem -Path "C:\msys64\usr" -Recurse -Depth 3
-      continue-on-error: true
-      if: contains(inputs.os, 'windows')
-      shell: pwsh
-
-    - run: Get-ChildItem -Path "C:\msys64\msys64\usr" -Recurse -Depth 3
-      continue-on-error: true
-      if: contains(inputs.os, 'windows')
-      shell: pwsh
-
-    - run: Get-ChildItem -Path "C:\msys64\clang64\usr" -Recurse -Depth 3
-      continue-on-error: true
-      if: contains(inputs.os, 'windows')
-      shell: pwsh
-
-    - run: Get-ChildItem -Path "C:\msys64\clang64\include" -Recurse -Depth 3
       continue-on-error: true
       if: contains(inputs.os, 'windows')
       shell: pwsh
