@@ -7,20 +7,21 @@ on:
 permissions:
   contents: write
   id-token: write
+  actions: read
 
 jobs:
   build-native-addons:
     strategy:
       matrix:
         include:
-          - os: ubuntu-latest
-            arch: x64
+          # - os: ubuntu-latest
+          #   arch: x64
           - os: windows-latest
             arch: ia32
-          - os: macos-latest
-            arch: arm64
-          - os: macos-latest
-            arch: x64
+          # - os: macos-latest
+          #   arch: arm64
+          # - os: macos-latest
+          #   arch: x64
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -135,7 +136,7 @@ jobs:
           npm_config_arch: ${{ matrix.arch }}
         shell: bash
         run: |
-          pnpm node-gyp rebuild --arch=${{ matrix.arch }}
+          npx --yes node-gyp rebuild --arch=${{ matrix.arch }}
 
       - name: Verify binaries
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
@@ -180,6 +181,9 @@ jobs:
           architecture: ${{ matrix.arch }}
           node-version: 22.x
 
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
       - name: Build package
         if: steps.should-skip-cd.outputs.skip != 'true'
         run: make build
@@ -215,16 +219,56 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Download artifact
-        uses: actions/download-artifact@v4
+      - run: mkdir -p build/addons
+
+      - name: Download all artifacts from current run
         if: steps.should-skip-cd.outputs.skip != 'true'
+        continue-on-error: true
+        uses: actions/download-artifact@v4
         with:
+          pattern: xml_validator-*
           path: build/addons
+          merge-multiple: false
+
+      - name: Download missing artifacts from previous runs
+        if: steps.should-skip-cd.outputs.skip != 'true'
+        run: |
+          ARTIFACTS=(
+            "xml_validator-linux-x64"
+            "xml_validator-win32-ia32"
+            "xml_validator-macos-arm64"
+            "xml_validator-macos-x64"
+          )
+
+          for ARTIFACT_NAME in "${ARTIFACTS[@]}"; do
+            if [ ! -d "build/addons/$ARTIFACT_NAME.node" ]; then
+              echo "Artifact $ARTIFACT_NAME not found in current run, downloading from previous run..."
+
+              ARTIFACT_ID=$(gh api repos/${{ github.repository }}/actions/artifacts \
+                --jq ".artifacts[] | select(.name == \"$ARTIFACT_NAME\" and .expired == false) | .id" \
+                | head -1)
+
+              if [ -z "$ARTIFACT_ID" ]; then
+                echo "Warning: No valid artifact found for $ARTIFACT_NAME"
+                continue
+              fi
+
+              echo "Downloading artifact $ARTIFACT_NAME (ID: $ARTIFACT_ID)"
+              mkdir -p "artifacts/addons"
+              gh api repos/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID/zip \
+                --output "artifacts/addons/$ARTIFACT_NAME.zip"
+
+              cd "artifacts/addons"
+              unzip -q "$ARTIFACT_NAME.zip" -d build/addons
+              rm "$ARTIFACT_NAME.zip"
+              cd -
+            fi
+          done
 
       - name: ls -la build/addons
         if: steps.should-skip-cd.outputs.skip != 'true'
         run: |
-          ls -la build/addons
+          ls -lah build/addons
 
       # - name: Create and push tag
       #   if: steps.should-skip-cd.outputs.skip != 'true'

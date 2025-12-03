@@ -21,4 +21,4 @@ build:
 
 dev\:install:
 	@pnpm install --frozen-lockfile
-	@pnpm node-gyp rebuild
+	@npx --yes node-gyp rebuild

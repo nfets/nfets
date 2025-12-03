@@ -31,23 +31,34 @@ runs:
 
     - name: Install Windows packages
       if: contains(inputs.os, 'windows')
-      shell: bash
+      shell: pwsh
       run: |
-        if [ "${{ inputs.architecture }}" == "x86" ]; then
-          TRIPLET="x86-windows"
-        else
-          echo "Unsupported Windows architecture: ${{ inputs.architecture }}"
+        if ("${{ inputs.architecture }}" -eq "x86") {
+          $TRIPLET = "x86-windows"
+        } else {
+          Write-Error "Unsupported Windows architecture: ${{ inputs.architecture }}"
           exit 1
-        fi
+        }
 
-        C:/vcpkg/vcpkg.exe install libxml2:$TRIPLET
+        Write-Host "Installing libxml2:$TRIPLET..."
+        & C:\vcpkg\vcpkg.exe install libxml2:$TRIPLET
+        if ($LASTEXITCODE -ne 0) {
+          Write-Error "Failed to install libxml2"
+          exit 1
+        }
+
+        $VCPKG_ROOT = "C:\vcpkg"
+        $LIBXML2_DIR = "$VCPKG_ROOT\installed\$TRIPLET\include"
+        $LIBXML2_LIB = "$VCPKG_ROOT\installed\$TRIPLET\lib\xml2.lib"
+
+        Write-Host "Setting LIBXML2_DIR=$LIBXML2_DIR"
+        Write-Host "Setting LIBXML2_LIB=$LIBXML2_LIB"
+
+        "LIBXML2_DIR=$LIBXML2_DIR" | Out-File -FilePath $env:GITHUB_ENV -Append
+        "LIBXML2_LIB=$LIBXML2_LIB" | Out-File -FilePath $env:GITHUB_ENV -Append
 
     - name: Install pnpm
       run: |
         npm install -g npm@latest
         npm install -g pnpm
-      shell: bash
-
-    - name: Install packages
-      run: pnpm install --frozen-lockfile
       shell: bash
