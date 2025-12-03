@@ -71,8 +71,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - id: setup-environment
-        uses: ./.github/actions/setup-environment
+      - uses: ./.github/actions/setup-environment
+        if: matrix.arch == 'ia32'
+        with:
+          os: ${{ matrix.os }}
+          architecture: x86
+          node-version: 22.x
+
+      - uses: ./.github/actions/setup-environment
+        if: matrix.arch != 'ia32'
         with:
           os: ${{ matrix.os }}
           architecture: ${{ matrix.arch }}
@@ -130,8 +137,7 @@ jobs:
       - id: should-skip-cd
         uses: ./.github/actions/should-skip-cd
 
-      - id: setup-environment
-        uses: ./.github/actions/setup-environment
+      - uses: ./.github/actions/setup-environment
         if: steps.should-skip-cd.outputs.skip != 'true'
         with:
           os: ${{ matrix.os }}
