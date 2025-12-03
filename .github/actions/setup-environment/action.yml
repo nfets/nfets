@@ -39,6 +39,9 @@ runs:
         location: "C:\\msys64"
         install: libxml2-devel
 
+    - run: dir C:\\msys64
+      shell: pwsh
+
     - run: dir C:\\msys64\\mingw64\\lib
       shell: pwsh
 
