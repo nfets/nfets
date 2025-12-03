@@ -62,17 +62,8 @@ jobs:
             echo "artifact_exists=true" >> $GITHUB_OUTPUT
             echo "artifact_created_at=$ARTIFACT_CREATED_AT" >> $GITHUB_OUTPUT
 
-            DAYS_OLD=$(python3 -c "
-from datetime import datetime, timezone
-import sys
-try:
-    created = datetime.fromisoformat('$ARTIFACT_CREATED_AT'.replace('Z', '+00:00'))
-    now = datetime.now(timezone.utc)
-    days = (now - created).days
-    print(days)
-except:
-    print(999)
-" 2>/dev/null || echo "999")
+            PYTHON_CODE="from datetime import datetime, timezone; created = datetime.fromisoformat('$ARTIFACT_CREATED_AT'.replace('Z', '+00:00')); now = datetime.now(timezone.utc); days = (now - created).days; print(days)"
+            DAYS_OLD=$(python3 -c "$PYTHON_CODE" 2>/dev/null || echo "999")
 
             echo "Artifact $ARTIFACT_NAME created $DAYS_OLD days ago"
             echo "artifact_days_old=$DAYS_OLD" >> $GITHUB_OUTPUT
