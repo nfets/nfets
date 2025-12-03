@@ -42,10 +42,22 @@ runs:
     - run: dir C:\\msys64
       shell: pwsh
 
+    - run: dir C:\\msys64\\msys64
+      shell: pwsh
+
+    - run: dir C:\\msys64\\msys64\\include
+      shell: pwsh
+
     - run: dir C:\\msys64\\mingw64\\lib
       shell: pwsh
 
     - run: dir C:\\msys64\\mingw64\\include
+      shell: pwsh
+
+    - run: dir C:\\msys64\\mingw32\\lib
+      shell: pwsh
+
+    - run: dir C:\\msys64\\mingw32\\include
       shell: pwsh
 
     # - name: Install Windows packages
