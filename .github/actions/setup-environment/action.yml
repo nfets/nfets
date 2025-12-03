@@ -34,10 +34,9 @@ runs:
       uses: msys2/setup-msys2@v2
       with:
         update: true
-        msystem: UCRT64
-        install: mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-libxml2
+        install: libxml2-devel
 
-    - run: Get-ChildItem -Path "C:\msys64" -Recurse -Depth 3
+    - run: Get-ChildItem -Path "C:\msys64\usr" -Recurse -Depth 3
       continue-on-error: true
       if: contains(inputs.os, 'windows')
       shell: pwsh

@@ -8,11 +8,11 @@
       "conditions": [
         ["OS=='win'", {
           "include_dirs": [
-            "C:\\msys64\\ucrt64\\include",
-            "C:\\msys64\\ucrt64\\include\\libxml2"
+            "C:\\msys64\\usr\\include",
+            "C:\\msys64\\usr\\include\\libxml2"
           ],
           "library_dirs": [
-            "C:\\msys64\\ucrt64\\lib"
+            "C:\\msys64\\usr\\lib"
           ],
           "libraries": [
             "libxml2.dll.a"
