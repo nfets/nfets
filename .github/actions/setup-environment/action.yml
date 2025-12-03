@@ -34,9 +34,15 @@ runs:
       uses: msys2/setup-msys2@v2
       with:
         update: true
+        msystem: MINGW64
         install: libxml2-devel
 
-    - run: Get-ChildItem -Path "C:\msys64\usr" -Recurse -Depth 3
+    - run: Get-ChildItem -Path "C:\msys64\usr\lib" -Recurse -Depth 3
+      continue-on-error: true
+      if: contains(inputs.os, 'windows')
+      shell: pwsh
+
+    - run: Get-ChildItem -Path "C:\msys64\usr\include" -Recurse -Depth 3
       continue-on-error: true
       if: contains(inputs.os, 'windows')
       shell: pwsh
