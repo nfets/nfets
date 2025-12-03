@@ -12,13 +12,12 @@ jobs:
   should-rebuild-native-addons:
     runs-on: ubuntu-latest
     steps:
-      - id: should-skip-cd
-        uses: ./.github/actions/should-skip-cd.yaml
-
       - uses: actions/checkout@v4
-        if: steps.should-skip-cd.outputs.skip != 'true'
         with:
           fetch-depth: 0
+
+      - id: should-skip-cd
+        uses: ./.github/actions/should-skip-cd.yaml
 
       - if: steps.should-skip-cd.outputs.skip == 'true'
         run: |
@@ -124,13 +123,12 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-      - id: should-skip-cd
-        uses: ./.github/actions/should-skip-cd.yaml
-
       - uses: actions/checkout@v4
-        if: steps.should-skip-cd.outputs.skip != 'true'
         with:
           fetch-depth: 0
+
+      - id: should-skip-cd
+        uses: ./.github/actions/should-skip-cd.yaml
 
       - id: setup-environment
         uses: ./.github/actions/setup-environment.yaml
