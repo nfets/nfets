@@ -116,7 +116,13 @@ jobs:
 
   build-and-deploy:
     needs: build-native-addons
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            arch: x64
+
+    runs-on: ${{ matrix.os }}
     steps:
       - id: should-skip-cd
         uses: ./.github/actions/should-skip-cd.yaml
@@ -130,8 +136,8 @@ jobs:
         uses: ./.github/actions/setup-environment.yaml
         if: steps.should-skip-cd.outputs.skip != 'true'
         with:
-          os: ${{ runner.name.toLowerCase() }}
-          architecture: ${{ runner.arch.toLowerCase() }}
+          os: ${{ matrix.os }}
+          architecture: ${{ matrix.arch }}
           node-version: 22.x
 
       - name: build package
