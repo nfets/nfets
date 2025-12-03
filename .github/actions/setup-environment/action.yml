@@ -39,13 +39,10 @@ runs:
         location: "C:\\msys64"
         install: libxml2-devel
 
-    - run: dir C:\\msys64
+    - run: dir C:\\msys64\\mingw64\\lib
       shell: pwsh
 
-    - run: dir C:\\msys64\\usr\\lib
-      shell: pwsh
-
-    - run: dir C:\\msys64\\usr\\include
+    - run: dir C:\\msys64\\mingw64\\include
       shell: pwsh
 
     # - name: Install Windows packages

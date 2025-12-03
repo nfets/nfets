@@ -8,11 +8,11 @@
       "conditions": [
         ["OS=='win'", {
           "include_dirs": [
-            "C:\\msys64\\usr\\include",
-            "C:\\msys64\\usr\\include\\libxml2"
+            "C:\\msys64\\mingw64\\include",
+            "C:\\msys64\\mingw64\\include\\libxml2"
           ],
           "library_dirs": [
-            "C:\\msys64\\usr\\lib"
+            "C:\\msys64\\mingw64\\lib"
           ],
           "libraries": [
             "libxml2.dll.a"
