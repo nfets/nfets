@@ -20,13 +20,13 @@ runs:
         registry-url: "https://registry.npmjs.org"
 
     - run: sudo apt update && sudo apt install -y libxml2-dev
-      if: inputs.os.contains('ubuntu')
+      if: contains('${{ inputs.os }}', 'ubuntu')
 
     - run: brew install libxml2 pkg-config
-      if: inputs.os.contains('macos')
+      if: contains('${{ inputs.os }}', 'macos')
 
     - run: choco install libxml2
-      if: inputs.os.contains('windows')
+      if: contains('${{ inputs.os }}', 'windows')
 
     - name: Install pnpm
       run: |
