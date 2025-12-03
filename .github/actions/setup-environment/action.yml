@@ -33,9 +33,6 @@ runs:
       if: contains(inputs.os, 'windows')
       shell: bash
       run: |
-        git clone https://github.com/microsoft/vcpkg.git C:/vcpkg
-        cmd //c C:/vcpkg/bootstrap-vcpkg.bat
-
         if [ "${{ inputs.architecture }}" == "x86" ]; then
           TRIPLET="x86-windows"
         else
