@@ -9,69 +9,137 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
+  should-rebuild-native-addons:
     runs-on: ubuntu-latest
+    steps:
+      - id: should-skip-cd
+        uses: ./.github/actions/should-skip-cd.yaml
+
+      - uses: actions/checkout@v4
+        if: steps.should-skip-cd.outputs.skip != 'true'
+        with:
+          fetch-depth: 0
+
+      - if: steps.should-skip-cd.outputs.skip == 'true'
+        run: |
+          echo "skip=true" >> $GITHUB_OUTPUT
+
+      - id: check-changes
+        if: steps.should-skip-cd.outputs.skip != 'true'
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -z "$LATEST_TAG" ]; then
+            echo "No tags found, checking against initial commit"
+            BASE_REF=$(git rev-list --max-parents=0 HEAD)
+          else
+            BASE_REF="$LATEST_TAG"
+            echo "Comparing against latest tag: $LATEST_TAG"
+          fi
+
+          ADDONS_CHANGED=$(git diff --name-only --diff-filter=AM "$BASE_REF" HEAD -- "addons/" | wc -l | tr -d ' ')
+          BINDING_CHANGED=$(git diff --name-only --diff-filter=M "$BASE_REF" HEAD -- "binding.gyp" | wc -l | tr -d ' ')
+
+          echo "Addons folder changes: $ADDONS_CHANGED"
+          echo "binding.gyp changes: $BINDING_CHANGED"
+
+          if [ "$ADDONS_CHANGED" -gt 0 ] || [ "$BINDING_CHANGED" -gt 0 ]; then
+            echo "Native addon files changed, rebuild required"
+            echo "skip=false" >> $GITHUB_OUTPUT
+          else
+            echo "No native addon changes detected, skipping rebuild"
+            echo "skip=true" >> $GITHUB_OUTPUT
+          fi
+
+  build-native-addons:
+    needs: should-rebuild-native-addons
+    if: needs.should-rebuild-native-addons.outputs.skip != 'true'
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            arch: x64
+          - os: windows-latest
+            arch: ia32
+          - os: macos-latest
+            arch: arm64
+          - os: macos-latest
+            arch: x64
+
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Check if should skip (dependabot)
-        id: should-skip
-        env:
-          ACTOR: ${{ github.actor }}
-          AUTHOR_NAME: ${{ github.event.head_commit.author.name }}
-          AUTHOR_EMAIL: ${{ github.event.head_commit.author.email }}
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-        run: |
-          COMMIT_MESSAGE_SINGLE=$(echo "$COMMIT_MESSAGE" | tr '\n' ' ')
-
-          SKIP=false
-
-          if [[ -n "$AUTHOR_NAME" && "$AUTHOR_NAME" == *"dependabot"* ]]; then
-            SKIP=true
-          elif [[ -n "$AUTHOR_EMAIL" && "$AUTHOR_EMAIL" == *"dependabot"* ]]; then
-            SKIP=true
-          elif [[ "$ACTOR" == *"dependabot"* ]]; then
-            SKIP=true
-          elif [[ -n "$COMMIT_MESSAGE_SINGLE" && ("$COMMIT_MESSAGE_SINGLE" == *"dependabot"* || "$COMMIT_MESSAGE_SINGLE" == *"build(deps)"*) ]]; then
-            SKIP=true
-          elif [[ -n "$COMMIT_MESSAGE_SINGLE" && ("$COMMIT_MESSAGE_SINGLE" == *"[skip-cd]"*) ]]; then
-            SKIP=true
-          fi
-
-          if [ "$SKIP" = true ]; then
-            echo "skip=true" >> $GITHUB_OUTPUT
-          else
-            echo "skip=false" >> $GITHUB_OUTPUT
-          fi
-
-      - uses: actions/setup-node@v4
-        if: steps.should-skip.outputs.skip != 'true'
+      - id: setup-environment
+        uses: ./.github/actions/setup-environment.yaml
         with:
+          os: ${{ matrix.os }}
+          architecture: ${{ matrix.arch }}
           node-version: 22.x
-          registry-url: "https://registry.npmjs.org"
 
-      - name: Install system dependencies
-        if: steps.should-skip.outputs.skip != 'true'
-        run: sudo apt update && sudo apt install -y libxml2-dev
-
-      - name: Install pnpm
-        if: steps.should-skip.outputs.skip != 'true'
+      - name: Build native addon
+        env:
+          npm_config_arch: ${{ matrix.arch }}
         run: |
-          npm install -g npm@latest
-          npm install -g pnpm
+          pnpm node-gyp rebuild --arch=${{ matrix.arch }}
 
-      - name: Install packages
-        if: steps.should-skip.outputs.skip != 'true'
-        run: pnpm install
+      - name: Verify binaries
+        run: |
+          files=$(ls build/Release/*.node || echo "")
+          for file in $files; do
+            file $file || echo "file command not available"
+          done
+
+      - id: get-artifact-name
+        run: |
+          if [ "${{ matrix.os }}" == "ubuntu-latest" && "${{ matrix.arch }}" == "x64" ]; then
+            echo "artifact_name=xml_validator-linux-x64" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.os }}" == "windows-latest" && "${{ matrix.arch }}" == "ia32" ]; then
+            echo "artifact_name=xml_validator-win32-ia32" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.os }}" == "macos-latest" && "${{ matrix.arch }}" == "arm64" ]; then
+            echo "artifact_name=xml_validator-macos-arm64" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.os }}" == "macos-latest" && "${{ matrix.arch }}" == "x64" ]; then
+            echo "artifact_name=xml_validator-macos-x64" >> $GITHUB_OUTPUT
+          else
+            echo "Unsupported platform: ${{ matrix.os }} ${{ matrix.arch }}"
+            exit 1
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.get-artifact-name.outputs.artifact_name }}
+          path: build/addons/
+          retention-days: 30
+
+  build-and-deploy:
+    needs: build-native-addons
+    runs-on: ubuntu-latest
+    steps:
+      - id: should-skip-cd
+        uses: ./.github/actions/should-skip-cd.yaml
+
+      - uses: actions/checkout@v4
+        if: steps.should-skip-cd.outputs.skip != 'true'
+        with:
+          fetch-depth: 0
+
+      - id: setup-environment
+        uses: ./.github/actions/setup-environment.yaml
+        if: steps.should-skip-cd.outputs.skip != 'true'
+        with:
+          os: ${{ runner.name.toLowerCase() }}
+          architecture: ${{ runner.arch.toLowerCase() }}
+          node-version: 22.x
 
       - name: build package
-        if: steps.should-skip.outputs.skip != 'true'
+        if: steps.should-skip-cd.outputs.skip != 'true'
         run: make build
 
       - name: Get next version
-        if: steps.should-skip.outputs.skip != 'true'
+        if: steps.should-skip-cd.outputs.skip != 'true'
         id: version
         run: |
           LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
@@ -96,48 +164,53 @@ jobs:
           echo "tag=v$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Configure git
-        if: steps.should-skip.outputs.skip != 'true'
+        if: steps.should-skip-cd.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Create and push tag
-        if: steps.should-skip.outputs.skip != 'true'
-        run: |
-          TAG="${{ steps.version.outputs.tag }}"
-          VERSION="${{ steps.version.outputs.version }}"
+      - uses: actions/download-artifact@v4
+        if: steps.should-skip-cd.outputs.skip != 'true'
+        with:
+          path: build/addons
 
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
-            echo "Tag $TAG already exists, skipping..."
-            exit 0
-          fi
+      # - name: Create and push tag
+      #   if: steps.should-skip-cd.outputs.skip != 'true'
+      #   run: |
+      #     TAG="${{ steps.version.outputs.tag }}"
+      #     VERSION="${{ steps.version.outputs.version }}"
 
-          git tag -a "$TAG" -m "Release $VERSION"
-          git push origin "$TAG"
+      #     if git rev-parse "$TAG" >/dev/null 2>&1; then
+      #       echo "Tag $TAG already exists, skipping..."
+      #       exit 0
+      #     fi
 
-      - name: Create release
-        if: steps.should-skip.outputs.skip != 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          TAG="${{ steps.version.outputs.tag }}"
-          VERSION="${{ steps.version.outputs.version }}"
+      #     git tag -a "$TAG" -m "Release $VERSION"
+      #     git push origin "$TAG"
 
-          gh release create "$TAG" \
-              --repo="$GITHUB_REPOSITORY" \
-              --title="${GITHUB_REPOSITORY#*/} $VERSION" \
-              --generate-notes
+      # - name: Create release
+      #   if: steps.should-skip-cd.outputs.skip != 'true'
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     TAG="${{ steps.version.outputs.tag }}"
+      #     VERSION="${{ steps.version.outputs.version }}"
 
-      - name: Update package.json version
-        if: steps.should-skip.outputs.skip != 'true'
-        run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          jq --arg version "$VERSION" '.version = $version' package.json > .package.json && mv .package.json package.json
+      #     gh release create "$TAG" \
+      #         --repo="$GITHUB_REPOSITORY" \
+      #         --title="${GITHUB_REPOSITORY#*/} $VERSION" \
+      #         --generate-notes
 
-      - name: Publish to npm using Trusted Publishing
-        if: steps.should-skip.outputs.skip != 'true'
-        run: |
-          # Ensure npm is authenticated via OIDC (Trusted Publishing)
-          # setup-node should configure this automatically with id-token: write permission
-          # pnpm will use npm's authentication
-          pnpm publish --no-git-checks
+      # - name: Update package.json version
+      #   if: steps.should-skip-cd.outputs.skip != 'true'
+      #   run: |
+      #     VERSION="${{ steps.version.outputs.version }}"
+      #     jq --arg version "$VERSION" '.version = $version' package.json > .package.json && mv .package.json package.json
+
+      # - name: Publish to npm using Trusted Publishing
+      #   if: steps.should-skip-cd.outputs.skip != 'true'
+      #   run: |
+      #     # Ensure npm is authenticated via OIDC (Trusted Publishing)
+      #     # setup-node should configure this automatically with id-token: write permission
+      #     # pnpm will use npm's authentication
+      #     pnpm publish --no-git-checks

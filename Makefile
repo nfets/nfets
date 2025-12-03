@@ -18,3 +18,7 @@ test\:coverage-summary:
 build:
 	@make clean
 	@pnpm build
+
+dev\:install:
+	@pnpm install --frozen-lockfile
+	@pnpm node-gyp rebuild

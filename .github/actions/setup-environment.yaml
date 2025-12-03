@@ -1,0 +1,37 @@
+name: Setup Environment
+description: A reusable composite action to setup the environment.
+inputs:
+  os:
+    description: The operating system to setup.
+    required: true
+  node-version:
+    description: The Node.js version to setup.
+    required: true
+  architecture:
+    description: The architecture to setup the node.js.
+    required: true
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        architecture: ${{ inputs.architecture }}
+        node-version: ${{ inputs.node-version }}
+        registry-url: "https://registry.npmjs.org"
+
+    - run: sudo apt update && sudo apt install -y libxml2-dev
+      if: inputs.os.contains('ubuntu')
+
+    - run: brew install libxml2 pkg-config
+      if: inputs.os.contains('macos')
+
+    - run: choco install libxml2
+      if: inputs.os.contains('windows')
+
+    - name: Install pnpm
+      run: |
+        npm install -g npm@latest
+        npm install -g pnpm
+
+    - name: Install packages
+      run: pnpm install --frozen-lockfile

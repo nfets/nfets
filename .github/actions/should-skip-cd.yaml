@@ -1,0 +1,36 @@
+name: Should Skip CD
+description: A reusable composite action to check if the CD should be skipped.
+outputs:
+  skip:
+    description: Whether the CD should be skipped.
+    required: true
+runs:
+  using: composite
+  env:
+    ACTOR: ${{ github.actor }}
+    AUTHOR_NAME: ${{ github.event.head_commit.author.name }}
+    AUTHOR_EMAIL: ${{ github.event.head_commit.author.email }}
+    COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+  steps:
+    - run: |
+      COMMIT_MESSAGE_SINGLE=$(echo "$COMMIT_MESSAGE" | tr '\n' ' ')
+
+      SKIP=false
+
+      if [[ -n "$AUTHOR_NAME" && "$AUTHOR_NAME" == *"dependabot"* ]]; then
+        SKIP=true
+      elif [[ -n "$AUTHOR_EMAIL" && "$AUTHOR_EMAIL" == *"dependabot"* ]]; then
+        SKIP=true
+      elif [[ "$ACTOR" == *"dependabot"* ]]; then
+        SKIP=true
+      elif [[ -n "$COMMIT_MESSAGE_SINGLE" && ("$COMMIT_MESSAGE_SINGLE" == *"dependabot"* || "$COMMIT_MESSAGE_SINGLE" == *"build(deps)"*) ]]; then
+        SKIP=true
+      elif [[ -n "$COMMIT_MESSAGE_SINGLE" && ("$COMMIT_MESSAGE_SINGLE" == *"[skip-cd]"*) ]]; then
+        SKIP=true
+      fi
+
+      if [ "$SKIP" = true ]; then
+        echo "skip=true" >> $GITHUB_OUTPUT
+      else
+        echo "skip=false" >> $GITHUB_OUTPUT
+      fi

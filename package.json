@@ -36,11 +36,11 @@
   },
   "files": [
     "dist",
-    "build/Release/xml_validator.node",
+    "build/addons",
     "packages/nfe/schemas"
   ],
   "scripts": {
-    "build": "node-gyp rebuild && pnpm --filter !@nfets/test build && tsup --config tsup.config.ts",
+    "build": "pnpm --filter !@nfets/test build && tsup --config tsup.config.ts",
     "test": "pnpm --filter @nfets/* test",
     "typecheck": "pnpm --filter @nfets/* typecheck",
     "test:coverage": "pnpm --filter @nfets/* test:coverage --coverageReporters=\"json-summary\""

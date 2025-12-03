@@ -1,6 +1,6 @@
 import { addon } from '@nfets/core/shared/addon';
 
-const validator = addon<XmlValidator>('xml_validator.node');
+const validator = addon<XmlValidator>('xml_validator');
 export default validator;
 
 declare interface XmlValidator {
