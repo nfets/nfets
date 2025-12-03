@@ -31,8 +31,19 @@ runs:
 
     - name: Install Windows packages
       if: contains(inputs.os, 'windows')
-      run: choco install libxml2
       shell: bash
+      run: |
+        git clone https://github.com/microsoft/vcpkg.git C:/vcpkg
+        cmd //c C:/vcpkg/bootstrap-vcpkg.bat
+
+        if [ "${{ inputs.architecture }}" == "x86" ]; then
+          TRIPLET="x86-windows"
+        else
+          echo "Unsupported Windows architecture: ${{ inputs.architecture }}"
+          exit 1
+        fi
+
+        C:/vcpkg/vcpkg.exe install libxml2:$TRIPLET
 
     - name: Install pnpm
       run: |
