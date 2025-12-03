@@ -42,16 +42,16 @@ runs:
     - run: dir C:\\msys64
       shell: pwsh
 
-    - run: dir C:\\msys64\\msys64
+    - run: dir C:\\msys64\\msys64\\usr
       shell: pwsh
 
-    - run: dir C:\\msys64\\msys64\\include
+    - run: dir C:\\msys64\\mingw64\\usr\\lib
       shell: pwsh
 
-    - run: dir C:\\msys64\\mingw64\\lib
+    - run: dir C:\\msys64\\mingw64\\usr\\include
       shell: pwsh
 
-    - run: dir C:\\msys64\\mingw64\\include
+    - run: dir C:\\msys64\\msys64\\usr\\include
       shell: pwsh
 
     - run: dir C:\\msys64\\mingw32\\lib
