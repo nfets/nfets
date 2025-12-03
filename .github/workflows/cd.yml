@@ -9,50 +9,7 @@ permissions:
   id-token: write
 
 jobs:
-  should-rebuild-native-addons:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - id: should-skip-cd
-        uses: ./.github/actions/should-skip-cd
-
-      - if: steps.should-skip-cd.outputs.skip == 'true'
-        run: |
-          echo "skip=true" >> $GITHUB_OUTPUT
-
-      - id: check-changes
-        if: steps.should-skip-cd.outputs.skip != 'true'
-        run: |
-          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-
-          if [ -z "$LATEST_TAG" ]; then
-            echo "No tags found, checking against initial commit"
-            BASE_REF=$(git rev-list --max-parents=0 HEAD)
-          else
-            BASE_REF="$LATEST_TAG"
-            echo "Comparing against latest tag: $LATEST_TAG"
-          fi
-
-          ADDONS_CHANGED=$(git diff --name-only --diff-filter=AM "$BASE_REF" HEAD -- "addons/" | wc -l | tr -d ' ')
-          BINDING_CHANGED=$(git diff --name-only --diff-filter=M "$BASE_REF" HEAD -- "binding.gyp" | wc -l | tr -d ' ')
-
-          echo "Addons folder changes: $ADDONS_CHANGED"
-          echo "binding.gyp changes: $BINDING_CHANGED"
-
-          if [ "$ADDONS_CHANGED" -gt 0 ] || [ "$BINDING_CHANGED" -gt 0 ]; then
-            echo "Native addon files changed, rebuild required"
-            echo "skip=false" >> $GITHUB_OUTPUT
-          else
-            echo "No native addon changes detected, skipping rebuild"
-            echo "skip=true" >> $GITHUB_OUTPUT
-          fi
-
   build-native-addons:
-    needs: should-rebuild-native-addons
-    if: needs.should-rebuild-native-addons.outputs.skip != 'true'
     strategy:
       matrix:
         include:
@@ -71,54 +28,129 @@ jobs:
         with:
           fetch-depth: 0
 
+      - id: should-skip-cd
+        uses: ./.github/actions/should-skip-cd
+
+      - id: get-artifact-name
+        if: steps.should-skip-cd.outputs.skip != 'true'
+        run: |
+          if [ "${{ matrix.os }}" == "ubuntu-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
+            echo "artifact_name=xml_validator-linux-x64" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.os }}" == "windows-latest" ] && [ "${{ matrix.arch }}" == "ia32" ]; then
+            echo "artifact_name=xml_validator-win32-ia32" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.os }}" == "macos-latest" ] && [ "${{ matrix.arch }}" == "arm64" ]; then
+            echo "artifact_name=xml_validator-macos-arm64" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.os }}" == "macos-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
+            echo "artifact_name=xml_validator-macos-x64" >> $GITHUB_OUTPUT
+          else
+            echo "Unsupported platform: ${{ matrix.os }} ${{ matrix.arch }}"
+            exit 1
+          fi
+
+      - id: check-artifact-expiration
+        if: steps.should-skip-cd.outputs.skip != 'true'
+        run: |
+          ARTIFACT_NAME="${{ steps.get-artifact-name.outputs.artifact_name }}"
+
+          ARTIFACT_CREATED_AT=$(gh api repos/${{ github.repository }}/actions/artifacts --jq ".artifacts[] | select(.name == \"$ARTIFACT_NAME\") | .created_at" | head -1 || echo "")
+
+          if [ -z "$ARTIFACT_CREATED_AT" ]; then
+            echo "Artifact $ARTIFACT_NAME not found"
+            echo "artifact_exists=false" >> $GITHUB_OUTPUT
+            echo "artifact_expired=true" >> $GITHUB_OUTPUT
+          else
+            echo "artifact_exists=true" >> $GITHUB_OUTPUT
+            echo "artifact_created_at=$ARTIFACT_CREATED_AT" >> $GITHUB_OUTPUT
+
+            DAYS_OLD=$(python3 -c "
+from datetime import datetime, timezone
+import sys
+try:
+    created = datetime.fromisoformat('$ARTIFACT_CREATED_AT'.replace('Z', '+00:00'))
+    now = datetime.now(timezone.utc)
+    days = (now - created).days
+    print(days)
+except:
+    print(999)
+" 2>/dev/null || echo "999")
+
+            echo "Artifact $ARTIFACT_NAME created $DAYS_OLD days ago"
+            echo "artifact_days_old=$DAYS_OLD" >> $GITHUB_OUTPUT
+
+            if [ "$DAYS_OLD" -ge 90 ]; then
+              echo "Artifact expired (90+ days old)"
+              echo "artifact_expired=true" >> $GITHUB_OUTPUT
+            else
+              echo "Artifact is still valid ($DAYS_OLD days old)"
+              echo "artifact_expired=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - id: check-changes-or-artifact-expired
+        if: steps.should-skip-cd.outputs.skip != 'true'
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -z "$LATEST_TAG" ]; then
+            echo "No tags found, checking against initial commit"
+            BASE_REF=$(git rev-list --max-parents=0 HEAD)
+          else
+            BASE_REF="$LATEST_TAG"
+            echo "Comparing against latest tag: $LATEST_TAG"
+          fi
+
+          ADDONS_CHANGED=$(git diff --name-only --diff-filter=AM "$BASE_REF" HEAD -- "addons/" | wc -l | tr -d ' ')
+          BINDING_CHANGED=$(git diff --name-only --diff-filter=M "$BASE_REF" HEAD -- "binding.gyp" | wc -l | tr -d ' ')
+
+          echo "Addons folder changes: $ADDONS_CHANGED"
+          echo "binding.gyp changes: $BINDING_CHANGED"
+
+          ARTIFACT_EXPIRED="${{ steps.check-artifact-expiration.outputs.artifact_expired }}"
+
+          if [ "$ADDONS_CHANGED" -gt 0 ] || [ "$BINDING_CHANGED" -gt 0 ] || [ "$ARTIFACT_EXPIRED" = "true" ]; then
+            echo "Rebuild required: changes=$([ "$ADDONS_CHANGED" -gt 0 ] || [ "$BINDING_CHANGED" -gt 0 ] && echo "yes" || echo "no"), expired=$ARTIFACT_EXPIRED"
+            echo "skip=false" >> $GITHUB_OUTPUT
+          else
+            echo "No rebuild needed: no changes and artifact is valid"
+            echo "skip=true" >> $GITHUB_OUTPUT
+          fi
+
       - uses: ./.github/actions/setup-environment
-        if: matrix.arch == 'ia32'
+        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && matrix.arch == 'ia32'
         with:
           os: ${{ matrix.os }}
           architecture: x86
           node-version: 22.x
 
       - uses: ./.github/actions/setup-environment
-        if: matrix.arch != 'ia32'
+        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && matrix.arch != 'ia32'
         with:
           os: ${{ matrix.os }}
           architecture: ${{ matrix.arch }}
           node-version: 22.x
 
       - name: Build native addon
+        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
         env:
           npm_config_arch: ${{ matrix.arch }}
         run: |
           pnpm node-gyp rebuild --arch=${{ matrix.arch }}
 
       - name: Verify binaries
+        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
         run: |
           files=$(ls build/Release/*.node || echo "")
           for file in $files; do
             file $file || echo "file command not available"
           done
 
-      - id: get-artifact-name
-        run: |
-          if [ "${{ matrix.os }}" == "ubuntu-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
-            echo "artifact_name=xml_validator-linux-x64.node" >> $GITHUB_OUTPUT
-          elif [ "${{ matrix.os }}" == "windows-latest" ] && [ "${{ matrix.arch }}" == "ia32" ]; then
-            echo "artifact_name=xml_validator-win32-ia32.node" >> $GITHUB_OUTPUT
-          elif [ "${{ matrix.os }}" == "macos-latest" ] && [ "${{ matrix.arch }}" == "arm64" ]; then
-            echo "artifact_name=xml_validator-macos-arm64.node" >> $GITHUB_OUTPUT
-          elif [ "${{ matrix.os }}" == "macos-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
-            echo "artifact_name=xml_validator-macos-x64.node" >> $GITHUB_OUTPUT
-          else
-            echo "Unsupported platform: ${{ matrix.os }} ${{ matrix.arch }}"
-            exit 1
-          fi
-
       - name: Upload artifact
+        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.get-artifact-name.outputs.artifact_name }}
-          path: build/addons/
-          retention-days: 30
+          path: build/Release/*.node
+          retention-days: 90
 
   build-and-deploy:
     needs: build-native-addons
