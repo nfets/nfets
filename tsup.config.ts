@@ -15,6 +15,17 @@ const addDayjsPluginExtensions = () =>
     },
   } as const);
 
+const addCreateRequireBanner = () =>
+  ({
+    name: 'add-create-require-banner',
+    renderChunk(this: { format: string }, code: string) {
+      if (this.format !== 'esm') return { code, map: null };
+      const banner =
+        "import { createRequire } from 'module'; const require = createRequire(import.meta.url);";
+      return { code: `${banner}\n${code}`, map: null };
+    },
+  } as const);
+
 export default defineConfig({
   outDir: 'dist',
   clean: true,
@@ -28,14 +39,9 @@ export default defineConfig({
   target: 'node22',
   platform: 'node',
   minify: true,
-  esbuildOptions(options) {
-    options.banner = {
-      js: "import { createRequire } from 'module'; const require = createRequire(import.meta.url);",
-    };
-  },
   entry: ['lib/index.ts', 'lib/core/index.ts', 'lib/nfe/index.ts'],
   dts: { entry: ['lib/index.ts', 'lib/core/index.ts', 'lib/nfe/index.ts'] },
   watch: false,
   sourcemap: false,
-  plugins: [addDayjsPluginExtensions()],
+  plugins: [addDayjsPluginExtensions(), addCreateRequireBanner()],
 });
