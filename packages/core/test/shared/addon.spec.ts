@@ -40,7 +40,7 @@ describe('addon (unit)', () => {
       const result = addon('test-addon');
 
       expect(result).toEqual({
-        path: expect.stringContaining('test-addon-darwin-arm64.node'),
+        path: expect.stringContaining('darwin-arm64/test-addon.node'),
         loaded: true,
       });
       expect(mockPlatform).toHaveBeenCalled();
@@ -55,7 +55,7 @@ describe('addon (unit)', () => {
       const result = addon('test-addon');
 
       expect(result).toEqual({
-        path: expect.stringContaining('test-addon-linux-x64.node'),
+        path: expect.stringContaining('linux-x64/test-addon.node'),
         loaded: true,
       });
       expect(mockPlatform).toHaveBeenCalled();
@@ -70,7 +70,7 @@ describe('addon (unit)', () => {
       const result = addon('test-addon');
 
       expect(result).toEqual({
-        path: expect.stringContaining('test-addon-win32-x64.node'),
+        path: expect.stringContaining('win32-x64/test-addon.node'),
         loaded: true,
       });
       expect(mockPlatform).toHaveBeenCalled();
@@ -134,7 +134,7 @@ describe('addon (unit)', () => {
 
         expect(() => {
           addon('test-addon');
-        }).toThrow(`Addon test-addon-${plat}-${archValue}.node not found`);
+        }).toThrow(`Addon ${plat}-${archValue}/test-addon.node not found`);
 
         expect(mockPlatform).toHaveBeenCalled();
         expect(mockArch).toHaveBeenCalled();
@@ -162,7 +162,7 @@ describe('addon (unit)', () => {
       const result = addon('test-addon');
 
       expect(result).toEqual({
-        path: '/custom/addons/dir/test-addon-darwin-arm64.node',
+        path: '/custom/addons/dir/test-addon.node',
         loaded: true,
       });
       expect(mockExistsSync).not.toHaveBeenCalled();
@@ -179,7 +179,7 @@ describe('addon (unit)', () => {
       const result = addon('test-addon');
 
       expect(result).toEqual({
-        path: expect.stringContaining('test-addon-linux-x64.node'),
+        path: expect.stringContaining('linux-x64/test-addon.node'),
         loaded: true,
       });
       expect(mockExistsSync.mock.calls.length).toBeGreaterThanOrEqual(2);
@@ -197,7 +197,7 @@ describe('addon (unit)', () => {
       const result = addon('test-addon');
 
       expect(result).toEqual({
-        path: expect.stringContaining('test-addon-win32-x64.node'),
+        path: expect.stringContaining('win32-x64/test-addon.node'),
         loaded: true,
       });
 

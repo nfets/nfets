@@ -15,18 +15,10 @@
             "C:\\msys64\\msys64\\usr\\lib"
           ],
           "libraries": [
-            "libxml2.dll.a"
+            "<!(if [ -f \"C:/msys64/msys64/usr/lib/libxml2.a\" ]; then echo 'libxml2.a'; else echo 'libxml2.dll.a'; fi)"
           ],
           "defines": [
             "WIN32"
-          ],
-          "conditions": [
-            ["target_arch=='x64'", {
-              "product_name": "xml_validator-win32-x64"
-            }],
-            ["target_arch=='arm64'", {
-              "product_name": "xml_validator-win32-arm64"
-            }]
           ]
         }],
         ["OS=='mac'", {
@@ -35,14 +27,6 @@
           ],
           "libraries": [
             "<!(LIBDIR=$(pkg-config --variable=libdir libxml-2.0 2>/dev/null || echo ''); if [ -n \"$LIBDIR\" ] && [ -f \"$LIBDIR/libxml2.a\" ]; then echo \"$LIBDIR/libxml2.a\"; elif [ -f \"/opt/homebrew/lib/libxml2.a\" ]; then echo \"/opt/homebrew/lib/libxml2.a\"; elif [ -f \"/usr/local/lib/libxml2.a\" ]; then echo \"/usr/local/lib/libxml2.a\"; else pkg-config --libs libxml-2.0 2>/dev/null || echo '-lxml2'; fi)"
-          ],
-          "conditions": [
-            ["target_arch=='arm64'", {
-              "product_name": "xml_validator-darwin-arm64"
-            }],
-            ["target_arch=='x64'", {
-              "product_name": "xml_validator-darwin-x64"
-            }]
           ]
         }],
         ["OS=='linux'", {
@@ -56,14 +40,6 @@
             "-Wl,-Bstatic",
             "-lxml2",
             "-Wl,-Bdynamic"
-          ],
-          "conditions": [
-            ["target_arch=='x64'", {
-              "product_name": "xml_validator-linux-x64"
-            }],
-            ["target_arch=='arm64'", {
-              "product_name": "xml_validator-linux-arm64"
-            }]
           ]
         }]
       ]

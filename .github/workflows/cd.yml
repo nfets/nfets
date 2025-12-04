@@ -16,12 +16,16 @@ jobs:
         include:
           - os: ubuntu-latest
             arch: x64
+            node-version: 22.x
           - os: windows-latest
             arch: x64
+            node-version: 22.x
           - os: macos-latest
             arch: arm64
+            node-version: 22.x
           # - os: macos-15-intel
           #   arch: x64
+          #   node-version: 22.x
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -33,19 +37,23 @@ jobs:
         id: should-skip-cd
         uses: ./.github/actions/should-skip-cd
 
-      - name: Get artifact name
-        id: get-artifact-name
+      - name: Get platform-arch folder name
+        id: get-platform-arch
         if: steps.should-skip-cd.outputs.skip != 'true'
         shell: bash
         run: |
           if [ "${{ matrix.os }}" == "ubuntu-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
-            echo "artifact_name=xml_validator-linux-x64" >> $GITHUB_OUTPUT
+            echo "platform_arch=linux-x64" >> $GITHUB_OUTPUT
+            echo "artifact_name=addons-linux-x64" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.os }}" == "windows-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
-            echo "artifact_name=xml_validator-win32-x64" >> $GITHUB_OUTPUT
+            echo "platform_arch=win32-x64" >> $GITHUB_OUTPUT
+            echo "artifact_name=addons-win32-x64" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.os }}" == "macos-latest" ] && [ "${{ matrix.arch }}" == "arm64" ]; then
-            echo "artifact_name=xml_validator-darwin-arm64" >> $GITHUB_OUTPUT
+            echo "platform_arch=darwin-arm64" >> $GITHUB_OUTPUT
+            echo "artifact_name=addons-darwin-arm64" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.os }}" == "macos-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
-            echo "artifact_name=xml_validator-darwin-x64" >> $GITHUB_OUTPUT
+            echo "platform_arch=darwin-x64" >> $GITHUB_OUTPUT
+            echo "artifact_name=addons-darwin-x64" >> $GITHUB_OUTPUT
           else
             echo "Unsupported platform: ${{ matrix.os }} ${{ matrix.arch }}"
             exit 1
@@ -58,8 +66,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          ARTIFACT_NAME="${{ steps.get-artifact-name.outputs.artifact_name }}"
-
+          ARTIFACT_NAME="${{ steps.get-platform-arch.outputs.artifact_name }}"
           ARTIFACT_CREATED_AT=$(gh api repos/${{ github.repository }}/actions/artifacts --jq ".artifacts[] | select(.name == \"$ARTIFACT_NAME\") | .created_at" | head -1 || echo "")
 
           if [ -z "$ARTIFACT_CREATED_AT" ]; then
@@ -122,7 +129,7 @@ jobs:
         with:
           os: ${{ matrix.os }}
           architecture: ${{ matrix.arch }}
-          node-version: 22.x
+          node-version: ${{ matrix.node-version }}
 
       - name: Build native addon
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
@@ -130,21 +137,63 @@ jobs:
         run: |
           ARCH=${{ matrix.arch }} make addon
 
+      - name: Organize addon files into platform-arch structure
+        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
+        shell: bash
+        run: |
+          PLATFORM_ARCH="${{ steps.get-platform-arch.outputs.platform_arch }}"
+          ADDONS=(
+            "xml_validator.node"
+          )
+
+          mkdir -p "build/addons/$PLATFORM_ARCH"
+
+          for ADDON in "${ADDONS[@]}"; do
+            if [ -f "build/Release/$ADDON" ]; then
+              mv "build/Release/$ADDON" "build/addons/$PLATFORM_ARCH/$ADDON"
+              echo "Moved addon to build/addons/$PLATFORM_ARCH/$ADDON"
+            else
+              echo "Error: $ADDON not found in build/Release/"
+              exit 1
+            fi
+          done
+
+      - name: Bundle Windows DLL dependencies
+        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && contains(matrix.os, 'windows')
+        shell: bash
+        run: |
+          PLATFORM_ARCH="${{ steps.get-platform-arch.outputs.platform_arch }}"
+          DLL_PATH="C:/msys64/msys64/usr/bin/libxml2-2.dll"
+
+          if [ -f "$DLL_PATH" ]; then
+            cp "$DLL_PATH" "build/addons/$PLATFORM_ARCH/"
+            echo "Bundled libxml2-2.dll with addon"
+          else
+            echo "Error: Could not find libxml2-2.dll to bundle"
+            exit 1
+          fi
+
       - name: Verify binaries
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
         shell: bash
         run: |
-          files=$(ls build/Release/*.node || echo "")
-          for file in $files; do
-            file $file || echo "file command not available"
-          done
+          PLATFORM_ARCH="${{ steps.get-platform-arch.outputs.platform_arch }}"
+          FILES=$(find build/addons/$PLATFORM_ARCH -name "*.node" 2>/dev/null || echo "")
+
+          if [ -n "$FILES" ]; then
+            for file in $FILES; do
+              file $file || echo "file command not available"
+            done
+          else
+            echo "Warning: No .node files found in build/addons/$PLATFORM_ARCH"
+          fi
 
       - name: Upload artifact
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.get-artifact-name.outputs.artifact_name }}
-          path: build/Release/${{ steps.get-artifact-name.outputs.artifact_name }}.node
+          name: ${{ steps.get-platform-arch.outputs.artifact_name }}
+          path: build/addons/${{ steps.get-platform-arch.outputs.platform_arch }}/*
           retention-days: 90
 
   build-and-deploy:
@@ -171,10 +220,13 @@ jobs:
         with:
           os: ${{ matrix.os }}
           architecture: ${{ matrix.arch }}
-          node-version: 22.x
+          node-version: ${{ matrix.node-version }}
 
       - name: Install packages
-        run: make install
+        uses: ./.github/actions/install-packages
+        with:
+          os: ${{ matrix.os }}
+          node-version: ${{ matrix.node-version }}
 
       - name: Build package
         if: steps.should-skip-cd.outputs.skip != 'true'
@@ -217,28 +269,35 @@ jobs:
         if: steps.should-skip-cd.outputs.skip != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
           ARTIFACTS=(
-            "xml_validator-linux-x64"
-            "xml_validator-win32-x64"
-            "xml_validator-darwin-arm64"
+            "addons-linux-x64"
+            "addons-win32-x64"
+            "addons-darwin-arm64"
           )
 
           for ARTIFACT_NAME in "${ARTIFACTS[@]}"; do
-            if [ ! -f "build/addons/$ARTIFACT_NAME.node" ]; then
-              echo "Artifact $ARTIFACT_NAME not found in current run, downloading from previous run..."
+            PLATFORM_ARCH=$(echo "$ARTIFACT_NAME" | sed 's/^addons-//')
+            TARGET_DIR="build/addons/$PLATFORM_ARCH"
 
-              DOWNLOAD_URL=$(gh api repos/${{ github.repository }}/actions/artifacts \
-                --jq ".artifacts[] | select(.name == \"$ARTIFACT_NAME\" and .expired == false) | .archive_download_url" \
-                | head -1)
+            echo "Downloading artifact $ARTIFACT_NAME..."
 
-              curl -L -H "Authorization: token ${GH_TOKEN}" \
-                -o "/tmp/$ARTIFACT_NAME.zip" \
-                "$DOWNLOAD_URL"
+            DOWNLOAD_URL=$(gh api repos/${{ github.repository }}/actions/artifacts \
+              --jq ".artifacts[] | select(.name == \"$ARTIFACT_NAME\" and .expired == false) | .archive_download_url" \
+              | head -1)
 
-              unzip -q "/tmp/$ARTIFACT_NAME.zip" -d build/addons
-              rm "/tmp/$ARTIFACT_NAME.zip"
+            if [ -z "$DOWNLOAD_URL" ]; then
+              echo "Warning: No valid artifact found for $ARTIFACT_NAME"
+              continue
             fi
+
+            curl -L -H "Authorization: token ${GH_TOKEN}" \
+              -o "/tmp/$ARTIFACT_NAME.zip" \
+              "$DOWNLOAD_URL"
+
+            unzip -q "/tmp/$ARTIFACT_NAME.zip" -d $TARGET_DIR
+            rm "/tmp/$ARTIFACT_NAME.zip"
           done
 
       - name: Create and push tag

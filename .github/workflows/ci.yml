@@ -12,8 +12,16 @@ jobs:
   ci:
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        node-version: [22.x, latest]
+        include:
+          - os: ubuntu-latest
+            arch: x64
+            node-version: 22.x
+          # - os: windows-latest
+          #   arch: x64
+          #   node-version: 22.x
+          - os: macos-latest
+            arch: arm64
+            node-version: 22.x
 
     runs-on: ${{ matrix.os }}
 
@@ -24,26 +32,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: setup node-version v${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - name: Setup environment
+        uses: ./.github/actions/setup-environment
         with:
+          os: ${{ matrix.os }}
+          architecture: ${{ matrix.arch }}
           node-version: ${{ matrix.node-version }}
 
-      - run: sudo apt update && sudo apt install -y libxml2-dev
-
-      - run: |
-          corepack enable
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - uses: actions/cache@v4
+      - name: Install packages
+        uses: ./.github/actions/install-packages
         with:
-          path: ${{ env.STORE_PATH }}
-          key: os:${{ matrix.os }}|node:${{ matrix.node-version }}|pnpm:${{ hashFiles('pnpm-lock.yaml') }}
+          os: ${{ matrix.os }}
+          node-version: ${{ matrix.node-version }}
 
-      - name: install dependencies and rebuild addons
-        run: |
-          make install
-          make addon
+      - name: Rebuild addons
+        run: make addon
 
       - name: run lint
         run: make lint
