@@ -213,16 +213,7 @@ jobs:
 
       - run: mkdir -p build/addons
 
-      - name: Download all artifacts from current run
-        if: steps.should-skip-cd.outputs.skip != 'true'
-        continue-on-error: true
-        uses: actions/download-artifact@v4
-        with:
-          pattern: xml_validator-*
-          path: build/addons
-          merge-multiple: false
-
-      - name: Download missing artifacts from previous runs
+      - name: Download artifacts
         if: steps.should-skip-cd.outputs.skip != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -237,20 +228,9 @@ jobs:
             if [ ! -f "build/addons/$ARTIFACT_NAME.node" ]; then
               echo "Artifact $ARTIFACT_NAME not found in current run, downloading from previous run..."
 
-              ARTIFACT_ID=$(gh api repos/${{ github.repository }}/actions/artifacts \
-                --jq ".artifacts[] | select(.name == \"$ARTIFACT_NAME\" and .expired == false) | .id" \
+              DOWNLOAD_URL=$(gh api repos/${{ github.repository }}/actions/artifacts \
+                --jq ".artifacts[] | select(.name == \"$ARTIFACT_NAME\" and .expired == false) | .archive_download_url" \
                 | head -1)
-
-              if [ -z "$ARTIFACT_ID" ]; then
-                echo "Warning: No valid artifact found for $ARTIFACT_NAME"
-                continue
-              fi
-
-              echo "Downloading artifact $ARTIFACT_NAME (ID: $ARTIFACT_ID)"
-              mkdir -p "build/addons"
-
-              DOWNLOAD_URL=$(gh api repos/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID \
-                --jq ".archive_download_url")
 
               curl -L -H "Authorization: token ${GH_TOKEN}" \
                 -o "/tmp/$ARTIFACT_NAME.zip" \
