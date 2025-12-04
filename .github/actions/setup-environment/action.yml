@@ -21,7 +21,12 @@ runs:
 
     - name: Install Linux packages
       if: contains(inputs.os, 'ubuntu')
-      run: sudo apt update && sudo apt install -y libxml2-dev
+      run: |
+        sudo apt update
+        sudo apt install -y libxml2-dev
+        if [ ! -f /usr/lib/x86_64-linux-gnu/libxml2.a ] && [ ! -f /usr/lib/libxml2.a ] && [ ! -f /usr/lib64/libxml2.a ]; then
+          echo "Warning: Static libxml2 library not found. Static linking may fall back to dynamic linking."
+        fi
       shell: bash
 
     - name: Install macOS packages
