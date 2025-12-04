@@ -234,7 +234,7 @@ jobs:
           )
 
           for ARTIFACT_NAME in "${ARTIFACTS[@]}"; do
-            if [ ! -d "build/addons/$ARTIFACT_NAME.node" ]; then
+            if [ ! -f "build/addons/$ARTIFACT_NAME.node" ]; then
               echo "Artifact $ARTIFACT_NAME not found in current run, downloading from previous run..."
 
               ARTIFACT_ID=$(gh api repos/${{ github.repository }}/actions/artifacts \
@@ -247,14 +247,17 @@ jobs:
               fi
 
               echo "Downloading artifact $ARTIFACT_NAME (ID: $ARTIFACT_ID)"
-              mkdir -p "artifacts/addons"
-              gh api repos/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID/zip \
-                --output "artifacts/addons/$ARTIFACT_NAME.zip"
+              mkdir -p "build/addons"
 
-              cd "artifacts/addons"
-              unzip -q "$ARTIFACT_NAME.zip" -d build/addons
-              rm "$ARTIFACT_NAME.zip"
-              cd -
+              DOWNLOAD_URL=$(gh api repos/${{ github.repository }}/actions/artifacts/$ARTIFACT_ID \
+                --jq ".archive_download_url")
+
+              curl -L -H "Authorization: token ${GH_TOKEN}" \
+                -o "/tmp/$ARTIFACT_NAME.zip" \
+                "$DOWNLOAD_URL"
+
+              unzip -q "/tmp/$ARTIFACT_NAME.zip" -d build/addons
+              rm "/tmp/$ARTIFACT_NAME.zip"
             fi
           done
 
