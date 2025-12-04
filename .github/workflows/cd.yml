@@ -128,8 +128,6 @@ jobs:
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
         with:
           os: ${{ matrix.os }}
-          architecture: ${{ matrix.arch }}
-          node-version: ${{ matrix.node-version }}
 
       - name: Build native addon
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
@@ -234,6 +232,13 @@ jobs:
         if: steps.should-skip-cd.outputs.skip != 'true'
         with:
           os: ${{ matrix.os }}
+
+      - uses: actions/setup-node@v4
+        with:
+          architecture: ${{ matrix.arch }}
+          node-version: 22.x
+          registry-url: "https://registry.npmjs.org"
+          always-auth: true
 
       - name: Setup Node.js
         uses: ./.github/actions/setup-nodejs

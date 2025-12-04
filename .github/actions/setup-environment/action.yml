@@ -17,7 +17,7 @@ runs:
     - name: Install macOS packages
       if: contains(inputs.os, 'macos')
       shell: bash
-      run: brew install libxml2 pkg-config
+      run: brew install libxml2
 
     - name: Install Windows packages
       if: contains(inputs.os, 'windows')
