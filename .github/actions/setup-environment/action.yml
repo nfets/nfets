@@ -4,21 +4,9 @@ inputs:
   os:
     description: The operating system to setup.
     required: true
-  node-version:
-    description: The Node.js version to setup.
-    required: true
-  architecture:
-    description: The architecture to setup the node.js.
-    required: true
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@v4
-      with:
-        architecture: ${{ inputs.architecture }}
-        node-version: ${{ inputs.node-version }}
-        registry-url: "https://registry.npmjs.org"
-
     - name: Install Linux packages
       if: contains(inputs.os, 'ubuntu')
       shell: bash
@@ -39,9 +27,3 @@ runs:
         msystem: MINGW64
         location: "C:\\msys64"
         install: libxml2 libxml2-devel
-
-    - name: Install pnpm
-      shell: bash
-      run: |
-        npm install -g npm@latest
-        npm install -g pnpm

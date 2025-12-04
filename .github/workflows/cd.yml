@@ -174,7 +174,7 @@ jobs:
           fi
 
       - name: Bundle Linux (x64) shared object dependencies
-        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && contains(matrix.os, 'linux') && contains(matrix.arch, 'x64')
+        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && contains(matrix.os, 'ubuntu') && contains(matrix.arch, 'x64')
         shell: bash
         run: |
           PLATFORM_ARCH="${{ steps.get-platform-arch.outputs.platform_arch }}"
@@ -234,18 +234,20 @@ jobs:
         if: steps.should-skip-cd.outputs.skip != 'true'
         with:
           os: ${{ matrix.os }}
-          architecture: ${{ matrix.arch }}
-          node-version: ${{ matrix.node-version }}
 
-      - name: Install packages
-        uses: ./.github/actions/install-packages
+      - name: Setup Node.js
+        uses: ./.github/actions/setup-node
+        if: steps.should-skip-cd.outputs.skip != 'true'
         with:
           os: ${{ matrix.os }}
           node-version: ${{ matrix.node-version }}
+          architecture: ${{ matrix.arch }}
 
-      - name: Build package
+      - name: Install dependencies and Build package
         if: steps.should-skip-cd.outputs.skip != 'true'
-        run: make build
+        run: |
+          make install
+          make build
 
       - name: Get next version for release
         if: steps.should-skip-cd.outputs.skip != 'true'

@@ -48,10 +48,16 @@ git clone git@github.com:nfets/nfets.git
 cd nfets
 
 # Instale as dependências
-pnpm install
+make install
+
+# Rebuild addons
+make addon
+
+# Build package
+make build
 
 # Execute os testes
-pnpm test
+make test
 ```
 
 ### Arquitetura
