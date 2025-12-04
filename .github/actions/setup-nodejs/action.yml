@@ -22,14 +22,19 @@ runs:
     - name: Install pnpm
       shell: bash
       run: |
+        mkdir -p ~/.npm-global
+        npm config set prefix '~/.npm-global'
+        echo "$HOME/.npm-global/bin" >> $GITHUB_PATH
+
         npm install -g npm@latest
-        npm install -g pnpm
+
+        corepack enable
+        pnpm --version
 
     - id: setup-pnpm-store-path
       name: Setup pnpm store path
       shell: bash
       run: |
-        corepack enable
         echo "store_path=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
 
     - uses: actions/cache@v4

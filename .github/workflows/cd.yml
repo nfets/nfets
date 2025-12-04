@@ -188,6 +188,22 @@ jobs:
             exit 1
           fi
 
+      - name: Bundle macOS (arm64) shared object dependencies
+        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && contains(matrix.os, 'macos') && contains(matrix.arch, 'arm64')
+        shell: bash
+        run: |
+          PLATFORM_ARCH="${{ steps.get-platform-arch.outputs.platform_arch }}"
+          SO_PATH="/usr/local/opt/libxml2/lib/libxml2.2.dylib"
+
+          if [ -f "$SO_PATH" ] || [ -L "$SO_PATH" ]; then
+            cp -L "$SO_PATH" "build/addons/$PLATFORM_ARCH/libxml2.dylib"
+            echo "Bundled libxml2.dylib with addon"
+          else
+            echo "Error: Could not find libxml2.dylib to bundle"
+            find /usr -name "libxml2.2.dylib" 2>/dev/null
+            exit 1
+          fi
+
       - name: Verify binaries
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
         shell: bash
@@ -240,7 +256,7 @@ jobs:
         if: steps.should-skip-cd.outputs.skip != 'true'
         with:
           os: ${{ matrix.os }}
-          node-version: ${{ matrix.node-version }}
+          node-version: 22.x
           architecture: ${{ matrix.arch }}
 
       - name: Install dependencies and Build package
