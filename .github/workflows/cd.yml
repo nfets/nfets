@@ -163,13 +163,28 @@ jobs:
         shell: bash
         run: |
           PLATFORM_ARCH="${{ steps.get-platform-arch.outputs.platform_arch }}"
-          DLL_PATH="C:/msys64/msys64/usr/bin/libxml2-2.dll"
+          DLL_PATH="C:/msys64/msys64/usr/bin/msys-xml2-16.dll"
 
           if [ -f "$DLL_PATH" ]; then
             cp "$DLL_PATH" "build/addons/$PLATFORM_ARCH/"
-            echo "Bundled libxml2-2.dll with addon"
+            echo "Bundled msys-xml2-16.dll with addon"
           else
-            echo "Error: Could not find libxml2-2.dll to bundle"
+            echo "Error: Could not find msys-xml2-16.dll to bundle"
+            exit 1
+          fi
+
+      - name: Bundle Linux (x64) shared object dependencies
+        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && contains(matrix.os, 'linux') && contains(matrix.arch, 'x64')
+        shell: bash
+        run: |
+          PLATFORM_ARCH="${{ steps.get-platform-arch.outputs.platform_arch }}"
+          SO_PATH="/usr/lib/x86_64-linux-gnu/libxml2.so.2"
+
+          if [ -f "$SO_PATH" ] || [ -L "$SO_PATH" ]; then
+            cp -L "$SO_PATH" "build/addons/$PLATFORM_ARCH/libxml2.so.2"
+            echo "Bundled libxml2.so.2 with addon"
+          else
+            echo "Error: Could not find libxml2.so.2 to bundle"
             exit 1
           fi
 

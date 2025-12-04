@@ -25,9 +25,6 @@ runs:
       run: |
         sudo apt update
         sudo apt install -y libxml2-dev
-        if [ ! -f /usr/lib/x86_64-linux-gnu/libxml2.a ] && [ ! -f /usr/lib/libxml2.a ] && [ ! -f /usr/lib64/libxml2.a ]; then
-          echo "Warning: Static libxml2 library not found. Static linking may fall back to dynamic linking."
-        fi
 
     - name: Install macOS packages
       if: contains(inputs.os, 'macos')
@@ -41,18 +38,7 @@ runs:
         update: true
         msystem: MINGW64
         location: "C:\\msys64"
-        install: libxml2-devel
-
-    - name: Check for static libxml2 library on Windows
-      if: contains(inputs.os, 'windows')
-      shell: bash
-      run: |
-        if [ -f "C:/msys64/msys64/usr/lib/libxml2.a" ]; then
-          echo "Static libxml2 library found"
-        else
-          echo "Warning: Static libxml2 library not found. The addon will require libxml2-2.dll at runtime."
-          echo "Consider bundling the DLL or building libxml2 statically."
-        fi
+        install: libxml2 libxml2-devel
 
     - name: Install pnpm
       shell: bash
