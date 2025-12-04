@@ -33,6 +33,17 @@ export const addon = <T>(bin: string): T => {
     search = parent;
   }
 
+  search = current;
+  for (let i = 0; i < 5; i++) {
+    const candidate = join(search, 'build', 'Release', bin);
+    if (existsSync(candidate)) return exportRequireModule<T>(candidate);
+
+    const parent = dirname(search);
+    if (parent === search) break;
+    search = parent;
+  }
+
+  search = current;
   for (let i = 0; i < 5; i++) {
     const candidate = join(
       search,
