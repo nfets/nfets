@@ -43,9 +43,9 @@ jobs:
           elif [ "${{ matrix.os }}" == "windows-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
             echo "artifact_name=xml_validator-win32-x64" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.os }}" == "macos-latest" ] && [ "${{ matrix.arch }}" == "arm64" ]; then
-            echo "artifact_name=xml_validator-macos-arm64" >> $GITHUB_OUTPUT
+            echo "artifact_name=xml_validator-darwin-arm64" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.os }}" == "macos-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
-            echo "artifact_name=xml_validator-macos-x64" >> $GITHUB_OUTPUT
+            echo "artifact_name=xml_validator-darwin-x64" >> $GITHUB_OUTPUT
           else
             echo "Unsupported platform: ${{ matrix.os }} ${{ matrix.arch }}"
             exit 1

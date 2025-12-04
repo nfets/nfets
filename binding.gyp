@@ -38,10 +38,10 @@
           ],
           "conditions": [
             ["target_arch=='arm64'", {
-              "product_name": "xml_validator-macos-arm64"
+              "product_name": "xml_validator-darwin-arm64"
             }],
             ["target_arch=='x64'", {
-              "product_name": "xml_validator-macos-x64"
+              "product_name": "xml_validator-darwin-x64"
             }]
           ]
         }],
