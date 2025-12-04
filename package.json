@@ -40,6 +40,7 @@
     "packages/nfe/schemas"
   ],
   "scripts": {
+    "install": "echo 'Skipping automatic node-gyp rebuild. Run \"make addon\" manually if needed.'",
     "build": "pnpm --filter !@nfets/test build && tsup --config tsup.config.ts",
     "test": "pnpm --filter @nfets/* test",
     "typecheck": "pnpm --filter @nfets/* typecheck",
@@ -80,7 +81,6 @@
     "fs-extra": "^11.3.0",
     "globals": "^16.0.0",
     "jest": "^30.2.0",
-    "node-gyp": "^12.1.0",
     "pdf-parse": "^2.4.5",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",

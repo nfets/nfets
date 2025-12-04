@@ -15,10 +15,12 @@ typecheck:
 test\:coverage-summary:
 	@pnpm test:coverage
 
+install:
+	@pnpm install --frozen-lockfile
+
+addon:
+	@npx --yes node-gyp@12.1.0 rebuild --arch=$(or $(ARCH),)
+
 build:
 	@make clean
 	@pnpm build
-
-dev\:install:
-	@pnpm install --frozen-lockfile
-	@npx --yes node-gyp rebuild

@@ -40,8 +40,10 @@ jobs:
           path: ${{ env.STORE_PATH }}
           key: os:${{ matrix.os }}|node:${{ matrix.node-version }}|pnpm:${{ hashFiles('pnpm-lock.yaml') }}
 
-      - name: install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: install dependencies and rebuild addons
+        run: |
+          make install
+          make addon
 
       - name: run lint
         run: make lint

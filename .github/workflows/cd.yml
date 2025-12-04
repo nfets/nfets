@@ -126,7 +126,7 @@ jobs:
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
         shell: bash
         run: |
-          npx --yes node-gyp rebuild --arch=${{ matrix.arch }}
+          ARCH=${{ matrix.arch }} make addon
 
       - name: Verify binaries
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
@@ -172,7 +172,7 @@ jobs:
           node-version: 22.x
 
       - name: Install packages
-        run: pnpm install --frozen-lockfile
+        run: make install
 
       - name: Build package
         if: steps.should-skip-cd.outputs.skip != 'true'
