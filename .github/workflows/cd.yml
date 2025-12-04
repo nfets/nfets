@@ -233,13 +233,6 @@ jobs:
         with:
           os: ${{ matrix.os }}
 
-      - uses: actions/setup-node@v4
-        with:
-          architecture: ${{ matrix.arch }}
-          node-version: 22.x
-          registry-url: "https://registry.npmjs.org"
-          always-auth: true
-
       - name: Setup Node.js
         uses: ./.github/actions/setup-nodejs
         if: steps.should-skip-cd.outputs.skip != 'true'
@@ -285,8 +278,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - run: mkdir -p build/addons
-
       - name: Download artifacts
         if: steps.should-skip-cd.outputs.skip != 'true'
         env:
@@ -298,6 +289,8 @@ jobs:
             "addons-win32-x64"
             "addons-darwin-arm64"
           )
+
+          mkdir -p build/addons
 
           for ARTIFACT_NAME in "${ARTIFACTS[@]}"; do
             PLATFORM_ARCH=$(echo "$ARTIFACT_NAME" | sed 's/^addons-//')
@@ -360,5 +353,4 @@ jobs:
         run: |
           # Ensure npm is authenticated via OIDC (Trusted Publishing)
           # setup-node should configure this automatically with id-token: write permission
-          pnpm config set registry https://registry.npmjs.org
           pnpm publish --no-git-checks

@@ -13,6 +13,13 @@ inputs:
 runs:
   using: composite
   steps:
+    - uses: actions/setup-node@v4
+      with:
+        architecture: ${{ inputs.architecture }}
+        node-version: ${{ inputs.node-version }}
+        registry-url: "https://registry.npmjs.org"
+        always-auth: true
+
     - name: Install pnpm
       shell: bash
       run: |
@@ -21,6 +28,7 @@ runs:
         echo "$HOME/.npm-global/bin" >> $GITHUB_PATH
 
         npm install -g npm@latest
+        npm install -g pnpm
 
         corepack enable
         pnpm --version
