@@ -29,14 +29,36 @@ runs:
       run: brew install libxml2 pkg-config
       shell: bash
 
+    # - name: Install Windows packages
+    #   if: contains(inputs.os, 'windows')
+    #   uses: msys2/setup-msys2@v2
+    #   with:
+    #     update: true
+    #     msystem: MINGW64
+    #     location: "C:\\msys64"
+    #     install: libxml2-devel
+
     - name: Install Windows packages
       if: contains(inputs.os, 'windows')
-      uses: msys2/setup-msys2@v2
-      with:
-        update: true
-        msystem: MINGW64
-        location: "C:"
-        install: libxml2-devel
+      run: |
+        pacman -Syu
+        pacman -S libxml2-devel
+      shell: msys2 {0}
+
+    - run: Get-ChildItem -Path "C:\msys64\msys64\usr\include" -Recurse -Depth 3
+      continue-on-error: true
+      if: contains(inputs.os, 'windows')
+      shell: pwsh
+
+    - run: Get-ChildItem -Path "C:\msys64\usr\include" -Recurse -Depth 3
+      continue-on-error: true
+      if: contains(inputs.os, 'windows')
+      shell: pwsh
+
+    - run: Get-ChildItem -Path "C:\msys64\usr" -Recurse -Depth 3
+      continue-on-error: true
+      if: contains(inputs.os, 'windows')
+      shell: pwsh
 
     - name: Install pnpm
       run: |
