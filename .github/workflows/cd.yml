@@ -254,43 +254,43 @@ jobs:
             fi
           done
 
-      # - name: Create and push tag
-      #   if: steps.should-skip-cd.outputs.skip != 'true'
-      #   run: |
-      #     TAG="${{ steps.version.outputs.tag }}"
-      #     VERSION="${{ steps.version.outputs.version }}"
+      - name: Create and push tag
+        if: steps.should-skip-cd.outputs.skip != 'true'
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          VERSION="${{ steps.version.outputs.version }}"
 
-      #     if git rev-parse "$TAG" >/dev/null 2>&1; then
-      #       echo "Tag $TAG already exists, skipping..."
-      #       exit 0
-      #     fi
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists, skipping..."
+            exit 0
+          fi
 
-      #     git tag -a "$TAG" -m "Release $VERSION"
-      #     git push origin "$TAG"
+          git tag -a "$TAG" -m "Release $VERSION"
+          git push origin "$TAG"
 
-      # - name: Create release
-      #   if: steps.should-skip-cd.outputs.skip != 'true'
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: |
-      #     TAG="${{ steps.version.outputs.tag }}"
-      #     VERSION="${{ steps.version.outputs.version }}"
+      - name: Create release
+        if: steps.should-skip-cd.outputs.skip != 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          VERSION="${{ steps.version.outputs.version }}"
 
-      #     gh release create "$TAG" \
-      #         --repo="$GITHUB_REPOSITORY" \
-      #         --title="${GITHUB_REPOSITORY#*/} $VERSION" \
-      #         --generate-notes
+          gh release create "$TAG" \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="${GITHUB_REPOSITORY#*/} $VERSION" \
+              --generate-notes
 
-      # - name: Update package.json version
-      #   if: steps.should-skip-cd.outputs.skip != 'true'
-      #   run: |
-      #     VERSION="${{ steps.version.outputs.version }}"
-      #     jq --arg version "$VERSION" '.version = $version' package.json > .package.json && mv .package.json package.json
+      - name: Update package.json version
+        if: steps.should-skip-cd.outputs.skip != 'true'
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          jq --arg version "$VERSION" '.version = $version' package.json > .package.json && mv .package.json package.json
 
-      # - name: Publish to npm using Trusted Publishing
-      #   if: steps.should-skip-cd.outputs.skip != 'true'
-      #   run: |
-      #     # Ensure npm is authenticated via OIDC (Trusted Publishing)
-      #     # setup-node should configure this automatically with id-token: write permission
-      #     # pnpm will use npm's authentication
-      #     pnpm publish --no-git-checks
+      - name: Publish to npm using Trusted Publishing
+        if: steps.should-skip-cd.outputs.skip != 'true'
+        run: |
+          # Ensure npm is authenticated via OIDC (Trusted Publishing)
+          # setup-node should configure this automatically with id-token: write permission
+          # pnpm will use npm's authentication
+          pnpm publish --no-git-checks
