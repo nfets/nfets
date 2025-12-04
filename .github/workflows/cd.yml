@@ -193,16 +193,36 @@ jobs:
         shell: bash
         run: |
           PLATFORM_ARCH="${{ steps.get-platform-arch.outputs.platform_arch }}"
-          SO_PATH="/usr/local/opt/libxml2/lib/libxml2.2.dylib"
+          HOMEBREW_PREFIX=$(brew --prefix 2>/dev/null || echo "")
 
-          if [ -f "$SO_PATH" ] || [ -L "$SO_PATH" ]; then
-            cp -L "$SO_PATH" "build/addons/$PLATFORM_ARCH/libxml2.dylib"
-            echo "Bundled libxml2.dylib with addon"
-          else
+          POSSIBLE_PATHS=(
+            "$HOMEBREW_PREFIX/opt/libxml2/lib/libxml2.2.dylib"
+            "/opt/homebrew/opt/libxml2/lib/libxml2.2.dylib"
+            "/usr/local/opt/libxml2/lib/libxml2.2.dylib"
+          )
+
+          SO_PATH=""
+          for path in "${POSSIBLE_PATHS[@]}"; do
+            if [ -f "$path" ] || [ -L "$path" ]; then
+              SO_PATH="$path"
+              echo "Found libxml2.dylib at: $SO_PATH"
+              break
+            fi
+          done
+
+          if [ -z "$SO_PATH" ]; then
             echo "Error: Could not find libxml2.dylib to bundle"
-            find /usr -name "libxml2.2.dylib" 2>/dev/null
+            echo "Searched paths:"
+            for path in "${POSSIBLE_PATHS[@]}"; do
+              echo "  - $path"
+            done
+            echo "Searching system for libxml2.2.dylib..."
+            find /opt /usr -name "libxml2.2.dylib" 2>/dev/null | head -10
             exit 1
           fi
+
+          cp -L "$SO_PATH" "build/addons/$PLATFORM_ARCH/libxml2.dylib"
+          echo "Bundled libxml2.dylib with addon"
 
       - name: Verify binaries
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
