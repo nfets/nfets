@@ -227,7 +227,6 @@ jobs:
             "xml_validator-linux-x64"
             "xml_validator-win32-x64"
             "xml_validator-macos-arm64"
-            "xml_validator-macos-x64"
           )
 
           for ARTIFACT_NAME in "${ARTIFACTS[@]}"; do
@@ -254,12 +253,6 @@ jobs:
               cd -
             fi
           done
-
-      - name: ls -la build/addons
-        if: steps.should-skip-cd.outputs.skip != 'true'
-        run: |
-          ls -lah build/addons
-          ls -lah
 
       # - name: Create and push tag
       #   if: steps.should-skip-cd.outputs.skip != 'true'
