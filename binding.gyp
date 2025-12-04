@@ -15,7 +15,7 @@
             "C:\\msys64\\msys64\\usr\\lib"
           ],
           "libraries": [
-            "<!(powershell -Command \"if (Test-Path 'C:/msys64/msys64/usr/lib/libxml2.a') { Write-Output 'libxml2.a' } else { Write-Output 'libxml2.dll.a' }\")"
+            "libxml2.dll.a"
           ],
           "defines": [
             "WIN32"
