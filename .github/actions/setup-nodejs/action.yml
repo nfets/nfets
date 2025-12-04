@@ -18,6 +18,7 @@ runs:
         architecture: ${{ inputs.architecture }}
         node-version: ${{ inputs.node-version }}
         registry-url: "https://registry.npmjs.org"
+        always-auth: true
 
     - name: Install pnpm
       shell: bash

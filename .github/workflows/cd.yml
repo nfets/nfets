@@ -355,5 +355,5 @@ jobs:
         run: |
           # Ensure npm is authenticated via OIDC (Trusted Publishing)
           # setup-node should configure this automatically with id-token: write permission
-          # pnpm will use npm's authentication
+          pnpm config set registry https://registry.npmjs.org
           pnpm publish --no-git-checks
