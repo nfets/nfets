@@ -54,6 +54,8 @@ jobs:
       - name: Check if artifact is expired
         id: check-artifact-expiration
         if: steps.should-skip-cd.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           ARTIFACT_NAME="${{ steps.get-artifact-name.outputs.artifact_name }}"
@@ -222,11 +224,13 @@ jobs:
 
       - name: Download missing artifacts from previous runs
         if: steps.should-skip-cd.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           ARTIFACTS=(
             "xml_validator-linux-x64"
             "xml_validator-win32-x64"
-            "xml_validator-macos-arm64"
+            "xml_validator-darwin-arm64"
           )
 
           for ARTIFACT_NAME in "${ARTIFACTS[@]}"; do
