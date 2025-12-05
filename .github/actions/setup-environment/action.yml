@@ -33,4 +33,7 @@ runs:
       if: contains(inputs.os, 'windows')
       shell: msys2 {0}
       run: |
-        pacman --noconfirm -S mingw-w64-x86_64-libxml2
+        pacman --noconfirm -Syu
+        pacman --noconfirm -S mingw-w64-x86_64-libxml2=2.15.1-2
+        echo "Installed libxml2 version:"
+        pacman -Qi mingw-w64-x86_64-libxml2 | grep Version
