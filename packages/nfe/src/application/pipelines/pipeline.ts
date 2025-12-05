@@ -14,10 +14,13 @@ import {
   SoapRemoteTransmissionRepository,
   MemoryCacheAdapter,
 } from '@nfets/core/infrastructure';
-import { EntitySigner, ValidateErrorsMetadata } from '@nfets/core/application';
+import {
+  EntitySigner,
+  ValidateErrorsMetadata,
+  XmlSigner,
+} from '@nfets/core/application';
 
 import type { NfeRemoteClient } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
-import { NfeRemoteTransmitter } from '../transmission/nfe-transmitter';
 
 export abstract class Pipeline {
   protected readonly xmlns = 'http://www.portalfiscal.inf.br/nfe';
@@ -34,11 +37,10 @@ export abstract class Pipeline {
   protected readonly soap: RemoteTransmissionRepository<NfeRemoteClient> =
     new SoapRemoteTransmissionRepository(this.toolkit, this.certificates);
 
-  protected readonly transmitter = new NfeRemoteTransmitter(this.soap);
-
   protected readonly signer = new EntitySigner(this.toolkit, this.certificates);
+  protected readonly xmlSigner = new XmlSigner(this.toolkit, this.certificates);
 
-  public constructor(protected readonly certificate: ReadCertificateRequest) {}
+  public constructor(protected readonly certificate?: ReadCertificateRequest) {}
 
   protected errors(): string[] | undefined {
     return Reflect.getMetadata(ValidateErrorsMetadata, this) as

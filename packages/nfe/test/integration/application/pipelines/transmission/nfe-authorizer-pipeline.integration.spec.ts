@@ -4,7 +4,7 @@ import { NfeXmlBuilder } from '@nfets/nfe';
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
 import { expectIsRight } from '@nfets/test/expects';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
-import { NfeAuthorizerPipeline } from '@nfets/nfe/application/pipelines/nfe-authorizer-pipeline';
+import { NfeAuthorizerPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-authorizer-pipeline';
 
 import type { Emit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
 import type { Ide } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';

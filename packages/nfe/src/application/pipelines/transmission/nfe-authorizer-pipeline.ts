@@ -5,9 +5,9 @@ import type {
 import type { AutorizacaoPayload as IAutorizacaoPayload } from '@nfets/nfe/domain/entities/services/autorizacao';
 import type { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
-import { Pipeline } from './pipeline';
+import { TransmissionPipeline } from './transmission-pipeline';
 
-export class NfeAuthorizerPipeline extends Pipeline {
+export class NfeAuthorizerPipeline extends TransmissionPipeline {
   public async execute(
     payload: IAutorizacaoPayload<NFe>,
     options?: Pick<NfeTransmitterOptions, 'schema'>,
