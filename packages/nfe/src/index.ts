@@ -3,3 +3,6 @@ export { AccessKeyBuilder } from './application/access-key/access-key-builder';
 
 export { NFe } from './infrastructure/dto/nfe/nfe';
 export { NFCe } from './infrastructure/dto/nfe/nfce';
+
+export type * from './domain/entities/xml-builder/nfe-xml-builder';
+export type * from './domain/entities/xml-builder/nfe-det-xml-builder';
