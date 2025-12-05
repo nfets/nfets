@@ -8,14 +8,14 @@
       "conditions": [
         ["OS=='win'", {
           "include_dirs": [
-            "C:\\msys64\\msys64\\usr\\include",
-            "C:\\msys64\\msys64\\usr\\include\\libxml2",
-            "C:\\msys64\\msys64\\mingw64\\include",
-            "C:\\msys64\\msys64\\mingw64\\include\\libxml2"
+            "C:\\msys64\\usr\\include",
+            "C:\\msys64\\usr\\include\\libxml2",
+            "C:\\msys64\\mingw64\\include",
+            "C:\\msys64\\mingw64\\include\\libxml2"
           ],
           "library_dirs": [
-            "C:\\msys64\\msys64\\usr\\lib",
-            "C:\\msys64\\msys64\\mingw64\\lib"
+            "C:\\msys64\\usr\\lib",
+            "C:\\msys64\\mingw64\\lib"
           ],
           "libraries": [
             "libxml2.dll.a"
@@ -26,15 +26,15 @@
           "copies": [
             {
               "destination": "<(PRODUCT_DIR)/libxml2-16.dll",
-              "source": "C:\\msys64\\msys64\\mingw64\\bin\\libxml2-16.dll"
+              "source": "C:\\msys64\\mingw64\\bin\\libxml2-16.dll"
             },
             {
               "destination": "<(PRODUCT_DIR)/libiconv-2.dll",
-              "source": "C:\\msys64\\msys64\\ucrt64\\bin\\libiconv-2.dll"
+              "source": "C:\\msys64\\ucrt64\\bin\\libiconv-2.dll"
             },
             {
               "destination": "<(PRODUCT_DIR)/zlib1.dll",
-              "source": "C:\\msys64\\msys64\\ucrt64\\bin\\zlib1.dll"
+              "source": "C:\\msys64\\ucrt64\\bin\\zlib1.dll"
             }
           ]
         }],

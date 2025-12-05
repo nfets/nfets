@@ -19,11 +19,11 @@ runs:
       shell: bash
       run: brew install libxml2
 
-    - name: Install Windows packages
+    - uses: msys2/setup-msys2@v2
       if: contains(inputs.os, 'windows')
-      uses: msys2/setup-msys2@v2
-      with:
-        update: true
-        msystem: MINGW64
-        location: "C:\\msys64"
-        install: libxml2 libxml2-devel
+
+    - name: Install Windows dependencies
+      if: contains(inputs.os, 'windows')
+      shell: msys2 {0}
+      run: |
+        pacman --noconfirm -S mingw-w64-x86_64-libxml2
