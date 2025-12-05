@@ -11,10 +11,10 @@ import {
   left,
 } from '@nfets/core';
 import events from '@nfets/nfe/services/events';
-import { Pipeline } from './pipeline';
+import { TransmissionPipeline } from './transmission-pipeline';
 import { EventoItem } from '@nfets/nfe/infrastructure/dto/services/evento';
 
-export abstract class EventPipeline extends Pipeline {
+export abstract class EventPipeline extends TransmissionPipeline {
   protected async event<T>(
     tpEvento: TpEvent,
     payload: Pick<

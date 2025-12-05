@@ -5,11 +5,11 @@ import type {
   VoidRangePayload,
 } from '@nfets/nfe/domain/entities/services/inutilizacao';
 
-import { Pipeline } from './pipeline';
+import { TransmissionPipeline } from './transmission-pipeline';
 import { left, NFeTsError, right, Validates } from '@nfets/core';
 import { InutilizacaoPayload } from '@nfets/nfe/infrastructure/dto/services/inutilizacao';
 
-export class NfeNfceVoidRangePipeline extends Pipeline {
+export class NfeNfceVoidRangePipeline extends TransmissionPipeline {
   public async execute(
     payload: VoidRangePayload,
     options: Pick<NfeTransmitterOptions, 'tpAmb' | 'cUF'>,

@@ -1,6 +1,6 @@
 import { Environment, StateCodes, type StateCode } from '@nfets/core/domain';
 import { expectIsRight } from '@nfets/test/expects';
-import { NfeAuthorizerPipeline } from '@nfets/nfe/application/pipelines/nfe-authorizer-pipeline';
+import { NfeAuthorizerPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-authorizer-pipeline';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 import { right } from '@nfets/core/shared';
 import contingency from '@nfets/nfe/services/contingency-webservices-mod55';

@@ -1,7 +1,7 @@
 import { Environment } from '@nfets/core/domain';
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
 import { expectIsRight } from '@nfets/test/expects';
-import { NfeNfceCancelPipeline } from '@nfets/nfe/application/pipelines/nfe-nfce-cancel-pipeline';
+import { NfeNfceCancelPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-nfce-cancel-pipeline';
 
 const SEFAZ_TIMEOUT_SC = 60 * 1000;
 

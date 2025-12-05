@@ -1,7 +1,7 @@
 import { Environment, StateCodes, type StateAcronym } from '@nfets/core/domain';
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
 import { expectIsRight } from '@nfets/test/expects';
-import { NfeNfceVoidRangePipeline } from '@nfets/nfe/application/pipelines/nfe-nfce-void-range-pipeline';
+import { NfeNfceVoidRangePipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-nfce-void-range-pipeline';
 
 const SEFAZ_TIMEOUT_SC = 60 * 1000;
 
