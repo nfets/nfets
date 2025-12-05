@@ -20,16 +20,13 @@
           "defines": [
             "WIN32"
           ],
-          "actions": [
+          "copies": [
             {
-              "action_name": "Copy DLLs",
-              "inputs": [],
-              "outputs": [
-                "<(PRODUCT_DIR)/copy_dlls.flag"
-              ],
-              "action": [
-                "<(module_root_dir)/win/copy_dlls.bat",
-                "<(PRODUCT_DIR)"
+              "destination": "<(PRODUCT_DIR)",
+              "files": [
+                "<!(cmd /c \"if defined MSYS2_LOCATION (echo %MSYS2_LOCATION%\\mingw64\\bin\\libiconv-2.dll) else (echo C:\\msys64\\mingw64\\bin\\libiconv-2.dll)\")",
+                "<!(cmd /c \"if defined MSYS2_LOCATION (echo %MSYS2_LOCATION%\\mingw64\\bin\\zlib1.dll) else (echo C:\\msys64\\mingw64\\bin\\zlib1.dll)\")",
+                "<!(cmd /c \"if defined MSYS2_LOCATION (if exist %MSYS2_LOCATION%\\mingw64\\bin\\libxml2-16.dll (echo %MSYS2_LOCATION%\\mingw64\\bin\\libxml2-16.dll) else (echo %MSYS2_LOCATION%\\mingw64\\bin\\libxml2-2.dll)) else (if exist C:\\msys64\\mingw64\\bin\\libxml2-16.dll (echo C:\\msys64\\mingw64\\bin\\libxml2-16.dll) else (echo C:\\msys64\\mingw64\\bin\\libxml2-2.dll))\")"
               ]
             }
           ]
