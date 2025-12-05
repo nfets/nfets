@@ -37,7 +37,7 @@ export interface EmitBuilder<T extends object> {
     RetiradaBuilder<T> &
     EntregaBuilder<T> &
     AutXMLBuilder<T> &
-    DetBuilder<T>;
+    DetGroupBuilder<T>;
 }
 
 export interface AvulsaBuilder<T extends object> {
@@ -47,30 +47,35 @@ export interface AvulsaBuilder<T extends object> {
     RetiradaBuilder<T> &
     EntregaBuilder<T> &
     AutXMLBuilder<T> &
-    DetBuilder<T>;
+    DetGroupBuilder<T>;
 }
 
 export interface DestBuilder<T extends object> {
   dest(
     payload: IDest,
-  ): RetiradaBuilder<T> & EntregaBuilder<T> & AutXMLBuilder<T> & DetBuilder<T>;
+  ): RetiradaBuilder<T> &
+    EntregaBuilder<T> &
+    AutXMLBuilder<T> &
+    DetGroupBuilder<T>;
 }
 
 export interface RetiradaBuilder<T extends object> {
   retirada(
     payload: ILocal,
-  ): DestBuilder<T> & EntregaBuilder<T> & AutXMLBuilder<T> & DetBuilder<T>;
+  ): DestBuilder<T> & EntregaBuilder<T> & AutXMLBuilder<T> & DetGroupBuilder<T>;
 }
 
 export interface EntregaBuilder<T extends object> {
-  entrega(payload: ILocal): DestBuilder<T> & AutXMLBuilder<T> & DetBuilder<T>;
+  entrega(
+    payload: ILocal,
+  ): DestBuilder<T> & AutXMLBuilder<T> & DetGroupBuilder<T>;
 }
 
 export interface AutXMLBuilder<T extends object> {
-  autXML(payload: IAutXML): AutXMLBuilder<T> & DetBuilder<T>;
+  autXML(payload: IAutXML): AutXMLBuilder<T> & DetGroupBuilder<T>;
 }
 
-export interface DetBuilder<T extends object> {
+export interface DetGroupBuilder<T extends object> {
   det<D>(
     items: [D, ...D[]],
     build: (ctx: ProdBuilder, item: D) => AssembleDetXmlBuilder,
@@ -188,7 +193,7 @@ export interface AssembleNfeBuilder<T extends object> {
 export interface INfeXmlBuilder<T extends object>
   extends InfNFeBuilder<T>,
     IdeBuilder<T>,
-    DetBuilder<T>,
+    DetGroupBuilder<T>,
     DestBuilder<T>,
     RetiradaBuilder<T>,
     EntregaBuilder<T>,
