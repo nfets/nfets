@@ -161,15 +161,11 @@ jobs:
         shell: bash
         run: |
           PLATFORM_ARCH="${{ steps.get-platform-arch.outputs.platform_arch }}"
-          DLL_PATH="C:/msys64/msys64/usr/bin/msys-xml2-16.dll"
 
-          if [ -f "$DLL_PATH" ]; then
-            cp "$DLL_PATH" "build/addons/$PLATFORM_ARCH/"
-            echo "Bundled msys-xml2-16.dll with addon"
-          else
-            echo "Error: Could not find msys-xml2-16.dll to bundle"
-            exit 1
-          fi
+          for dll in $(find build/Release -name "*.dll"); do
+            cp "$dll" "build/addons/$PLATFORM_ARCH/"
+            echo "Bundled $(basename "$dll") with addon"
+          done
 
       - name: Bundle Linux (x64) shared object dependencies
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && contains(matrix.os, 'ubuntu') && contains(matrix.arch, 'x64')
