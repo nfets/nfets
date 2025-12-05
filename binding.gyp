@@ -47,7 +47,6 @@
             "<!@(pkg-config --libs libxml-2.0 2>/dev/null || echo '-lxml2')"
           ],
           "ldflags": [
-            "-Wl,-Bstatic",
             "-lxml2",
             "-Wl,-Bdynamic"
           ]
