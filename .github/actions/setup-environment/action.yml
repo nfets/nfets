@@ -19,8 +19,15 @@ runs:
       shell: bash
       run: brew install libxml2
 
-    - uses: msys2/setup-msys2@v2
+    - id: setup-msys2
+      uses: msys2/setup-msys2@v2
       if: contains(inputs.os, 'windows')
+
+    - name: Set MSYS2 location environment variable
+      if: contains(inputs.os, 'windows')
+      shell: bash
+      run: |
+        echo "MSYS2_LOCATION=${{ steps.setup-msys2.outputs.msys2-location }}" >> $GITHUB_ENV
 
     - name: Install Windows dependencies
       if: contains(inputs.os, 'windows')
