@@ -30,10 +30,10 @@ describe('xml signer (integration)', () => {
       new MemoryCacheAdapter(),
     );
 
-    const certificateOrError = await certificateRepository.read(
-      cert.certificatePath,
-      cert.password,
-    );
+    const certificateOrError = await certificateRepository.read({
+      pfxPathOrBase64: cert.certificatePath,
+      password: cert.password,
+    });
 
     if (certificateOrError.isLeft()) return;
     certificate = certificateOrError.value;
@@ -74,10 +74,10 @@ describe('xml signer (unit)', () => {
       new MemoryCacheAdapter(),
     );
 
-    const certificateOrError = await certificateRepository.read(
-      validCnpjPfxCertificate,
+    const certificateOrError = await certificateRepository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
       password,
-    );
+    });
 
     if (certificateOrError.isLeft()) return;
     certificate = certificateOrError.value;
