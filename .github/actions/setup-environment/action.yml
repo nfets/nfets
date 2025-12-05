@@ -22,6 +22,8 @@ runs:
     - id: setup-msys2
       uses: msys2/setup-msys2@v2
       if: contains(inputs.os, 'windows')
+      with:
+        update: true
 
     - name: Set MSYS2 location environment variable
       if: contains(inputs.os, 'windows')
@@ -33,4 +35,4 @@ runs:
       if: contains(inputs.os, 'windows')
       shell: msys2 {0}
       run: |
-        pacman --noconfirm -Syu mingw-w64-x86_64-libxml2=2.15.1-2
+        pacman --noconfirm -S mingw-w64-x86_64-libxml2=2.15.1-2
