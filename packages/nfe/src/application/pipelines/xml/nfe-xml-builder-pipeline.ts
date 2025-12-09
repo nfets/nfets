@@ -12,8 +12,9 @@ import { directory, type Schema } from '@nfets/nfe/domain';
 import { Pipeline } from '../pipeline';
 
 export class NfeXmlBuilderPipeline<T extends object> extends Pipeline {
-  protected readonly builder: InfNFeBuilder<T> & IdeBuilder<T> =
-    NfeXmlBuilder.create<T>(this.toolkit);
+  protected readonly builder:
+    | (InfNFeBuilder<T> & IdeBuilder<T>)
+    | AssembleNfeBuilder<T> = NfeXmlBuilder.create<T>(this.toolkit);
 
   public constructor(
     protected readonly certificate?: ReadCertificateRequest,
@@ -22,17 +23,18 @@ export class NfeXmlBuilderPipeline<T extends object> extends Pipeline {
     super(certificate);
   }
 
-  public toObject(
-    build: (builder: typeof this.builder) => AssembleNfeBuilder<T>,
-  ): Either<NFeTsError, T> {
-    return build(this.builder).toObject();
+  public build(
+    build: (builder: InfNFeBuilder<T> & IdeBuilder<T>) => AssembleNfeBuilder<T>,
+  ) {
+    return build(this.builder as InfNFeBuilder<T> & IdeBuilder<T>), this;
   }
 
-  public async assemble(
-    build: (builder: typeof this.builder) => AssembleNfeBuilder<T>,
-  ): Promise<Either<NFeTsError, string>> {
-    const built = build(this.builder);
-    const xmlOrLeft = await built.assemble();
+  public toObject(): Either<NFeTsError, T> {
+    return (this.builder as AssembleNfeBuilder<T>).toObject();
+  }
+
+  public async assemble(): Promise<Either<NFeTsError, string>> {
+    const xmlOrLeft = await (this.builder as AssembleNfeBuilder<T>).assemble();
     if (xmlOrLeft.isLeft()) return xmlOrLeft;
     return this.assertXmlSignedAndValidated(xmlOrLeft.value);
   }

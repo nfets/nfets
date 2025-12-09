@@ -36,7 +36,7 @@ describe('NfeXmlBuilderPipeline', () => {
       password,
     });
 
-    const result = await pipeline.assemble((builder) =>
+    const builder = pipeline.build((builder) =>
       builder
         .infNFe({ versao: '4.00' })
         .ide({
@@ -143,6 +143,8 @@ describe('NfeXmlBuilderPipeline', () => {
           detPag: [{ tPag: '01', vPag: 100 }],
         }),
     );
+
+    const result = await builder.assemble();
 
     expectIsRight(result);
     expect(result.value).toBeDefined();
