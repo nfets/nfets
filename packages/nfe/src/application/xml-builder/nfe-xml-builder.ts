@@ -80,6 +80,8 @@ export class NfeXmlBuilder<T extends object = INFe>
     },
   } as const as INFe;
 
+  private $data: T | undefined = void 0;
+
   protected get entity(): new () => T {
     return NFe as new () => T;
   }
@@ -256,15 +258,17 @@ export class NfeXmlBuilder<T extends object = INFe>
   }
 
   public toObject() {
+    if (this.$data !== void 0) return right(this.$data);
     const errors = this.errors();
     if (errors) return left(new NFeTsError(errors.join(', ')));
     this.$total?.aggregate();
     this.assertHomologValidations();
     this.assertContingencyModes();
     this.fillAccessKeyIfEmpty();
-    return right(
-      plainToInstance<T>(this.data, this.entity, { clearEmptyValues: true }),
-    );
+    this.$data = plainToInstance<T>(this.data, this.entity, {
+      clearEmptyValues: true,
+    });
+    return right(this.$data);
   }
 
   /** @throws {NFeTsError} */

@@ -46,14 +46,17 @@ export interface NfceTransmitter
   extends NfeTransmitter,
     Transmitter<NfceRemoteClient> {
   configure(options: NfceTransmitterOptions): this;
-  autorizacao(
-    payload: AutorizacaoPayload<SignedEntity<NFCe>>,
+  autorizacao<E extends NFCe, T extends SignedEntity<E> | SignedEntity<E>[]>(
+    payload: AutorizacaoPayload<E, T>,
   ): Promise<Either<NFeTsError, AutorizacaoResponse>>;
 }
 
 export interface NfceRemoteClient extends NfeRemoteClient {
-  nfeAutorizacaoLote(
-    args: AutorizacaoRequest<SignedEntity<NFCe>>,
+  nfeAutorizacaoLote<
+    E extends NFCe,
+    T extends SignedEntity<E> | SignedEntity<E>[],
+  >(
+    args: AutorizacaoRequest<E, T>,
     opt?: RequestConfig,
   ): Promise<AutorizacaoResponse>;
 }

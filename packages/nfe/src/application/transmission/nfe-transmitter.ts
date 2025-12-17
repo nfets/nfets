@@ -26,7 +26,7 @@ import type { AutorizacaoPayload as IAutorizacaoPayload } from '@nfets/nfe/domai
 import type { RetAutorizacaoPayload as IRetAutorizacaoPayload } from '@nfets/nfe/domain/entities/services/ret-autorizacao';
 import type { EventoRequest } from '@nfets/nfe/domain/entities/services/evento';
 import type { ConsultaCadastroPayload as IConsultaCadastroPayload } from '@nfets/nfe/domain/entities/services/consulta-cadastro';
-import type { NFe as INFe } from '@nfets/nfe/domain/entities/nfe/nfe';
+import type { NFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 
 import { ConsultStatusPayload } from '@nfets/nfe/infrastructure/dto/services/consult-status';
 import { InutilizacaoPayload } from '@nfets/nfe/infrastructure/dto/services/inutilizacao';
@@ -168,8 +168,11 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     });
   }
 
-  @Validates(NfeAutorizacaoPayload)
-  public async autorizacao(payload: IAutorizacaoPayload<SignedEntity<INFe>>) {
+  @Validates(NfeAutorizacaoPayload<NFe, never>)
+  public async autorizacao<
+    E extends NFe,
+    T extends SignedEntity<E> | SignedEntity<E>[],
+  >(payload: IAutorizacaoPayload<E, T>) {
     const payloadOrError = this.validate(payload);
     if (payloadOrError.isLeft()) return payloadOrError;
 

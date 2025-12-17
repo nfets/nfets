@@ -85,8 +85,8 @@ export interface NfeTransmitter extends Transmitter<NfeRemoteClient> {
   consultaProtocolo(
     payload: ConsultaProtocoloPayload,
   ): Promise<Either<NFeTsError, ConsultaProtocoloResponse>>;
-  autorizacao(
-    payload: AutorizacaoPayload<SignedEntity<NFe>>,
+  autorizacao<E extends NFe, T extends SignedEntity<E> | SignedEntity<E>[]>(
+    payload: AutorizacaoPayload<E, T>,
   ): Promise<Either<NFeTsError, AutorizacaoResponse>>;
   retAutorizacao(
     payload: RetAutorizacaoPayload,
@@ -112,8 +112,11 @@ export interface NfeRemoteClient extends Client {
     args: ConsultaProtocoloRequest,
     opt?: RequestConfig,
   ): Promise<ConsultaProtocoloResponse>;
-  nfeAutorizacaoLote(
-    args: AutorizacaoRequest<SignedEntity<NFe>>,
+  nfeAutorizacaoLote<
+    E extends NFe,
+    T extends SignedEntity<E> | SignedEntity<E>[],
+  >(
+    args: AutorizacaoRequest<E, T>,
     opt?: RequestConfig,
   ): Promise<AutorizacaoResponse>;
   nfeRetAutorizacaoLote(

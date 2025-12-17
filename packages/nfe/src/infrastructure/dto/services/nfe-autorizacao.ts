@@ -7,12 +7,12 @@ import {
 } from '@nfets/core/domain';
 import type { NFe as INFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 import type { AutorizacaoPayload as IAutorizacaoPayload } from '@nfets/nfe/domain/entities/services/autorizacao';
-import { Type } from 'class-transformer';
 import { IsEnum, IsOptional, IsString, IsNotEmpty } from 'class-validator';
-import { NFe } from '../nfe/nfe';
 
-export class NfeAutorizacaoPayload
-  implements IAutorizacaoPayload<SignedEntity<NFe>>
+export class NfeAutorizacaoPayload<
+  E extends INFe,
+  T extends SignedEntity<E> | SignedEntity<E>[],
+> implements IAutorizacaoPayload<E, T>
 {
   @IsEnum(Environment)
   @IsOptional()
@@ -23,13 +23,13 @@ export class NfeAutorizacaoPayload
   public cUF?: StateCode;
 
   @IsString()
-  public idLote!: string;
+  @IsOptional()
+  public idLote?: string;
 
   @IsOptional()
   @IsEnum(['0', '1'])
   public indSinc = '1' as const;
 
   @IsNotEmpty()
-  @Type(() => NFe)
-  public NFe!: SignedEntity<INFe>;
+  public NFe!: T;
 }

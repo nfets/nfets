@@ -6,6 +6,7 @@ import {
 } from '@nfets/core/domain';
 import { NfeRemoteTransmitter } from '@nfets/nfe/application/transmission/nfe-transmitter';
 import type { NfeRemoteClient } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
+import type { AsynchronousAutorizacaoResponse } from '@nfets/nfe/domain/entities/services/autorizacao';
 import { right, left } from '@nfets/core/shared';
 import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
 
@@ -297,7 +298,9 @@ describe('NfeRemoteTransmitter (unit)', () => {
         },
       };
 
-      mockRepository.send.mockResolvedValue(right(mockResponse));
+      mockRepository.send.mockResolvedValue(
+        right(mockResponse as AsynchronousAutorizacaoResponse),
+      );
 
       const response = await transmission.autorizacao({
         tpAmb: Environment.Homolog,
@@ -345,7 +348,6 @@ describe('NfeRemoteTransmitter (unit)', () => {
 
       const response = await transmission.retAutorizacao({
         tpAmb: Environment.Homolog,
-        cUF: StateCodes.RS,
         nRec: '432400000000001',
       });
 
@@ -358,7 +360,6 @@ describe('NfeRemoteTransmitter (unit)', () => {
           consReciNFe: expect.objectContaining({
             $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
             tpAmb: Environment.Homolog,
-            cUF: StateCodes.RS,
             nRec: '432400000000001',
           }),
         },
