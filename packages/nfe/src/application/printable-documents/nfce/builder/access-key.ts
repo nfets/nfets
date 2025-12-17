@@ -33,11 +33,11 @@ export class AccessKey implements Builder {
   }
 
   protected url() {
-    const { urlChave } = this.context.data.infNFeSupl;
+    const { urlChave } = this.context.data.infNFeSupl ?? {};
 
     const { left, right } = this.builder.pageMargins();
     this.builder.row({ left, right }, (options) =>
-      this.builder.text(urlChave, {
+      this.builder.text(urlChave ?? '', {
         ...options,
         link: urlChave,
         align: 'center',

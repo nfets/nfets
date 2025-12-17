@@ -1,5 +1,6 @@
 import type { EnvironmentCode } from '@nfets/core/domain';
 import type { EventoItem } from './evento';
+import type { ProtNFe } from '../nfe/prot-nfe';
 
 export interface ConsultaProtocoloPayload {
   tpAmb?: EnvironmentCode;
@@ -9,21 +10,6 @@ export interface ConsultaProtocoloPayload {
 
 export interface ConsultaProtocoloRequest {
   consSitNFe: ConsultaProtocoloPayload;
-}
-
-export interface ProtNFe {
-  $: { versao: string };
-  infProt: {
-    tpAmb: string;
-    verAplic: string;
-    chNFe: string;
-    dhRecbto: string;
-    nProt?: string;
-    digVal?: string;
-    cStat: string;
-    xMotivo: string;
-    $?: { Id?: string };
-  };
 }
 
 export interface RetCancNFe {

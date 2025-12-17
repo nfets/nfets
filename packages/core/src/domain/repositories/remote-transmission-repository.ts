@@ -12,7 +12,7 @@ export interface RemoteTransmissionRepository<C extends Client> {
   setCertificate(
     certificate: ReadCertificateResponse,
   ): RemoteTransmissionRepository<C>;
-  send<P extends SendTransmissionPayload<C>>(
+  send<P extends SendTransmissionPayload<C>, R extends ExtractReturnType<C, P>>(
     params: P,
-  ): Promise<Either<NFeTsError, ExtractReturnType<C, P>>>;
+  ): Promise<Either<NFeTsError, R>>;
 }

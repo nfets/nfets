@@ -66,7 +66,7 @@ export class QRCode implements Builder {
   }
 
   protected async make() {
-    const { qrCode } = this.context.data.infNFeSupl;
+    const { qrCode } = this.context.data.infNFeSupl ?? {};
     if (!qrCode) return this.builder;
 
     const qrSvgString = await this.getQrSvgString(qrCode);

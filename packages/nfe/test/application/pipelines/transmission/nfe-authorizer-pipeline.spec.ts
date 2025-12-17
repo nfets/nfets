@@ -9,7 +9,7 @@ import type { ReadCertificateRequest } from '@nfets/core/domain';
 import type { RemoteTransmissionRepository } from '@nfets/core/domain';
 import type { NfeRemoteClient } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
 import type { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
-import type { EntitySigner } from '@nfets/core/application';
+import { type SynchronousAutorizacaoResponse } from '@nfets/nfe/domain/entities/services/autorizacao';
 import {
   getCertificatePassword,
   getCnpjCertificate,
@@ -222,7 +222,7 @@ describe('nfe authorizer pipeline (unit)', () => {
       protected override readonly soap: RemoteTransmissionRepository<NfeRemoteClient> =
         {
           setCertificate: jest.fn(),
-          send: jest.fn().mockImplementation((_params) => {
+          send: jest.fn().mockImplementation(() => {
             return Promise.resolve(
               right({
                 retEnviNFe: {
@@ -231,11 +231,12 @@ describe('nfe authorizer pipeline (unit)', () => {
                   verAplic: '1.0',
                   cStat: '103',
                   xMotivo: 'Lote recebido com sucesso',
-                  cRec: '123456789012345',
                   dhRecbto: new Date().toISOString(),
-                  tMed: '1',
+                  protNFe: {
+                    infProt: { nProt: '123456789012345' },
+                  },
                 },
-              }),
+              } as SynchronousAutorizacaoResponse),
             );
           }),
         } as unknown as RemoteTransmissionRepository<NfeRemoteClient>;
@@ -247,10 +248,6 @@ describe('nfe authorizer pipeline (unit)', () => {
         super(certificate);
         spy = jest.spyOn(this.soap, 'send');
       }
-
-      protected override readonly signer = {
-        sign: jest.fn().mockResolvedValue(right('<xml>signed</xml>')),
-      } as unknown as EntitySigner;
     }
 
     pipeline = new MockableNfeAuthorizerPipeline({

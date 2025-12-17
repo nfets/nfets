@@ -1,9 +1,8 @@
-import type { EnvironmentCode, StateCode } from '@nfets/core/domain';
-import type { ProtNFe } from './consulta-protocolo';
+import type { EnvironmentCode } from '@nfets/core/domain';
+import type { ProtNFe } from '../nfe/prot-nfe';
 
 export interface RetAutorizacaoPayload {
-  tpAmb?: EnvironmentCode;
-  cUF?: StateCode;
+  tpAmb: EnvironmentCode;
   nRec: string;
 }
 
@@ -21,6 +20,8 @@ export interface RetAutorizacaoResponse {
     xMotivo: string;
     cUF: string;
     dhRecbto: string;
-    protNFe?: ProtNFe[];
+    cMsg?: string;
+    xMsg?: string;
+    protNFe?: ProtNFe | ProtNFe[];
   };
 }

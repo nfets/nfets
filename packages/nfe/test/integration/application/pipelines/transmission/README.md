@@ -30,6 +30,20 @@ Quando for realmente necessário autorizar uma NF-e na contingência, execute a 
 DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}' pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline.integration -t 'should authorize a contingency nfe'
 ```
 
+Quando for realmente necessário autorizar um Lote de NFe na homolgação, execute a partir da raiz do repositório, limitando o flag a este comando:
+
+Lembrando que o teste autoriza uma NFe com o nNF informado e outra NFe com o nNF + 1.
+
+```bash
+DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}' pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline -t 'should authorize a batch of nfes'
+```
+
+Quando for realmente necessário consultar um recibo de Lote de NFe (retAutorizacao), execute a partir da raiz do repositório, limitando o flag a este comando:
+
+```bash
+DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"nRec":""}' pnpm --filter @nfets/nfe test:integration nfe-authorization-response -t 'should return the authorization response of a nfe'
+```
+
 Quando for realmente necessário autorizar uma NFC-e na homologação, execute a partir da raiz do repositório, limitando o flag a este comando:
 
 ```bash

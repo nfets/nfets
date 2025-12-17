@@ -91,7 +91,7 @@ export abstract class DanfcePdfDocument {
     const parsed = await this.toolkit.parse<NFeProc | NFCe>(xml);
 
     if ('protNFe' in parsed) this.protNFe = parsed.protNFe;
-    if ('NFe' in parsed) this.data = parsed.NFe as NFCe;
+    if ('NFe' in parsed) this.data = parsed.NFe;
     else this.data = parsed;
   }
 
