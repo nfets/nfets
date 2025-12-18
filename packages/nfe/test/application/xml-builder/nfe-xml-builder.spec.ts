@@ -40,13 +40,17 @@ import {
 } from '@nfets/test/expects';
 import { getCnpjCertificate } from '@nfets/test/certificates';
 import { getCertificatePassword } from '@nfets/test/certificates';
-import { directory } from '@nfets/nfe/domain/entities/transmission/schemas';
+import { schemas } from '@nfets/nfe/domain/entities/transmission/schemas';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 
 describe('xml builder with xml2js builder', () => {
   const toolkit: XmlToolkit = new Xml2JsToolkit();
-  const leiauteNFe4_00 = path.resolve(directory, 'PL_009_V4', 'nfe_v4.00.xsd');
+  const leiauteNFe4_00 = path.resolve(
+    schemas(),
+    'PL_009_V4',
+    'nfe_v4.00.xsd',
+  );
 
   const password = getCertificatePassword(),
     validCnpjPfxCertificate = getCnpjCertificate();

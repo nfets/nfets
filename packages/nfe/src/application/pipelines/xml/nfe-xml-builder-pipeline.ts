@@ -8,7 +8,7 @@ import type {
 } from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
 import type { Either } from '@nfets/core/shared';
 import type { NFeTsError, ReadCertificateRequest } from '@nfets/core/domain';
-import { directory, type Schema } from '@nfets/nfe/domain';
+import { schemas, type Schema } from '@nfets/nfe/domain';
 import { Pipeline } from '../pipeline';
 
 export class NfeXmlBuilderPipeline<T extends object> extends Pipeline {
@@ -40,7 +40,7 @@ export class NfeXmlBuilderPipeline<T extends object> extends Pipeline {
   }
 
   protected get nfeXsdSchema() {
-    return path.resolve(directory, this.schema, 'nfe_v4.00.xsd');
+    return path.resolve(schemas(), this.schema, 'nfe_v4.00.xsd');
   }
 
   protected async assertXmlSignedAndValidated(xml: string) {

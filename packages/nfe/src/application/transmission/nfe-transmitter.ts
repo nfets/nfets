@@ -40,8 +40,8 @@ import WSNFE_4_00_MOD55 from '../../services/wsnfe_4.00-mod55';
 import webservices from '../../services/webservices-mod55';
 import contingency from '../../services/contingency-webservices-mod55';
 
-import schemas, {
-  directory,
+import Schemas, {
+  schemas,
 } from '@nfets/nfe/domain/entities/transmission/schemas';
 
 export class NfeRemoteTransmitter implements NfeTransmitter {
@@ -60,7 +60,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       this.remoteTransmissionRepository.setCertificate(certificate);
     }
 
-    this.options.schema ??= schemas.PL_009_V4;
+    this.options.schema ??= Schemas.PL_009_V4;
 
     return this;
   }
@@ -107,7 +107,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
   }
 
   protected xsd(name: string) {
-    return path.resolve(directory, this.options.schema as string, name);
+    return path.resolve(schemas(), this.options.schema as string, name);
   }
 
   @Validates(ConsultStatusPayload)
