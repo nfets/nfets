@@ -115,7 +115,7 @@ export class NativeCertificateRepository implements CertificateRepository {
 
   public getStringPrivateKey(privateKey: KeyObject): string {
     try {
-      return privateKey.export({ type: 'pkcs8', format: 'pem' }).toString();
+      return privateKey.export({ type: 'pkcs8', format: 'pem' });
     } catch (e) {
       throw new NFeTsError('Cannot extract private key');
     }
