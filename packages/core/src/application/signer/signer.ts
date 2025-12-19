@@ -1,4 +1,4 @@
-import type { KeyObject, X509Certificate } from 'node:crypto';
+import type { X509Certificate } from 'node:crypto';
 import type {
   Signature,
   SignedInfo,
@@ -19,6 +19,7 @@ import {
   defaultCanonicalizeOptions,
 } from '../../domain/entities/xml/canonicalization';
 import { unreachable } from '../../shared/unreachable';
+import type { ReadCertificateResponse } from '@nfets/core/domain/entities/certificate/certificate';
 
 export abstract class Signer {
   public constructor(
@@ -65,7 +66,10 @@ export abstract class Signer {
     return this.toolkit.digest(node, this.algorithm, this.canonical);
   }
 
-  protected async signOrLeft(signedInfo: SignedInfo, privateKey: KeyObject) {
+  protected async signOrLeft(
+    signedInfo: SignedInfo,
+    cert: ReadCertificateResponse,
+  ) {
     const content = this.toolkit.canonicalize(
       await this.toolkit.build(
         { $: { xmlns: SignatureNamespace }, ...signedInfo },
@@ -74,11 +78,7 @@ export abstract class Signer {
       this.canonical,
     );
 
-    return await this.certificateRepository.sign(
-      content,
-      privateKey,
-      this.algorithm,
-    );
+    return this.certificateRepository.sign(content, cert, this.algorithm);
   }
 
   private get transforms() {

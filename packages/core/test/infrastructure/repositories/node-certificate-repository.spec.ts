@@ -1,7 +1,11 @@
 import axios from 'axios';
 import { MemoryCacheAdapter } from '@nfets/core/infrastructure/repositories/memory-cache-adapter';
 import { NativeCertificateRepository } from '@nfets/core/infrastructure/repositories/native-certificate-repository';
-import { expectIsRight, expectIsLeft } from '@nfets/test/expects';
+import {
+  expectIsRight,
+  expectIsLeft,
+  expectNotNull,
+} from '@nfets/test/expects';
 import {
   getCertificatePassword,
   getCnpjCertificate,
@@ -11,6 +15,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
 import { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
+import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 
 describe('node certificate repository (unit)', () => {
   const password = getCertificatePassword(),
@@ -19,6 +24,7 @@ describe('node certificate repository (unit)', () => {
 
   const repository = new NativeCertificateRepository(
     axios.create(),
+    new CryptoSignerRepository(),
     new MemoryCacheAdapter(),
   );
 
@@ -131,8 +137,10 @@ emailAddress=email@example.com`);
 
   it('should use cache when reading same certificate twice', async () => {
     const cache = new MemoryCacheAdapter();
+    const signerRepository = new CryptoSignerRepository();
     const cachedRepository = new NativeCertificateRepository(
       axios.create(),
+      signerRepository,
       cache,
     );
 
@@ -162,7 +170,7 @@ emailAddress=email@example.com`);
 
     const signResult = await repository.sign(
       'test content',
-      result.value.privateKey,
+      result.value,
       SignatureAlgorithm.SHA1,
     );
     expectIsRight(signResult);
@@ -179,7 +187,7 @@ emailAddress=email@example.com`);
 
     const signResult = await repository.sign(
       'test content',
-      result.value.privateKey,
+      result.value,
       SignatureAlgorithm.SHA256,
     );
     expectIsRight(signResult);
@@ -238,6 +246,7 @@ emailAddress=email@example.com`);
     });
     expectIsRight(result);
 
+    expectNotNull(result.value.privateKey);
     const privateKey = repository.getStringPrivateKey(result.value.privateKey);
     expect(privateKey).toBeDefined();
     expect(typeof privateKey).toBe('string');
@@ -273,6 +282,7 @@ emailAddress=email@example.com`);
 
       const remoteRepository = new NativeCertificateRepository(
         mockAxios as never,
+        new CryptoSignerRepository(),
         new MemoryCacheAdapter(),
       );
 
@@ -294,6 +304,7 @@ emailAddress=email@example.com`);
 
       const remoteRepository = new NativeCertificateRepository(
         mockAxios as never,
+        new CryptoSignerRepository(),
         new MemoryCacheAdapter(),
       );
 

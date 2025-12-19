@@ -7,13 +7,16 @@ import {
   getCertificatePassword,
   getCnpjCertificate,
 } from '@nfets/test/certificates';
+import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 
 describe('read certificate from pfx (unit)', () => {
   const password = getCertificatePassword();
   const validCnpjPfxCertificate = getCnpjCertificate();
+  const signerRepository = new CryptoSignerRepository();
 
   const certificateRepository = new NativeCertificateRepository(
     axios.create(),
+    signerRepository,
     new MemoryCacheAdapter(),
   );
 

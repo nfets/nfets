@@ -131,7 +131,7 @@ export class NfceQrcode {
     const sequence = `${Id}|${version}|${tpAmb}|${day}|${value}|${idDest}$`;
     const signatureOrLeft = await this.certificateRepository.sign(
       sequence,
-      options.certificate.privateKey,
+      options.certificate,
       SignatureAlgorithm.SHA1,
     );
 
