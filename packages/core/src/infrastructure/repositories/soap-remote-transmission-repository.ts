@@ -1,6 +1,7 @@
 import { constants } from 'node:crypto';
 import { Agent as HttpsAgent } from 'node:https';
 import { createClientAsync } from 'soap';
+import axios, { type AxiosInstance } from 'axios';
 
 import { right } from '@nfets/core/shared/either';
 import { leftFromError } from '@nfets/core/shared/left-from-error';
@@ -38,6 +39,8 @@ export class SoapRemoteTransmissionRepository<C extends Client>
     if (!this.certificate) return new HttpsAgent({ ...defaultAgentOptions });
 
     const { ca, password, certificate, privateKey } = this.certificate;
+    if (!privateKey) return new HttpsAgent({ ...defaultAgentOptions });
+
     return new HttpsAgent({
       passphrase: password,
       cert: certificate.toString(),
@@ -53,12 +56,17 @@ export class SoapRemoteTransmissionRepository<C extends Client>
     };
   }
 
+  protected get request(): AxiosInstance {
+    return axios.create();
+  }
+
   public async send<P extends SendTransmissionPayload<C>>(params: P) {
     try {
       const httpsAgent = this.httpsAgent;
 
       const client = await createClientAsync(`${params.url}?wsdl`, {
         attributesKey: '$',
+        request: this.request,
         wsdl_options: { httpsAgent },
       });
 
@@ -82,7 +90,7 @@ export class SoapRemoteTransmissionRepository<C extends Client>
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
       const [result] = await client[`${params.method}Async`](
         { _xml },
-        { httpsAgent },
+        { httpsAgent, request: this.request },
       );
 
       return right(result as ExtractReturnType<C, P>);

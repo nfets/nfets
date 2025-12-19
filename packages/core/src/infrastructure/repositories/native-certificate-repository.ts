@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto, { type X509Certificate, type KeyObject } from 'node:crypto';
-import forge from 'node-forge';
+import forge, { type pkcs12 } from 'node-forge';
 
 import { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
 import { left, right, type Either } from '@nfets/core/shared/either';
@@ -15,6 +15,7 @@ import type {
 import type { CertificateRepository } from '@nfets/core/domain/repositories/certificate-repository';
 import type { CacheAdapter } from '@nfets/core/domain/repositories/cache-adapter';
 import type { HttpClient } from '@nfets/core/domain/repositories/http-client';
+import type { SignerRepository } from '@nfets/core/domain/repositories/signer-repository';
 
 import { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
 import { ASN1 } from '@nfets/core/application';
@@ -22,6 +23,7 @@ import { ASN1 } from '@nfets/core/application';
 export class NativeCertificateRepository implements CertificateRepository {
   public constructor(
     private readonly httpClient: HttpClient,
+    private readonly signer: SignerRepository,
     private readonly cache: CacheAdapter = new NullCacheAdapter(),
   ) {}
 
@@ -39,27 +41,16 @@ export class NativeCertificateRepository implements CertificateRepository {
         ),
         p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, password);
 
-      const { certBag: oidCertBag, pkcs8ShroudedKeyBag } = forge.pki.oids;
-
+      const { certBag: oidCertBag } = forge.pki.oids;
       const certBags = p12.getBags({ bagType: oidCertBag });
-      const keyBags = p12.getBags({ bagType: pkcs8ShroudedKeyBag });
 
       const certBag = certBags[oidCertBag];
-
       if (!certBag?.length) {
         return left(new NFeTsError('Cannot read certificate'));
       }
 
-      const [{ cert: certificate }, ...chain] = certBag;
-
-      if (!certificate) {
-        return left(new NFeTsError('Issuer Certificate not found'));
-      }
-
-      const privateKey = keyBags[pkcs8ShroudedKeyBag]?.[0].key;
-
-      if (!privateKey)
-        return left(new NFeTsError('Certificate Private Key not found'));
+      const [{ cert }, ...chain] = certBag;
+      if (!cert) return left(new NFeTsError('Issuer Certificate not found'));
 
       const ca = chain.reduce<X509Certificate[]>((acc, { cert }) => {
         if (cert) {
@@ -70,39 +61,35 @@ export class NativeCertificateRepository implements CertificateRepository {
         return acc;
       }, []);
 
-      const pemPrivateKey = forge.pki.privateKeyToPem(privateKey);
-      const pemCertificate = forge.pki.certificateToPem(certificate);
-
-      const nativePrivateKey = crypto.createPrivateKey(pemPrivateKey);
-      const nativeCertificate = new crypto.X509Certificate(pemCertificate);
+      const certificate = new crypto.X509Certificate(
+        forge.pki.certificateToPem(cert),
+      );
 
       return right({
         ca,
         password,
-        privateKey: nativePrivateKey,
-        certificate: nativeCertificate,
+        certificate,
+        privateKey: this.getPrivateKey(p12),
       } satisfies ReadCertificateResponse);
     } catch (e) {
       return leftFromError(e);
     }
   }
 
+  private getPrivateKey(p12: pkcs12.Pkcs12Pfx): KeyObject | undefined {
+    const { pkcs8ShroudedKeyBag } = forge.pki.oids;
+    const keyBags = p12.getBags({ bagType: pkcs8ShroudedKeyBag });
+    const privateKey = keyBags[pkcs8ShroudedKeyBag]?.[0]?.key;
+    if (!privateKey) return void 0;
+    return crypto.createPrivateKey(forge.pki.privateKeyToPem(privateKey));
+  }
+
   public async sign(
     content: string,
-    privateKey: KeyObject,
+    cert: ReadCertificateResponse,
     algorithm: SignatureAlgorithm = SignatureAlgorithm.SHA1,
   ) {
-    try {
-      const signature = crypto.sign(algorithm, Buffer.from(content), {
-        key: privateKey,
-        padding: crypto.constants.RSA_PKCS1_PADDING,
-      });
-
-      const base64 = signature.toString('base64');
-      return await Promise.resolve(right(base64));
-    } catch (e) {
-      return Promise.resolve(leftFromError(e));
-    }
+    return this.signer.sign(content, cert, algorithm);
   }
 
   public getCertificateInfo(certificate: X509Certificate) {

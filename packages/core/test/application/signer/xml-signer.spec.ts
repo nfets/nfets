@@ -15,11 +15,13 @@ import type { CertificateRepository } from '@nfets/core/domain/repositories/cert
 import type { XmlToolkit } from '@nfets/core/domain/entities/xml/xml-toolkit';
 
 import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
+import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 
 describe('xml signer (integration)', () => {
   let certificate: ReadCertificateResponse | undefined;
   const toolkit: XmlToolkit = new Xml2JsToolkit();
   let certificateRepository: CertificateRepository;
+  const signerRepository = new CryptoSignerRepository();
 
   const cert = ensureIntegrationTestsHasValidCertificate();
   if (cert === undefined) return;
@@ -27,6 +29,7 @@ describe('xml signer (integration)', () => {
   beforeAll(async () => {
     certificateRepository = new NativeCertificateRepository(
       axios.create(),
+      signerRepository,
       new MemoryCacheAdapter(),
     );
 
@@ -67,10 +70,12 @@ describe('xml signer (unit)', () => {
   const toolkit: XmlToolkit = new Xml2JsToolkit();
   let certificate: ReadCertificateResponse | undefined;
   let certificateRepository: CertificateRepository;
+  const signerRepository = new CryptoSignerRepository();
 
   beforeAll(async () => {
     certificateRepository = new NativeCertificateRepository(
       axios.create(),
+      signerRepository,
       new MemoryCacheAdapter(),
     );
 

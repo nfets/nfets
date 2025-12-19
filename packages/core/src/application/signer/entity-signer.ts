@@ -16,7 +16,7 @@ export class EntitySigner extends Signer {
     cert: ReadCertificateResponse,
   ): Promise<Either<NFeTsError, SignedEntity<T>>> {
     const { tag, mark } = options;
-    const { privateKey, certificate } = cert;
+    const { certificate } = cert;
 
     if (!content[tag]) {
       return left(new NFeTsError(`Node ${String(tag)} not found`));
@@ -29,7 +29,7 @@ export class EntitySigner extends Signer {
     });
 
     const signedInfo = this.signedInfo(node, mark);
-    const signatureOrLeft = await this.signOrLeft(signedInfo, privateKey);
+    const signatureOrLeft = await this.signOrLeft(signedInfo, cert);
     if (signatureOrLeft.isLeft()) return signatureOrLeft;
 
     const result = content as SignedEntity<T>;

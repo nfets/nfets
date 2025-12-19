@@ -9,7 +9,7 @@ export interface ReadCertificateResponse {
   password: string;
   ca: X509Certificate[];
   certificate: X509Certificate;
-  privateKey: KeyObject;
+  privateKey?: KeyObject;
 }
 
 export interface CertificateInfo {

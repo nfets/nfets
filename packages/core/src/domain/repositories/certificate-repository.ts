@@ -15,7 +15,7 @@ export interface CertificateRepository {
   ): Promise<Either<NFeTsError, ReadCertificateResponse>>;
   sign(
     content: string,
-    privateKey: KeyObject,
+    cert: ReadCertificateResponse,
     algorithm: SignatureAlgorithm,
   ): Promise<Either<NFeTsError, string>>;
   getStringCertificate(certificate: X509Certificate): string;
