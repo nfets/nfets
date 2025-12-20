@@ -19,6 +19,23 @@
       ]
     },
     {
+      "conditions": [
+        ["OS=='win'", {
+          "target_name": "winhttp_ssl_client",
+          "sources": [ "addons/winhttp_ssl_client.cpp" ],
+          "libraries": [
+            "-lwinhttp",
+            "-lcrypt32"
+          ],
+          "msvs_settings": {
+            "VCCLCompilerTool": {
+              "ExceptionHandling": 1
+            }
+          }
+        }]
+      ]
+    },
+    {
       "target_name": "xml_validator",
       "sources": [
         "addons/xml_validator.cpp"
