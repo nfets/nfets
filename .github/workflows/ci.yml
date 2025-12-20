@@ -68,13 +68,6 @@ jobs:
 
             Write-Host "Importing $CertName certificate..."
 
-            $certutilResult = & certutil -f -p $CertPassword -importPFX -user "$PfxPath" 2>&1
-            if ($LASTEXITCODE -eq 0) {
-              Write-Host "Imported $CertName certificate using certutil"
-              return
-            }
-
-            Write-Host "certutil failed, using Import-PfxCertificate..."
             $cert = Import-PfxCertificate `
               -FilePath $PfxPath `
               -Password $securePassword `
@@ -83,12 +76,6 @@ jobs:
               -ErrorAction Stop
 
             Write-Host "Imported $CertName certificate with thumbprint: $($cert.Thumbprint)"
-
-            # Note: Certificates imported from PFX files created with legacy CSPs
-            # will remain in legacy CSPs and may not fully support CNG operations.
-            # SHA1 signing should work fine (uses CSP), but SHA256 may fail if the
-            # certificate is acquired as CNG but the underlying provider is CSP-based.
-            # This is a known limitation - see test comment: "SHA256 is not working"
           }
 
           if (Test-Path "$certPath/certificate_79839601000142.pfx") {
