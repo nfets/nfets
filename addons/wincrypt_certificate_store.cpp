@@ -126,10 +126,17 @@ napi_value SignDataWithCertificate(napi_env env, napi_callback_info info)
 
     // For SHA256, prefer CNG from the start since many CSPs don't support it
     // Don't use SILENT flag for SHA256 to allow user interaction (e.g., smart card PIN)
-    DWORD acquireFlags = CRYPT_ACQUIRE_SILENT_FLAG | CRYPT_ACQUIRE_ALLOW_NCRYPT_KEY_FLAG;
+    // For SHA1, use CSP only to avoid CNG issues with legacy CSP-based certificates
+    DWORD acquireFlags;
     if (hashAlg == CALG_SHA_256)
     {
       acquireFlags = CRYPT_ACQUIRE_PREFER_NCRYPT_KEY_FLAG;
+    }
+    else
+    {
+      // For SHA1, use CSP only (don't allow CNG) to avoid issues with legacy CSP certificates
+      // that don't fully support CNG operations
+      acquireFlags = CRYPT_ACQUIRE_SILENT_FLAG;
     }
 
     if (!CryptAcquireCertificatePrivateKey(
