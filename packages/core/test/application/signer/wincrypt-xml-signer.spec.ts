@@ -69,13 +69,13 @@ describe('wincrypt xml signer (integration)', () => {
 describe('wincrypt xml signer (unit)', () => {
   if (!ensurePlatform('win32')) return;
 
-  if (process.env.CI)
-    return it.skip(
-      `Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.
+  if (process.env.CI) {
+    return it.skip(`Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.
       The Typical Root Cause: The Certificate Location
       The primary reason you cannot access the certificate is likely that your application is trying to access a certificate installed in a user-specific store,
-      but the GitHub Actions runner process is running under a system or service account that does not have access to that specific user's store. `,
-    );
+      but the GitHub Actions runner process is running under a system or service account that does not have access to that specific user's store. `, () =>
+      void 0);
+  }
 
   // you must install the certificates located in the packages/test/fixtures/certificates directory in the certificate store
   // double click on the certificate pfx file to install it
