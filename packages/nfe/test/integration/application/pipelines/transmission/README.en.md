@@ -7,7 +7,7 @@ Running the scenarios under the `describe('soap nfe remote transmission (integra
 - **Irreversible operations**: Once SEFAZ authorizes an NF-e, that document exists. Even though the fixtures produce low-value invoices, you may need to issue inutilização or cancellation procedures manually to clean up.
 - **Sensitive data exposure**: The default fixtures pull emit information from the certificate (issuer name, CNPJ/CPF, address). Running with a developer certificate leaks that data to logs and telemetry.
 
-Before running any command with the `DESTRUCTIVE_TESTS=1` flag, ensure you:
+Before running any command with the `pnpm cross-env DESTRUCTIVE_TESTS=1` flag, ensure you:
 
 1. Understand the NF-e lifecycle for issued documents.
 2. Have explicit approval to use the configured certificate in homologation.
@@ -21,13 +21,13 @@ If you only need to validate the happy-path flow, prefer running the non-destruc
 When you intentionally need to authorize an NF-e in the homologation environment, run from the repository root with the flag scoped to that single command:
 
 ```bash
-DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}' pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline.integration -t 'should authorize a nfe'
+pnpm cross-env DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}' pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline.integration -t 'should authorize a nfe'
 ```
 
 When you intentionally need to authorize an NF-e in the contingency environment, run from the repository root with the flag scoped to that single command:
 
 ```bash
-DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}' pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline.integration -t 'should authorize a contingency nfe'
+pnpm cross-env DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}' pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline.integration -t 'should authorize a contingency nfe'
 ```
 
 When you intentionally need to authorize a batch of NFe in the homologation environment, execute from the repository root, limiting the flag to this command:
@@ -35,31 +35,31 @@ When you intentionally need to authorize a batch of NFe in the homologation envi
 Remember that the test authorizes one NFe with the nNF informed and another NFe with the nNF + 1.
 
 ```bash
-DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}' pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline -t 'should authorize a batch of nfes'
+pnpm cross-env DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","CNPJ":"","enderEmit":{"CEP":"","UF":"","xMun":"","cMun":""}}' pnpm --filter @nfets/nfe test:integration nfe-authorizer-pipeline -t 'should authorize a batch of nfes'
 ```
 
 When you intentionally need to consult a batch of NFe authorization response (retAutorizacao), execute from the repository root, limiting the flag to this command:
 
 ```bash
-DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"nRec":""}' pnpm --filter @nfets/nfe test:integration nfe-authorization-response -t 'should return the authorization response of a nfe'
+pnpm cross-env DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"nRec":""}' pnpm --filter @nfets/nfe test:integration nfe-authorization-response -t 'should return the authorization response of a nfe'
 ```
 
 When you intentionally need to authorize an NFC-e in the homologation environment, run from the repository root with the flag scoped to that single command:
 
 ```bash
-DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","enderEmit":{"CEP":"89700903","cMun":"4204301"}}' pnpm --filter @nfets/nfe test:integration nfce-transmitter -t 'autorizacao'
+pnpm cross-env DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"serie":"69","nNF":"1504","IE":"","enderEmit":{"CEP":"89700903","cMun":"4204301"}}' pnpm --filter @nfets/nfe test:integration nfce-transmitter -t 'autorizacao'
 ```
 
 When you intentionally need to cancel an NF-e in the homologation environment, run from the repository root with the flag scoped to that single command:
 
 ```bash
-DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"chNFe":"","nProt":"","xJust":"Cancelamento de NFe em homologação"}' pnpm --filter @nfets/nfe test:integration nfe-nfce-cancel-pipeline -t 'should cancel a nfe'
+pnpm cross-env DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"chNFe":"","nProt":"","xJust":"Cancelamento de NFe em homologação"}' pnpm --filter @nfets/nfe test:integration nfe-nfce-cancel-pipeline -t 'should cancel a nfe'
 ```
 
 When you intentionally need to void a range of NF-e in the homologation environment, run from the repository root with the flag scoped to that single command:
 
 ```bash
-DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"UF":"","mod":"55","serie":"69","nNFIni":"1504","nNFFin":"1504","xJust":"Inutilização de NFe em homologação"}' pnpm --filter @nfets/nfe test:integration nfe-nfce-void-range-pipeline -t 'should void a range of nfe'
+pnpm cross-env DESTRUCTIVE_TESTS=1 TEST_PAYLOAD='{"UF":"","mod":"55","serie":"69","nNFIni":"1504","nNFFin":"1504","xJust":"Inutilização de NFe em homologação"}' pnpm --filter @nfets/nfe test:integration nfe-nfce-void-range-pipeline -t 'should void a range of nfe'
 ```
 
 Double-check every argument (especially the certificate, IE, and address data) before executing, and remember that each run will leave a real NF-e in the homologation environment.

@@ -76,6 +76,7 @@
     "@types/pdfkit": "^0.17.3",
     "@typescript-eslint/parser": "^8.21.0",
     "axios": "^1.7.9",
+    "cross-env": "^10.1.0",
     "eslint": "^9.19.0",
     "eslint-plugin-prettier": "^5.2.3",
     "fs-extra": "^11.3.0",
