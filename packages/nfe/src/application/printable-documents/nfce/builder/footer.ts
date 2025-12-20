@@ -39,7 +39,15 @@ export class Footer implements Builder {
   }
 
   protected get infCplText(): string {
-    return this.context.data.infNFe.infAdic?.infCpl?.replace(/;/g, '\n') ?? '';
+    const text =
+      this.context.data.infNFe.infAdic?.infCpl?.replace(/;/g, '\n') ?? '';
+    return text
+      .split('\n')
+      .map((line) =>
+        line.trim().replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F-\x9F]/g, ''),
+      )
+      .filter((line) => line.length > 0)
+      .join('\n');
   }
 
   protected infCpl() {
