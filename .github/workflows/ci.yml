@@ -54,26 +54,59 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
-          $password = ConvertTo-SecureString -String "123456" -Force -AsPlainText
+          $password = "123456"
           $certPath = "${{ github.workspace }}/packages/test/fixtures/certificates"
 
-          if (Test-Path "$certPath/certificate_79839601000142.pfx") {
-            Import-PfxCertificate `
-              -FilePath "$certPath/certificate_79839601000142.pfx" `
-              -Password $password `
+          function Import-TestCertificate {
+            param(
+              [string]$PfxPath,
+              [string]$CertPassword,
+              [string]$CertName
+            )
+
+            $securePassword = ConvertTo-SecureString -String $CertPassword -Force -AsPlainText
+
+            Write-Host "Importing $CertName certificate..."
+
+            $certutilResult = & certutil -f -p $CertPassword -importPFX -user "$PfxPath" 2>&1
+            if ($LASTEXITCODE -eq 0) {
+              Write-Host "Imported $CertName certificate using certutil"
+              return
+            }
+
+            Write-Host "certutil failed, using Import-PfxCertificate..."
+            $cert = Import-PfxCertificate `
+              -FilePath $PfxPath `
+              -Password $securePassword `
               -CertStoreLocation Cert:\CurrentUser\My `
+              -KeyExportPolicy Exportable `
               -ErrorAction Stop
-            Write-Host "Installed CNPJ certificate"
+
+            Write-Host "Imported $CertName certificate with thumbprint: $($cert.Thumbprint)"
+
+            # Note: Certificates imported from PFX files created with legacy CSPs
+            # will remain in legacy CSPs and may not fully support CNG operations.
+            # SHA1 signing should work fine (uses CSP), but SHA256 may fail if the
+            # certificate is acquired as CNG but the underlying provider is CSP-based.
+            # This is a known limitation - see test comment: "SHA256 is not working"
+          }
+
+          if (Test-Path "$certPath/certificate_79839601000142.pfx") {
+            Import-TestCertificate `
+              -PfxPath "$certPath/certificate_79839601000142.pfx" `
+              -CertPassword $password `
+              -CertName "CNPJ"
           }
 
           if (Test-Path "$certPath/certificate_61094730068.pfx") {
-            Import-PfxCertificate `
-              -FilePath "$certPath/certificate_61094730068.pfx" `
-              -Password $password `
-              -CertStoreLocation Cert:\CurrentUser\My `
-              -ErrorAction Stop
-            Write-Host "Installed CPF certificate"
+            Import-TestCertificate `
+              -PfxPath "$certPath/certificate_61094730068.pfx" `
+              -CertPassword $password `
+              -CertName "CPF"
           }
+
+          Write-Host "`nInstalled certificates in CurrentUser\My store:"
+          Get-ChildItem Cert:\CurrentUser\My | Select-Object Thumbprint, Subject | Format-Table
 
       - name: Run lint
         run: make lint
