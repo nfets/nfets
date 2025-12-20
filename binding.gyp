@@ -1,6 +1,24 @@
 {
   "targets": [
     {
+      "conditions": [
+        ["OS=='win'", {
+          "target_name": "wincrypt_certificate_store",
+          "sources": [ "addons/wincrypt_certificate_store.cpp" ],
+          "libraries": [
+            "-lcrypt32",
+            "-lncrypt",
+            "-lwinhttp"
+          ],
+          "msvs_settings": {
+            "VCCLCompilerTool": {
+              "ExceptionHandling": 1
+            }
+          }
+        }]
+      ]
+    },
+    {
       "target_name": "xml_validator",
       "sources": [
         "addons/xml_validator.cpp"

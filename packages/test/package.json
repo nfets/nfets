@@ -8,7 +8,8 @@
     "./ensure-integration-tests": "./src/ensure-integration-tests.ts",
     "./expects": "./src/expects.ts",
     "./jest.config": "./jest.config.ts",
-    "./jest.config.integration": "./jest.config.integration.ts"
+    "./jest.config.integration": "./jest.config.integration.ts",
+    "./ensure-platform": "./src/ensure-platform.ts"
   },
   "scripts": {
     "test": "cross-env NODE_OPTIONS=\"--localstorage-file=/tmp/jest-localstorage.json\" jest --config jest.config.integration.ts"
