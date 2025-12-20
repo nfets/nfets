@@ -76,6 +76,11 @@ jobs:
               -ErrorAction Stop
 
             Write-Host "Imported $CertName certificate with thumbprint: $($cert.Thumbprint)"
+
+            $certWithKey = Get-ChildItem Cert:\CurrentUser\My\$($cert.Thumbprint) -ErrorAction SilentlyContinue
+            if ($certWithKey) {
+              Write-Host "Certificate found in store. HasPrivateKey: $($certWithKey.HasPrivateKey)"
+            }
           }
 
           if (Test-Path "$certPath/certificate_79839601000142.pfx") {

@@ -131,7 +131,7 @@ napi_value SignDataWithCertificate(napi_env env, napi_callback_info info)
 
     // For SHA256, prefer CNG from the start since many CSPs don't support it
     // Don't use SILENT flag for SHA256 to allow user interaction (e.g., smart card PIN)
-    // For SHA1, use CSP only to avoid CNG issues with legacy CSP-based certificates
+    // For SHA1, allow both CSP and CNG to maximize compatibility, especially in CI environments
     DWORD acquireFlags;
     if (hashAlg == CALG_SHA_256)
     {
@@ -139,9 +139,9 @@ napi_value SignDataWithCertificate(napi_env env, napi_callback_info info)
     }
     else
     {
-      // For SHA1, use CSP only (don't allow CNG) to avoid issues with legacy CSP certificates
-      // that don't fully support CNG operations
-      acquireFlags = CRYPT_ACQUIRE_SILENT_FLAG;
+      // For SHA1, allow both CSP and CNG to handle different certificate storage scenarios
+      // This helps in CI environments where certificates may be stored differently
+      acquireFlags = CRYPT_ACQUIRE_SILENT_FLAG | CRYPT_ACQUIRE_ALLOW_NCRYPT_KEY_FLAG;
     }
 
     if (!CryptAcquireCertificatePrivateKey(
@@ -152,7 +152,16 @@ napi_value SignDataWithCertificate(napi_env env, napi_callback_info info)
             &dwKeySpec,
             &fCallerFreeProvOrNCryptKey))
     {
-      throw std::runtime_error("Failed to acquire private key. Error: " + std::to_string(GetLastError()));
+      DWORD error = GetLastError();
+      std::string errorMsg = "Failed to acquire private key. Error: " + std::to_string(error);
+
+      if (error == 0x80090014) // NTE_BAD_KEYSET
+      {
+        errorMsg += " (NTE_BAD_KEYSET: The keyset does not exist or the private key is not accessible. "
+                    "Ensure the certificate is installed with exportable key and the process has access to it.)";
+      }
+
+      throw std::runtime_error(errorMsg);
     }
 
     if (dwKeySpec == CERT_NCRYPT_KEY_SPEC)
