@@ -19,8 +19,7 @@ describe('xml validator (unit)', () => {
 
   it('should return left when xml content is not provided', async () => {
     await expect(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (xml as any).validate(null) as Either<NFeTsError, void>,
+      xml.validate('', ''),
     ).resolves.toStrictEqual(
       left(new NFeTsError('Please provide a valid xml content')),
     );
