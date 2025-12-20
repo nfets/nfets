@@ -1,3 +1,4 @@
+import os from 'node:os';
 import { constants } from 'node:crypto';
 import { Agent as HttpsAgent } from 'node:https';
 import { createClientAsync } from 'soap';
@@ -15,6 +16,7 @@ import type {
   SendTransmissionPayload,
   ExtractReturnType,
 } from '@nfets/core/domain/entities/transmission/payload';
+import { WinHttpClient } from './winhttp-client';
 
 export class SoapRemoteTransmissionRepository<C extends Client>
   implements RemoteTransmissionRepository<C>
@@ -56,18 +58,32 @@ export class SoapRemoteTransmissionRepository<C extends Client>
     };
   }
 
+  protected getDefaultRequest(): AxiosInstance {
+    const instance = axios.create();
+    instance.defaults.httpsAgent = this.httpsAgent;
+    return instance;
+  }
+
   protected get request(): AxiosInstance {
-    return axios.create();
+    if (os.platform() === 'win32') {
+      try {
+        if (!this.certificate) return this.getDefaultRequest();
+        return WinHttpClient.create(this.certificate);
+      } catch (error) {
+        return this.getDefaultRequest();
+      }
+    }
+
+    return this.getDefaultRequest();
   }
 
   public async send<P extends SendTransmissionPayload<C>>(params: P) {
     try {
-      const httpsAgent = this.httpsAgent;
-
+      const request = this.request;
       const client = await createClientAsync(`${params.url}?wsdl`, {
+        request,
         attributesKey: '$',
-        request: this.request,
-        wsdl_options: { httpsAgent },
+        wsdl_options: { request },
       });
 
       params.payload.$ = {
@@ -90,7 +106,7 @@ export class SoapRemoteTransmissionRepository<C extends Client>
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
       const [result] = await client[`${params.method}Async`](
         { _xml },
-        { httpsAgent, request: this.request },
+        { request },
       );
 
       return right(result as ExtractReturnType<C, P>);
