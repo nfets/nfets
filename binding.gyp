@@ -1,9 +1,9 @@
 {
   "targets": [
     {
+      "target_name": "wincrypt_certificate_store",
       "conditions": [
         ["OS=='win'", {
-          "target_name": "wincrypt_certificate_store",
           "sources": [ "addons/wincrypt_certificate_store.cpp" ],
           "libraries": [
             "-lcrypt32",
@@ -19,9 +19,9 @@
       ]
     },
     {
+      "target_name": "winhttp_ssl_client",
       "conditions": [
         ["OS=='win'", {
-          "target_name": "winhttp_ssl_client",
           "sources": [ "addons/winhttp_ssl_client.cpp" ],
           "libraries": [
             "-lwinhttp",
