@@ -6,11 +6,14 @@ req_extensions = v3_req
 
 [ req_distinguished_name ]
 C = BR
-ST = São Paulo
+ST = SP
 L = São Paulo
 O = ICP-Brasil
-OU = Certificado PF A1
-CN = 610.947.300-68
+OU = Certificado PJ A1
+OU = Certificado Digital
+OU = 61094730068
+CN = JOAO DA SILVA:61094730068
+OU = AC SOLUTI Multipla v5
 emailAddress = email@example.com
 
 [ v3_ca ]
