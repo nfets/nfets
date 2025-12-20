@@ -50,6 +50,31 @@ jobs:
           make addon
           make build
 
+      - name: Install test certificates (Windows only)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          $password = ConvertTo-SecureString -String "123456" -Force -AsPlainText
+          $certPath = "${{ github.workspace }}/packages/test/fixtures/certificates"
+
+          if (Test-Path "$certPath/certificate_79839601000142.pfx") {
+            Import-PfxCertificate `
+              -FilePath "$certPath/certificate_79839601000142.pfx" `
+              -Password $password `
+              -CertStoreLocation Cert:\CurrentUser\My `
+              -ErrorAction Stop
+            Write-Host "Installed CNPJ certificate"
+          }
+
+          if (Test-Path "$certPath/certificate_61094730068.pfx") {
+            Import-PfxCertificate `
+              -FilePath "$certPath/certificate_61094730068.pfx" `
+              -Password $password `
+              -CertStoreLocation Cert:\CurrentUser\My `
+              -ErrorAction Stop
+            Write-Host "Installed CPF certificate"
+          }
+
       - name: Run lint
         run: make lint
 
