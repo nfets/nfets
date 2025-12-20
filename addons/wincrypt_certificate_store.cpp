@@ -91,7 +91,12 @@ napi_value SignDataWithCertificate(napi_env env, napi_callback_info info)
 
   try
   {
-    hStore = CertOpenSystemStoreW(0, L"MY");
+    hStore = CertOpenStore(
+        CERT_STORE_PROV_SYSTEM_W,
+        0,
+        NULL,
+        CERT_SYSTEM_STORE_CURRENT_USER,
+        L"MY");
     if (!hStore)
     {
       throw std::runtime_error("Failed to open certificate store");
