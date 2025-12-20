@@ -15,7 +15,7 @@ export class ASN1 {
     return {
       CNPJ: this.oid('2.16.76.1.3.3', certificate.raw),
       CPF: CPF,
-      CN: map.get('CN')?.replace(/:.*$/g, ''),
+      CN: map.get('CN'),
       O: map.get('O'),
       OU: map.get('OU'),
       ST: map.get('ST'),

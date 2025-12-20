@@ -38,29 +38,29 @@ describe('node certificate repository (unit)', () => {
     const { certificate: certificateInfo } = result.value;
 
     expect(certificateInfo.subject).toEqual(`C=BR
-ST=SÃ£o Paulo
+ST=SP
 L=SÃ£o Paulo
 O=ICP-Brasil
-OU=Certificado PJ A1
-CN=79.839.601/0001-42
+CN=EMPRESA DE TESTE:79839601000142
+OU=AC SOLUTI Multipla v5
 emailAddress=email@example.com`);
     expect(certificateInfo.subjectAltName).toContain(`email:email@example.com`);
     expect(certificateInfo.issuer).toEqual(`C=BR
-ST=SÃ£o Paulo
+ST=SP
 L=SÃ£o Paulo
 O=ICP-Brasil
-OU=Certificado PJ A1
-CN=79.839.601/0001-42
+CN=EMPRESA DE TESTE:79839601000142
+OU=AC SOLUTI Multipla v5
 emailAddress=email@example.com`);
 
     expect(certificateInfo.serialNumber).toEqual(
-      '41CCFE9C1EEAC1B02664CF77AAE42F6E64A117B4',
+      '53936274827C03FE661A6517AF66760A63A6910C',
     );
     expect(certificateInfo.validFromDate).toEqual(
-      new Date('2025-11-06T16:02:26.000Z'),
+      new Date('2025-12-20T01:11:27.000Z'),
     );
     expect(certificateInfo.validToDate).toEqual(
-      new Date('2035-11-04T16:02:26.000Z'),
+      new Date('2035-12-18T01:11:27.000Z'),
     );
   });
 
@@ -74,29 +74,29 @@ emailAddress=email@example.com`);
     const { certificate: certificateInfo } = result.value;
 
     expect(certificateInfo.subject).toEqual(`C=BR
-ST=SÃ£o Paulo
+ST=SP
 L=SÃ£o Paulo
 O=ICP-Brasil
-OU=Certificado PF A1
-CN=610.947.300-68
+CN=JOAO DA SILVA:61094730068
+OU=AC SOLUTI Multipla v5
 emailAddress=email@example.com`);
     expect(certificateInfo.subjectAltName).toContain(`email:email@example.com`);
     expect(certificateInfo.issuer).toEqual(`C=BR
-ST=SÃ£o Paulo
+ST=SP
 L=SÃ£o Paulo
 O=ICP-Brasil
-OU=Certificado PF A1
-CN=610.947.300-68
+CN=JOAO DA SILVA:61094730068
+OU=AC SOLUTI Multipla v5
 emailAddress=email@example.com`);
 
     expect(certificateInfo.serialNumber).toEqual(
-      '29914D22ADF9A65E8B24AC2B3673F5FFE2C9678A',
+      '1A860259E05C8CF076247489312CA7CE1E68797E',
     );
     expect(certificateInfo.validFromDate).toEqual(
-      new Date('2025-11-06T16:02:33.000Z'),
+      new Date('2025-12-20T01:13:31.000Z'),
     );
     expect(certificateInfo.validToDate).toEqual(
-      new Date('2035-11-04T16:02:33.000Z'),
+      new Date('2035-12-18T01:13:31.000Z'),
     );
   });
 

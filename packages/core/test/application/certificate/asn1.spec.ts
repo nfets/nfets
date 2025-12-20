@@ -8,6 +8,7 @@ import {
   getCnpjCertificate,
   getCpfCertificate,
 } from '@nfets/test/certificates';
+import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 
 describe('ASN1 (unit)', () => {
   const password = getCertificatePassword();
@@ -16,6 +17,7 @@ describe('ASN1 (unit)', () => {
 
   const certificateRepository = new NativeCertificateRepository(
     axios.create(),
+    new CryptoSignerRepository(),
     new MemoryCacheAdapter(),
   );
 
@@ -32,10 +34,10 @@ describe('ASN1 (unit)', () => {
       result.value.certificate,
     );
 
-    expect(certificateInfo.CN).toBe('79.839.601/0001-42');
+    expect(certificateInfo.CN).toBe('EMPRESA DE TESTE:79839601000142');
     expect(certificateInfo.O).toBe('ICP-Brasil');
-    expect(certificateInfo.OU).toBe('Certificado PJ A1');
-    expect(certificateInfo.ST).toBe('SÃ£o Paulo');
+    expect(certificateInfo.OU).toBe('AC SOLUTI Multipla v5');
+    expect(certificateInfo.ST).toBe('SP');
     expect(certificateInfo.L).toBe('SÃ£o Paulo');
     expect(certificateInfo.C).toBe('BR');
 
@@ -54,10 +56,10 @@ describe('ASN1 (unit)', () => {
       result.value.certificate,
     );
 
-    expect(certificateInfo.CN).toBe('610.947.300-68');
+    expect(certificateInfo.CN).toBe('JOAO DA SILVA:61094730068');
     expect(certificateInfo.O).toBe('ICP-Brasil');
-    expect(certificateInfo.OU).toBe('Certificado PF A1');
-    expect(certificateInfo.ST).toBe('SÃ£o Paulo');
+    expect(certificateInfo.OU).toBe('AC SOLUTI Multipla v5');
+    expect(certificateInfo.ST).toBe('SP');
     expect(certificateInfo.L).toBe('SÃ£o Paulo');
     expect(certificateInfo.C).toBe('BR');
 
@@ -86,7 +88,6 @@ describe('ASN1 (unit)', () => {
 
     const certificateInfo = asn1.extractCertificateInfo(mockCertificate);
 
-    expect(certificateInfo.CN).toBe('79.839.601/0001-42');
-    expect(certificateInfo.CN).not.toContain(':');
+    expect(certificateInfo.CN).toBe('EMPRESA DE TESTE:79839601000142');
   });
 });
