@@ -131,28 +131,77 @@ napi_value SignDataWithCertificate(napi_env env, napi_callback_info info)
 
     // For SHA256, prefer CNG from the start since many CSPs don't support it
     // Don't use SILENT flag for SHA256 to allow user interaction (e.g., smart card PIN)
-    // For SHA1, use CSP only to avoid CNG issues with legacy CSP-based certificates
+    // For SHA1, prefer CSP first (legacy certificates work better with CSP), fallback to CNG if needed
     DWORD acquireFlags;
+    BOOL acquired = FALSE;
+
     if (hashAlg == CALG_SHA_256)
     {
       acquireFlags = CRYPT_ACQUIRE_PREFER_NCRYPT_KEY_FLAG;
+      acquired = CryptAcquireCertificatePrivateKey(
+          pCertContext,
+          acquireFlags,
+          NULL,
+          &hCryptProv,
+          &dwKeySpec,
+          &fCallerFreeProvOrNCryptKey);
     }
     else
     {
-      // For SHA1, use CSP only (don't allow CNG) to avoid issues with legacy CSP certificates
-      // that don't fully support CNG operations
+      // For SHA1, try CSP first (without allowing CNG) to avoid CNG issues with legacy CSP certificates
       acquireFlags = CRYPT_ACQUIRE_SILENT_FLAG;
-    }
+      acquired = CryptAcquireCertificatePrivateKey(
+          pCertContext,
+          acquireFlags,
+          NULL,
+          &hCryptProv,
+          &dwKeySpec,
+          &fCallerFreeProvOrNCryptKey);
 
-    if (!CryptAcquireCertificatePrivateKey(
+      // If CSP failed, try with CNG as fallback (for certificates stored in CNG providers)
+      if (!acquired)
+      {
+        DWORD firstError = GetLastError();
+        acquireFlags = CRYPT_ACQUIRE_SILENT_FLAG | CRYPT_ACQUIRE_ALLOW_NCRYPT_KEY_FLAG;
+        acquired = CryptAcquireCertificatePrivateKey(
             pCertContext,
             acquireFlags,
             NULL,
             &hCryptProv,
             &dwKeySpec,
-            &fCallerFreeProvOrNCryptKey))
+            &fCallerFreeProvOrNCryptKey);
+
+        if (!acquired)
+        {
+          DWORD secondError = GetLastError();
+          std::string errorMsg = "Failed to acquire private key. First attempt (CSP only) error: " +
+                                std::to_string(firstError) +
+                                ". Second attempt (with CNG) error: " +
+                                std::to_string(secondError);
+
+          if (firstError == 0x80090014 || secondError == 0x80090014) // NTE_BAD_KEYSET
+          {
+            errorMsg += " (NTE_BAD_KEYSET: The keyset does not exist or the private key is not accessible. "
+                        "Ensure the certificate is installed with exportable key and the process has access to it.)";
+          }
+
+          throw std::runtime_error(errorMsg);
+        }
+      }
+    }
+
+    if (!acquired)
     {
-      throw std::runtime_error("Failed to acquire private key. Error: " + std::to_string(GetLastError()));
+      DWORD error = GetLastError();
+      std::string errorMsg = "Failed to acquire private key. Error: " + std::to_string(error);
+
+      if (error == 0x80090014) // NTE_BAD_KEYSET
+      {
+        errorMsg += " (NTE_BAD_KEYSET: The keyset does not exist or the private key is not accessible. "
+                    "Ensure the certificate is installed with exportable key and the process has access to it.)";
+      }
+
+      throw std::runtime_error(errorMsg);
     }
 
     if (dwKeySpec == CERT_NCRYPT_KEY_SPEC)
@@ -267,6 +316,96 @@ napi_value SignDataWithCertificate(napi_env env, napi_callback_info info)
       status = NCryptSignHash(hKey, NULL, pbHash, cbHash, pbSignature, cbSignature, &cbSignature, NCRYPT_PAD_PKCS1_FLAG);
       if (status != 0)
       {
+        // For SHA1, if CNG signing fails with NTE_BAD_KEY_STATE, try to fallback to CSP
+        // This can happen when the certificate is in a legacy CSP that doesn't fully support CNG
+        if ((status == NTE_BAD_KEY_STATE || status == 0x80090027 || status == -2146893785) &&
+            algorithm_str == "sha1" && hashAlg == CALG_SHA1)
+        {
+          // Free CNG resources
+          LocalFree(pbHashObject);
+          LocalFree(pbHash);
+          LocalFree(pbSignature);
+          BCryptCloseAlgorithmProvider(hAlg, 0);
+          if (fCallerFreeProvOrNCryptKey && hCryptProv)
+          {
+            NCryptFreeObject(hCryptProv);
+            hCryptProv = NULL;
+          }
+
+          // Try to re-acquire as CSP
+          acquireFlags = CRYPT_ACQUIRE_SILENT_FLAG;
+          if (CryptAcquireCertificatePrivateKey(
+                  pCertContext,
+                  acquireFlags,
+                  NULL,
+                  &hCryptProv,
+                  &dwKeySpec,
+                  &fCallerFreeProvOrNCryptKey) &&
+              dwKeySpec != CERT_NCRYPT_KEY_SPEC)
+          {
+            // Successfully acquired as CSP, now do CSP signing
+            // Create hash using CSP
+            if (!CryptCreateHash(hCryptProv, hashAlg, 0, 0, &hHash))
+            {
+              DWORD cspError = GetLastError();
+              throw std::runtime_error("Failed to create CSP hash after CNG fallback. Error: " + std::to_string(cspError));
+            }
+
+            if (!CryptHashData(hHash, data, dataLen, 0))
+            {
+              CryptDestroyHash(hHash);
+              hHash = NULL;
+              throw std::runtime_error("Failed to hash data with CSP. Error: " + std::to_string(GetLastError()));
+            }
+
+            DWORD signatureLen = 0;
+            if (!CryptSignHash(hHash, dwKeySpec, NULL, 0, NULL, &signatureLen))
+            {
+              CryptDestroyHash(hHash);
+              hHash = NULL;
+              throw std::runtime_error("Failed to get CSP signature size. Error: " + std::to_string(GetLastError()));
+            }
+
+            BYTE *signature = (BYTE *)LocalAlloc(LMEM_FIXED, signatureLen);
+            if (!signature)
+            {
+              CryptDestroyHash(hHash);
+              hHash = NULL;
+              throw std::runtime_error("Failed to allocate memory for CSP signature");
+            }
+
+            if (!CryptSignHash(hHash, dwKeySpec, NULL, 0, signature, &signatureLen))
+            {
+              LocalFree(signature);
+              CryptDestroyHash(hHash);
+              hHash = NULL;
+              throw std::runtime_error("Failed to sign hash with CSP. Error: " + std::to_string(GetLastError()));
+            }
+
+            std::vector<BYTE> reversedSignature(signatureLen);
+            for (DWORD i = 0; i < signatureLen; i++)
+            {
+              reversedSignature[i] = signature[signatureLen - 1 - i];
+            }
+
+            napi_create_buffer_copy(env, signatureLen, reversedSignature.data(), nullptr, &result);
+
+            LocalFree(signature);
+            CryptDestroyHash(hHash);
+            hHash = NULL;
+
+            // Skip the rest of CNG code and go to cleanup
+            goto cleanup;
+          }
+          else
+          {
+            // CSP acquisition also failed, throw error
+            throw std::runtime_error(
+              "CNG signing failed and CSP fallback also failed. The certificate's key provider may not fully support signing operations. "
+              "CNG error: " + std::to_string(status) + ", CSP acquisition error: " + std::to_string(GetLastError()));
+          }
+        }
+
         LocalFree(pbHashObject);
         LocalFree(pbHash);
         LocalFree(pbSignature);
@@ -542,6 +681,7 @@ napi_value SignDataWithCertificate(napi_env env, napi_callback_info info)
     result = nullptr;
   }
 
+cleanup:
   if (hHash)
   {
     CryptDestroyHash(hHash);

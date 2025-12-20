@@ -22,8 +22,9 @@ import {
   type ParserOptions,
 } from '../../domain/entities/xml/xml-parser';
 
-import { right } from '../../shared/either';
+import { left, right } from '../../shared/either';
 import { leftFromError } from '../../shared/left-from-error';
+import { NFeTsError } from '@nfets/core/domain';
 
 export class Xml2JsToolkit implements XmlToolkit {
   public constructor(private readonly xml2js = Xml2js) {
@@ -35,6 +36,14 @@ export class Xml2JsToolkit implements XmlToolkit {
   }
 
   public async validate(xml: string, xsd: string) {
+    if (!xml || xml.trim().length === 0) {
+      return left(new NFeTsError('Please provide a valid xml content'));
+    }
+
+    if (!xsd || xsd.trim().length === 0) {
+      return left(new NFeTsError('Please provide a valid existing xsd path'));
+    }
+
     try {
       await validator.validate(xml, xsd);
       return right();
