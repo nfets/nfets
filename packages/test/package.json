@@ -11,6 +11,6 @@
     "./jest.config.integration": "./jest.config.integration.ts"
   },
   "scripts": {
-    "test": "NODE_OPTIONS=\"--localstorage-file=/tmp/jest-localstorage.json\" jest --config jest.config.integration.ts"
+    "test": "cross-env NODE_OPTIONS=\"--localstorage-file=/tmp/jest-localstorage.json\" jest --config jest.config.integration.ts"
   }
 }

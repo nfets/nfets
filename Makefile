@@ -1,4 +1,4 @@
-.PHONY: build
+.PHONY: lint clean test typecheck test\:coverage-summary install addon build
 
 lint:
 	@pnpm eslint -c eslint.config.mjs
