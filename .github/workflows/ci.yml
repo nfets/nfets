@@ -72,7 +72,6 @@ jobs:
               -FilePath $PfxPath `
               -Password $securePassword `
               -CertStoreLocation Cert:\CurrentUser\My `
-              -KeyExportPolicy Exportable `
               -ErrorAction Stop
 
             Write-Host "Imported $CertName certificate with thumbprint: $($cert.Thumbprint)"
