@@ -44,6 +44,7 @@ export class Footer implements Builder {
     return text
       .split('\n')
       .map((line) =>
+        // eslint-disable-next-line no-control-regex
         line.trim().replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F-\x9F]/g, ''),
       )
       .filter((line) => line.length > 0)
