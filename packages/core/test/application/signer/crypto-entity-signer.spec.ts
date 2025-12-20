@@ -14,6 +14,7 @@ import type { CertificateRepository } from '@nfets/core/domain/repositories/cert
 import type { XmlToolkit } from '@nfets/core/domain/entities/xml/xml-toolkit';
 
 import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
+import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 
 describe('entity signer (integration)', () => {
   let certificate: ReadCertificateResponse | undefined;
@@ -26,13 +27,14 @@ describe('entity signer (integration)', () => {
   beforeAll(async () => {
     certificateRepository = new NativeCertificateRepository(
       axios.create(),
+      new CryptoSignerRepository(),
       new MemoryCacheAdapter(),
     );
 
-    const certificateOrError = await certificateRepository.read(
-      cert.certificatePath,
-      cert.password,
-    );
+    const certificateOrError = await certificateRepository.read({
+      pfxPathOrBase64: cert.certificatePath,
+      password: cert.password,
+    });
 
     if (certificateOrError.isLeft()) return;
     certificate = certificateOrError.value;
@@ -70,13 +72,14 @@ describe('entity signer (unit)', () => {
   beforeAll(async () => {
     certificateRepository = new NativeCertificateRepository(
       axios.create(),
+      new CryptoSignerRepository(),
       new MemoryCacheAdapter(),
     );
 
-    const certificateOrError = await certificateRepository.read(
-      validCnpjPfxCertificate,
+    const certificateOrError = await certificateRepository.read({
+      pfxPathOrBase64: validCnpjPfxCertificate,
       password,
-    );
+    });
 
     if (certificateOrError.isLeft()) return;
     certificate = certificateOrError.value;
@@ -345,7 +348,7 @@ describe('entity signer (unit)', () => {
     ).toStrictEqual(expectedDigestValue);
 
     const expectedSignatureValue =
-      'W7cYfkhE8VKDXf1hFzZMLSU0yexjuzU6ObxBUIAMTye9LYN8PKtsKemoRDkSrnHTitcXU8FiDuRBIthDxDpKJx1V30RxIQm6ATu+WxDIZy6m42Ux7IWwH9i/1M7xDyPSUUzYRr09tZq0S7Ss+Cy3QEbMyAPoFus633fJ3OwOa4vYyOEL35w11B+t+AP4q0p0Mcqp0EIv7s3Te+xyFr6YSQ8656kO3E8CmOgKNHcYp7/O3MTatKEa2E1enW2ivbSIEY2dwmWdNbz23k4RpSuzVI0B80vJFbGGDkmYWck+/3JNNgHDlLh7cOXAVrpW/rTwev1SdLYg3MSTm0vJ/COudA==';
+      'f/hhwH8mtfmUKEuDv4XhpL66fHycdj//jXmsz0TFKfZgZ9aHhIo313RxxTzqOUE9etomSjwlosDl9SbQKf5Fr/W0uEW6r4vcppkGjWh071VfJSdtHX0jKCk4FjzNLOLuHO5W3ToQD0D/sSrMZLGAD6yRQTXebeCek/MdBqzXyoDoWY3XOPmmv1utYLEEf/43ZOEC8fSzCufrcIusjF+gHbca7A9h28+qd+/VIcTj3f9kXcOAItUO/UiPvGtEhbpVduih9uzpvxQKn7IDritCbRJmIMdJRVLW8Ntf4oTZ21DwHkyX/cNtrkPI2PmA+gsPGBU+0uLgnkmjOCK2LoROrQ==';
     expect(signed.value.Signature.SignatureValue).toStrictEqual(
       expectedSignatureValue,
     );
@@ -640,7 +643,7 @@ describe('entity signer (unit)', () => {
     ).toStrictEqual(expectedDigestValue);
 
     const expectedSignatureValue =
-      'od+xwOD10z0yq+czNzjAHoi4jDxbHZi8U2yVc1iRMhg39gPG9ZRxIC1+/1JmPtLf6AAcoZLmSfFg1XYYLsxNfwDCroA2HhaF0+8DQ67uAru4v9w35hJXoGTYNjReAFcL53v+mQbwWs8p+KUYYOI5fpqI0gDyQZA3UfE4WsYSCJee3VhSRKbu2Lee2cd6LVbz9kUPZ4+N8KDUmnhywFtghxD0yrArDYg8UcIlm3dvmd0Cb8Y5xgXEww5TQ/XkEpZDkyd+X3sS+PowQABl7CJvx4e/lKmmax5rysPui6GHw8lZTmuF6rOJPe//+mMlTlG0bHaWUSLAittsp2PvhdoRZA==';
+      'jXYzNxaJ9kkZa0I+conWKMpQADC6hgsu1C+Wra+BcoUZllmjfxQzx74PjaDCABvSgMH9cjcCuO64TelcIce3m8iwx1MY6Z4u3ZSQHgNcHYzfc0/iFEXnqw2oHkzKMCuw/FVMBSrHyxGM+nzbSB27iLhVqLuz9gyZIjhNPdFkcsLqOG5CNM8mftbFeejiJO1rFuVSjHa1uX3cnzm/lrmDJXTJ4i1mxJk/awHD4Rj+7uqfO0/7CSgtQSG4juejiZRKOdrA45FIt1tB9eRxprr6wvLNcnNJjBHLwvI5oJveJulphAJv3nR+EO89ALvrnJzOR1ww8Zv2t46RhVIEiIhfIQ==';
     expect(signed.value.Signature.SignatureValue).toStrictEqual(
       expectedSignatureValue,
     );
