@@ -64,18 +64,37 @@ jobs:
               [string]$CertName
             )
 
-            $securePassword = ConvertTo-SecureString -String $CertPassword -Force -AsPlainText
-
             Write-Host "Importing $CertName certificate..."
 
-            $cert = Import-PfxCertificate `
-              -FilePath $PfxPath `
-              -Password $securePassword `
-              -CertStoreLocation Cert:\CurrentUser\My `
-              -Exportable `
-              -ErrorAction Stop
+            $securePassword = ConvertTo-SecureString -String $CertPassword -Force -AsPlainText
+            $pfxBytes = [System.IO.File]::ReadAllBytes($PfxPath)
 
-            Write-Host "Imported $CertName certificate with thumbprint: $($cert.Thumbprint)"
+            # Use flags that allow private key access similar to GUI import:
+            # - Exportable: Allow key export (enables access to private key)
+            # - PersistKeySet: Persist the key in the key container (required for proper access)
+            # Note: UserKeySet is the default for CurrentUser, but we explicitly set it to match GUI behavior
+            $flags = [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::PersistKeySet -bor
+                     [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::UserKeySet
+
+            $cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2(
+              $pfxBytes,
+              $securePassword,
+              $flags
+            )
+
+            $store = New-Object System.Security.Cryptography.X509Certificates.X509Store(
+              [System.Security.Cryptography.X509Certificates.StoreName]::My,
+              [System.Security.Cryptography.X509Certificates.StoreLocation]::CurrentUser
+            )
+            $store.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadWrite)
+
+            try {
+              $store.Add($cert)
+              Write-Host "Imported $CertName certificate with thumbprint: $($cert.Thumbprint)"
+            }
+            finally {
+              $store.Close()
+            }
 
             $certWithKey = Get-ChildItem Cert:\CurrentUser\My\$($cert.Thumbprint) -ErrorAction SilentlyContinue
             if ($certWithKey) {
