@@ -14,6 +14,9 @@ export * from './pipelines/transmission/nfe-nfce-void-range-pipeline';
 export * from './pipelines/xml/nfe-xml-builder-pipeline';
 export * from './pipelines/xml/nfce-xml-builder-pipeline';
 
+export * from './printable-documents/nfce/layouts/danfce-default';
+export * from './printable-documents/nfce/layouts/danfce-reduced';
+
 export * from './transmission/nfe-transmitter';
 export * from './transmission/nfce-transmitter';
 export * from './transmission/nfce-qrcode';
