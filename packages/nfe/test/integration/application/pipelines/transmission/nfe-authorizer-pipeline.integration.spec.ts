@@ -180,12 +180,10 @@ describe('nfe authorizer pipeline (integration) (destructive)', () => {
         NFe: entityOrLeft.value,
       });
       expectIsRight(response);
-      console.log(
-        'response:',
-        JSON.stringify(response.value.retEnviNFe, null, 2),
-      );
+      const { retEnviNFe } = response.value.response;
+      console.log('response:', JSON.stringify(retEnviNFe, null, 2));
 
-      const infProt = response.value.retEnviNFe.protNFe.infProt;
+      const infProt = retEnviNFe.protNFe.infProt;
 
       expect(infProt).toBeDefined();
       expect(infProt.nProt).toBeDefined();
@@ -456,12 +454,10 @@ describe('nfe authorizer pipeline (integration) (destructive)', () => {
         NFe: [firstNfeOrLeft.value, secondNfeOrLeft.value],
       });
       expectIsRight(response);
-      console.log(
-        'response:',
-        JSON.stringify(response.value.retEnviNFe, null, 2),
-      );
+      const { retEnviNFe } = response.value.response;
+      console.log('response:', JSON.stringify(retEnviNFe, null, 2));
 
-      const [protFirstNfe, protSecondNfe] = response.value.retEnviNFe.protNFe;
+      const [protFirstNfe, protSecondNfe] = retEnviNFe.protNFe;
 
       expect(protFirstNfe.infProt).toBeDefined();
       expect(protFirstNfe.infProt.nProt).toBeDefined();
@@ -632,12 +628,10 @@ describe('nfe authorizer pipeline (integration) (destructive)', () => {
         NFe: entityOrLeft.value,
       });
       expectIsRight(response);
-      console.log(
-        'response:',
-        JSON.stringify(response.value.retEnviNFe, null, 2),
-      );
+      const { retEnviNFe } = response.value.response;
+      console.log('response:', JSON.stringify(retEnviNFe, null, 2));
 
-      const infProt = response.value.retEnviNFe.protNFe.infProt;
+      const infProt = retEnviNFe.protNFe.infProt;
 
       expect(infProt).toBeDefined();
       expect(infProt.nProt).toBeDefined();

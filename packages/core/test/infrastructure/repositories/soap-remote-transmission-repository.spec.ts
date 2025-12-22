@@ -11,6 +11,7 @@ import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-in
 
 import type { Client, CertificateRepository } from '@nfets/core/domain';
 import { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
+import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 
 describe('soap remote transmission nfe (integration) (not destructive)', () => {
   const certificateFromEnvironment =
@@ -36,6 +37,7 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
   beforeAll(async () => {
     repository = new NativeCertificateRepository(
       axios.create(),
+      new CryptoSignerRepository(),
       new MemoryCacheAdapter(),
     );
     transmission = new TestSoapRemoteTransmissionRepository(

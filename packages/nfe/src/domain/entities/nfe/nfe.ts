@@ -12,7 +12,13 @@ export interface NFe {
   infNFeSupl?: InfNFeSupl;
 }
 
-export interface NFeProc {
-  NFe: NFe;
+export interface NFeProcAttributes {
+  xmlns: 'http://www.portalfiscal.inf.br/nfe';
+  versao: string;
+}
+
+export interface NFeProc<T extends object = NFe> {
+  NFe: T;
+  $: NFeProcAttributes;
   protNFe: ProtNFe;
 }

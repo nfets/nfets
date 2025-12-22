@@ -16,9 +16,11 @@ import type {
   AsynchronousAutorizacaoResponse,
   AutorizacaoResponse,
   AutorizacaoPayload as IAutorizacaoPayload,
+  PipelineAuthorizerResponse,
   SynchronousAutorizacaoResponse,
 } from '@nfets/nfe/domain/entities/services/autorizacao';
 import type { ProtNFe } from '@nfets/nfe/domain/entities/nfe/prot-nfe';
+import type { NFeProc } from '@nfets/nfe/domain/entities/nfe/nfe';
 import type { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 import { TransmissionPipeline } from './transmission-pipeline';
@@ -28,7 +30,7 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
   public async execute<E extends NFe, T extends E | E[]>(
     payload: IAutorizacaoPayload<E, T>,
     options?: Pick<NfeTransmitterOptions, 'schema'>,
-  ): Promise<Either<NFeTsError, SynchronousAutorizacaoResponse<T>>> {
+  ): Promise<Either<NFeTsError, PipelineAuthorizerResponse<E, T>>> {
     const certificateOrLeft = await this.certificates.read(this.certificate);
     if (certificateOrLeft.isLeft()) return certificateOrLeft;
 
@@ -56,13 +58,49 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
     });
 
     if (responseOrLeft.isLeft()) return responseOrLeft;
-
     const response = responseOrLeft.value;
 
-    if (this.isSyncResponse<E, T>(response)) return right(response);
-    return await this.handleAsyncResponse(
+    if (this.isSyncResponse<E, T>(response)) {
+      return right(await this.response<E, T>(NFe as SignedEntity<E>, response));
+    }
+
+    return await this.handleAsyncResponse<E, T>(
+      nfeBatchOrLeft.value,
       response as AsynchronousAutorizacaoResponse,
     );
+  }
+
+  protected async protocol(NFe: NFe, protNFe: ProtNFe) {
+    const data = {
+      NFe,
+      protNFe,
+      $: { xmlns: this.xmlns, versao: protNFe.$.versao },
+    } satisfies NFeProc<NFe>;
+    return await this.toolkit.build(data, {
+      renderOpts: { pretty: false },
+      rootName: 'nfeProc',
+    });
+  }
+
+  protected async response<E extends NFe, T extends E | E[]>(
+    NFe: SignedEntity<E> | SignedEntity<E>[],
+    response: SynchronousAutorizacaoResponse<T>,
+  ): Promise<PipelineAuthorizerResponse<E, T>> {
+    if (Array.isArray(NFe)) {
+      const protNFe = response.retEnviNFe.protNFe as ProtNFe[];
+      const xmls = await Promise.all(
+        NFe.map((NFe, i) => this.protocol(NFe, protNFe[i])),
+      );
+      return { xml: xmls, response } as PipelineAuthorizerResponse<E, T>;
+    }
+
+    const {
+      retEnviNFe: { protNFe },
+    } = response as SynchronousAutorizacaoResponse<typeof NFe>;
+    return {
+      xml: await this.protocol(NFe, protNFe),
+      response,
+    } as PipelineAuthorizerResponse<E, T>;
   }
 
   protected async signNfe(certificate: ReadCertificateResponse, NFe: NFe) {
@@ -101,8 +139,9 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
   }
 
   protected async handleAsyncResponse<E extends NFe, T extends E | E[]>(
+    NFe: SignedEntity<NFe> | SignedEntity<NFe>[],
     response: AsynchronousAutorizacaoResponse,
-  ): Promise<Either<NFeTsError, SynchronousAutorizacaoResponse<T>>> {
+  ): Promise<Either<NFeTsError, PipelineAuthorizerResponse<E, T>>> {
     const {
       tpAmb,
       infRec: { nRec },
@@ -124,12 +163,17 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
           continue;
         }
 
-        return right({
-          retEnviNFe: {
-            ...responseOrLeft.value.retConsReciNFe,
-            protNFe: protNFe as T extends E[] ? ProtNFe[] : ProtNFe,
-          },
-        } as SynchronousAutorizacaoResponse<T>);
+        return right(
+          await this.response<E, T>(
+            NFe as SignedEntity<E> | SignedEntity<E>[],
+            {
+              retEnviNFe: {
+                ...responseOrLeft.value.retConsReciNFe,
+                protNFe: protNFe as T extends E[] ? ProtNFe[] : ProtNFe,
+              },
+            } as SynchronousAutorizacaoResponse<T>,
+          ),
+        );
       } finally {
         attempt++;
       }

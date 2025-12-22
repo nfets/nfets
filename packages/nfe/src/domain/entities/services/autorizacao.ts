@@ -49,3 +49,16 @@ export type AutorizacaoResponse<
   E extends NFe = NFe,
   T extends E | E[] = E | E[],
 > = SynchronousAutorizacaoResponse<T> | AsynchronousAutorizacaoResponse;
+
+export type PipelineAuthorizerResponse<
+  E extends NFe,
+  T extends E | E[],
+> = T extends E[]
+  ? {
+      xml: string[];
+      response: SynchronousAutorizacaoResponse<T>;
+    }
+  : {
+      xml: string;
+      response: SynchronousAutorizacaoResponse<T>;
+    };
