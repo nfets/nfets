@@ -30,6 +30,7 @@ export class NFCe implements INFCe {
   public infNFe!: IInfNFe;
 
   @Type(() => InfNFeSupl)
+  @IsObject()
   public infNFeSupl!: IInfNFeSupl;
 
   @Allow()

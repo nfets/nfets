@@ -1,3 +1,4 @@
+import type { Signature } from '@nfets/core/domain';
 import type { InfNFe } from './inf-nfe';
 import type { InfNFeSupl } from './inf-nfe-supl';
 import type { ProtNFe } from './prot-nfe';
@@ -10,6 +11,7 @@ export interface NFe {
   $: NFeAttributes;
   infNFe: InfNFe;
   infNFeSupl?: InfNFeSupl;
+  Signature?: Signature;
 }
 
 export interface NFeProcAttributes {

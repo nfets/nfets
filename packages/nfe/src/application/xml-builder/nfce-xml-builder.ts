@@ -9,7 +9,6 @@ import { NFCe } from '@nfets/nfe/infrastructure/dto/nfe/nfce';
 
 import type { NFCe as INFCe } from '@nfets/nfe/domain/entities/nfe/nfce';
 import type { XmlToolkit } from '@nfets/core/domain';
-import type { InfNFeSupl as IInfNFeSupl } from '@nfets/nfe/domain/entities/nfe/inf-nfe-supl';
 import type { ContingencyOptions } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
 import { TpEmis } from '@nfets/nfe/domain';
 
@@ -22,7 +21,6 @@ export class NfceXmlBuilder<T extends object = INFCe>
     infNFe: {
       total: { ICMSTot: {} },
     },
-    infNFeSupl: {} as IInfNFeSupl,
   } as const as INFCe;
 
   protected override get entity() {
