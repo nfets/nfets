@@ -20,7 +20,10 @@ import type {
   SynchronousAutorizacaoResponse,
 } from '@nfets/nfe/domain/entities/services/autorizacao';
 import type { ProtNFe } from '@nfets/nfe/domain/entities/nfe/prot-nfe';
-import type { NFeProc } from '@nfets/nfe/domain/entities/nfe/nfe';
+import {
+  NfeCstatToProtocol,
+  type NFeProc,
+} from '@nfets/nfe/domain/entities/nfe/nfe';
 import type { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 import { TransmissionPipeline } from './transmission-pipeline';
@@ -61,7 +64,7 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
     const response = responseOrLeft.value;
 
     if (this.isSyncResponse<E, T>(response)) {
-      return right(await this.response<E, T>(NFe as SignedEntity<E>, response));
+      return right(await this.response<E, T>(nfeBatchOrLeft.value, response));
     }
 
     return await this.handleAsyncResponse<E, T>(
@@ -71,6 +74,16 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
   }
 
   protected async protocol(NFe: NFe, protNFe: ProtNFe) {
+    const { cStat } = protNFe.infProt;
+    if (
+      !Object.values(NfeCstatToProtocol).includes(cStat as NfeCstatToProtocol)
+    ) {
+      return await this.toolkit.build(NFe, {
+        renderOpts: { pretty: false },
+        rootName: 'NFe',
+      });
+    }
+
     const data = {
       NFe,
       protNFe,
@@ -83,24 +96,22 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
   }
 
   protected async response<E extends NFe, T extends E | E[]>(
-    NFe: SignedEntity<E> | SignedEntity<E>[],
+    NFe: SignedEntity<NFe>[],
     response: SynchronousAutorizacaoResponse<T>,
   ): Promise<PipelineAuthorizerResponse<E, T>> {
-    if (Array.isArray(NFe)) {
-      const protNFe = response.retEnviNFe.protNFe as ProtNFe[];
-      const xmls = await Promise.all(
-        NFe.map((NFe, i) => this.protocol(NFe, protNFe[i])),
-      );
-      return { xml: xmls, response } as PipelineAuthorizerResponse<E, T>;
+    const protNFe: ProtNFe[] = Array.isArray(response.retEnviNFe.protNFe)
+      ? response.retEnviNFe.protNFe
+      : [response.retEnviNFe.protNFe];
+
+    const xml = await Promise.all(
+      NFe.map((NFe, i) => this.protocol(NFe, protNFe[i])),
+    );
+
+    if (xml.length > 1) {
+      return { xml, response } as PipelineAuthorizerResponse<E, T>;
     }
 
-    const {
-      retEnviNFe: { protNFe },
-    } = response as SynchronousAutorizacaoResponse<typeof NFe>;
-    return {
-      xml: await this.protocol(NFe, protNFe),
-      response,
-    } as PipelineAuthorizerResponse<E, T>;
+    return { xml: xml[0], response } as PipelineAuthorizerResponse<E, T>;
   }
 
   protected async signNfe(certificate: ReadCertificateResponse, NFe: NFe) {
@@ -139,7 +150,7 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
   }
 
   protected async handleAsyncResponse<E extends NFe, T extends E | E[]>(
-    NFe: SignedEntity<NFe> | SignedEntity<NFe>[],
+    NFe: SignedEntity<NFe>[],
     response: AsynchronousAutorizacaoResponse,
   ): Promise<Either<NFeTsError, PipelineAuthorizerResponse<E, T>>> {
     const {
@@ -164,15 +175,12 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
         }
 
         return right(
-          await this.response<E, T>(
-            NFe as SignedEntity<E> | SignedEntity<E>[],
-            {
-              retEnviNFe: {
-                ...responseOrLeft.value.retConsReciNFe,
-                protNFe: protNFe as T extends E[] ? ProtNFe[] : ProtNFe,
-              },
-            } as SynchronousAutorizacaoResponse<T>,
-          ),
+          await this.response<E, T>(NFe, {
+            retEnviNFe: {
+              ...responseOrLeft.value.retConsReciNFe,
+              protNFe: protNFe as T extends E[] ? ProtNFe[] : ProtNFe,
+            },
+          } as SynchronousAutorizacaoResponse<T>),
         );
       } finally {
         attempt++;

@@ -29,8 +29,8 @@ export class NFCe implements INFCe {
   @ValidateNested()
   public infNFe!: IInfNFe;
 
+  @Allow()
   @Type(() => InfNFeSupl)
-  @IsObject()
   public infNFeSupl!: IInfNFeSupl;
 
   @Allow()
