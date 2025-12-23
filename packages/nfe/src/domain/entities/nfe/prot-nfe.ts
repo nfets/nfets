@@ -1,3 +1,5 @@
+import type { NfeCstatToProtocol } from './nfe';
+
 export interface ProtNFeAttributes {
   versao: string;
 }
@@ -9,7 +11,7 @@ export interface InfProt {
   dhRecbto: string;
   nProt: string;
   digVal: string;
-  cStat: string;
+  cStat: NfeCstatToProtocol | string;
   xMotivo: string;
   cMsg?: string;
   xMsg?: string;

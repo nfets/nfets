@@ -24,6 +24,12 @@ import axios from 'axios';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 import type { Emit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
 import type { Ide } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
+import {
+  type AutorizacaoResponse,
+  type SynchronousAutorizacaoResponse,
+} from '@nfets/nfe/domain';
+import { type ProtNFe } from '@nfets/nfe/domain/entities/nfe/prot-nfe';
+import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 
 const SEFAZ_TIMEOUT_SC = 60 * 1000;
 
@@ -46,6 +52,7 @@ describe('soap nfce remote transmission (integration) (destructive)', () => {
   beforeAll(async () => {
     repository = new NativeCertificateRepository(
       axios.create(),
+      new CryptoSignerRepository(),
       new MemoryCacheAdapter(),
     );
 
@@ -248,12 +255,21 @@ describe('soap nfce remote transmission (integration) (destructive)', () => {
         JSON.stringify(response.value.retEnviNFe, null, 2),
       );
 
-      const infProt = response.value.retEnviNFe.protNFe?.infProt;
+      function isSyncResponse(
+        response: AutorizacaoResponse,
+      ): asserts response is SynchronousAutorizacaoResponse {
+        if ('protNFe' in response.retEnviNFe) return;
+        throw new Error('Response is not a synchronous response');
+      }
+
+      isSyncResponse(response.value);
+
+      const { infProt } = response.value.retEnviNFe.protNFe as ProtNFe;
 
       expect(infProt).toBeDefined();
-      expect(infProt?.nProt).toBeDefined();
-      expect(infProt?.cStat).toStrictEqual('100');
-      expect(infProt?.xMotivo).toStrictEqual('Autorizado o uso da NF-e');
+      expect(infProt.nProt).toBeDefined();
+      expect(infProt.cStat).toStrictEqual('100');
+      expect(infProt.xMotivo).toStrictEqual('Autorizado o uso da NF-e');
     },
     SEFAZ_TIMEOUT_SC,
   );

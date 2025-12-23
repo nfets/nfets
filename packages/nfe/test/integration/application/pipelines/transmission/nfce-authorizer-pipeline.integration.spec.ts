@@ -162,8 +162,11 @@ describe('nfce authorizer pipeline (integration) (destructive)', () => {
       const { retEnviNFe } = response.value.response;
       console.log('response:', JSON.stringify(retEnviNFe, null, 2));
 
-      const infProt = retEnviNFe.protNFe.infProt;
+      expect(response.value.xml).toContain('<infNFeSupl><qrCode>');
+      expect(response.value.xml).toContain('</qrCode><urlChave>');
+      expect(response.value.xml).toContain('</urlChave></infNFeSupl>');
 
+      const infProt = retEnviNFe.protNFe.infProt;
       expect(infProt).toBeDefined();
       expect(infProt.nProt).toBeDefined();
       expect(infProt.cStat).toStrictEqual('100');
