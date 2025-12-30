@@ -84,6 +84,7 @@ export class SoapRemoteTransmissionRepository<C extends Client>
         request,
         attributesKey: '$',
         wsdl_options: { request },
+        forceSoap12Headers: true,
       });
 
       params.payload.$ = {

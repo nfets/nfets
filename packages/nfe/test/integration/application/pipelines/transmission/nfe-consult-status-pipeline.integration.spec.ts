@@ -27,7 +27,7 @@ describe('nfe consult status pipeline (integration) (destructive)', () => {
   it(
     'should consult the status of a nfe',
     async () => {
-      const payload = { tpAmb: Environment.Homolog, cUF: StateCodes.SC };
+      const payload = { tpAmb: Environment.Homolog, cUF: StateCodes.SP };
       const response = await pipeline.execute(payload);
       console.log(JSON.stringify(response.value, null, 2));
       expectIsRight(response);
@@ -35,9 +35,11 @@ describe('nfe consult status pipeline (integration) (destructive)', () => {
       expect(response.value.retConsStatServ).toBeDefined();
       expect(response.value.retConsStatServ.tpAmb).toBe(Environment.Homolog);
       expect(response.value.retConsStatServ.cStat).toBe('107');
-      expect(response.value.retConsStatServ.xMotivo).toBe(
-        'Servico em Operacao',
-      );
+      expect(
+        response.value.retConsStatServ.xMotivo
+          .replaceAll('ç', 'c')
+          .replaceAll('ã', 'a'),
+      ).toBe('Servico em Operacao');
       expect(response.value.retConsStatServ.dhRecbto).toBeDefined();
     },
     SEFAZ_TIMEOUT_SC,
