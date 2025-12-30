@@ -83,7 +83,7 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
         },
       },
       method: 'nfeStatusServicoNF',
-      url: 'https://nfe-homologacao.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx',
+      url: 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx',
     });
 
     expectIsLeft(response);
@@ -112,15 +112,14 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
       ),
       payload: { consStatServ },
       method: 'nfeStatusServicoNF',
-      url: 'https://nfe-homologacao.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx',
+      url: 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx',
     });
 
     expectIsRight(response);
     expect(response.value).toMatchObject({
       retConsStatServ: {
-        cStat: '410',
-        xMotivo:
-          'Rejeicao: UF informada no campo cUF nao e atendida pelo Web Service',
+        cStat: '289',
+        xMotivo: 'Rejeição: Código da UF informada diverge da UF solicitada',
       },
     });
   });
@@ -129,7 +128,7 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
     const consStatServ = {
       $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
       tpAmb: '2',
-      cUF: '43',
+      cUF: '35',
       xServ: 'STATUS',
     };
 
@@ -142,14 +141,14 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
         'consStatServ_v4.00.xsd',
       ),
       method: 'nfeStatusServicoNF',
-      url: 'https://nfe-homologacao.sefazrs.rs.gov.br/ws/NfeStatusServico/NfeStatusServico4.asmx',
+      url: 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx',
     });
 
     expectIsRight(response);
     expect(response.value).toMatchObject({
       retConsStatServ: {
         cStat: '107',
-        xMotivo: 'Servico em Operacao',
+        xMotivo: 'Serviço em Operação',
       },
     });
   });
