@@ -45,7 +45,7 @@ import { II } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/ii';
 import { DetBuilderAggregator } from '@nfets/nfe/application/aggregator/det-builder-aggregator';
 
 export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
-  protected readonly data = {} as IDet;
+  protected data = {} as IDet;
 
   public static create(
     listener?: DetBuilderAggregator,
@@ -140,6 +140,8 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
 
   public assemble(): IDet {
     if (this.data.imposto) this.imposto(this.data.imposto);
-    return this.data;
+    const result = { ...this.data };
+    this.data = {} as IDet;
+    return result;
   }
 }

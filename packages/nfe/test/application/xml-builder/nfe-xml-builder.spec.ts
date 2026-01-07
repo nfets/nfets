@@ -4108,6 +4108,298 @@ describe('xml builder with xml2js builder', () => {
     expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
+  it('should build NFe with multiple det elements', async () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide(createValidIde())
+      .emit(createValidEmit())
+      .det([...createValidItems(), ...createValidItems()], (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag())
+      .infIntermed({
+        CNPJ: '12345678000195',
+        idCadIntTran: '123456',
+      })
+      .cana({
+        safra: '2024/2025',
+        ref: '06/2024',
+        forDia: [
+          {
+            $: { dia: '1' },
+            qtde: '1000.0000',
+          },
+        ],
+        qTotMes: '1000.0000',
+        qTotAnt: '0.0000',
+        qTotGer: '1000.0000',
+        deduc: [
+          {
+            xDed: 'Dedução 1',
+            vDed: '100.00',
+          },
+        ],
+        vFor: '1000.00',
+        vTotDed: '100.00',
+        vLiqFor: '900.00',
+      });
+
+    const xml = await builder.assemble();
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain('<infIntermed>');
+    expect(xml.value).toContain('<cana>');
+
+    const infIntermedIndex = xml.value.indexOf('<infIntermed>');
+    const canaIndex = xml.value.indexOf('<cana>');
+    expect(infIntermedIndex).toBeLessThan(canaIndex);
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+  <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
+    <ide>
+      <cUF>52</cUF>
+      <cNF>78527251</cNF>
+      <natOp>Venda de mercadoria</natOp>
+      <mod>55</mod>
+      <serie>99</serie>
+      <nNF>8018</nNF>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
+      <tpNF>1</tpNF>
+      <idDest>2</idDest>
+      <cMunFG>5212501</cMunFG>
+      <tpImp>1</tpImp>
+      <tpEmis>1</tpEmis>
+      <cDV>5</cDV>
+      <tpAmb>2</tpAmb>
+      <finNFe>1</finNFe>
+      <indFinal>0</indFinal>
+      <indPres>1</indPres>
+      <procEmi>0</procEmi>
+      <verProc>nfets-0.0.1</verProc>
+    </ide>
+    <emit>
+      <CNPJ>46755763000143</CNPJ>
+      <xNome>cliente de goias</xNome>
+      <xFant>cliente de goias</xFant>
+      <enderEmit>
+        <xLgr>14 897</xLgr>
+        <nro>13897</nro>
+        <xCpl>teste teste</xCpl>
+        <xBairro>Residencial Copaibas</xBairro>
+        <cMun>5212501</cMun>
+        <xMun>Luziania</xMun>
+        <UF>GO</UF>
+        <CEP>72831770</CEP>
+        <cPais>1058</cPais>
+        <fone>4934420122</fone>
+      </enderEmit>
+      <IE>109381599</IE>
+      <IM>123748</IM>
+      <CNAE>1234567</CNAE>
+      <CRT>1</CRT>
+    </emit>
+    <det nItem="1">
+      <prod>
+        <cProd>1</cProd>
+        <cEAN>SEM GTIN</cEAN>
+        <xProd>Product 1</xProd>
+        <NCM>00</NCM>
+        <CFOP>5102</CFOP>
+        <uCom>UN</uCom>
+        <qCom>1.0000</qCom>
+        <vUnCom>100.0000000000</vUnCom>
+        <vProd>100.00</vProd>
+        <cEANTrib>SEM GTIN</cEANTrib>
+        <uTrib>UN</uTrib>
+        <qTrib>1.0000</qTrib>
+        <vUnTrib>100.0000000000</vUnTrib>
+        <indTot>1</indTot>
+      </prod>
+      <imposto>
+        <ICMS>
+          <ICMS00>
+            <orig>1</orig>
+            <CST>00</CST>
+            <modBC>0</modBC>
+            <vBC>100.00</vBC>
+            <pICMS>18.0000</pICMS>
+            <vICMS>18.00</vICMS>
+          </ICMS00>
+        </ICMS>
+        <IPI>
+          <cEnq>999</cEnq>
+          <IPINT>
+            <CST>53</CST>
+          </IPINT>
+        </IPI>
+        <PIS>
+          <PISNT>
+            <CST>08</CST>
+          </PISNT>
+        </PIS>
+        <COFINS>
+          <COFINSNT>
+            <CST>08</CST>
+          </COFINSNT>
+        </COFINS>
+      </imposto>
+    </det>
+    <det nItem="2">
+      <prod>
+        <cProd>1</cProd>
+        <cEAN>SEM GTIN</cEAN>
+        <xProd>Product 1</xProd>
+        <NCM>00</NCM>
+        <CFOP>5102</CFOP>
+        <uCom>UN</uCom>
+        <qCom>1.0000</qCom>
+        <vUnCom>100.0000000000</vUnCom>
+        <vProd>100.00</vProd>
+        <cEANTrib>SEM GTIN</cEANTrib>
+        <uTrib>UN</uTrib>
+        <qTrib>1.0000</qTrib>
+        <vUnTrib>100.0000000000</vUnTrib>
+        <indTot>1</indTot>
+      </prod>
+      <imposto>
+        <ICMS>
+          <ICMS00>
+            <orig>1</orig>
+            <CST>00</CST>
+            <modBC>0</modBC>
+            <vBC>100.00</vBC>
+            <pICMS>18.0000</pICMS>
+            <vICMS>18.00</vICMS>
+          </ICMS00>
+        </ICMS>
+        <IPI>
+          <cEnq>999</cEnq>
+          <IPINT>
+            <CST>53</CST>
+          </IPINT>
+        </IPI>
+        <PIS>
+          <PISNT>
+            <CST>08</CST>
+          </PISNT>
+        </PIS>
+        <COFINS>
+          <COFINSNT>
+            <CST>08</CST>
+          </COFINSNT>
+        </COFINS>
+      </imposto>
+    </det>
+    <total>
+      <ICMSTot>
+        <vBC>0.00</vBC>
+        <vICMS>0.00</vICMS>
+        <vICMSDeson>0.00</vICMSDeson>
+        <vFCP>0.00</vFCP>
+        <vBCST>0.00</vBCST>
+        <vST>0.00</vST>
+        <vFCPST>0.00</vFCPST>
+        <vFCPSTRet>0.00</vFCPSTRet>
+        <vProd>200.00</vProd>
+        <vFrete>0.00</vFrete>
+        <vSeg>0.00</vSeg>
+        <vDesc>0.00</vDesc>
+        <vII>0.00</vII>
+        <vIPI>0.00</vIPI>
+        <vIPIDevol>0.00</vIPIDevol>
+        <vPIS>0.00</vPIS>
+        <vCOFINS>0.00</vCOFINS>
+        <vOutro>0.00</vOutro>
+        <vNF>200.00</vNF>
+      </ICMSTot>
+    </total>
+    <transp>
+      <modFrete>9</modFrete>
+    </transp>
+    <pag>
+      <detPag>
+        <tPag>01</tPag>
+        <vPag>100.00</vPag>
+      </detPag>
+    </pag>
+    <infIntermed>
+      <CNPJ>12345678000195</CNPJ>
+      <idCadIntTran>123456</idCadIntTran>
+    </infIntermed>
+    <cana>
+      <safra>2024/2025</safra>
+      <ref>06/2024</ref>
+      <forDia dia="1">
+        <qtde>1000.0000</qtde>
+      </forDia>
+      <qTotMes>1000.0000</qTotMes>
+      <qTotAnt>0.0000</qTotAnt>
+      <qTotGer>1000.0000</qTotGer>
+      <deduc>
+        <xDed>Dedução 1</xDed>
+        <vDed>100.00</vDed>
+      </deduc>
+      <vFor>1000.00</vFor>
+      <vTotDed>100.00</vTotDed>
+      <vLiqFor>900.00</vLiqFor>
+    </cana>
+  </infNFe>
+</NFe>`);
+
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
+    expectIsRight(signed);
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
+  });
+
+
   it('should build NFe with infIntermed and cana after pag', async () => {
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
