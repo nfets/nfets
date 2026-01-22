@@ -19,6 +19,10 @@ import type { COFINS as ICOFINS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/d
 import type { COFINSST as ICOFINSST } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/cofins';
 import type { ISSQN as IISSQN } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/issqn';
 import type { ICMSUFDest as IICMSUFDest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/icmsufdest';
+import { IBSCBS } from './imposto/ibscbs';
+import { IS } from './imposto/is';
+import { type IBSCBS as IIBSCBS } from "@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs"
+import { type IS as IIS } from "@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/is"
 
 import { Choice } from '@nfets/core/application';
 
@@ -63,6 +67,7 @@ export class Imposto implements IImposto {
   @Type(() => COFINS)
   public COFINS?: ICOFINS;
 
+
   @IsOptional()
   @ValidateNested()
   @Type(() => COFINSST)
@@ -72,4 +77,14 @@ export class Imposto implements IImposto {
   @ValidateNested()
   @Type(() => ICMSUFDest)
   public ICMSUFDest?: IICMSUFDest;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => IBSCBS)
+  public IBSCBS?: IIBSCBS
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => IS)
+  public IS?: IIS;
 }
