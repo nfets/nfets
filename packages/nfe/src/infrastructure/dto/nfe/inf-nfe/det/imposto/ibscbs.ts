@@ -25,12 +25,12 @@ export class IBSCBS implements IIBSCBS {
     @IsOptional()
     @ValidateNested()
     @Type(() => TransferenciaCredito)
-    public gTransfCred?: TransferenciaCredito
+    public gTransfCred?: TransferenciaCredito;
 
     @IsOptional()
     @ValidateNested()
     @Type(() => CredPresIBSZFM)
-    public gCredPresIBSZFM?: CredPresIBSZFM
+    public gCredPresIBSZFM?: CredPresIBSZFM;
 
     @IsOptional()
     @ValidateNested()
@@ -55,6 +55,6 @@ export class IBSCBS implements IIBSCBS {
     @IsOptional()
     @ValidateNested()
     @Type(() => GIBSCBS)
-    public gIBSCBS?: GIBSCBS
+    public gIBSCBS?: GIBSCBS;
 }
 

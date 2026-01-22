@@ -69,6 +69,8 @@ describe('Imposto Choice validation', () => {
     const imposto = new Imposto;
     const ibscbs = new IBSCBS;
     ibscbs.gIBSCBS = new GIBSCBS
+    ibscbs.gIBSCBS.vBC = '10.00';
+    ibscbs.gIBSCBS.vIBS = '20.00';
 
     const ibsMun = new IBSMun;
     ibsMun.pIBSMun = '1.0';

@@ -1,4 +1,4 @@
 export interface Dif {
-    pDif: string
-    vDif: string
+    pDif: string;
+    vDif: string;
 }

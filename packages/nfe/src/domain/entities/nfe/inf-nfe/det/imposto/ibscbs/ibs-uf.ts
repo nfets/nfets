@@ -1,6 +1,6 @@
-import { DevTrib } from "./dev-trib";
-import { Dif } from "./dif";
-import { Red } from "./red";
+import { type DevTrib } from "./dev-trib";
+import { type Dif } from "./dif";
+import { type Red } from "./red";
 
 export interface IBSUF {
     gDevTrib?: DevTrib;

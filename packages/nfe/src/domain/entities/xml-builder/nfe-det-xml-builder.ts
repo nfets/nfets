@@ -14,6 +14,7 @@ import type {
   PISST,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/pis';
 import type { Prod } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/prod';
+import type { IBSCBS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs';
 
 export interface DetBuilder {
   det($: DetAttributes): ProdBuilder;
@@ -45,13 +46,13 @@ export interface IssQnBuilder {
   ): IssIpiBuilder & PisBuilder & PisStBuilder & AssembleDetXmlBuilder;
 }
 
-export interface IcmsOrIssQnBuilder extends IcmsBuilder, IssQnBuilder {}
+export interface IcmsOrIssQnBuilder extends IcmsBuilder, IssQnBuilder { }
 
 export interface OptionalSharedImpostoBuilder
   extends PisBuilder,
-    CofinsBuilder,
-    IcmsufdestBuilder,
-    AssembleDetXmlBuilder {}
+  CofinsBuilder,
+  IcmsufdestBuilder,
+  AssembleDetXmlBuilder { }
 
 export interface IcmsIpiBuilder {
   ipi(
@@ -105,7 +106,11 @@ export interface CofinsStBuilder {
 }
 
 export interface IcmsufdestBuilder {
-  icmsufdest(payload: ICMSUFDest): AssembleDetXmlBuilder;
+  icmsufdest(payload: ICMSUFDest): IbscbsBuilder;
+}
+
+export interface IbscbsBuilder {
+  ibscbs(payload: IBSCBS): AssembleDetXmlBuilder
 }
 
 export interface AssembleDetXmlBuilder {
@@ -114,8 +119,8 @@ export interface AssembleDetXmlBuilder {
 
 export interface INfeDetXmlBuilder
   extends DetBuilder,
-    ProdBuilder,
-    ImpostoBuilder,
-    IcmsOrIssQnBuilder,
-    OptionalSharedImpostoBuilder,
-    AssembleDetXmlBuilder {}
+  ProdBuilder,
+  ImpostoBuilder,
+  IcmsOrIssQnBuilder,
+  OptionalSharedImpostoBuilder,
+  AssembleDetXmlBuilder { }

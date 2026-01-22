@@ -3,8 +3,8 @@ import { IsString } from "class-validator"
 
 export class Red implements IRed {
     @IsString()
-    public pAliqEfet!: number
+    public pAliqEfet!: string
 
     @IsString()
-    public pRedAliq!: number
+    public pRedAliq!: string
 }
