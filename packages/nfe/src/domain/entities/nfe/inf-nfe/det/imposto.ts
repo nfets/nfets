@@ -5,6 +5,8 @@ import type { ISSQN } from './imposto/issqn';
 import type { PIS, PISST } from './imposto/pis';
 import type { COFINS, COFINSST } from './imposto/cofins';
 import type { ICMSUFDest } from './imposto/icmsufdest';
+import { IBSCBS } from './imposto/ibscbs';
+import { IS } from './imposto/is';
 
 export interface Imposto {
   vTotTrib?: number;
@@ -17,4 +19,6 @@ export interface Imposto {
   COFINS?: COFINS;
   COFINSST?: COFINSST;
   ICMSUFDest?: ICMSUFDest;
+  IBSCBS?: IBSCBS
+  IS?: IS;
 }
