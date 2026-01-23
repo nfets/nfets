@@ -15,6 +15,7 @@ export default [
       'package.json',
       'node_modules/**/*',
       'eslint.config.mjs',
+      '**/*.mjs'
     ],
   },
   // defaults
