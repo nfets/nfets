@@ -34,13 +34,16 @@
     "type": "git",
     "url": "https://github.com/nfets/nfets.git"
   },
+  "gypfile": true,
   "files": [
     "dist",
     "build/addons",
+    "addons",
+    "binding.gyp",
     "packages/nfe/schemas"
   ],
   "scripts": {
-    "install": "echo 'Skipping automatic node-gyp rebuild. Run \"make addon\" manually if needed.'",
+    "install": "npx --yes node-gyp@12.1.0 rebuild || echo 'Warning: Failed to rebuild native addon. Make sure you have build tools installed (python, make, g++, and libxml2-dev on Linux).'",
     "build": "pnpm --filter !@nfets/test build && tsup --config tsup.config.ts",
     "test": "pnpm --filter @nfets/* test",
     "typecheck": "pnpm --filter @nfets/* typecheck",
