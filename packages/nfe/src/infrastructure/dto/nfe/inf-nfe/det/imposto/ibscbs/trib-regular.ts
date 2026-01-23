@@ -3,26 +3,26 @@ import { IsString } from "class-validator";
 
 export class TribRegular implements ITribRegular {
     @IsString()
-    public pAliqEfetRegIBSMun!: string;
-
-    @IsString()
-    public pAliqEfetRegIBSUF!: string;
-
-    @IsString()
-    public pAliqEfetRegCBS!: string;
-
-    @IsString()
-    public vTribRegIBSMun!: string;
-
-    @IsString()
-    public vTribRegIBSUF!: string;
+    public CSTReg!: string;
 
     @IsString()
     public cClassTribReg!: string;
 
     @IsString()
-    public vTribRegCBS!: string;
+    public pAliqEfetRegIBSUF!: string;
 
     @IsString()
-    public CSTReg!: string;
+    public vTribRegIBSUF!: string;
+
+    @IsString()
+    public pAliqEfetRegIBSMun!: string;
+
+    @IsString()
+    public vTribRegIBSMun!: string;
+
+    @IsString()
+    public pAliqEfetRegCBS!: string;
+
+    @IsString()
+    public vTribRegCBS!: string;
 }

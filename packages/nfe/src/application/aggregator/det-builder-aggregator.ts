@@ -10,9 +10,8 @@ export interface DetBuilderAggregator {
 }
 
 export class DefaultDetBuilderAggregator<T extends object>
-  implements DetBuilderAggregator
-{
-  public constructor(private readonly builder: INfeXmlBuilder<T>) {}
+  implements DetBuilderAggregator {
+  public constructor(private readonly builder: INfeXmlBuilder<T>) { }
 
   public prod(payload: Prod): void {
     const zero = Decimal.from(0);
@@ -35,7 +34,13 @@ export class DefaultDetBuilderAggregator<T extends object>
     }));
   }
 
+  //TODO
+
   public icms(_payload: ICMS): void {
     //
   }
+  //TODO
+  //public ibscbs(_payload: ICMS): void {
+  //  //
+  //}
 }
