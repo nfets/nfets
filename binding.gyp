@@ -83,8 +83,7 @@
           ],
           "ldflags": [
             "-lxml2",
-            "-Wl,-Bdynamic",
-            "-Wl,-rpath,'$$ORIGIN'"
+            "-Wl,-Bdynamic"
           ]
         }]
       ]
