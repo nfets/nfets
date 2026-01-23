@@ -215,16 +215,20 @@ jobs:
             cp -L "$SO_PATH" "build/addons/$PLATFORM_ARCH/libxml2.so.2"
             echo "Bundled libxml2.so.2 with addon"
 
-            while IFS= read -r line; do
-              lib=$(echo "$line" | grep -oE '/[^ ]+' | head -1)
-              if [ -n "$lib" ] && [ -f "$lib" ]; then
-                libname=$(basename "$lib")
-                if [[ ! "$libname" =~ ^(libc\.|libpthread\.|libdl\.|libm\.|librt\.|libgcc_s\.|ld-linux) ]]; then
-                  cp -L "$lib" "build/addons/$PLATFORM_ARCH/$libname"
-                  echo "Bundled dependency: $libname"
+            # Find and bundle dependencies (excluding system libraries)
+            ldd_output=$(ldd "$SO_PATH" 2>/dev/null || true)
+            if [ -n "$ldd_output" ]; then
+              echo "$ldd_output" | while IFS= read -r line || [ -n "$line" ]; do
+                lib=$(echo "$line" | grep -oE '/[^ ]+' | head -1 || true)
+                if [ -n "$lib" ] && [ -f "$lib" ]; then
+                  libname=$(basename "$lib")
+                  if [[ ! "$libname" =~ ^(libc\.|libpthread\.|libdl\.|libm\.|librt\.|libgcc_s\.|ld-linux) ]]; then
+                    cp -L "$lib" "build/addons/$PLATFORM_ARCH/$libname" || true
+                    echo "Bundled dependency: $libname"
+                  fi
                 fi
-              fi
-            done < <(ldd "$SO_PATH" 2>/dev/null)
+              done || true
+            fi
           else
             echo "Error: Could not find libxml2.so.2 to bundle"
             exit 1
