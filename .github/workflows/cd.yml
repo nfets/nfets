@@ -17,6 +17,9 @@ jobs:
           - os: ubuntu-latest
             arch: x64
             node-version: 22.x
+          - os: ubuntu-24.04-arm
+            arch: arm64
+            node-version: 22.x
           - os: windows-latest
             arch: x64
             node-version: 22.x
@@ -45,6 +48,9 @@ jobs:
           if [ "${{ matrix.os }}" == "ubuntu-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
             echo "platform_arch=linux-x64" >> $GITHUB_OUTPUT
             echo "artifact_name=addons-linux-x64" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.os }}" == "ubuntu-24.04-arm" ] && [ "${{ matrix.arch }}" == "arm64" ]; then
+            echo "platform_arch=linux-arm64" >> $GITHUB_OUTPUT
+            echo "artifact_name=addons-linux-arm64" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.os }}" == "windows-latest" ] && [ "${{ matrix.arch }}" == "x64" ]; then
             echo "platform_arch=win32-x64" >> $GITHUB_OUTPUT
             echo "artifact_name=addons-win32-x64" >> $GITHUB_OUTPUT
@@ -148,6 +154,9 @@ jobs:
           elif [[ "$OS" == "ubuntu-latest" ]]; then
             echo "addons=xml_validator.node" >> $GITHUB_OUTPUT
             echo "Validated OS: Linux - will include xml_validator only"
+          elif [[ "$OS" == "ubuntu-24.04-arm" ]]; then
+            echo "addons=xml_validator.node" >> $GITHUB_OUTPUT
+            echo "Validated OS: Ubuntu 24.04 ARM - will include xml_validator only"
           elif [[ "$OS" == "macos-latest" ]]; then
             echo "addons=xml_validator.node" >> $GITHUB_OUTPUT
             echo "Validated OS: macOS - will include xml_validator only"
@@ -193,6 +202,21 @@ jobs:
         run: |
           PLATFORM_ARCH="${{ steps.get-platform-arch.outputs.platform_arch }}"
           SO_PATH="/usr/lib/x86_64-linux-gnu/libxml2.so.2"
+
+          if [ -f "$SO_PATH" ] || [ -L "$SO_PATH" ]; then
+            cp -L "$SO_PATH" "build/addons/$PLATFORM_ARCH/libxml2.so.2"
+            echo "Bundled libxml2.so.2 with addon"
+          else
+            echo "Error: Could not find libxml2.so.2 to bundle"
+            exit 1
+          fi
+
+      - name: Bundle Linux (arm64) shared object dependencies
+        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && contains(matrix.os, 'ubuntu') && contains(matrix.arch, 'arm64')
+        shell: bash
+        run: |
+          PLATFORM_ARCH="${{ steps.get-platform-arch.outputs.platform_arch }}"
+          SO_PATH="/usr/lib/aarch64-linux-gnu/libxml2.so.2"
 
           if [ -f "$SO_PATH" ] || [ -L "$SO_PATH" ]; then
             cp -L "$SO_PATH" "build/addons/$PLATFORM_ARCH/libxml2.so.2"
@@ -302,6 +326,7 @@ jobs:
         run: |
           ARTIFACTS=(
             "addons-linux-x64"
+            "addons-linux-arm64"
             "addons-win32-x64"
             "addons-darwin-arm64"
           )
