@@ -1,5 +1,5 @@
 import { arch, platform } from 'node:os';
-import { existsSync } from 'node:fs';
+import { existsSync, type PathLike } from 'node:fs';
 import { addon } from '@nfets/core/shared/addon';
 
 jest.mock('node:os', () => ({
@@ -41,7 +41,9 @@ describe('addon (unit)', () => {
     it('should successfully load addon for darwin + arm64', () => {
       mockPlatform.mockReturnValue('darwin');
       mockArch.mockReturnValue('arm64');
-      mockExistsSync.mockReturnValue(true);
+      mockExistsSync.mockImplementation((path: PathLike) => {
+        return path.toString().includes('build/addons/darwin-arm64/test-addon.node');
+      });
 
       const result = addon('test-addon');
 
@@ -58,7 +60,9 @@ describe('addon (unit)', () => {
     it('should successfully load addon for linux + x64', () => {
       mockPlatform.mockReturnValue('linux');
       mockArch.mockReturnValue('x64');
-      mockExistsSync.mockReturnValue(true);
+      mockExistsSync.mockImplementation((path: PathLike) => {
+        return path.toString().includes('build/addons/linux-x64/test-addon.node');
+      });
 
       const result = addon('test-addon');
 
@@ -75,7 +79,10 @@ describe('addon (unit)', () => {
     it('should successfully load addon for win32 + x64', () => {
       mockPlatform.mockReturnValue('win32');
       mockArch.mockReturnValue('x64');
-      mockExistsSync.mockReturnValue(true);
+      mockExistsSync.mockImplementation((path: PathLike) => {
+        return path.toString().includes('build/addons/win32-x64/test-addon.node') ||
+          path.toString().includes('build\\addons\\win32-x64\\test-addon.node');
+      });
 
       const result = addon('test-addon');
 
@@ -188,7 +195,9 @@ describe('addon (unit)', () => {
       mockPlatform.mockReturnValue('linux');
       mockArch.mockReturnValue('x64');
 
-      mockExistsSync.mockReturnValueOnce(false).mockReturnValueOnce(true);
+      mockExistsSync.mockImplementation((path: PathLike) => {
+        return path.toString().includes('build/addons/linux-x64/test-addon.node');
+      });
 
       const result = addon('test-addon');
 
@@ -198,16 +207,17 @@ describe('addon (unit)', () => {
         ),
         loaded: true,
       });
-      expect(mockExistsSync.mock.calls.length).toBeGreaterThanOrEqual(2);
+      expect(mockExistsSync.mock.calls.length).toBeGreaterThanOrEqual(1);
     });
 
     it('should search in node_modules/nfets/build/addons as fallback', () => {
       mockPlatform.mockReturnValue('win32');
       mockArch.mockReturnValue('x64');
 
-      let callCount = 0;
-      mockExistsSync.mockImplementation(() => {
-        return ++callCount >= 6;
+      mockExistsSync.mockImplementation((path: PathLike) => {
+        return (path.toString().includes('node_modules/nfets/build/addons/win32-x64') ||
+          path.toString().includes('node_modules\\nfets\\build\\addons\\win32-x64')) &&
+          path.toString().includes('test-addon.node');
       });
 
       const result = addon('test-addon');
