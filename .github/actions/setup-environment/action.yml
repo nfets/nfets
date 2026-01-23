@@ -12,7 +12,7 @@ runs:
       shell: bash
       run: |
         sudo apt update
-        sudo apt install -y libxml2-dev
+        sudo apt install -y libxml2-dev patchelf
 
     - name: Install macOS packages
       if: contains(inputs.os, 'macos')

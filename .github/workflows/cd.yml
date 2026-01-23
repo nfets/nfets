@@ -229,6 +229,17 @@ jobs:
                 fi
               done || true
             fi
+
+            if command -v patchelf &> /dev/null; then
+              for so_file in build/addons/$PLATFORM_ARCH/*.so*; do
+                if [ -f "$so_file" ] && [ ! -L "$so_file" ]; then
+                  patchelf --set-rpath '$ORIGIN' "$so_file" 2>/dev/null || true
+                  echo "Set RPATH on $(basename "$so_file")"
+                fi
+              done
+            else
+              echo "Warning: patchelf not available, skipping RPATH setting on shared libraries"
+            fi
           else
             echo "Error: Could not find libxml2.so.2 to bundle"
             exit 1
