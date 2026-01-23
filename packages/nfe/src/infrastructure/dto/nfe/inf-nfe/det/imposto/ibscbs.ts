@@ -12,15 +12,15 @@ import { Type } from "class-transformer";
 export class IBSCBS implements IIBSCBS {
     @IsOptional()
     @IsString()
+    public CST?: string;
+
+    @IsOptional()
+    @IsString()
     public cClassTrib?: string;
 
     @IsOptional()
     @IsString()
     public indDoacao?: string;
-
-    @IsOptional()
-    @IsString()
-    public CST?: string;
 
     @IsOptional()
     @ValidateNested()

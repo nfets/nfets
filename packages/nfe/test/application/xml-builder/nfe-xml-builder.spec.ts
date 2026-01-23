@@ -48,7 +48,7 @@ describe('xml builder with xml2js builder', () => {
   const toolkit: XmlToolkit = new Xml2JsToolkit();
   const leiauteNFe4_00 = path.resolve(
     schemas(),
-    'PL_009_V4',
+    'PL_010_V1.21',
     'nfe_v4.00.xsd',
   );
 
@@ -83,7 +83,7 @@ describe('xml builder with xml2js builder', () => {
 
   it('should completely ignores validations and sets the versao to [object Object]', async () => {
     @SkipAllValidations()
-    class DontValidateNfeXmlBuilder extends NfeXmlBuilder {}
+    class DontValidateNfeXmlBuilder extends NfeXmlBuilder { }
 
     const builder = DontValidateNfeXmlBuilder.create(toolkit)
       .infNFe({ versao: { some: 'invalid-value' } as never })
@@ -8989,5 +8989,723 @@ describe('xml builder with xml2js builder', () => {
 
     const decompiled = new AccessKeyBuilder().decompile(accessKey);
     expect(decompiled?.tpEmis).toBe('7');
+  });
+
+
+  it('should build NFe with minimal ibs regime fields', async () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide(createValidIde())
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }).ibscbs({
+            CST: '400',
+            cClassTrib: '400001',
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const xml = await builder.assemble();
+
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain(
+      '<NFe xmlns="http://www.portalfiscal.inf.br/nfe">',
+    );
+
+    expect(xml.value).toContain('<infNFe');
+    expect(xml.value).toContain('<ide>');
+    expect(xml.value).toContain('<emit>');
+    expect(xml.value).toContain('<det nItem="1">');
+    expect(xml.value).toContain('<total>');
+    expect(xml.value).toContain('<transp>');
+    expect(xml.value).toContain('<pag>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+  <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
+    <ide>
+      <cUF>52</cUF>
+      <cNF>78527251</cNF>
+      <natOp>Venda de mercadoria</natOp>
+      <mod>55</mod>
+      <serie>99</serie>
+      <nNF>8018</nNF>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
+      <tpNF>1</tpNF>
+      <idDest>2</idDest>
+      <cMunFG>5212501</cMunFG>
+      <tpImp>1</tpImp>
+      <tpEmis>1</tpEmis>
+      <cDV>5</cDV>
+      <tpAmb>2</tpAmb>
+      <finNFe>1</finNFe>
+      <indFinal>0</indFinal>
+      <indPres>1</indPres>
+      <procEmi>0</procEmi>
+      <verProc>nfets-0.0.1</verProc>
+    </ide>
+    <emit>
+      <CNPJ>46755763000143</CNPJ>
+      <xNome>cliente de goias</xNome>
+      <xFant>cliente de goias</xFant>
+      <enderEmit>
+        <xLgr>14 897</xLgr>
+        <nro>13897</nro>
+        <xCpl>teste teste</xCpl>
+        <xBairro>Residencial Copaibas</xBairro>
+        <cMun>5212501</cMun>
+        <xMun>Luziania</xMun>
+        <UF>GO</UF>
+        <CEP>72831770</CEP>
+        <cPais>1058</cPais>
+        <fone>4934420122</fone>
+      </enderEmit>
+      <IE>109381599</IE>
+      <IM>123748</IM>
+      <CNAE>1234567</CNAE>
+      <CRT>1</CRT>
+    </emit>
+    <det nItem="1">
+      <prod>
+        <cProd>1</cProd>
+        <cEAN>SEM GTIN</cEAN>
+        <xProd>Product 1</xProd>
+        <NCM>00</NCM>
+        <CFOP>5102</CFOP>
+        <uCom>UN</uCom>
+        <qCom>1.0000</qCom>
+        <vUnCom>100.0000000000</vUnCom>
+        <vProd>100.00</vProd>
+        <cEANTrib>SEM GTIN</cEANTrib>
+        <uTrib>UN</uTrib>
+        <qTrib>1.0000</qTrib>
+        <vUnTrib>100.0000000000</vUnTrib>
+        <indTot>1</indTot>
+      </prod>
+      <imposto>
+        <ICMS>
+          <ICMS00>
+            <orig>1</orig>
+            <CST>00</CST>
+            <modBC>0</modBC>
+            <vBC>100.00</vBC>
+            <pICMS>18.0000</pICMS>
+            <vICMS>18.00</vICMS>
+          </ICMS00>
+        </ICMS>
+        <IPI>
+          <cEnq>999</cEnq>
+          <IPINT>
+            <CST>53</CST>
+          </IPINT>
+        </IPI>
+        <PIS>
+          <PISNT>
+            <CST>08</CST>
+          </PISNT>
+        </PIS>
+        <COFINS>
+          <COFINSNT>
+            <CST>08</CST>
+          </COFINSNT>
+        </COFINS>
+        <IBSCBS>
+          <CST>400</CST>
+          <cClassTrib>400001</cClassTrib>
+        </IBSCBS>
+      </imposto>
+    </det>
+    <total>
+      <ICMSTot>
+        <vBC>0.00</vBC>
+        <vICMS>0.00</vICMS>
+        <vICMSDeson>0.00</vICMSDeson>
+        <vFCP>0.00</vFCP>
+        <vBCST>0.00</vBCST>
+        <vST>0.00</vST>
+        <vFCPST>0.00</vFCPST>
+        <vFCPSTRet>0.00</vFCPSTRet>
+        <vProd>100.00</vProd>
+        <vFrete>0.00</vFrete>
+        <vSeg>0.00</vSeg>
+        <vDesc>0.00</vDesc>
+        <vII>0.00</vII>
+        <vIPI>0.00</vIPI>
+        <vIPIDevol>0.00</vIPIDevol>
+        <vPIS>0.00</vPIS>
+        <vCOFINS>0.00</vCOFINS>
+        <vOutro>0.00</vOutro>
+        <vNF>100.00</vNF>
+      </ICMSTot>
+    </total>
+    <transp>
+      <modFrete>9</modFrete>
+    </transp>
+    <pag>
+      <detPag>
+        <tPag>01</tPag>
+        <vPag>100.00</vPag>
+      </detPag>
+    </pag>
+  </infNFe>
+</NFe>`);
+
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
+    expectIsRight(signed);
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
+  });
+
+  it('should build NFe with ibs and cbs', async () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide(createValidIde())
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }).ibscbs({
+            CST: '400',
+            cClassTrib: '400001',
+            gIBSCBS: {
+              vBC: '100.00',
+              vIBS: '20.00',
+              gCBS: {
+                pCBS: '0.90',
+                vCBS: '0.90',
+              },
+              gIBSMun: {
+                pIBSMun: '0.00',
+                vIBSMun: '0.00',
+              },
+              gIBSUF: {
+                pIBSUF: '0.10',
+                vIBSUF: '0.10',
+              }
+            }
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const xml = await builder.assemble();
+
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain(
+      '<NFe xmlns="http://www.portalfiscal.inf.br/nfe">',
+    );
+
+    expect(xml.value).toContain('<infNFe');
+    expect(xml.value).toContain('<ide>');
+    expect(xml.value).toContain('<emit>');
+    expect(xml.value).toContain('<det nItem="1">');
+    expect(xml.value).toContain('<total>');
+    expect(xml.value).toContain('<transp>');
+    expect(xml.value).toContain('<pag>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+  <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
+    <ide>
+      <cUF>52</cUF>
+      <cNF>78527251</cNF>
+      <natOp>Venda de mercadoria</natOp>
+      <mod>55</mod>
+      <serie>99</serie>
+      <nNF>8018</nNF>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
+      <tpNF>1</tpNF>
+      <idDest>2</idDest>
+      <cMunFG>5212501</cMunFG>
+      <tpImp>1</tpImp>
+      <tpEmis>1</tpEmis>
+      <cDV>5</cDV>
+      <tpAmb>2</tpAmb>
+      <finNFe>1</finNFe>
+      <indFinal>0</indFinal>
+      <indPres>1</indPres>
+      <procEmi>0</procEmi>
+      <verProc>nfets-0.0.1</verProc>
+    </ide>
+    <emit>
+      <CNPJ>46755763000143</CNPJ>
+      <xNome>cliente de goias</xNome>
+      <xFant>cliente de goias</xFant>
+      <enderEmit>
+        <xLgr>14 897</xLgr>
+        <nro>13897</nro>
+        <xCpl>teste teste</xCpl>
+        <xBairro>Residencial Copaibas</xBairro>
+        <cMun>5212501</cMun>
+        <xMun>Luziania</xMun>
+        <UF>GO</UF>
+        <CEP>72831770</CEP>
+        <cPais>1058</cPais>
+        <fone>4934420122</fone>
+      </enderEmit>
+      <IE>109381599</IE>
+      <IM>123748</IM>
+      <CNAE>1234567</CNAE>
+      <CRT>1</CRT>
+    </emit>
+    <det nItem="1">
+      <prod>
+        <cProd>1</cProd>
+        <cEAN>SEM GTIN</cEAN>
+        <xProd>Product 1</xProd>
+        <NCM>00</NCM>
+        <CFOP>5102</CFOP>
+        <uCom>UN</uCom>
+        <qCom>1.0000</qCom>
+        <vUnCom>100.0000000000</vUnCom>
+        <vProd>100.00</vProd>
+        <cEANTrib>SEM GTIN</cEANTrib>
+        <uTrib>UN</uTrib>
+        <qTrib>1.0000</qTrib>
+        <vUnTrib>100.0000000000</vUnTrib>
+        <indTot>1</indTot>
+      </prod>
+      <imposto>
+        <ICMS>
+          <ICMS00>
+            <orig>1</orig>
+            <CST>00</CST>
+            <modBC>0</modBC>
+            <vBC>100.00</vBC>
+            <pICMS>18.0000</pICMS>
+            <vICMS>18.00</vICMS>
+          </ICMS00>
+        </ICMS>
+        <IPI>
+          <cEnq>999</cEnq>
+          <IPINT>
+            <CST>53</CST>
+          </IPINT>
+        </IPI>
+        <PIS>
+          <PISNT>
+            <CST>08</CST>
+          </PISNT>
+        </PIS>
+        <COFINS>
+          <COFINSNT>
+            <CST>08</CST>
+          </COFINSNT>
+        </COFINS>
+        <IBSCBS>
+          <CST>400</CST>
+          <cClassTrib>400001</cClassTrib>
+          <gIBSCBS>
+            <vBC>100.00</vBC>
+            <gIBSUF>
+              <pIBSUF>0.10</pIBSUF>
+              <vIBSUF>0.10</vIBSUF>
+            </gIBSUF>
+            <gIBSMun>
+              <pIBSMun>0.00</pIBSMun>
+              <vIBSMun>0.00</vIBSMun>
+            </gIBSMun>
+            <vIBS>20.00</vIBS>
+            <gCBS>
+              <pCBS>0.90</pCBS>
+              <vCBS>0.90</vCBS>
+            </gCBS>
+          </gIBSCBS>
+        </IBSCBS>
+      </imposto>
+    </det>
+    <total>
+      <ICMSTot>
+        <vBC>0.00</vBC>
+        <vICMS>0.00</vICMS>
+        <vICMSDeson>0.00</vICMSDeson>
+        <vFCP>0.00</vFCP>
+        <vBCST>0.00</vBCST>
+        <vST>0.00</vST>
+        <vFCPST>0.00</vFCPST>
+        <vFCPSTRet>0.00</vFCPSTRet>
+        <vProd>100.00</vProd>
+        <vFrete>0.00</vFrete>
+        <vSeg>0.00</vSeg>
+        <vDesc>0.00</vDesc>
+        <vII>0.00</vII>
+        <vIPI>0.00</vIPI>
+        <vIPIDevol>0.00</vIPIDevol>
+        <vPIS>0.00</vPIS>
+        <vCOFINS>0.00</vCOFINS>
+        <vOutro>0.00</vOutro>
+        <vNF>100.00</vNF>
+      </ICMSTot>
+    </total>
+    <transp>
+      <modFrete>9</modFrete>
+    </transp>
+    <pag>
+      <detPag>
+        <tPag>01</tPag>
+        <vPag>100.00</vPag>
+      </detPag>
+    </pag>
+  </infNFe>
+</NFe>`);
+
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
+    expectIsRight(signed);
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
+  });
+
+  it('should build NFe with trib regular', async () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide(createValidIde())
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .ipi({
+            cEnq: '999',
+            IPINT: {
+              CST: '53',
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }).ibscbs({
+            CST: '200',
+            cClassTrib: '200022',
+            gIBSCBS: {
+              vBC: '100.00',
+              vIBS: '20.00',
+              gCBS: {
+                pCBS: '0.90',
+                vCBS: '0.90',
+              },
+              gIBSMun: {
+                pIBSMun: '0.00',
+                vIBSMun: '0.00',
+              },
+              gIBSUF: {
+                pIBSUF: '0.10',
+                vIBSUF: '0.10',
+              },
+              gTribRegular: {
+                cClassTribReg: '000001',
+                CSTReg: '000',
+                pAliqEfetRegCBS: '0.9000',
+                pAliqEfetRegIBSMun: '0.0000',
+                pAliqEfetRegIBSUF: '0.1000',
+                vTribRegCBS: '0.90',
+                vTribRegIBSMun: '0.00',
+                vTribRegIBSUF: '0.10',
+              }
+            }
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const xml = await builder.assemble();
+
+    expectIsRight(xml);
+    expect(xml.value).toBeDefined();
+    expect(xml.value).toContain(
+      '<NFe xmlns="http://www.portalfiscal.inf.br/nfe">',
+    );
+
+    expect(xml.value).toContain('<infNFe');
+    expect(xml.value).toContain('<ide>');
+    expect(xml.value).toContain('<emit>');
+    expect(xml.value).toContain('<det nItem="1">');
+    expect(xml.value).toContain('<total>');
+    expect(xml.value).toContain('<transp>');
+    expect(xml.value).toContain('<pag>');
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+  <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
+    <ide>
+      <cUF>52</cUF>
+      <cNF>78527251</cNF>
+      <natOp>Venda de mercadoria</natOp>
+      <mod>55</mod>
+      <serie>99</serie>
+      <nNF>8018</nNF>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
+      <tpNF>1</tpNF>
+      <idDest>2</idDest>
+      <cMunFG>5212501</cMunFG>
+      <tpImp>1</tpImp>
+      <tpEmis>1</tpEmis>
+      <cDV>5</cDV>
+      <tpAmb>2</tpAmb>
+      <finNFe>1</finNFe>
+      <indFinal>0</indFinal>
+      <indPres>1</indPres>
+      <procEmi>0</procEmi>
+      <verProc>nfets-0.0.1</verProc>
+    </ide>
+    <emit>
+      <CNPJ>46755763000143</CNPJ>
+      <xNome>cliente de goias</xNome>
+      <xFant>cliente de goias</xFant>
+      <enderEmit>
+        <xLgr>14 897</xLgr>
+        <nro>13897</nro>
+        <xCpl>teste teste</xCpl>
+        <xBairro>Residencial Copaibas</xBairro>
+        <cMun>5212501</cMun>
+        <xMun>Luziania</xMun>
+        <UF>GO</UF>
+        <CEP>72831770</CEP>
+        <cPais>1058</cPais>
+        <fone>4934420122</fone>
+      </enderEmit>
+      <IE>109381599</IE>
+      <IM>123748</IM>
+      <CNAE>1234567</CNAE>
+      <CRT>1</CRT>
+    </emit>
+    <det nItem="1">
+      <prod>
+        <cProd>1</cProd>
+        <cEAN>SEM GTIN</cEAN>
+        <xProd>Product 1</xProd>
+        <NCM>00</NCM>
+        <CFOP>5102</CFOP>
+        <uCom>UN</uCom>
+        <qCom>1.0000</qCom>
+        <vUnCom>100.0000000000</vUnCom>
+        <vProd>100.00</vProd>
+        <cEANTrib>SEM GTIN</cEANTrib>
+        <uTrib>UN</uTrib>
+        <qTrib>1.0000</qTrib>
+        <vUnTrib>100.0000000000</vUnTrib>
+        <indTot>1</indTot>
+      </prod>
+      <imposto>
+        <ICMS>
+          <ICMS00>
+            <orig>1</orig>
+            <CST>00</CST>
+            <modBC>0</modBC>
+            <vBC>100.00</vBC>
+            <pICMS>18.0000</pICMS>
+            <vICMS>18.00</vICMS>
+          </ICMS00>
+        </ICMS>
+        <IPI>
+          <cEnq>999</cEnq>
+          <IPINT>
+            <CST>53</CST>
+          </IPINT>
+        </IPI>
+        <PIS>
+          <PISNT>
+            <CST>08</CST>
+          </PISNT>
+        </PIS>
+        <COFINS>
+          <COFINSNT>
+            <CST>08</CST>
+          </COFINSNT>
+        </COFINS>
+        <IBSCBS>
+          <CST>200</CST>
+          <cClassTrib>200022</cClassTrib>
+          <gIBSCBS>
+            <vBC>100.00</vBC>
+            <gIBSUF>
+              <pIBSUF>0.10</pIBSUF>
+              <vIBSUF>0.10</vIBSUF>
+            </gIBSUF>
+            <gIBSMun>
+              <pIBSMun>0.00</pIBSMun>
+              <vIBSMun>0.00</vIBSMun>
+            </gIBSMun>
+            <vIBS>20.00</vIBS>
+            <gCBS>
+              <pCBS>0.90</pCBS>
+              <vCBS>0.90</vCBS>
+            </gCBS>
+            <gTribRegular>
+              <CSTReg>000</CSTReg>
+              <cClassTribReg>000001</cClassTribReg>
+              <pAliqEfetRegIBSUF>0.1000</pAliqEfetRegIBSUF>
+              <vTribRegIBSUF>0.10</vTribRegIBSUF>
+              <pAliqEfetRegIBSMun>0.0000</pAliqEfetRegIBSMun>
+              <vTribRegIBSMun>0.00</vTribRegIBSMun>
+              <pAliqEfetRegCBS>0.9000</pAliqEfetRegCBS>
+              <vTribRegCBS>0.90</vTribRegCBS>
+            </gTribRegular>
+          </gIBSCBS>
+        </IBSCBS>
+      </imposto>
+    </det>
+    <total>
+      <ICMSTot>
+        <vBC>0.00</vBC>
+        <vICMS>0.00</vICMS>
+        <vICMSDeson>0.00</vICMSDeson>
+        <vFCP>0.00</vFCP>
+        <vBCST>0.00</vBCST>
+        <vST>0.00</vST>
+        <vFCPST>0.00</vFCPST>
+        <vFCPSTRet>0.00</vFCPSTRet>
+        <vProd>100.00</vProd>
+        <vFrete>0.00</vFrete>
+        <vSeg>0.00</vSeg>
+        <vDesc>0.00</vDesc>
+        <vII>0.00</vII>
+        <vIPI>0.00</vIPI>
+        <vIPIDevol>0.00</vIPIDevol>
+        <vPIS>0.00</vPIS>
+        <vCOFINS>0.00</vCOFINS>
+        <vOutro>0.00</vOutro>
+        <vNF>100.00</vNF>
+      </ICMSTot>
+    </total>
+    <transp>
+      <modFrete>9</modFrete>
+    </transp>
+    <pag>
+      <detPag>
+        <tPag>01</tPag>
+        <vPag>100.00</vPag>
+      </detPag>
+    </pag>
+  </infNFe>
+</NFe>`);
+
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
+    expectIsRight(signed);
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 });

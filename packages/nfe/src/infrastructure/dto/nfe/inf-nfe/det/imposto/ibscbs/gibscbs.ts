@@ -8,20 +8,7 @@ import { CBS } from "./cbs";
 
 export class GIBSCBS implements IGIBSCBS {
     @IsString()
-    public vIBS!: string;
-
-    @IsString()
     public vBC!: string;
-
-    @IsOptional()
-    @ValidateNested()
-    @Type(() => TribRegular)
-    public gTribRegular?: TribRegular;
-
-    @IsOptional()
-    @ValidateNested()
-    @Type(() => IBSMun)
-    public gIBSMun?: IBSMun;
 
     @IsOptional()
     @ValidateNested()
@@ -30,7 +17,19 @@ export class GIBSCBS implements IGIBSCBS {
 
     @IsOptional()
     @ValidateNested()
+    @Type(() => IBSMun)
+    public gIBSMun?: IBSMun;
+
+    @IsString()
+    public vIBS!: string;
+
+    @IsOptional()
+    @ValidateNested()
     @Type(() => CBS)
     public gCBS?: CBS;
 
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => TribRegular)
+    public gTribRegular?: TribRegular;
 }
