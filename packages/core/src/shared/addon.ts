@@ -16,16 +16,17 @@ export const addon = <T>(bin: string): T => {
     return exportRequireModule<T>(join(process.env.NFETS_ADDONS_DIR, bin));
   }
 
+  const folder = `${platform()}-${arch()}`;
+
   try {
-    return search<T>(`build/Release/${bin}`, {
+    return search<T>(`build/addons/${folder}/${bin}`, {
       onFound: (path) => exportRequireModule<T>(path),
       onNotFound: () => {
-        throw new Error(`Addon ${bin} not found`);
+        throw new Error(`Addon ${folder}/${bin} not found`);
       },
     });
   } catch {
-    const folder = `${platform()}-${arch()}`;
-    return search<T>(`build/addons/${folder}/${bin}`, {
+    return search<T>(`build/Release/${bin}`, {
       onFound: (path) => exportRequireModule<T>(path),
       onNotFound: () => {
         throw new Error(`Addon ${folder}/${bin} not found`);
