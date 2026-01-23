@@ -196,31 +196,35 @@ jobs:
             echo "Bundled $(basename "$dll") with addon"
           done
 
-      - name: Bundle Linux (x64) shared object dependencies
-        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && contains(matrix.os, 'ubuntu') && contains(matrix.arch, 'x64')
+      - name: Bundle Linux shared object dependencies
+        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && contains(matrix.os, 'ubuntu')
         shell: bash
         run: |
           PLATFORM_ARCH="${{ steps.get-platform-arch.outputs.platform_arch }}"
-          SO_PATH="/usr/lib/x86_64-linux-gnu/libxml2.so.2"
 
-          if [ -f "$SO_PATH" ] || [ -L "$SO_PATH" ]; then
-            cp -L "$SO_PATH" "build/addons/$PLATFORM_ARCH/libxml2.so.2"
-            echo "Bundled libxml2.so.2 with addon"
+          if [ "${{ matrix.arch }}" == "x64" ]; then
+            SO_PATH="/usr/lib/x86_64-linux-gnu/libxml2.so.2"
+          elif [ "${{ matrix.arch }}" == "arm64" ]; then
+            SO_PATH="/usr/lib/aarch64-linux-gnu/libxml2.so.2"
           else
-            echo "Error: Could not find libxml2.so.2 to bundle"
+            echo "Error: Unsupported architecture: ${{ matrix.arch }}"
             exit 1
           fi
 
-      - name: Bundle Linux (arm64) shared object dependencies
-        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true' && contains(matrix.os, 'ubuntu') && contains(matrix.arch, 'arm64')
-        shell: bash
-        run: |
-          PLATFORM_ARCH="${{ steps.get-platform-arch.outputs.platform_arch }}"
-          SO_PATH="/usr/lib/aarch64-linux-gnu/libxml2.so.2"
-
           if [ -f "$SO_PATH" ] || [ -L "$SO_PATH" ]; then
             cp -L "$SO_PATH" "build/addons/$PLATFORM_ARCH/libxml2.so.2"
             echo "Bundled libxml2.so.2 with addon"
+
+            while IFS= read -r line; do
+              lib=$(echo "$line" | grep -oE '/[^ ]+' | head -1)
+              if [ -n "$lib" ] && [ -f "$lib" ]; then
+                libname=$(basename "$lib")
+                if [[ ! "$libname" =~ ^(libc\.|libpthread\.|libdl\.|libm\.|librt\.|libgcc_s\.|ld-linux) ]]; then
+                  cp -L "$lib" "build/addons/$PLATFORM_ARCH/$libname"
+                  echo "Bundled dependency: $libname"
+                fi
+              fi
+            done < <(ldd "$SO_PATH" 2>/dev/null)
           else
             echo "Error: Could not find libxml2.so.2 to bundle"
             exit 1
