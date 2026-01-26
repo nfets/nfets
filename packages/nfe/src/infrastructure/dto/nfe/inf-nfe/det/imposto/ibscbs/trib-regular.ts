@@ -1,4 +1,4 @@
-import { TribRegular as ITribRegular } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/trib-regular'
+import { TribRegular as ITribRegular } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/trib-regular';
 import { IsString } from 'class-validator';
 
 export class TribRegular implements ITribRegular {

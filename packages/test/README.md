@@ -9,7 +9,7 @@ Pacote de utilitários e testes de integração para o ecossistema nfets.
 - `src/integration.spec.ts` - Testes de estrutura dos pacotes
 - `src/integration-usage.spec.ts` - Testes de uso real (simulação end-user)
 - `src/jest.config.mjs` - Configuração base do Jest
-- `jest.config.integration.ts` - Configuração específica para testes de integração
+- `jest.config.integration.mjs` - Configuração específica para testes de integração
 
 ## Testes de Integração
 
