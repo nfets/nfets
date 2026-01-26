@@ -1,6 +1,4 @@
-import { getCurrentFile } from '@nfets/core/shared/resolve-requires';
-import { existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { search } from '@nfets/core/shared/search-file';
 
 const Schemas = {
   PL_009_V4: 'PL_009_V4',
@@ -13,21 +11,21 @@ export const schemas = () => {
     return process.env.NFETS_NFE_SCHEMAS_DIR;
   }
 
-  const __filename = getCurrentFile();
-
-  const attempts = [
-    resolve(__filename, 'node_modules', 'nfets', 'packages', 'nfe', 'schemas'),
-    resolve(__filename, '../../../../', 'nfe', 'schemas'),
-    resolve(__filename, '../../../', 'nfe', 'schemas'),
-    resolve(__filename, '../../', 'nfe', 'schemas'),
-    resolve(__filename, '../', 'nfe', 'schemas'),
-  ];
-
-  for (const attempt of attempts) {
-    if (existsSync(attempt)) return attempt;
+  try {
+    return search<string>('node_modules/nfets/packages/nfe/schemas', {
+      onFound: (path) => path,
+      onNotFound: () => {
+        throw new Error('Schemas not found on node_modules/nfets/packages/nfe/schemas');
+      },
+    });
+  } catch {
+    return search<string>('nfe/schemas', {
+      onFound: (path) => path,
+      onNotFound: () => {
+        throw new Error('Schemas not found on nfe/schemas');
+      },
+    });
   }
-
-  return __filename;
 };
 
 export type Schema = (typeof Schemas)[keyof typeof Schemas];
