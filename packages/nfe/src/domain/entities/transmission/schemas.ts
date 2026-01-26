@@ -4,6 +4,7 @@ const Schemas = {
   PL_009_V4: 'PL_009_V4',
   PL_010_V1: 'PL_010_V1',
   PL_010_V1_21: 'PL_010_V1.21',
+  PL_010_V1_30: 'PL_010_V1.30',
 } as const;
 
 export const schemas = () => {
@@ -15,7 +16,9 @@ export const schemas = () => {
     return search<string>('node_modules/nfets/packages/nfe/schemas', {
       onFound: (path) => path,
       onNotFound: () => {
-        throw new Error('Schemas not found on node_modules/nfets/packages/nfe/schemas');
+        throw new Error(
+          'Schemas not found on node_modules/nfets/packages/nfe/schemas',
+        );
       },
     });
   } catch {
