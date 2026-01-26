@@ -26,7 +26,7 @@ export class NfeXmlBuilderPipeline<T extends object> extends Pipeline {
   public build(
     build: (builder: InfNFeBuilder<T> & IdeBuilder<T>) => AssembleNfeBuilder<T>,
   ) {
-    return build(this.builder as InfNFeBuilder<T> & IdeBuilder<T>), this;
+    return (build(this.builder as InfNFeBuilder<T> & IdeBuilder<T>), this);
   }
 
   public toObject(): Either<NFeTsError, T> {

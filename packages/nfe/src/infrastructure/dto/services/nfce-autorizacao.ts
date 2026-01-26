@@ -12,8 +12,7 @@ import { IsEnum, IsOptional, IsString, IsNotEmpty } from 'class-validator';
 export class NfceAutorizacaoPayload<
   E extends INFCe,
   T extends SignedEntity<E> | SignedEntity<E>[],
-> implements IAutorizacaoPayload<E, T>
-{
+> implements IAutorizacaoPayload<E, T> {
   @IsEnum(Environment)
   @IsOptional()
   public tpAmb?: EnvironmentCode;

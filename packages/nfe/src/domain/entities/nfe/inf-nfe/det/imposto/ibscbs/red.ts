@@ -1,4 +1,4 @@
 export interface Red {
-    pAliqEfet: string
-    pRedAliq: string
+  pAliqEfet: string;
+  pRedAliq: string;
 }

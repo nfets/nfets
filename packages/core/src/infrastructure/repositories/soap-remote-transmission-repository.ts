@@ -18,10 +18,10 @@ import type {
 } from '@nfets/core/domain/entities/transmission/payload';
 import { WinHttpClient } from './winhttp-client';
 
-export class SoapRemoteTransmissionRepository<C extends Client>
-  implements RemoteTransmissionRepository<C>
-{
-  private declare certificate?: ReadCertificateResponse;
+export class SoapRemoteTransmissionRepository<
+  C extends Client,
+> implements RemoteTransmissionRepository<C> {
+  declare private certificate?: ReadCertificateResponse;
 
   public constructor(
     private readonly toolkit: XmlToolkit,
@@ -29,7 +29,7 @@ export class SoapRemoteTransmissionRepository<C extends Client>
   ) {}
 
   public setCertificate(certificate: ReadCertificateResponse) {
-    return (this.certificate = certificate), this;
+    return ((this.certificate = certificate), this);
   }
 
   protected get httpsAgent(): HttpsAgent {

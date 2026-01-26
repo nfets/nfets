@@ -34,7 +34,8 @@ export class HeaderWithLogo extends Header implements Builder {
           valign: 'center',
         }),
       (options) => (
-        this.emit({ ...options, x: options.x + 4 * mmToPt }), this.builder
+        this.emit({ ...options, x: options.x + 4 * mmToPt }),
+        this.builder
       ),
     );
   }

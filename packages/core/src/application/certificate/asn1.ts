@@ -74,7 +74,7 @@ export class ASN1 {
 
     const bin = parts.slice(2).reduce<number[]>((bytes, part) => {
       const result = this.base128(bytes, Number.parseInt(part, 10), true);
-      return (bytes.length = 0), bytes.push(...result), bytes;
+      return ((bytes.length = 0), bytes.push(...result), bytes);
     }, []);
 
     return Buffer.from([

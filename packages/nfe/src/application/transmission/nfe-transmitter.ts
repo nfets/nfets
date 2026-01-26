@@ -103,7 +103,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
 
   protected ns<T extends object>(payload: Namespaced<T>, version: string) {
     const $ = (payload.$ ?? {}) as { xmlns: string; versao: string };
-    return ($.xmlns = this.xmlns), ($.versao = version), { ...payload, $ };
+    return (($.xmlns = this.xmlns), ($.versao = version), { ...payload, $ });
   }
 
   protected xsd(name: string) {

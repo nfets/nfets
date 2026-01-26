@@ -28,21 +28,23 @@ export type GroupServicesForState<
   O extends Record<string, unknown>,
   S extends StateCode,
   E extends EnvironmentCode,
-> = WebserviceForState<WS, S> extends keyof O
-  ? E extends keyof O[WebserviceForState<WS, S>]
-    ? keyof O[WebserviceForState<WS, S>][E]
-    : never
-  : never;
+> =
+  WebserviceForState<WS, S> extends keyof O
+    ? E extends keyof O[WebserviceForState<WS, S>]
+      ? keyof O[WebserviceForState<WS, S>][E]
+      : never
+    : never;
 
 export type StateServicesForState<
   O extends Record<string, unknown>,
   S extends StateCode,
   E extends EnvironmentCode,
-> = StateAcronymFromCode<S> extends keyof O
-  ? E extends keyof O[StateAcronymFromCode<S>]
-    ? keyof O[StateAcronymFromCode<S>][E]
-    : never
-  : never;
+> =
+  StateAcronymFromCode<S> extends keyof O
+    ? E extends keyof O[StateAcronymFromCode<S>]
+      ? keyof O[StateAcronymFromCode<S>][E]
+      : never
+    : never;
 
 type ServicesForState<
   WS extends Record<string, unknown>,

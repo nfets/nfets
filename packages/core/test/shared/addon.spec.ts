@@ -42,7 +42,9 @@ describe('addon (unit)', () => {
       mockPlatform.mockReturnValue('darwin');
       mockArch.mockReturnValue('arm64');
       mockExistsSync.mockImplementation((path: PathLike) => {
-        return path.toString().includes('build/addons/darwin-arm64/test-addon.node');
+        return path
+          .toString()
+          .includes('build/addons/darwin-arm64/test-addon.node');
       });
 
       const result = addon('test-addon');
@@ -61,7 +63,9 @@ describe('addon (unit)', () => {
       mockPlatform.mockReturnValue('linux');
       mockArch.mockReturnValue('x64');
       mockExistsSync.mockImplementation((path: PathLike) => {
-        return path.toString().includes('build/addons/linux-x64/test-addon.node');
+        return path
+          .toString()
+          .includes('build/addons/linux-x64/test-addon.node');
       });
 
       const result = addon('test-addon');
@@ -80,8 +84,10 @@ describe('addon (unit)', () => {
       mockPlatform.mockReturnValue('win32');
       mockArch.mockReturnValue('x64');
       mockExistsSync.mockImplementation((path: PathLike) => {
-        return path.toString().includes('build/addons/win32-x64/test-addon.node') ||
-          path.toString().includes('build\\addons\\win32-x64\\test-addon.node');
+        return (
+          path.toString().includes('build/addons/win32-x64/test-addon.node') ||
+          path.toString().includes('build\\addons\\win32-x64\\test-addon.node')
+        );
       });
 
       const result = addon('test-addon');
@@ -196,7 +202,9 @@ describe('addon (unit)', () => {
       mockArch.mockReturnValue('x64');
 
       mockExistsSync.mockImplementation((path: PathLike) => {
-        return path.toString().includes('build/addons/linux-x64/test-addon.node');
+        return path
+          .toString()
+          .includes('build/addons/linux-x64/test-addon.node');
       });
 
       const result = addon('test-addon');
@@ -215,9 +223,15 @@ describe('addon (unit)', () => {
       mockArch.mockReturnValue('x64');
 
       mockExistsSync.mockImplementation((path: PathLike) => {
-        return (path.toString().includes('node_modules/nfets/build/addons/win32-x64') ||
-          path.toString().includes('node_modules\\nfets\\build\\addons\\win32-x64')) &&
-          path.toString().includes('test-addon.node');
+        return (
+          (path
+            .toString()
+            .includes('node_modules/nfets/build/addons/win32-x64') ||
+            path
+              .toString()
+              .includes('node_modules\\nfets\\build\\addons\\win32-x64')) &&
+          path.toString().includes('test-addon.node')
+        );
       });
 
       const result = addon('test-addon');

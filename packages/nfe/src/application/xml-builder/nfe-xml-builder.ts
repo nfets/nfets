@@ -70,9 +70,9 @@ import { ContingencyOptions } from '@nfets/nfe/domain/entities/transmission/nfe-
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 import webservices from '@nfets/nfe/services/contingency-webservices-mod55';
 
-export class NfeXmlBuilder<T extends object = INFe>
-  implements INfeXmlBuilder<T>
-{
+export class NfeXmlBuilder<
+  T extends object = INFe,
+> implements INfeXmlBuilder<T> {
   protected readonly data = {
     $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
     infNFe: {
@@ -165,7 +165,7 @@ export class NfeXmlBuilder<T extends object = INFe>
         this.nfeDetXmlBuilder.det({ nItem: (index + 1).toString() }),
         item,
       );
-      return this.collect(builder), builder.assemble();
+      return (this.collect(builder), builder.assemble());
     }) as [IDet, ...IDet[]];
     return this;
   }
@@ -304,9 +304,9 @@ export class NfeXmlBuilder<T extends object = INFe>
     const contingency = webservices[cUF];
     switch (contingency) {
       case 'SVCAN':
-        return (this.data.infNFe.ide.tpEmis = TpEmis.SVCAN), void 0;
+        return ((this.data.infNFe.ide.tpEmis = TpEmis.SVCAN), void 0);
       case 'SVCRS':
-        return (this.data.infNFe.ide.tpEmis = TpEmis.SVCRS), void 0;
+        return ((this.data.infNFe.ide.tpEmis = TpEmis.SVCRS), void 0);
     }
   }
 

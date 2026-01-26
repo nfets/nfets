@@ -31,11 +31,11 @@ export class PdfkitPdfBuilder implements PdfBuilder {
   }
 
   public configure(options: DocumentOptions): this {
-    return (this.doc.options = { ...this.doc.options, ...options }), this;
+    return ((this.doc.options = { ...this.doc.options, ...options }), this);
   }
 
   public pipe(stream: Writable): this {
-    return this.doc.pipe(stream), this;
+    return (this.doc.pipe(stream), this);
   }
 
   public end(): void {
@@ -43,33 +43,33 @@ export class PdfkitPdfBuilder implements PdfBuilder {
   }
 
   public restore() {
-    return this.doc.restore(), this;
+    return (this.doc.restore(), this);
   }
 
   public save() {
-    return this.doc.save(), this;
+    return (this.doc.save(), this);
   }
 
   public stroke(color?: ColorValue): this {
-    return this.doc.stroke(color), this;
+    return (this.doc.stroke(color), this);
   }
 
   public page(options?: DocumentOptions) {
-    return this.doc.addPage(options), this;
+    return (this.doc.addPage(options), this);
   }
 
   public table(options: TableOptionsWithData) {
-    return this.doc.table(options), this;
+    return (this.doc.table(options), this);
   }
 
   public text(text: string, options?: TextOptions): this {
     const { x, y, ...rest } = options ?? {};
-    if (x || y) return this.doc.text(text, x, y, rest), this;
-    return this.doc.text(text, options), this;
+    if (x || y) return (this.doc.text(text, x, y, rest), this);
+    return (this.doc.text(text, options), this);
   }
 
   public fontSize(size: number) {
-    return this.doc.fontSize(size), this;
+    return (this.doc.fontSize(size), this);
   }
 
   public font(font: string): this;
@@ -79,10 +79,10 @@ export class PdfkitPdfBuilder implements PdfBuilder {
     size?: number,
   ): this {
     if (typeof familyOrSize === 'string')
-      return this.doc.font(font, familyOrSize, size), this;
+      return (this.doc.font(font, familyOrSize, size), this);
     if (typeof familyOrSize === 'number')
-      return this.doc.font(font, familyOrSize), this;
-    return this.doc.font(font), this;
+      return (this.doc.font(font, familyOrSize), this);
+    return (this.doc.font(font), this);
   }
 
   public image(image: string, options?: ImageOptions): this;
@@ -99,29 +99,29 @@ export class PdfkitPdfBuilder implements PdfBuilder {
     options?: ImageOptions,
   ): this {
     if (typeof xOrOptions === 'number' && typeof y === 'number')
-      return this.doc.image(image, xOrOptions, y, options), this;
-    return this.doc.image(image, xOrOptions as ImageOptions), this;
+      return (this.doc.image(image, xOrOptions, y, options), this);
+    return (this.doc.image(image, xOrOptions as ImageOptions), this);
   }
 
   public rect(x: number, y: number, w: number, h: number) {
-    return this.doc.rect(x, y, w, h), this;
+    return (this.doc.rect(x, y, w, h), this);
   }
 
   public path(path: string): this {
-    return this.doc.path(path), this;
+    return (this.doc.path(path), this);
   }
 
   public translate(x: number, y: number): this {
-    return this.doc.translate(x, y), this;
+    return (this.doc.translate(x, y), this);
   }
 
   public scale(x: number, y?: number): this {
-    return this.doc.scale(x, y), this;
+    return (this.doc.scale(x, y), this);
   }
 
   public fill(rule: RuleValue): this;
   public fill(color?: ColorValue, rule?: RuleValue): this {
-    return this.doc.fill(color, rule), this;
+    return (this.doc.fill(color, rule), this);
   }
 
   public pageWidth(): number {
@@ -163,7 +163,7 @@ export class PdfkitPdfBuilder implements PdfBuilder {
   }
 
   public moveDown(amount?: number): this {
-    return this.doc.moveDown(amount), this;
+    return (this.doc.moveDown(amount), this);
   }
 
   public row<C extends number>(

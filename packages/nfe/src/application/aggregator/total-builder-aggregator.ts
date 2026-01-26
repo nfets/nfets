@@ -6,9 +6,9 @@ export interface TotalBuilderAggregator {
   aggregate(): void;
 }
 
-export class DefaultTotalBuilderAggregator<T extends object>
-  implements TotalBuilderAggregator
-{
+export class DefaultTotalBuilderAggregator<
+  T extends object,
+> implements TotalBuilderAggregator {
   public constructor(private readonly builder: INfeXmlBuilder<T>) {}
 
   public aggregate(): void {
