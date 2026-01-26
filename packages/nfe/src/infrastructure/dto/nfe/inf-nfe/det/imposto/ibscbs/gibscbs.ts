@@ -1,4 +1,4 @@
-import { GIBSCBS as IGIBSCBS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/gibscbs'
+import { GIBSCBS as IGIBSCBS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/gibscbs';
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { TribRegular } from './trib-regular';
 import { Type } from 'class-transformer';

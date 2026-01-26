@@ -2,7 +2,7 @@ import {
   CredPresOper as ICredPresOper,
   CBSCredPres as ICBSCredPres,
   IBSCredPres as IIBSCredPres,
-} from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/cred-pres-oper'
+} from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/cred-pres-oper';
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 

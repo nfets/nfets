@@ -1,4 +1,4 @@
-import { IS as IIS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/is'
+import { IS as IIS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/is';
 import { IsString } from 'class-validator';
 
 export class IS implements IIS {
