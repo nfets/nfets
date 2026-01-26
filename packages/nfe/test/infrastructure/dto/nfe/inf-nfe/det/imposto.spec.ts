@@ -66,17 +66,17 @@ describe('Imposto Choice validation', () => {
   });
 
   it('should be valid when only IBSCBS is set', () => {
-    const imposto = new Imposto;
-    const ibscbs = new IBSCBS;
-    ibscbs.gIBSCBS = new GIBSCBS
+    const imposto = new Imposto();
+    const ibscbs = new IBSCBS();
+    ibscbs.gIBSCBS = new GIBSCBS();
     ibscbs.gIBSCBS.vBC = '10.00';
     ibscbs.gIBSCBS.vIBS = '20.00';
 
-    const ibsMun = new IBSMun;
+    const ibsMun = new IBSMun();
     ibsMun.pIBSMun = '1.0';
     ibsMun.vIBSMun = '1.0';
 
-    const ibsUf = new IBSUF;
+    const ibsUf = new IBSUF();
     ibsUf.pIBSUF = '2.0';
     ibsUf.vIBSUF = '2.0';
 
