@@ -43,7 +43,10 @@ import {
 import { ICMSUFDest } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/icmsufdest';
 import { II } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/ii';
 import { DetBuilderAggregator } from '@nfets/nfe/application/aggregator/det-builder-aggregator';
-import { IBSCBS, IBSCBS as IIBSCBS } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/ibscbs';
+import {
+  IBSCBS,
+  IBSCBS as IIBSCBS,
+} from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/ibscbs';
 
 export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   protected data = {} as IDet;
@@ -54,7 +57,7 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
     return new this(listener);
   }
 
-  protected constructor(private readonly listener?: DetBuilderAggregator) { }
+  protected constructor(private readonly listener?: DetBuilderAggregator) {}
 
   @Validates(DetAttributes)
   public det(payload: IDetAttributes) {

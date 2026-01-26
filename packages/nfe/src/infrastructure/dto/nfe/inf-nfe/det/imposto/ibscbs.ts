@@ -1,4 +1,4 @@
-import { IBSCBS as IIBSCBS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs'
+import { IBSCBS as IIBSCBS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs';
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { TransferenciaCredito } from './ibscbs/transf-cred';
 import { CredPresIBSZFM } from './ibscbs/cred-pres-ibs-zfm';
@@ -57,4 +57,3 @@ export class IBSCBS implements IIBSCBS {
   @Type(() => GIBSCBS)
   public gIBSCBS?: GIBSCBS;
 }
-

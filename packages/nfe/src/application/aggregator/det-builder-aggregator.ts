@@ -9,9 +9,9 @@ export interface DetBuilderAggregator {
   icms(payload: ICMS): void;
 }
 
-export class DefaultDetBuilderAggregator<T extends object>
-  implements DetBuilderAggregator
-{
+export class DefaultDetBuilderAggregator<
+  T extends object,
+> implements DetBuilderAggregator {
   public constructor(private readonly builder: INfeXmlBuilder<T>) {}
 
   public prod(payload: Prod): void {

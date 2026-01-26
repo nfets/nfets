@@ -18,9 +18,7 @@ describe('xml validator (unit)', () => {
   const xml = new Xml2JsToolkit();
 
   it('should return left when xml content is not provided', async () => {
-    await expect(
-      xml.validate('', ''),
-    ).resolves.toStrictEqual(
+    await expect(xml.validate('', '')).resolves.toStrictEqual(
       left(new NFeTsError('Please provide a valid xml content')),
     );
   });

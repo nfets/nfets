@@ -43,8 +43,7 @@ export interface NfceTransmitterOptions extends NfeTransmitterOptions {
 }
 
 export interface NfceTransmitter
-  extends NfeTransmitter,
-    Transmitter<NfceRemoteClient> {
+  extends NfeTransmitter, Transmitter<NfceRemoteClient> {
   configure(options: NfceTransmitterOptions): this;
   autorizacao<E extends NFCe, T extends SignedEntity<E> | SignedEntity<E>[]>(
     payload: AutorizacaoPayload<E, T>,

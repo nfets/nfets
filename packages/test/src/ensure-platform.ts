@@ -4,7 +4,7 @@ export const ensurePlatform = (
   const platform = process.platform;
 
   if (platform !== name) {
-    return it.skip(`test only for ${name} platform`, () => void 0), void 0;
+    return (it.skip(`test only for ${name} platform`, () => void 0), void 0);
   }
 
   return true;

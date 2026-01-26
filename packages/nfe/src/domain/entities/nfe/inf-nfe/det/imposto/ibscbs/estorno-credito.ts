@@ -1,4 +1,4 @@
 export interface EstornoCred {
-    vIBSEstCred: string
-    vCBSEstCred: string
+  vIBSEstCred: string;
+  vCBSEstCred: string;
 }

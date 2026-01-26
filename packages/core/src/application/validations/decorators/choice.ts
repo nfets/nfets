@@ -12,8 +12,7 @@ interface ChoiceGroup<P extends string | number | symbol> {
 }
 
 export interface ChoiceOptions<P extends string | number | symbol>
-  extends ValidationOptions,
-    ChoiceGroup<P> {}
+  extends ValidationOptions, ChoiceGroup<P> {}
 
 const CHOICE_METADATA_KEY = Symbol('choice');
 

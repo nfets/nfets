@@ -43,7 +43,7 @@ export const expectInOrder = (text: string) => {
       const index = remainingText.indexOf(substring);
 
       if (index === -1) {
-        return expect(remainingText).toContain(substring), matcher;
+        return (expect(remainingText).toContain(substring), matcher);
       }
 
       current += index + substring.length;

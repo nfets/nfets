@@ -46,7 +46,8 @@ const getElectronResourcesPath = (): string | null => {
   if (app) {
     try {
       const appPath = app.getAppPath();
-      if (typeof appPath === 'string') return dirname(appPath.replace(/\.asar$/, ''));
+      if (typeof appPath === 'string')
+        return dirname(appPath.replace(/\.asar$/, ''));
     } catch {
       // getAppPath failed
     }
@@ -55,16 +56,16 @@ const getElectronResourcesPath = (): string | null => {
   return null;
 };
 
-export const search = <T>(target: string, { onFound, onNotFound }: { onFound: (path: string) => T, onNotFound: () => void }): T => {
-
+export const search = <T>(
+  target: string,
+  {
+    onFound,
+    onNotFound,
+  }: { onFound: (path: string) => T; onNotFound: () => void },
+): T => {
   const resources = getElectronResourcesPath();
   if (resources) {
-    const electronCandidate = join(
-      resources,
-      'node_modules',
-      'nfets',
-      target
-    );
+    const electronCandidate = join(resources, 'node_modules', 'nfets', target);
 
     if (existsSync(electronCandidate)) {
       return onFound(electronCandidate);
@@ -94,12 +95,7 @@ export const search = <T>(target: string, { onFound, onNotFound }: { onFound: (p
   // distribution fallback
   search = base;
   for (let i = 0; i < 5; i++) {
-    const candidate = join(
-      search,
-      'node_modules',
-      'nfets',
-      target,
-    );
+    const candidate = join(search, 'node_modules', 'nfets', target);
 
     if (existsSync(candidate)) return onFound(candidate);
 
@@ -120,4 +116,4 @@ export const search = <T>(target: string, { onFound, onNotFound }: { onFound: (p
   }
 
   return onNotFound() as never;
-}
+};

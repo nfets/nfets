@@ -23,8 +23,8 @@ import {
 import type { Builder } from '@nfets/nfe/domain/entities/printable-documents/builder';
 
 export abstract class DanfcePdfDocument {
-  public declare data: NFCe;
-  public declare protNFe?: ProtNFe;
+  declare public data: NFCe;
+  declare public protNFe?: ProtNFe;
 
   public readonly builder: PdfBuilder;
   public readonly toolkit: XmlToolkit = new Xml2JsToolkit();
@@ -112,7 +112,9 @@ export abstract class DanfcePdfDocument {
 
   public end(): void {
     return (
-      this.builder.end(), this.builders.map((builder) => builder.end()), void 0
+      this.builder.end(),
+      this.builders.map((builder) => builder.end()),
+      void 0
     );
   }
 

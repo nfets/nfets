@@ -19,6 +19,6 @@ export interface Imposto {
   COFINS?: COFINS;
   COFINSST?: COFINSST;
   ICMSUFDest?: ICMSUFDest;
-  IBSCBS?: IBSCBS
+  IBSCBS?: IBSCBS;
   IS?: IS;
 }

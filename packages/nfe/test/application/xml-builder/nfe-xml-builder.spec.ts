@@ -83,7 +83,7 @@ describe('xml builder with xml2js builder', () => {
 
   it('should completely ignores validations and sets the versao to [object Object]', async () => {
     @SkipAllValidations()
-    class DontValidateNfeXmlBuilder extends NfeXmlBuilder { }
+    class DontValidateNfeXmlBuilder extends NfeXmlBuilder {}
 
     const builder = DontValidateNfeXmlBuilder.create(toolkit)
       .infNFe({ versao: { some: 'invalid-value' } as never })
@@ -4398,7 +4398,6 @@ describe('xml builder with xml2js builder', () => {
     expectIsRight(signed);
     expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
-
 
   it('should build NFe with infIntermed and cana after pag', async () => {
     const builder = NfeXmlBuilder.create(toolkit)
@@ -8991,7 +8990,6 @@ describe('xml builder with xml2js builder', () => {
     expect(decompiled?.tpEmis).toBe('7');
   });
 
-
   it('should build NFe with minimal ibs regime fields', async () => {
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
@@ -9040,7 +9038,8 @@ describe('xml builder with xml2js builder', () => {
             COFINSNT: {
               CST: '08',
             },
-          }).ibscbs({
+          })
+          .ibscbs({
             CST: '400',
             cClassTrib: '400001',
           }),
@@ -9251,7 +9250,8 @@ describe('xml builder with xml2js builder', () => {
             COFINSNT: {
               CST: '08',
             },
-          }).ibscbs({
+          })
+          .ibscbs({
             CST: '400',
             cClassTrib: '400001',
             gIBSCBS: {
@@ -9268,8 +9268,8 @@ describe('xml builder with xml2js builder', () => {
               gIBSUF: {
                 pIBSUF: '0.10',
                 vIBSUF: '0.10',
-              }
-            }
+              },
+            },
           }),
       )
       .transp(createValidTransp())
@@ -9494,7 +9494,8 @@ describe('xml builder with xml2js builder', () => {
             COFINSNT: {
               CST: '08',
             },
-          }).ibscbs({
+          })
+          .ibscbs({
             CST: '200',
             cClassTrib: '200022',
             gIBSCBS: {
@@ -9521,8 +9522,8 @@ describe('xml builder with xml2js builder', () => {
                 vTribRegCBS: '0.90',
                 vTribRegIBSMun: '0.00',
                 vTribRegIBSUF: '0.10',
-              }
-            }
+              },
+            },
           }),
       )
       .transp(createValidTransp())

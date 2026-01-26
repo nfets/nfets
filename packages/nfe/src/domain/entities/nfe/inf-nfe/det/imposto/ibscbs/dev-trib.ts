@@ -1,1 +1,3 @@
-export interface DevTrib { vDevTrib: string }
+export interface DevTrib {
+  vDevTrib: string;
+}
