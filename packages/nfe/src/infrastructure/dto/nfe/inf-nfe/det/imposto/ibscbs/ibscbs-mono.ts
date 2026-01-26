@@ -1,4 +1,4 @@
-import { IBSCBSMono as IIBSCBSMono } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/ibscbs-mono'
+import { IBSCBSMono as IIBSCBSMono } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/ibscbs-mono';
 import { IsOptional, IsString } from 'class-validator';
 
 export class IBSCBSMono implements IIBSCBSMono {

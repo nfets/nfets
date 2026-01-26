@@ -1,4 +1,4 @@
-import { CBS as ICBS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/cbs'
+import { CBS as ICBS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/cbs';
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { DevTrib } from './dev-trib';

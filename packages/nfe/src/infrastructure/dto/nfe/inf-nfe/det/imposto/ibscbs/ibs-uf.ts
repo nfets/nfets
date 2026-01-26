@@ -1,4 +1,4 @@
-import { IBSUF as IIBSUF } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/ibs-uf'
+import { IBSUF as IIBSUF } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/ibs-uf';
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { DevTrib } from './dev-trib';

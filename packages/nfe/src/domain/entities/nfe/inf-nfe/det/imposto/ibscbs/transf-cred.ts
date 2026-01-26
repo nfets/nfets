@@ -1,4 +1,4 @@
 export interface TransferenciaCredito {
-    vIBS?: string;
-    vCBS?: string;
+  vIBS?: string;
+  vCBS?: string;
 }

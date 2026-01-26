@@ -1,5 +1,5 @@
 export interface AjusteCompet {
-    competApur: string;
-    vCBS: string;
-    vIBS: string;
+  competApur: string;
+  vCBS: string;
+  vIBS: string;
 }
