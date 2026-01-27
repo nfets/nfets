@@ -66,45 +66,45 @@ export interface Total {
 }
 
 export interface IBSCBSTot {
-  vBCIBSCBS: DecimalValue;
-  gIBS: IBSTot;
-  gCBS: CBSTot;
-  gMono: IBSMonoTot;
+  vBCIBSCBS?: DecimalValue;
+  gIBS?: IBSTot;
+  gCBS?: CBSTot;
+  gMono?: IBSMonoTot;
 }
 
 export type IBSTot = {
-  gIBSUF: IBSUFTot;
-  gIBSMun: IBSMunTot;
-  vIBS: DecimalValue;
-  vCredPres: DecimalValue;
-  vCredPresCondSus: DecimalValue;
+  gIBSUF?: IBSUFTot;
+  gIBSMun?: IBSMunTot;
+  vIBS?: DecimalValue;
+  vCredPres?: DecimalValue;
+  vCredPresCondSus?: DecimalValue;
 };
 
 export type IBSUFTot = {
-  vDif: DecimalValue;
-  vDevTrib: DecimalValue;
-  vIBSUF: DecimalValue;
+  vDif?: DecimalValue;
+  vDevTrib?: DecimalValue;
+  vIBSUF?: DecimalValue;
 };
 
 export type IBSMunTot = {
-  vDif: DecimalValue;
-  vDevTrib: DecimalValue;
-  vIBSMun: DecimalValue;
+  vDif?: DecimalValue;
+  vDevTrib?: DecimalValue;
+  vIBSMun?: DecimalValue;
 };
 
 export type CBSTot = {
-  vDif: DecimalValue;
-  vDevTrib: DecimalValue;
-  vCBS: DecimalValue;
-  vCredPres: DecimalValue;
-  vCredPresCondSus: DecimalValue;
+  vDif?: DecimalValue;
+  vDevTrib?: DecimalValue;
+  vCBS?: DecimalValue;
+  vCredPres?: DecimalValue;
+  vCredPresCondSus?: DecimalValue;
 };
 
 export type IBSMonoTot = {
-  vIBSMono: DecimalValue;
-  vCBSMono: DecimalValue;
-  vIBSMonoReten: DecimalValue;
-  vCBSMonoReten: DecimalValue;
-  vIBSMonoRet: DecimalValue;
-  vCBSMonoRet: DecimalValue;
+  vIBSMono?: DecimalValue;
+  vCBSMono?: DecimalValue;
+  vIBSMonoReten?: DecimalValue;
+  vCBSMonoReten?: DecimalValue;
+  vIBSMonoRet?: DecimalValue;
+  vCBSMonoRet?: DecimalValue;
 };
