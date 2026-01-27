@@ -1,8 +1,10 @@
 import type { EnvironmentCode, StateCode } from '@nfets/core/domain';
+import { type Schema } from '../transmission/schemas';
 
 export interface ConsultStatusPayload {
   tpAmb: EnvironmentCode;
   cUF: StateCode;
+  schema?: Schema;
   xServ?: 'STATUS';
 }
 

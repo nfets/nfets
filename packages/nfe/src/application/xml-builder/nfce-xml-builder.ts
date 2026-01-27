@@ -10,7 +10,7 @@ import { NFCe } from '@nfets/nfe/infrastructure/dto/nfe/nfce';
 import type { NFCe as INFCe } from '@nfets/nfe/domain/entities/nfe/nfce';
 import type { XmlToolkit } from '@nfets/core/domain';
 import type { ContingencyOptions } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
-import { TpEmis } from '@nfets/nfe/domain';
+import { type Schema, TpEmis } from '@nfets/nfe/domain';
 
 export class NfceXmlBuilder<T extends object = INFCe>
   extends NfeXmlBuilder<T>
@@ -30,8 +30,9 @@ export class NfceXmlBuilder<T extends object = INFCe>
   public static override create<T extends object = INFCe>(
     builder: XmlToolkit,
     contingency?: ContingencyOptions,
+    schema: Schema = 'PL_009_V4',
   ): InfNFeBuilder<T> & IdeBuilder<T> {
-    return new this(builder, contingency);
+    return new this(builder, contingency, schema);
   }
 
   protected override assertHomologValidations(): boolean {
@@ -54,6 +55,6 @@ export class NfceXmlBuilder<T extends object = INFCe>
     const { tpEmis } = this.data.infNFe.ide;
     if (tpEmis !== TpEmis.Normal) return;
 
-    return ((this.data.infNFe.ide.tpEmis = TpEmis.OFFLINE), void 0);
+    return (this.data.infNFe.ide.tpEmis = TpEmis.OFFLINE), void 0;
   }
 }

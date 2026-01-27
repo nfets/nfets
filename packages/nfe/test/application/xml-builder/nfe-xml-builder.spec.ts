@@ -40,7 +40,9 @@ import {
 } from '@nfets/test/expects';
 import { getCnpjCertificate } from '@nfets/test/certificates';
 import { getCertificatePassword } from '@nfets/test/certificates';
-import { schemas } from '@nfets/nfe/domain/entities/transmission/schemas';
+import Schemas, {
+  schemas,
+} from '@nfets/nfe/domain/entities/transmission/schemas';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 
@@ -8991,7 +8993,11 @@ describe('xml builder with xml2js builder', () => {
   });
 
   it('should build NFe with minimal ibs regime fields', async () => {
-    const builder = NfeXmlBuilder.create(toolkit)
+    const builder = NfeXmlBuilder.create(
+      toolkit,
+      undefined,
+      Schemas.PL_010_V1_30,
+    )
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
       .emit(createValidEmit())
@@ -9042,7 +9048,8 @@ describe('xml builder with xml2js builder', () => {
           .ibscbs({
             CST: '400',
             cClassTrib: '400001',
-          }),
+          })
+          .vItem({ vItem: '1.00' }),
       )
       .transp(createValidTransp())
       .pag(createValidPag());
@@ -9157,6 +9164,7 @@ describe('xml builder with xml2js builder', () => {
           <cClassTrib>400001</cClassTrib>
         </IBSCBS>
       </imposto>
+      <vItem>1.00</vItem>
     </det>
     <total>
       <ICMSTot>
@@ -9180,6 +9188,40 @@ describe('xml builder with xml2js builder', () => {
         <vOutro>0.00</vOutro>
         <vNF>100.00</vNF>
       </ICMSTot>
+      <IBSCBSTot>
+        <vBCIBSCBS>0.00</vBCIBSCBS>
+        <gIBS>
+          <gIBSUF>
+            <vDif>0.00</vDif>
+            <vDevTrib>0.00</vDevTrib>
+            <vIBSUF>0.00</vIBSUF>
+          </gIBSUF>
+          <gIBSMun>
+            <vDif>0.00</vDif>
+            <vDevTrib>0.00</vDevTrib>
+            <vIBSMun>0.00</vIBSMun>
+          </gIBSMun>
+          <vIBS>0.00</vIBS>
+          <vCredPres>0.00</vCredPres>
+          <vCredPresCondSus>0.00</vCredPresCondSus>
+        </gIBS>
+        <gCBS>
+          <vDif>0.00</vDif>
+          <vDevTrib>0.00</vDevTrib>
+          <vCBS>0.00</vCBS>
+          <vCredPres>0.00</vCredPres>
+          <vCredPresCondSus>0.00</vCredPresCondSus>
+        </gCBS>
+        <gMono>
+          <vIBSMono>0.00</vIBSMono>
+          <vCBSMono>0.00</vCBSMono>
+          <vIBSMonoReten>0.00</vIBSMonoReten>
+          <vCBSMonoReten>0.00</vCBSMonoReten>
+          <vIBSMonoRet>0.00</vIBSMonoRet>
+          <vCBSMonoRet>0.00</vCBSMonoRet>
+        </gMono>
+      </IBSCBSTot>
+      <vNFTot>1.00</vNFTot>
     </total>
     <transp>
       <modFrete>9</modFrete>
@@ -9203,7 +9245,11 @@ describe('xml builder with xml2js builder', () => {
   });
 
   it('should build NFe with ibs and cbs', async () => {
-    const builder = NfeXmlBuilder.create(toolkit)
+    const builder = NfeXmlBuilder.create(
+      toolkit,
+      undefined,
+      Schemas.PL_010_V1_30,
+    )
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
       .emit(createValidEmit())
@@ -9270,7 +9316,8 @@ describe('xml builder with xml2js builder', () => {
                 vIBSUF: '0.10',
               },
             },
-          }),
+          })
+          .vItem({ vItem: '2.00' }),
       )
       .transp(createValidTransp())
       .pag(createValidPag());
@@ -9401,6 +9448,7 @@ describe('xml builder with xml2js builder', () => {
           </gIBSCBS>
         </IBSCBS>
       </imposto>
+      <vItem>2.00</vItem>
     </det>
     <total>
       <ICMSTot>
@@ -9424,6 +9472,40 @@ describe('xml builder with xml2js builder', () => {
         <vOutro>0.00</vOutro>
         <vNF>100.00</vNF>
       </ICMSTot>
+      <IBSCBSTot>
+        <vBCIBSCBS>0.00</vBCIBSCBS>
+        <gIBS>
+          <gIBSUF>
+            <vDif>0.00</vDif>
+            <vDevTrib>0.00</vDevTrib>
+            <vIBSUF>0.00</vIBSUF>
+          </gIBSUF>
+          <gIBSMun>
+            <vDif>0.00</vDif>
+            <vDevTrib>0.00</vDevTrib>
+            <vIBSMun>0.00</vIBSMun>
+          </gIBSMun>
+          <vIBS>0.00</vIBS>
+          <vCredPres>0.00</vCredPres>
+          <vCredPresCondSus>0.00</vCredPresCondSus>
+        </gIBS>
+        <gCBS>
+          <vDif>0.00</vDif>
+          <vDevTrib>0.00</vDevTrib>
+          <vCBS>0.00</vCBS>
+          <vCredPres>0.00</vCredPres>
+          <vCredPresCondSus>0.00</vCredPresCondSus>
+        </gCBS>
+        <gMono>
+          <vIBSMono>0.00</vIBSMono>
+          <vCBSMono>0.00</vCBSMono>
+          <vIBSMonoReten>0.00</vIBSMonoReten>
+          <vCBSMonoReten>0.00</vCBSMonoReten>
+          <vIBSMonoRet>0.00</vIBSMonoRet>
+          <vCBSMonoRet>0.00</vCBSMonoRet>
+        </gMono>
+      </IBSCBSTot>
+      <vNFTot>2.00</vNFTot>
     </total>
     <transp>
       <modFrete>9</modFrete>
@@ -9447,7 +9529,11 @@ describe('xml builder with xml2js builder', () => {
   });
 
   it('should build NFe with trib regular', async () => {
-    const builder = NfeXmlBuilder.create(toolkit)
+    const builder = NfeXmlBuilder.create(
+      toolkit,
+      undefined,
+      Schemas.PL_010_V1_30,
+    )
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
       .emit(createValidEmit())
@@ -9524,7 +9610,8 @@ describe('xml builder with xml2js builder', () => {
                 vTribRegIBSUF: '0.10',
               },
             },
-          }),
+          })
+          .vItem({ vItem: '3.00' }),
       )
       .transp(createValidTransp())
       .pag(createValidPag());
@@ -9665,6 +9752,7 @@ describe('xml builder with xml2js builder', () => {
           </gIBSCBS>
         </IBSCBS>
       </imposto>
+      <vItem>3.00</vItem>
     </det>
     <total>
       <ICMSTot>
@@ -9688,6 +9776,40 @@ describe('xml builder with xml2js builder', () => {
         <vOutro>0.00</vOutro>
         <vNF>100.00</vNF>
       </ICMSTot>
+      <IBSCBSTot>
+        <vBCIBSCBS>0.00</vBCIBSCBS>
+        <gIBS>
+          <gIBSUF>
+            <vDif>0.00</vDif>
+            <vDevTrib>0.00</vDevTrib>
+            <vIBSUF>0.00</vIBSUF>
+          </gIBSUF>
+          <gIBSMun>
+            <vDif>0.00</vDif>
+            <vDevTrib>0.00</vDevTrib>
+            <vIBSMun>0.00</vIBSMun>
+          </gIBSMun>
+          <vIBS>0.00</vIBS>
+          <vCredPres>0.00</vCredPres>
+          <vCredPresCondSus>0.00</vCredPresCondSus>
+        </gIBS>
+        <gCBS>
+          <vDif>0.00</vDif>
+          <vDevTrib>0.00</vDevTrib>
+          <vCBS>0.00</vCBS>
+          <vCredPres>0.00</vCredPres>
+          <vCredPresCondSus>0.00</vCredPresCondSus>
+        </gCBS>
+        <gMono>
+          <vIBSMono>0.00</vIBSMono>
+          <vCBSMono>0.00</vCBSMono>
+          <vIBSMonoReten>0.00</vIBSMonoReten>
+          <vCBSMonoReten>0.00</vCBSMonoReten>
+          <vIBSMonoRet>0.00</vIBSMonoRet>
+          <vCBSMonoRet>0.00</vCBSMonoRet>
+        </gMono>
+      </IBSCBSTot>
+      <vNFTot>3.00</vNFTot>
     </total>
     <transp>
       <modFrete>9</modFrete>
