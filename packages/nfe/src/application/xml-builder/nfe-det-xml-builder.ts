@@ -149,6 +149,11 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
     return this;
   }
 
+  public vItem(payload: { vItem: string }) {
+    this.data.vItem = payload.vItem;
+    return this;
+  }
+
   public assemble(): IDet {
     if (this.data.imposto) this.imposto(this.data.imposto);
     const result = { ...this.data };

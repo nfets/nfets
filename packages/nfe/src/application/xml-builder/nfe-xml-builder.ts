@@ -69,10 +69,12 @@ import { Cana } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/cana';
 import { ContingencyOptions } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 import webservices from '@nfets/nfe/services/contingency-webservices-mod55';
+import { Schema } from '@nfets/nfe/domain';
+import Schemas from '@nfets/nfe/domain/entities/transmission/schemas';
 
-export class NfeXmlBuilder<
-  T extends object = INFe,
-> implements INfeXmlBuilder<T> {
+export class NfeXmlBuilder<T extends object = INFe>
+  implements INfeXmlBuilder<T>
+{
   protected readonly data = {
     $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
     infNFe: {
@@ -98,13 +100,15 @@ export class NfeXmlBuilder<
   public static create<T extends object = INFe>(
     builder: XmlToolkit,
     contingency?: ContingencyOptions,
+    schema: Schema = 'PL_009_V4',
   ): InfNFeBuilder<T> & IdeBuilder<T> {
-    return new this(builder, contingency);
+    return new this(builder, contingency, schema);
   }
 
   protected constructor(
     protected readonly builder: XmlToolkit,
     protected contingency?: ContingencyOptions,
+    public readonly schema: Schema = 'PL_009_V4',
   ) {}
 
   @Validates(InfNFeAttributes)
@@ -165,7 +169,7 @@ export class NfeXmlBuilder<
         this.nfeDetXmlBuilder.det({ nItem: (index + 1).toString() }),
         item,
       );
-      return (this.collect(builder), builder.assemble());
+      return this.collect(builder), builder.assemble();
     }) as [IDet, ...IDet[]];
     return this;
   }
@@ -177,9 +181,15 @@ export class NfeXmlBuilder<
   }
 
   public increment(
-    callback: (context: DeepPartial<ITotal>) => DeepPartial<ITotal>,
+    callback: (
+      context: DeepPartial<ITotal>,
+      det: DeepPartial<IDet[]>,
+    ) => DeepPartial<ITotal>,
   ) {
-    const result = callback(this.data.infNFe.total) as ITotal;
+    const result = callback(
+      this.data.infNFe.total,
+      this.data.infNFe.det,
+    ) as ITotal;
 
     this.data.infNFe.total = {
       ...this.data.infNFe.total,
@@ -189,7 +199,34 @@ export class NfeXmlBuilder<
         : void 0,
     };
 
+    if (this.schema == Schemas.PL_010_V1_30) this.buildTotalForPL_010(result);
+
     return this;
+  }
+
+  private buildTotalForPL_010(result: ITotal) {
+    this.data.infNFe.total = {
+      ...this.data.infNFe.total,
+      IBSCBSTot: {
+        ...this.data.infNFe.total.IBSCBSTot,
+        gCBS: {
+          ...this.data.infNFe.total.IBSCBSTot?.gCBS,
+        },
+        gIBS: {
+          ...this.data.infNFe.total.IBSCBSTot?.gIBS,
+          gIBSMun: {
+            ...this.data.infNFe.total.IBSCBSTot?.gIBS?.gIBSMun,
+          },
+          gIBSUF: {
+            ...this.data.infNFe.total.IBSCBSTot?.gIBS?.gIBSUF,
+          },
+        },
+        gMono: {
+          ...this.data.infNFe.total.IBSCBSTot?.gMono,
+        },
+      },
+      vNFTot: result.vNFTot,
+    };
   }
 
   @Validates(Transp)
@@ -304,9 +341,9 @@ export class NfeXmlBuilder<
     const contingency = webservices[cUF];
     switch (contingency) {
       case 'SVCAN':
-        return ((this.data.infNFe.ide.tpEmis = TpEmis.SVCAN), void 0);
+        return (this.data.infNFe.ide.tpEmis = TpEmis.SVCAN), void 0;
       case 'SVCRS':
-        return ((this.data.infNFe.ide.tpEmis = TpEmis.SVCRS), void 0);
+        return (this.data.infNFe.ide.tpEmis = TpEmis.SVCRS), void 0;
     }
   }
 

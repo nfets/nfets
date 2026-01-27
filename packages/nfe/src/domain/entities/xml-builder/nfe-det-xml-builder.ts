@@ -55,7 +55,10 @@ export interface IssQnBuilder {
 export interface IcmsOrIssQnBuilder extends IcmsBuilder, IssQnBuilder {}
 
 export interface OptionalSharedImpostoBuilder
-  extends PisBuilder, CofinsBuilder, IcmsufdestBuilder, AssembleDetXmlBuilder {}
+  extends PisBuilder,
+    CofinsBuilder,
+    IcmsufdestBuilder,
+    AssembleDetXmlBuilder {}
 
 export interface IcmsIpiBuilder {
   ipi(
@@ -129,7 +132,11 @@ export interface IcmsufdestBuilder {
 }
 
 export interface IbscbsBuilder {
-  ibscbs(payload: IBSCBS): AssembleDetXmlBuilder;
+  ibscbs(payload: IBSCBS): vItemBuilder;
+}
+
+export interface vItemBuilder {
+  vItem(payload: { vItem: string }): AssembleDetXmlBuilder;
 }
 
 export interface AssembleDetXmlBuilder {
@@ -137,8 +144,7 @@ export interface AssembleDetXmlBuilder {
 }
 
 export interface INfeDetXmlBuilder
-  extends
-    DetBuilder,
+  extends DetBuilder,
     ProdBuilder,
     ImpostoBuilder,
     IcmsOrIssQnBuilder,

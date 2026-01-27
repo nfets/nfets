@@ -61,4 +61,50 @@ export interface Total {
   ICMSTot: ICMSTot;
   ISSQNtot?: ISSQNTot;
   retTrib?: RetTrib;
+  IBSCBSTot?: IBSCBSTot;
+  vNFTot?: DecimalValue;
 }
+
+export interface IBSCBSTot {
+  vBCIBSCBS?: DecimalValue;
+  gIBS?: IBSTot;
+  gCBS?: CBSTot;
+  gMono?: IBSMonoTot;
+}
+
+export type IBSTot = {
+  gIBSUF?: IBSUFTot;
+  gIBSMun?: IBSMunTot;
+  vIBS?: DecimalValue;
+  vCredPres?: DecimalValue;
+  vCredPresCondSus?: DecimalValue;
+};
+
+export type IBSUFTot = {
+  vDif?: DecimalValue;
+  vDevTrib?: DecimalValue;
+  vIBSUF?: DecimalValue;
+};
+
+export type IBSMunTot = {
+  vDif?: DecimalValue;
+  vDevTrib?: DecimalValue;
+  vIBSMun?: DecimalValue;
+};
+
+export type CBSTot = {
+  vDif?: DecimalValue;
+  vDevTrib?: DecimalValue;
+  vCBS?: DecimalValue;
+  vCredPres?: DecimalValue;
+  vCredPresCondSus?: DecimalValue;
+};
+
+export type IBSMonoTot = {
+  vIBSMono?: DecimalValue;
+  vCBSMono?: DecimalValue;
+  vIBSMonoReten?: DecimalValue;
+  vCBSMonoReten?: DecimalValue;
+  vIBSMonoRet?: DecimalValue;
+  vCBSMonoRet?: DecimalValue;
+};

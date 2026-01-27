@@ -11,5 +11,9 @@ export class NfceXmlBuilderPipeline<
 > extends NfeXmlBuilderPipeline<T> {
   protected readonly builder:
     | (InfNFeBuilder<T> & IdeBuilder<T>)
-    | AssembleNfeBuilder<T> = NfceXmlBuilder.create<T>(this.toolkit);
+    | AssembleNfeBuilder<T> = NfceXmlBuilder.create<T>(
+    this.toolkit,
+    undefined,
+    this.schema,
+  );
 }

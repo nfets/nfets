@@ -20,6 +20,8 @@ import type { InfAdic as IInfAdic } from '@nfets/nfe/domain/entities/nfe/inf-nfe
 import type { Avulsa as IAvulsa } from '@nfets/nfe/domain/entities/nfe/inf-nfe/avulsa';
 import type { Local as ILocal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/local';
 import type { AutXML as IAutXML } from '@nfets/nfe/domain/entities/nfe/inf-nfe/autxml';
+import type { Det as IDet } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det';
+import { type Schema } from '../transmission/schemas';
 
 export interface InfNFeBuilder<T extends object> {
   infNFe(payload: InfNFeAttributes): IdeBuilder<T>;
@@ -85,7 +87,10 @@ export interface DetGroupBuilder<T extends object> {
 export interface TotalBuilder<T extends object> {
   total(payload: ITotal): TranspBuilder<T>;
   increment(
-    callback: (context: DeepPartial<ITotal>) => DeepPartial<ITotal>,
+    callback: (
+      context: DeepPartial<ITotal>,
+      det: DeepPartial<IDet[]>,
+    ) => DeepPartial<ITotal>,
   ): TranspBuilder<T>;
 }
 
@@ -191,8 +196,7 @@ export interface AssembleNfeBuilder<T extends object> {
 }
 
 export interface INfeXmlBuilder<T extends object>
-  extends
-    InfNFeBuilder<T>,
+  extends InfNFeBuilder<T>,
     IdeBuilder<T>,
     DetGroupBuilder<T>,
     DestBuilder<T>,
@@ -210,4 +214,6 @@ export interface INfeXmlBuilder<T extends object>
     InfSolicNFFBuilder<T>,
     InfAdicBuilder<T>,
     AvulsaBuilder<T>,
-    AssembleNfeBuilder<T> {}
+    AssembleNfeBuilder<T> {
+  schema?: Schema;
+}
