@@ -199,7 +199,7 @@ export class NfeXmlBuilder<T extends object = INFe>
         : void 0,
     };
 
-    if (this.schema == Schemas.PL_010_V1_30) this.buildTotalForPL_010(result);
+    if (this.schema === Schemas.PL_010_V1_30) this.buildTotalForPL_010(result);
 
     return this;
   }

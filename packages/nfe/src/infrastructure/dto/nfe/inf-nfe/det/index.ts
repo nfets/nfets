@@ -55,6 +55,7 @@ export class Det implements IDet {
   @Type(() => ObsItem)
   public obsItem?: IObsItem;
 
+  @IsOptional()
   @TransformDecimal({ fixed: 2 })
   public vItem?: DecimalValue;
 }
