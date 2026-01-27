@@ -35,6 +35,7 @@ export class Total implements ITotal {
   @Type(() => IBSCBSTot)
   public IBSCBSTot?: IIBSCBSTot;
 
+  @IsOptional()
   @TransformDecimal({ fixed: 2 })
   public vNFTot?: DecimalValue;
 }
