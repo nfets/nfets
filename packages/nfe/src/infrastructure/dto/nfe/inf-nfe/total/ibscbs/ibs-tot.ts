@@ -13,15 +13,13 @@ import {
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
 
 export class IBSTot implements IIBSTot {
-  @IsOptional()
   @ValidateNested()
   @Type(() => IBSUFTot)
-  public gIBSUF?: IIBSUFTot;
+  public gIBSUF!: IIBSUFTot;
 
-  @IsOptional()
   @ValidateNested()
   @Type(() => IBSMunTot)
-  public gIBSMun?: IIBSMunTot;
+  public gIBSMun!: IIBSMunTot;
 
   @TransformDecimal({ fixed: 2 })
   public vIBS: DecimalValue = '0.00';
