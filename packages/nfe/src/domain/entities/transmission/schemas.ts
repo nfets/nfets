@@ -13,11 +13,11 @@ export const schemas = () => {
   }
 
   try {
-    return search<string>('node_modules/nfets/packages/nfe/schemas', {
+    return search<string>('packages/nfe/schemas', {
       onFound: (path) => path,
       onNotFound: () => {
         throw new Error(
-          'Schemas not found on node_modules/nfets/packages/nfe/schemas',
+          'Schemas not found on packages/nfe/schemas',
         );
       },
     });
