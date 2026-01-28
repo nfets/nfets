@@ -1,17 +1,20 @@
 import { Decimal } from '@nfets/core/infrastructure';
 
-import type { INfeXmlBuilder } from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
 import type { Prod } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/prod';
 import type { ICMS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/icms';
+import type { INfeXmlBuilder } from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
+import type { UnionToIntersection } from '@nfets/core/shared';
+
+type ICMSIntersection = UnionToIntersection<NonNullable<ICMS[keyof ICMS]>>;
 
 export interface DetBuilderAggregator {
   prod(payload: Prod): void;
   icms(payload: ICMS): void;
 }
 
-export class DefaultDetBuilderAggregator<
-  T extends object,
-> implements DetBuilderAggregator {
+export class DefaultDetBuilderAggregator<T extends object>
+  implements DetBuilderAggregator
+{
   public constructor(private readonly builder: INfeXmlBuilder<T>) {}
 
   public prod(payload: Prod): void {
@@ -35,9 +38,32 @@ export class DefaultDetBuilderAggregator<
     }));
   }
 
-  //TODO
+  public icms(payload: ICMS): void {
+    const zero = Decimal.from(0);
+    const [key] = Object.keys(payload) as (keyof ICMS)[];
 
-  public icms(_payload: ICMS): void {
-    //
+    this.builder.increment(({ ICMSTot }) => {
+      const icms = payload[key] as ICMSIntersection;
+
+      return {
+        ICMSTot: {
+          vBC: Decimal.newOrZero(ICMSTot?.vBC)
+            .add(icms.vBC ?? zero)
+            .toFixed(2),
+          vICMS: Decimal.newOrZero(ICMSTot?.vICMS)
+            .add(icms.vICMS ?? zero)
+            .toFixed(2),
+          vICMSDeson: Decimal.newOrZero(ICMSTot?.vICMSDeson)
+            .add(icms.vICMSDeson ?? zero)
+            .toFixed(2),
+          vBCST: Decimal.newOrZero(ICMSTot?.vBCST)
+            .add(icms.vBCST ?? zero)
+            .toFixed(2),
+          vST: Decimal.newOrZero(ICMSTot?.vST)
+            .add(icms.vICMSST ?? zero)
+            .toFixed(2),
+        },
+      };
+    });
   }
 }
