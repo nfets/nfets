@@ -1,11 +1,16 @@
 import { arch, platform } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve, normalize } from 'node:path';
 import { getRequireFn } from './resolve-requires';
 import { search } from './search-file';
 
+const normalizePath = (path: string): string => {
+  const normalized = path.replace(/^\\\\\?\\/, '');
+  return resolve(normalize(normalized));
+};
+
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 const exportRequireModule = <T>(module: string): T => {
-  return getRequireFn()(module) as T;
+  return getRequireFn()(normalizePath(module)) as T;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters

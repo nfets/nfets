@@ -1,4 +1,4 @@
-import { join, dirname, resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { existsSync } from 'node:fs';
 import { getCurrentFile } from './resolve-requires';
 
@@ -65,7 +65,7 @@ export const search = <T>(
 ): T => {
   const resources = getElectronResourcesPath();
   if (resources) {
-    const electronCandidate = join(resources, 'node_modules', 'nfets', target);
+    const electronCandidate = resolve(resources, 'node_modules', 'nfets', target);
 
     if (existsSync(electronCandidate)) {
       return onFound(electronCandidate);
@@ -77,14 +77,14 @@ export const search = <T>(
   const base = current.includes('.asar') ? process.cwd() : current;
 
   const root = resolve(base, '../../../../');
-  const build = join(root, target);
+  const build = resolve(root, target);
 
   if (existsSync(build)) return onFound(build);
 
   // distribution
   let search = base;
   for (let i = 0; i < 5; i++) {
-    const candidate = join(search, target);
+    const candidate = resolve(search, target);
     if (existsSync(candidate)) return onFound(candidate);
 
     const parent = dirname(search);
@@ -95,7 +95,7 @@ export const search = <T>(
   // distribution fallback
   search = base;
   for (let i = 0; i < 5; i++) {
-    const candidate = join(search, 'node_modules', 'nfets', target);
+    const candidate = resolve(search, 'node_modules', 'nfets', target);
 
     if (existsSync(candidate)) return onFound(candidate);
 
@@ -107,7 +107,7 @@ export const search = <T>(
   // dev-time
   search = base;
   for (let i = 0; i < 5; i++) {
-    const candidate = join(search, target.replace(/^build\//, 'Release/'));
+    const candidate = resolve(search, target.replace(/^build\//, 'Release/'));
     if (existsSync(candidate)) return onFound(candidate);
 
     const parent = dirname(search);
