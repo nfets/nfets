@@ -47,17 +47,23 @@ import {
   IBSCBS,
   IBSCBS as IIBSCBS,
 } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/ibscbs';
+import Schemas from '@nfets/nfe/domain/entities/transmission/schemas';
+import { Schema } from '@nfets/nfe/domain';
 
 export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   protected data = {} as IDet;
 
   public static create(
     listener?: DetBuilderAggregator,
+    schema: Schema = 'PL_009_V4',
   ): DetBuilder & ProdBuilder {
-    return new this(listener);
+    return new this(listener, schema);
   }
 
-  protected constructor(private readonly listener?: DetBuilderAggregator) {}
+  protected constructor(
+    private readonly listener?: DetBuilderAggregator,
+    private readonly schema: Schema = 'PL_009_V4',
+  ) {}
 
   @Validates(DetAttributes)
   public det(payload: IDetAttributes) {
@@ -144,12 +150,16 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
 
   @Validates(IBSCBS)
   public ibscbs(payload: IIBSCBS) {
+    if (this.schema === Schemas.PL_009_V4) return this;
+
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.IBSCBS = payload;
     return this;
   }
 
   public vItem(payload: { vItem: string }) {
+    if (this.schema === Schemas.PL_009_V4) return this;
+
     this.data.vItem = payload.vItem;
     return this;
   }

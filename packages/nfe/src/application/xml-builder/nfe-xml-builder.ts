@@ -94,8 +94,7 @@ export class NfeXmlBuilder<T extends object = INFe>
     new DefaultDetBuilderAggregator(this);
   protected readonly $total: TotalBuilderAggregator | undefined =
     new DefaultTotalBuilderAggregator(this);
-
-  protected readonly nfeDetXmlBuilder = NfeDetXmlBuilder.create(this.$det);
+  protected readonly nfeDetXmlBuilder;
 
   public static create<T extends object = INFe>(
     builder: XmlToolkit,
@@ -109,7 +108,9 @@ export class NfeXmlBuilder<T extends object = INFe>
     protected readonly builder: XmlToolkit,
     protected contingency?: ContingencyOptions,
     public readonly schema: Schema = 'PL_009_V4',
-  ) {}
+  ) {
+    this.nfeDetXmlBuilder = NfeDetXmlBuilder.create(this.$det, this.schema);
+  }
 
   @Validates(InfNFeAttributes)
   public infNFe($: IInfNFeAttributes) {
@@ -199,7 +200,7 @@ export class NfeXmlBuilder<T extends object = INFe>
         : void 0,
     };
 
-    if (this.schema === Schemas.PL_010_V1_30) this.buildTotalForPL_010(result);
+    if (this.schema !== Schemas.PL_009_V4) this.buildTotalForPL_010(result);
 
     return this;
   }
