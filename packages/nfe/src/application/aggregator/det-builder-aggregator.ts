@@ -41,29 +41,26 @@ export class DefaultDetBuilderAggregator<T extends object>
   public icms(payload: ICMS): void {
     const zero = Decimal.from(0);
     const [key] = Object.keys(payload) as (keyof ICMS)[];
+    const icms = payload[key] as ICMSIntersection;
 
-    this.builder.increment(({ ICMSTot }) => {
-      const icms = payload[key] as ICMSIntersection;
-
-      return {
-        ICMSTot: {
-          vBC: Decimal.newOrZero(ICMSTot?.vBC)
-            .add(icms.vBC ?? zero)
-            .toFixed(2),
-          vICMS: Decimal.newOrZero(ICMSTot?.vICMS)
-            .add(icms.vICMS ?? zero)
-            .toFixed(2),
-          vICMSDeson: Decimal.newOrZero(ICMSTot?.vICMSDeson)
-            .add(icms.vICMSDeson ?? zero)
-            .toFixed(2),
-          vBCST: Decimal.newOrZero(ICMSTot?.vBCST)
-            .add(icms.vBCST ?? zero)
-            .toFixed(2),
-          vST: Decimal.newOrZero(ICMSTot?.vST)
-            .add(icms.vICMSST ?? zero)
-            .toFixed(2),
-        },
-      };
-    });
+    this.builder.increment(({ ICMSTot }) => ({
+      ICMSTot: {
+        vBC: Decimal.newOrZero(ICMSTot?.vBC)
+          .add(icms.vBC ?? zero)
+          .toFixed(2),
+        vICMS: Decimal.newOrZero(ICMSTot?.vICMS)
+          .add(icms.vICMS ?? zero)
+          .toFixed(2),
+        vICMSDeson: Decimal.newOrZero(ICMSTot?.vICMSDeson)
+          .add(icms.vICMSDeson ?? zero)
+          .toFixed(2),
+        vBCST: Decimal.newOrZero(ICMSTot?.vBCST)
+          .add(icms.vBCST ?? zero)
+          .toFixed(2),
+        vST: Decimal.newOrZero(ICMSTot?.vST)
+          .add(icms.vICMSST ?? zero)
+          .toFixed(2),
+      },
+    }));
   }
 }
