@@ -1,5 +1,5 @@
 import { arch, platform } from 'node:os';
-import { join, resolve, normalize } from 'node:path';
+import { dirname, join, resolve, normalize, delimiter } from 'node:path';
 import { getRequireFn } from './resolve-requires';
 import { search } from './search-file';
 
@@ -8,9 +8,18 @@ const normalizePath = (path: string): string => {
   return resolve(normalize(normalized));
 };
 
+// On Windows, native .node addons load DLL dependencies from the addon's directory.
+// Prepend that directory to PATH so libxml2, libiconv, zlib etc. are found when packaged.
+const addAddonDirToPath = (path: string): void => {
+  if (platform() !== 'win32') return;
+  process.env.PATH = `${dirname(path)}${delimiter}${process.env.PATH}`;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 const exportRequireModule = <T>(module: string): T => {
-  return getRequireFn()(normalizePath(module)) as T;
+  const normalized = normalizePath(module);
+  addAddonDirToPath(normalized);
+  return getRequireFn()(normalized) as T;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
