@@ -35,4 +35,4 @@ runs:
       if: contains(inputs.os, 'windows')
       shell: msys2 {0}
       run: |
-        pacman --noconfirm -S mingw-w64-x86_64-libxml2=2.15.1-3
+        pacman --noconfirm -S mingw-w64-x86_64-libxml2=2.15.1
