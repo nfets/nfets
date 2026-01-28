@@ -439,8 +439,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -654,8 +654,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -883,8 +883,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -1100,8 +1100,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -1317,8 +1317,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -1522,8 +1522,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -1725,8 +1725,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -1933,8 +1933,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -2134,8 +2134,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -2334,8 +2334,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -2552,8 +2552,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -2767,8 +2767,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -2970,8 +2970,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -3200,8 +3200,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -3587,8 +3587,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -3848,8 +3848,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -4061,8 +4061,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -4583,8 +4583,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -4811,8 +4811,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -5027,8 +5027,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -5241,8 +5241,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -5472,8 +5472,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -5700,8 +5700,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -5916,8 +5916,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -6148,8 +6148,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -6374,8 +6374,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -6607,8 +6607,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -6854,8 +6854,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -7084,8 +7084,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -7320,8 +7320,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -7567,8 +7567,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -7801,8 +7801,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -8078,8 +8078,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -9168,8 +9168,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -9452,8 +9452,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -9756,8 +9756,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
@@ -9994,8 +9994,8 @@ describe('xml builder with xml2js builder', () => {
     </det>
     <total>
       <ICMSTot>
-        <vBC>0.00</vBC>
-        <vICMS>0.00</vICMS>
+        <vBC>100.00</vBC>
+        <vICMS>18.00</vICMS>
         <vICMSDeson>0.00</vICMSDeson>
         <vFCP>0.00</vFCP>
         <vBCST>0.00</vBCST>
