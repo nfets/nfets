@@ -9,6 +9,7 @@ import type {
   COFINS as ICOFINS,
   COFINSST as ICOFINSST,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/cofins';
+import { TransformDecimal } from '@nfets/core';
 
 export class COFINSAliq implements ICOFINSAliq {
   @IsString()
@@ -16,6 +17,7 @@ export class COFINSAliq implements ICOFINSAliq {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vBC?: string;
 
   @IsOptional()
@@ -55,6 +57,7 @@ export class COFINSOutr implements ICOFINSOutr {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vBC?: string;
 
   @IsOptional()
@@ -99,6 +102,7 @@ export class COFINS implements ICOFINS {
 export class COFINSST implements ICOFINSST {
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vBC?: string;
 
   @IsOptional()

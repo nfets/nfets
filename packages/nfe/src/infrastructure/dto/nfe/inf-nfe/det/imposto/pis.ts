@@ -9,6 +9,7 @@ import type {
   PISST as IPISST,
   PIS as IPIS,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/pis';
+import { TransformDecimal } from '@nfets/core';
 
 export class PISAliq implements IPISAliq {
   @IsString()
@@ -16,6 +17,7 @@ export class PISAliq implements IPISAliq {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vBC?: string;
 
   @IsOptional()
@@ -55,6 +57,7 @@ export class PISOutr implements IPISOutr {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vBC?: string;
 
   @IsOptional()
@@ -99,6 +102,7 @@ export class PIS implements IPIS {
 export class PISST implements IPISST {
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vBC?: string;
 
   @IsOptional()
