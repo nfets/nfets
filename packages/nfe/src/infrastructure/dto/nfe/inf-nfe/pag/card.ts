@@ -13,4 +13,16 @@ export class Card implements ICard {
   @IsOptional()
   @IsString()
   public cAut?: string;
+
+  @IsOptional()
+  @IsString()
+  public tpIntegra?: string;
+
+  @IsOptional()
+  @IsString()
+  public CNPJReceb?: string;
+
+  @IsOptional()
+  @IsString()
+  public idTermPag?: string;
 }
