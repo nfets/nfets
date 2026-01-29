@@ -4,7 +4,7 @@ import { Card as ICard } from '@nfets/nfe/domain/entities/nfe/inf-nfe/pag';
 export class Card implements ICard {
   @IsOptional()
   @IsString()
-  public cNPJ?: string;
+  public CNPJ?: string;
 
   @IsOptional()
   @IsString()
