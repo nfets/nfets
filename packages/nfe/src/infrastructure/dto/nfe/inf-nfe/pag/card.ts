@@ -4,6 +4,10 @@ import { Card as ICard } from '@nfets/nfe/domain/entities/nfe/inf-nfe/pag';
 export class Card implements ICard {
   @IsOptional()
   @IsString()
+  public tpIntegra?: string;
+
+  @IsOptional()
+  @IsString()
   public CNPJ?: string;
 
   @IsOptional()
@@ -13,10 +17,6 @@ export class Card implements ICard {
   @IsOptional()
   @IsString()
   public cAut?: string;
-
-  @IsOptional()
-  @IsString()
-  public tpIntegra?: string;
 
   @IsOptional()
   @IsString()
