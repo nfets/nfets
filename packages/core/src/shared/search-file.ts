@@ -70,6 +70,16 @@ export const search = <T>(
     if (existsSync(electronCandidate)) {
       return onFound(electronCandidate);
     }
+
+    const unpackedCandidate = resolve(
+      resources,
+      'app.asar.unpacked',
+      'node_modules',
+      'nfets',
+      target,
+    );
+
+    if (existsSync(unpackedCandidate)) return onFound(unpackedCandidate);
   }
 
   const current = getCurrentFile();
