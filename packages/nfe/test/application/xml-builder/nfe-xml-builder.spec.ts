@@ -336,7 +336,17 @@ describe('xml builder with xml2js builder', () => {
           }),
       )
       .transp(createValidTransp())
-      .pag(createValidPag());
+      .pag({
+        detPag: [
+          {
+            tPag: '01',
+            vPag: Decimal.from('100').toString(),
+            card: {
+              tpIntegra: '2',
+            },
+          },
+        ],
+      });
 
     const xml = await builder.assemble();
     expectIsRight(xml);
@@ -479,6 +489,9 @@ describe('xml builder with xml2js builder', () => {
       <detPag>
         <tPag>01</tPag>
         <vPag>100.00</vPag>
+        <card>
+          <tpIntegra>2</tpIntegra>
+        </card>
       </detPag>
     </pag>
   </infNFe>
