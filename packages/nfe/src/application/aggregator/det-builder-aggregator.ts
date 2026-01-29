@@ -1,7 +1,9 @@
 import { Decimal } from '@nfets/core/infrastructure';
 
+import type { PIS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/pis';
 import type { Prod } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/prod';
 import type { ICMS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/icms';
+import type { COFINS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/cofins';
 import type { INfeXmlBuilder } from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
 import type { UnionToIntersection } from '@nfets/core/shared';
 
@@ -10,6 +12,8 @@ type ICMSIntersection = UnionToIntersection<NonNullable<ICMS[keyof ICMS]>>;
 export interface DetBuilderAggregator {
   prod(payload: Prod): void;
   icms(payload: ICMS): void;
+  pis(payload: PIS): void;
+  cofins(payload: COFINS): void;
 }
 
 export class DefaultDetBuilderAggregator<T extends object>
@@ -33,6 +37,39 @@ export class DefaultDetBuilderAggregator<T extends object>
           .toFixed(2),
         vOutro: Decimal.newOrZero(ICMSTot?.vOutro)
           .add(payload.vOutro ?? zero)
+          .toFixed(2),
+      },
+    }));
+  }
+
+  public cofins(payload: COFINS): void {
+    const zero = Decimal.from(0);
+    this.builder.increment(({ ICMSTot }) => ({
+      ICMSTot: {
+        vCOFINS: Decimal.newOrZero(ICMSTot?.vCOFINS)
+          .add(
+            payload.COFINSAliq?.vCOFINS ??
+              payload.COFINSOutr?.vCOFINS ??
+              payload.COFINSQtde?.vCOFINS ??
+              zero,
+          )
+          .toFixed(2),
+      },
+    }));
+  }
+
+  public pis(payload: PIS): void {
+    const zero = Decimal.from(0);
+
+    this.builder.increment(({ ICMSTot }) => ({
+      ICMSTot: {
+        vPIS: Decimal.newOrZero(ICMSTot?.vPIS)
+          .add(
+            payload.PISAliq?.vPIS ??
+              payload.PISOutr?.vPIS ??
+              payload.PISQtde?.vPIS ??
+              zero,
+          )
           .toFixed(2),
       },
     }));

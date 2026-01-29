@@ -117,6 +117,7 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   public pis(payload: IPIS) {
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.PIS = payload;
+    this.listener?.pis(payload);
     return this;
   }
 
@@ -131,6 +132,7 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   public cofins(payload: ICOFINS) {
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.COFINS = payload;
+    this.listener?.cofins(payload);
     return this;
   }
 

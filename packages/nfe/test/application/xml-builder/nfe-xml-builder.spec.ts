@@ -319,13 +319,19 @@ describe('xml builder with xml2js builder', () => {
             },
           })
           .pis({
-            PISNT: {
-              CST: '08',
+            PISAliq: {
+              CST: '01',
+              vBC: '100',
+              pPIS: '18.0000',
+              vPIS: '18.00',
             },
           })
           .cofins({
-            COFINSNT: {
-              CST: '08',
+            COFINSAliq: {
+              CST: '01',
+              vBC: '100',
+              pCOFINS: '18.0000',
+              vCOFINS: '18.00',
             },
           }),
       )
@@ -426,14 +432,20 @@ describe('xml builder with xml2js builder', () => {
           </IPINT>
         </IPI>
         <PIS>
-          <PISNT>
-            <CST>08</CST>
-          </PISNT>
+          <PISAliq>
+            <CST>01</CST>
+            <vBC>100.00</vBC>
+            <pPIS>18.0000</pPIS>
+            <vPIS>18.00</vPIS>
+          </PISAliq>
         </PIS>
         <COFINS>
-          <COFINSNT>
-            <CST>08</CST>
-          </COFINSNT>
+          <COFINSAliq>
+            <CST>01</CST>
+            <vBC>100.00</vBC>
+            <pCOFINS>18.0000</pCOFINS>
+            <vCOFINS>18.00</vCOFINS>
+          </COFINSAliq>
         </COFINS>
       </imposto>
     </det>
@@ -454,8 +466,8 @@ describe('xml builder with xml2js builder', () => {
         <vII>0.00</vII>
         <vIPI>0.00</vIPI>
         <vIPIDevol>0.00</vIPIDevol>
-        <vPIS>0.00</vPIS>
-        <vCOFINS>0.00</vCOFINS>
+        <vPIS>18.00</vPIS>
+        <vCOFINS>18.00</vCOFINS>
         <vOutro>0.00</vOutro>
         <vNF>100.00</vNF>
       </ICMSTot>

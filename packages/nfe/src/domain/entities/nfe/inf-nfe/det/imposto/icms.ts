@@ -1,5 +1,28 @@
 import type { DecimalValue } from '@nfets/core/domain';
 
+export type ICMSStandard = Pick<
+  ICMS,
+  | 'ICMS00'
+  | 'ICMS10'
+  | 'ICMS20'
+  | 'ICMS30'
+  | 'ICMS40'
+  | 'ICMS51'
+  | 'ICMS60'
+  | 'ICMS70'
+  | 'ICMS90'
+>;
+
+export type ICMSSN = Pick<
+  ICMS,
+  | 'ICMSSN101'
+  | 'ICMSSN102'
+  | 'ICMSSN201'
+  | 'ICMSSN202'
+  | 'ICMSSN500'
+  | 'ICMSSN900'
+>;
+
 export interface ICMS {
   ICMS00?: ICMS00;
   ICMS10?: ICMS10;
