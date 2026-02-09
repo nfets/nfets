@@ -16,6 +16,7 @@ export type * from './entities/xml/xml-toolkit';
 export * from './errors/nfets-error';
 export * from './errors/validation-error';
 
+export * from './repositories/pdf-builder';
 export * from './repositories/cache-adapter';
 export * from './repositories/certificate-repository';
 export * from './repositories/http-client';

@@ -1,5 +1,6 @@
 export * from './calculator/decimaljs';
 
+export * from './repositories/pdfkit-pdf-builder';
 export * from './repositories/memory-cache-adapter';
 export * from './repositories/native-certificate-repository';
 export * from './repositories/null-cache-adapter';
