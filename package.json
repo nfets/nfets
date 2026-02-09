@@ -43,7 +43,8 @@
     "packages/nfe/schemas"
   ],
   "scripts": {
-    "install": "npx --yes node-gyp@12.1.0 rebuild || echo 'Warning: Failed to rebuild native addon. Make sure you have build tools installed (python, make, g++, and libxml2-dev on Linux).'",
+    "postinstall": "pnpm rebuild",
+    "rebuild": "npx --yes node-gyp@12.1.0 rebuild || echo 'Warning: Failed to rebuild native addon. Make sure you have build tools installed (python, make, g++, and libxml2-dev on Linux).'",
     "build": "pnpm --filter !@nfets/test build && tsup --config tsup.config.ts",
     "test": "pnpm --filter @nfets/* test",
     "typecheck": "pnpm --filter @nfets/* typecheck",
