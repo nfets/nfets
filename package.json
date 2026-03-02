@@ -63,7 +63,7 @@
   ],
   "dependencies": {
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.1",
+    "class-validator": "^0.15.1",
     "dayjs": "^1.11.18",
     "dotenv": "^17.2.2",
     "pdfkit": "^0.17.2",
