@@ -108,6 +108,18 @@ emailAddress=email@example.com`);
     expectIsLeft(result);
   });
 
+  it('should return left (Certificate path is required) when certificate path is undefined', async () => {
+    const result = await repository.read({
+      pfxPathOrBase64: undefined as never,
+      password: 'password',
+    });
+
+    expectIsLeft(result);
+    expect(result.value).toStrictEqual(
+      new NFeTsError('Certificate path is required'),
+    );
+  });
+
   it('should return left when password is incorrect', async () => {
     const result = await repository.read({
       pfxPathOrBase64: validCnpjPfxCertificate,
