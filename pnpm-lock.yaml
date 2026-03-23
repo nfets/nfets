@@ -119,7 +119,7 @@ importers:
         version: 0.6.2
       xmldsigjs:
         specifier: ^2.7.0
-        version: 2.8.5(@xmldom/xmldom@0.8.11)
+        version: 2.8.6(@xmldom/xmldom@0.8.11)
     devDependencies:
       '@nfets/test':
         specifier: workspace:*
@@ -2613,8 +2613,8 @@ packages:
   pkg-types@1.3.1:
     resolution: {integrity: sha512-/Jm5M4RvtBFVkKWRu2BLUTNP8/M2a+UwuAX+ae4770q1qVGtfjG+WTCupoZixokjmHiry8uI+dlY8KXYV5HVVQ==}
 
-  pkijs@3.3.3:
-    resolution: {integrity: sha512-+KD8hJtqQMYoTuL1bbGOqxb4z+nZkTAwVdNtWwe8Tc2xNbEmdJYIYoc6Qt0uF55e6YW6KuTHw1DjQ18gMhzepw==}
+  pkijs@3.4.0:
+    resolution: {integrity: sha512-emEcLuomt2j03vxD54giVB4SxTjnsqkU692xZOZXHDVoYyypEm+b3jpiTcc+Cf+myooc+/Ly0z01jqeNHVgJGw==}
     engines: {node: '>=16.0.0'}
 
   plimit-lit@1.6.1:
@@ -3185,8 +3185,8 @@ packages:
     resolution: {integrity: sha512-fDlsI/kFEx7gLvbecc0/ohLG50fugQp8ryHzMTuW9vSa1GJ0XYWKnhsUx7oie3G98+r56aTQIUB4kht42R3JvA==}
     engines: {node: '>=4.0'}
 
-  xmldsigjs@2.8.5:
-    resolution: {integrity: sha512-kKpd+/Q2W8lRFvtfA5mf21VO6jhnhniOTlpuL1Nke/SMTP/9tsoOXgxYCg+bEEbKu3utqzeSP+LhgrZqR2+qzg==}
+  xmldsigjs@2.8.6:
+    resolution: {integrity: sha512-wTjBZ5TmqwqQqTblUUhXL9CXOIFUXFnO3ereYipiWvwJkXqcWqAdmuv83B7hQzCjJTSMdxm8riV5/Tu01G1BsQ==}
     engines: {node: '>=16.0.0'}
 
   xpath@0.0.33:
@@ -5902,7 +5902,7 @@ snapshots:
       mlly: 1.8.0
       pathe: 2.0.3
 
-  pkijs@3.3.3:
+  pkijs@3.4.0:
     dependencies:
       '@noble/hashes': 1.4.0
       asn1js: 3.0.7
@@ -6507,10 +6507,10 @@ snapshots:
 
   xmlbuilder@11.0.1: {}
 
-  xmldsigjs@2.8.5(@xmldom/xmldom@0.8.11):
+  xmldsigjs@2.8.6(@xmldom/xmldom@0.8.11):
     dependencies:
       asn1js: 3.0.7
-      pkijs: 3.3.3
+      pkijs: 3.4.0
       pvtsutils: 1.3.6
       pvutils: 1.1.5
       tslib: 2.8.1
