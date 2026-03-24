@@ -31,9 +31,11 @@ export class NativeCertificateRepository implements CertificateRepository {
     request: ReadCertificateRequest,
   ): Promise<Either<NFeTsError, ReadCertificateResponse>> {
     try {
-      const { password } = request;
-      const pfxBufferOrError = await this.getPfxBuffer(request);
+      const { password, pfxPathOrBase64 } = request;
+      if (!pfxPathOrBase64)
+        return left(new NFeTsError('Certificate path is required'));
 
+      const pfxBufferOrError = await this.getPfxBuffer(request);
       if (pfxBufferOrError.isLeft()) return pfxBufferOrError;
 
       const p12Asn1 = forge.asn1.fromDer(
