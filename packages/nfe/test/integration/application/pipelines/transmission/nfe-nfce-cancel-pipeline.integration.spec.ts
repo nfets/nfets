@@ -1,7 +1,7 @@
 import { Environment } from '@nfets/core/domain';
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
 import { expectIsRight } from '@nfets/test/expects';
-import { NfeNfceCancelPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-nfce-cancel-pipeline';
+import { NfeCancelPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-cancel-pipeline';
 
 const SEFAZ_TIMEOUT_SC = 60 * 1000;
 
@@ -14,10 +14,10 @@ describe('nfe nfce cancel pipeline (integration) (destructive)', () => {
     ensureIntegrationTestsHasValidCertificate();
   if (certificateFromEnvironment === undefined) return;
 
-  let pipeline: NfeNfceCancelPipeline;
+  let pipeline: NfeCancelPipeline;
 
   beforeAll(() => {
-    pipeline = new NfeNfceCancelPipeline({
+    pipeline = new NfeCancelPipeline({
       pfxPathOrBase64: certificateFromEnvironment.certificatePath,
       password: certificateFromEnvironment.password,
     });

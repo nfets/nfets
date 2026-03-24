@@ -8,7 +8,7 @@ import type {
 } from '@nfets/nfe/domain/entities/events/cancelamento';
 import type { InfEvento } from '@nfets/nfe/domain/entities/services/evento';
 
-export class NfeNfceCancelPipeline extends EventPipeline {
+export class NfeCancelPipeline extends EventPipeline {
   public async execute(
     payload: EventoCancelamento,
     options: Pick<NfeTransmitterOptions, 'tpAmb'>,
