@@ -1,18 +1,18 @@
-import { NfceCancelPipeline } from '@nfets/nfe/application/pipelines/transmission/nfce-cancel-pipeline';
-import { NfceRemoteTransmitter } from '@nfets/nfe/application/transmission/nfce-transmitter';
 import { Environment } from '@nfets/core/domain';
 import { right } from '@nfets/core/shared';
-import { NfeCancelPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-cancel-pipeline';
+import { NfceVoidRangePipeline } from '@nfets/nfe/application/pipelines/transmission/nfce-void-range-pipeline';
+import { NfeVoidRangePipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-void-range-pipeline';
+import { NfceRemoteTransmitter } from '@nfets/nfe/application/transmission/nfce-transmitter';
 
-describe('nfce cancel pipeline (unit)', () => {
+describe('nfce void range pipeline (unit)', () => {
   it('should use nfce remote transmitter', () => {
-    class NfceCancelPipelineExposed extends NfceCancelPipeline {
+    class NfceVoidRangePipelineExposed extends NfceVoidRangePipeline {
       public get transmitterRef() {
         return this.transmitter;
       }
     }
 
-    const pipeline = new NfceCancelPipelineExposed({
+    const pipeline = new NfceVoidRangePipelineExposed({
       pfxPathOrBase64: 'mock',
       password: 'mock',
     });
@@ -22,24 +22,26 @@ describe('nfce cancel pipeline (unit)', () => {
 
   it('should delegate execute to super implementation', async () => {
     const superExecuteSpy = jest
-      .spyOn(NfeCancelPipeline.prototype, 'execute')
+      .spyOn(NfeVoidRangePipeline.prototype, 'execute')
       .mockResolvedValue(
         right({
-          retEnvEvento: { cStat: '128', xMotivo: 'Lote de Evento Processado' },
+          retInutNFe: { infInut: { cStat: '102', xMotivo: 'Inutilizacao homologada' } },
         }) as never,
       );
 
-    const pipeline = new NfceCancelPipeline({
+    const pipeline = new NfceVoidRangePipeline({
       pfxPathOrBase64: 'mock',
       password: 'mock',
     });
 
     const payload = {
-      chNFe: '35240100000000000000650010000000011000000010',
-      nProt: '135240000000001',
-      xJust: 'Cancelamento NFC-e de teste',
+      mod: '65',
+      serie: '1',
+      nNFIni: '1',
+      nNFFin: '9',
+      xJust: 'Teste de inutilizacao NFC-e',
     };
-    const options = { tpAmb: Environment.Homolog } as const;
+    const options = { tpAmb: Environment.Homolog, cUF: '35' } as const;
 
     const result = await pipeline.execute(payload, options);
 
