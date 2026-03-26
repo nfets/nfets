@@ -1,8 +1,8 @@
 import { NfceQrcode } from '../../transmission/nfce-qrcode';
-import { NfeCancelPipeline } from './nfe-cancel-pipeline';
+import { NfeVoidRangePipeline } from './nfe-void-range-pipeline';
 import { NfceRemoteTransmitter } from '../../transmission/nfce-transmitter';
 
-export class NfceCancelPipeline extends NfeCancelPipeline {
+export class NfceVoidRangePipeline extends NfeVoidRangePipeline {
   protected readonly qrCode = new NfceQrcode(this.certificates);
   protected readonly transmitter = new NfceRemoteTransmitter(
     this.soap,
