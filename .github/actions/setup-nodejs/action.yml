@@ -17,15 +17,13 @@ runs:
       with:
         architecture: ${{ inputs.architecture }}
         node-version: ${{ inputs.node-version }}
-        registry-url: "https://registry.npmjs.org"
+        registry-url: 'https://registry.npmjs.org'
         always-auth: true
 
     - name: Install pnpm
       shell: bash
       run: |
-        corepack enable
-        corepack prepare pnpm@latest --activate
-        pnpm --version
+        npm install -g npm@latest
 
     # - id: setup-pnpm-store-path
     #   name: Setup pnpm store path
