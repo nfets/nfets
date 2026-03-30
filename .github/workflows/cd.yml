@@ -244,6 +244,10 @@ jobs:
 
   build-and-deploy:
     needs: build-native-addons
+    permissions:
+      contents: write
+      id-token: write
+      actions: read
     strategy:
       matrix:
         include:
@@ -385,5 +389,7 @@ jobs:
       - name: Publish to npm using Trusted Publishing
         if: steps.should-skip-cd.outputs.skip != 'true'
         run: |
-          # Registry auth for Trusted Publishing (OIDC): setup-node writes .npmrc; pnpm publish uses it.
+          # Trusted publishing requires npm CLI >= 11.5.1 (Node 22 may ship npm 10).
+          npm install -g npm@^11.5.1
+          # setup-node wrote .npmrc for OIDC; do not set NODE_AUTH_TOKEN here (breaks OIDC / may cause E404).
           pnpm publish --no-git-checks

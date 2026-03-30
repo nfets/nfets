@@ -23,3 +23,4 @@ runs:
         node-version: ${{ inputs.node-version }}
         registry-url: 'https://registry.npmjs.org'
         always-auth: true
+        provenance: true
