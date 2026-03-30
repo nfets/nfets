@@ -13,27 +13,13 @@ inputs:
 runs:
   using: composite
   steps:
+    - uses: pnpm/action-setup@v4
+      with:
+        package_json_file: package.json
+
     - uses: actions/setup-node@v4
       with:
         architecture: ${{ inputs.architecture }}
         node-version: ${{ inputs.node-version }}
         registry-url: 'https://registry.npmjs.org'
         always-auth: true
-
-    - name: Install pnpm
-      shell: bash
-      run: |
-        npm install -g pnpm@10.33.0
-
-    # - id: setup-pnpm-store-path
-    #   name: Setup pnpm store path
-    #   shell: bash
-    #   run: |
-    #     echo "store_path=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
-
-    # - uses: actions/cache@v4
-    #   env:
-    #     STORE_PATH: ${{ steps.setup-pnpm-store-path.outputs.store_path }}
-    #   with:
-    #     path: ${{ env.STORE_PATH }}
-    #     key: os:${{ inputs.os }}-${{ inputs.architecture }}|node:${{ inputs.node-version }}|pnpm:${{ hashFiles('pnpm-lock.yaml') }}
