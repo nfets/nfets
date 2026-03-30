@@ -19,7 +19,7 @@ install:
 	@pnpm install --frozen-lockfile
 
 addon:
-	@npx --yes node-gyp@12.1.0 rebuild --arch=$(or $(ARCH),)
+	@pnpm dlx node-gyp@12.1.0 rebuild --arch=$(or $(ARCH),)
 
 build:
 	@make clean

@@ -2,7 +2,7 @@ name: CD
 
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
 
 permissions:
   contents: write
@@ -385,6 +385,5 @@ jobs:
       - name: Publish to npm using Trusted Publishing
         if: steps.should-skip-cd.outputs.skip != 'true'
         run: |
-          # Ensure npm is authenticated via OIDC (Trusted Publishing)
-          # setup-node should configure this automatically with id-token: write permission
+          # Registry auth for Trusted Publishing (OIDC): setup-node writes .npmrc; pnpm publish uses it.
           pnpm publish --no-git-checks

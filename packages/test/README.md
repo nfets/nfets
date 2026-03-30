@@ -60,7 +60,7 @@ Este comando:
 
 ### 1. Instalação do pacote `nfets` (full)
 
-Simula: `npm install nfets`
+Simula consumo do registry (ex.: `npm install nfets` ou `pnpm add nfets`).
 
 ```typescript
 import { Signer, NfeXmlBuilder, AccessKeyBuilder } from 'nfets';
@@ -68,7 +68,7 @@ import { Signer, NfeXmlBuilder, AccessKeyBuilder } from 'nfets';
 
 ### 2. Instalação do `@nfets/core`
 
-Simula: `npm install @nfets/core`
+Simula consumo do registry (ex.: `npm install @nfets/core` ou `pnpm add @nfets/core`).
 
 ```typescript
 import { Signer, NativeCertificateRepository } from '@nfets/core';
@@ -76,7 +76,7 @@ import { Signer, NativeCertificateRepository } from '@nfets/core';
 
 ### 3. Instalação do `@nfets/nfe`
 
-Simula: `npm install @nfets/nfe`
+Simula consumo do registry (ex.: `npm install @nfets/nfe` ou `pnpm add @nfets/nfe`).
 
 ```typescript
 import { NfeXmlBuilder, AccessKeyBuilder } from '@nfets/nfe';
