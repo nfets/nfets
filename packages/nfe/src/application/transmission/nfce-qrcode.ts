@@ -14,6 +14,7 @@ import type {
   NfceQrcodeOptionsBase,
 } from '@nfets/nfe/domain/entities/transmission/nfce-remote-client';
 import type { NFCe as INFCe } from '@nfets/nfe/domain/entities/nfe/nfce';
+import type { Dest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/dest';
 import { TpEmis } from '@nfets/nfe/domain';
 
 export class NfceQrcode {
@@ -103,6 +104,36 @@ export class NfceQrcode {
     return Promise.resolve(right(`${url}${sequence}|${hash}`));
   }
 
+  /** QR Code v3 offline: após vNF vêm tipo (1|2|3 ou vazio)
+   * e documento (3–14 dígitos ou vazio), conforme XSD.
+   */
+  private getQrcodeV300OfflineIdentification(dest: Dest | undefined): {
+    tipo: '' | '1' | '2' | '3';
+    documento: string;
+  } {
+    if (!dest) return { tipo: '', documento: '' };
+
+    const { CPF, CNPJ, idEstrangeiro } = dest;
+    const digits = CPF
+      ? CPF.replace(/\D/g, '')
+      : CNPJ
+        ? CNPJ.replace(/\D/g, '')
+        : idEstrangeiro?.replace(/\D/g, '');
+
+    if (!digits) return { tipo: '', documento: '' };
+
+    if (digits.length === 11) return { tipo: '1', documento: digits };
+    if (digits.length === 14) return { tipo: '2', documento: digits };
+    if (idEstrangeiro && digits.length >= 3 && digits.length <= 14)
+      return { tipo: '3', documento: digits };
+
+    return { tipo: '', documento: '' };
+  }
+
+  private emissionDayOfMonthFormatted(dhEmi: string): string {
+    return String(new Date(dhEmi).getDate()).padStart(2, '0');
+  }
+
   private async execute300(
     entity: INFCe,
     options: NfceQrcodeOptions300 & NfceQrcodeOptionsBase,
@@ -115,20 +146,16 @@ export class NfceQrcode {
     const Id = entity.infNFe.$.Id?.substring(3),
       version = Number.parseInt(options.version) / 100;
 
-    if (entity.infNFe.ide.tpEmis !== TpEmis.OFFLINE) {
+    if (entity.infNFe.ide.tpEmis !== TpEmis.OFFLINE)
       return right(`${url}${Id}|${version}|${tpAmb}`);
-    }
 
-    const day = new Date(entity.infNFe.ide.dhEmi).getDate(),
+    const day = this.emissionDayOfMonthFormatted(entity.infNFe.ide.dhEmi),
       value = Number(entity.infNFe.total.ICMSTot.vNF).toFixed(2),
-      identification =
-        entity.infNFe.dest?.CNPJ ??
-        entity.infNFe.dest?.CPF ??
-        entity.infNFe.dest?.idEstrangeiro ??
-        '',
-      idDest = identification.length ? entity.infNFe.ide.idDest : '';
+      { tipo, documento } = this.getQrcodeV300OfflineIdentification(
+        entity.infNFe.dest,
+      );
 
-    const sequence = `${Id}|${version}|${tpAmb}|${day}|${value}|${idDest}$`;
+    const sequence = `${Id}|${version}|${tpAmb}|${day}|${value}|${tipo}|${documento}`;
     const signatureOrLeft = await this.certificateRepository.sign(
       sequence,
       options.certificate,
