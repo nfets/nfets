@@ -26,7 +26,7 @@ export class NfeXmlBuilderPipeline<T extends object> extends Pipeline {
   public build(
     build: (builder: InfNFeBuilder<T> & IdeBuilder<T>) => AssembleNfeBuilder<T>,
   ) {
-    return build(this.builder as InfNFeBuilder<T> & IdeBuilder<T>), this;
+    return (build(this.builder as InfNFeBuilder<T> & IdeBuilder<T>), this);
   }
 
   public toObject(): Either<NFeTsError, T> {
@@ -45,21 +45,30 @@ export class NfeXmlBuilderPipeline<T extends object> extends Pipeline {
 
   protected async assertXmlSignedAndValidated(xml: string) {
     if (!this.certificate) return right(xml);
+    const signedOrLeft = await this.signXmlString(xml);
+    if (signedOrLeft.isLeft()) return signedOrLeft;
+    return this.validateXmlString(signedOrLeft.value);
+  }
+
+  protected async signXmlString(
+    xml: string,
+  ): Promise<Either<NFeTsError, string>> {
+    if (!this.certificate) return right(xml);
     const certificateOrLeft = await this.certificates.read(this.certificate);
     if (certificateOrLeft.isLeft()) return certificateOrLeft;
 
-    const signedOrLeft = await this.xmlSigner.sign(
+    return this.xmlSigner.sign(
       xml,
       { tag: 'infNFe', mark: 'Id' },
       certificateOrLeft.value,
     );
-    if (signedOrLeft.isLeft()) return signedOrLeft;
+  }
 
-    const validatedOrLeft = await this.toolkit.validate(
-      signedOrLeft.value,
-      this.nfeXsdSchema,
-    );
+  protected async validateXmlString(
+    xml: string,
+  ): Promise<Either<NFeTsError, string>> {
+    const validatedOrLeft = await this.toolkit.validate(xml, this.nfeXsdSchema);
     if (validatedOrLeft.isLeft()) return validatedOrLeft;
-    return right(signedOrLeft.value);
+    return right(xml);
   }
 }
