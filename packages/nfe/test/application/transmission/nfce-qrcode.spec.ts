@@ -14,7 +14,6 @@ import { XmlSigner } from '@nfets/core/application/signer/xml-signer';
 import { NfceQrcode } from '@nfets/nfe/application/transmission/nfce-qrcode';
 import { left, right } from '@nfets/core';
 import { NfeXmlBuilder } from '@nfets/nfe/application/xml-builder/nfe-xml-builder';
-import { insertInfNFeSupl } from '@nfets/nfe/application/xml-builder/insert-inf-nfe-supl';
 import { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
 import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
@@ -46,6 +45,22 @@ const CHAVE_CONTINGENCIA = '42260303916076000583650660000003699177489281';
 
 const certStub = {} as ReadCertificateResponse;
 const nfeV400XsdPath = path.resolve(schemas(), 'PL_010_V1.30', 'nfe_v4.00.xsd');
+
+const escapeXmlText = (s: string): string =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const insertInfNFeSupl = (
+  xml: string,
+  qrCode: string,
+  urlChave: string,
+): string => {
+  const block = `  <infNFeSupl>
+    <qrCode>${escapeXmlText(qrCode)}</qrCode>
+    <urlChave>${escapeXmlText(urlChave)}</urlChave>
+  </infNFeSupl>
+`;
+  return xml.replace(/<\/NFe>\s*$/, `${block}</NFe>`);
+};
 
 const digestToOfflineHex = (digestValue: string): string =>
   digestValue

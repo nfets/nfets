@@ -29,8 +29,10 @@ export class NFCe implements INFCe {
   @ValidateNested()
   public infNFe!: IInfNFe;
 
-  @Allow()
+  @IsObject()
+  @IsNotEmptyObject()
   @Type(() => InfNFeSupl)
+  @ValidateNested()
   public infNFeSupl!: IInfNFeSupl;
 
   @Allow()

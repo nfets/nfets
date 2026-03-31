@@ -19,4 +19,6 @@ export interface XmlToolkit {
   getFirstNode(xml: string): string | null;
   getAttribute(xml: string, tag: string): string | null;
   appendNode(xml: string, node: string): string;
+  /** Insere o fragmento `node` como irmão imediatamente anterior ao primeiro elemento com nome `referenceTag`. */
+  insertBefore(xml: string, referenceTag: string, node: string): string;
 }

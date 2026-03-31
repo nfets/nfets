@@ -115,6 +115,22 @@ export class Xml2JsToolkit implements XmlToolkit {
     return this.clear(XmlDsig.Stringify(parsed));
   }
 
+  public insertBefore(xml: string, referenceTag: string, node: string): string {
+    const parsed = XmlDsig.Parse(xml);
+    const reference = parsed.documentElement
+      .getElementsByTagName(referenceTag)
+      .item(0);
+
+    if (!reference?.parentNode)
+      throw new NFeTsError(
+        `No element found with tag "${referenceTag}" to insert before`,
+      );
+
+    const { documentElement } = XmlDsig.Parse(node);
+    reference.parentNode.insertBefore(documentElement, reference);
+    return this.clear(XmlDsig.Stringify(parsed));
+  }
+
   private hash(data: string, algorithm: SignatureAlgorithm): string {
     const hash = crypto.createHash(algorithm);
     return hash.update(data, 'utf8').digest().toString('base64');

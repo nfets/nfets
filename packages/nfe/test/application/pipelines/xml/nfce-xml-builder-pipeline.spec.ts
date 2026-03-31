@@ -2,7 +2,11 @@ import {
   getCnpjCertificate,
   getCertificatePassword,
 } from '@nfets/test/certificates';
-import { expectInOrder, expectIsLeft, expectIsRight } from '@nfets/test/expects';
+import {
+  expectInOrder,
+  expectIsLeft,
+  expectIsRight,
+} from '@nfets/test/expects';
 import { NfceXmlBuilderPipeline } from '@nfets/nfe/application/pipelines/xml/nfce-xml-builder-pipeline';
 import Schemas from '@nfets/nfe/domain/entities/transmission/schemas';
 import {
