@@ -55,6 +55,6 @@ export class NfceXmlBuilder<T extends object = INFCe>
     const { tpEmis } = this.data.infNFe.ide;
     if (tpEmis !== TpEmis.Normal) return;
 
-    return (this.data.infNFe.ide.tpEmis = TpEmis.OFFLINE), void 0;
+    return ((this.data.infNFe.ide.tpEmis = TpEmis.OFFLINE), void 0);
   }
 }

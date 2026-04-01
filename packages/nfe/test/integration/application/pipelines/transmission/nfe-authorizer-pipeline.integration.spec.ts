@@ -1,13 +1,14 @@
-import { StateCodes, Environment, type StateAcronym } from '@nfets/core/domain';
-import { Decimal, Xml2JsToolkit } from '@nfets/core/infrastructure';
-import { NfeXmlBuilder } from '@nfets/nfe';
-import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
-import { expectIsRight } from '@nfets/test/expects';
-import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
-import { NfeAuthorizerPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-authorizer-pipeline';
-
-import type { Emit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
 import type { Ide } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
+import type { Emit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
+import type { ProtNFe } from '@nfets/nfe/domain/entities/nfe/prot-nfe';
+
+import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
+import { NfeXmlBuilder } from '@nfets/nfe';
+import { expectIsRight } from '@nfets/test/expects';
+import { NfeAuthorizerPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-authorizer-pipeline';
+import { Decimal, Xml2JsToolkit } from '@nfets/core/infrastructure';
+import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
+import { StateCodes, Environment, type StateAcronym } from '@nfets/core/domain';
 
 const SEFAZ_TIMEOUT_SC = 60 * 1000;
 
@@ -173,17 +174,17 @@ describe('nfe authorizer pipeline (integration) (destructive)', () => {
           fone: args.enderEmit?.fone ?? '49999999999',
         });
 
-      const entityOrLeft = builder.toObject();
+      const entityOrLeft = await builder.assemble();
       expectIsRight(entityOrLeft);
 
       const response = await pipeline.execute({
-        NFe: entityOrLeft.value,
+        xml: entityOrLeft.value,
       });
       expectIsRight(response);
       const { retEnviNFe } = response.value.response;
       console.log('response:', JSON.stringify(retEnviNFe, null, 2));
 
-      const infProt = retEnviNFe.protNFe.infProt;
+      const infProt = (retEnviNFe.protNFe as ProtNFe).infProt;
 
       expect(infProt).toBeDefined();
       expect(infProt.nProt).toBeDefined();
@@ -336,7 +337,7 @@ describe('nfe authorizer pipeline (integration) (destructive)', () => {
           fone: args.enderEmit?.fone ?? '49999999999',
         });
 
-      const firstNfeOrLeft = builderForFirstNfe.toObject();
+      const firstNfeOrLeft = await builderForFirstNfe.assemble();
       expectIsRight(firstNfeOrLeft);
 
       const builderForSecondNfe = NfeXmlBuilder.create(toolkit)
@@ -446,18 +447,18 @@ describe('nfe authorizer pipeline (integration) (destructive)', () => {
           fone: args.enderEmit?.fone ?? '49999999999',
         });
 
-      const secondNfeOrLeft = builderForSecondNfe.toObject();
+      const secondNfeOrLeft = await builderForSecondNfe.assemble();
       expectIsRight(secondNfeOrLeft);
 
       const response = await pipeline.execute({
         indSinc: '0' as const,
-        NFe: [firstNfeOrLeft.value, secondNfeOrLeft.value],
+        xml: [firstNfeOrLeft.value, secondNfeOrLeft.value],
       });
       expectIsRight(response);
       const { retEnviNFe } = response.value.response;
       console.log('response:', JSON.stringify(retEnviNFe, null, 2));
 
-      const [protFirstNfe, protSecondNfe] = retEnviNFe.protNFe;
+      const [protFirstNfe, protSecondNfe] = retEnviNFe.protNFe as ProtNFe[];
 
       expect(protFirstNfe.infProt).toBeDefined();
       expect(protFirstNfe.infProt.nProt).toBeDefined();
@@ -621,17 +622,17 @@ describe('nfe authorizer pipeline (integration) (destructive)', () => {
           fone: args.enderEmit?.fone ?? '49999999999',
         });
 
-      const entityOrLeft = builder.toObject();
+      const entityOrLeft = await builder.assemble();
       expectIsRight(entityOrLeft);
 
       const response = await pipeline.execute({
-        NFe: entityOrLeft.value,
+        xml: entityOrLeft.value,
       });
       expectIsRight(response);
       const { retEnviNFe } = response.value.response;
       console.log('response:', JSON.stringify(retEnviNFe, null, 2));
 
-      const infProt = retEnviNFe.protNFe.infProt;
+      const infProt = (retEnviNFe.protNFe as ProtNFe).infProt;
 
       expect(infProt).toBeDefined();
       expect(infProt.nProt).toBeDefined();

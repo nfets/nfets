@@ -1,13 +1,13 @@
-import { StateCodes, Environment, type StateAcronym } from '@nfets/core/domain';
-import { Decimal, Xml2JsToolkit } from '@nfets/core/infrastructure';
-
-import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
-import { expectIsRight } from '@nfets/test/expects';
-import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
-import { NfceAuthorizerPipeline, NfceXmlBuilder } from '@nfets/nfe/application';
-
-import type { Emit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
 import type { Ide } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
+import type { Emit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
+import type { ProtNFe } from '@nfets/nfe/domain/entities/nfe/prot-nfe';
+
+import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
+import { expectIsRight } from '@nfets/test/expects';
+import { Decimal, Xml2JsToolkit } from '@nfets/core/infrastructure';
+import { NfceAuthorizerPipeline, NfceXmlBuilder } from '@nfets/nfe/application';
+import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
+import { StateCodes, Environment, type StateAcronym } from '@nfets/core/domain';
 
 const SEFAZ_TIMEOUT_SC = 60 * 1000;
 
@@ -151,13 +151,10 @@ describe('nfce authorizer pipeline (integration) (destructive)', () => {
           fone: args.enderEmit?.fone ?? '49999999999',
         });
 
-      const entityOrLeft = builder.toObject();
+      const entityOrLeft = await builder.assemble();
       expectIsRight(entityOrLeft);
 
-      const response = await pipeline.execute(
-        { NFe: entityOrLeft.value },
-        { qrCode: { version: '300' } },
-      );
+      const response = await pipeline.execute({ xml: entityOrLeft.value });
       expectIsRight(response);
       const { retEnviNFe } = response.value.response;
       console.log('response:', JSON.stringify(retEnviNFe, null, 2));
@@ -166,7 +163,7 @@ describe('nfce authorizer pipeline (integration) (destructive)', () => {
       expect(response.value.xml).toContain('</qrCode><urlChave>');
       expect(response.value.xml).toContain('</urlChave></infNFeSupl>');
 
-      const infProt = retEnviNFe.protNFe.infProt;
+      const infProt = (retEnviNFe.protNFe as ProtNFe).infProt;
       expect(infProt).toBeDefined();
       expect(infProt.nProt).toBeDefined();
       expect(infProt.cStat).toStrictEqual('100');

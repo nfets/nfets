@@ -1,6 +1,6 @@
-import type { EnvironmentCode, StateCode } from '@nfets/core/domain';
 import type { NFe } from '../nfe/nfe';
 import type { ProtNFe } from '../nfe/prot-nfe';
+import type { EnvironmentCode, StateCode } from '@nfets/core/domain';
 
 export interface AutorizacaoPayload<E extends NFe, T extends E | E[]> {
   cUF?: StateCode;
@@ -52,7 +52,7 @@ export type AutorizacaoResponse<
 
 export type PipelineAuthorizerResponse<
   E extends NFe,
-  T extends E | E[],
+  T extends E | E[] = E | E[],
 > = T extends E[]
   ? {
       xml: string[];

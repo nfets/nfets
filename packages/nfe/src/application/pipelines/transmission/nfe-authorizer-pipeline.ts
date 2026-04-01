@@ -1,45 +1,58 @@
-import {
-  right,
-  NFeTsError,
-  type Either,
-  left,
-  type SignedEntity,
-  type ReadCertificateResponse,
-  type Left,
-  type Right,
-} from '@nfets/core';
+import type { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
+import type { ProtNFe } from '@nfets/nfe/domain/entities/nfe/prot-nfe';
 import type {
   ContingencyOptions,
   NfeTransmitterOptions,
 } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
 import type {
-  AsynchronousAutorizacaoResponse,
   AutorizacaoResponse,
-  AutorizacaoPayload as IAutorizacaoPayload,
   PipelineAuthorizerResponse,
   SynchronousAutorizacaoResponse,
+  AsynchronousAutorizacaoResponse,
 } from '@nfets/nfe/domain/entities/services/autorizacao';
-import type { ProtNFe } from '@nfets/nfe/domain/entities/nfe/prot-nfe';
-import {
-  NfeCstatToProtocol,
-  type NFeProc,
-} from '@nfets/nfe/domain/entities/nfe/nfe';
-import type { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
+
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 import { TransmissionPipeline } from './transmission-pipeline';
 import { CouldNotReceiveResponseError } from '@nfets/nfe/domain/errors/could-not-receive-response';
+import {
+  type Left,
+  type Right,
+  type Either,
+  type StateCode,
+  type SignedEntity,
+  type EnvironmentCode,
+  type ReadCertificateResponse,
+  left,
+  right,
+  NFeTsError,
+} from '@nfets/core';
+import {
+  type NFeProc,
+  NfeCstatToProtocol,
+} from '@nfets/nfe/domain/entities/nfe/nfe';
+
+export interface NfeAuthorizerPayload<
+  E extends string,
+  T extends E | E[] = E | E[],
+> {
+  cUF?: StateCode;
+  tpAmb?: EnvironmentCode;
+  idLote?: string;
+  indSinc?: '0' | '1';
+  xml: T;
+}
 
 export class NfeAuthorizerPipeline extends TransmissionPipeline {
-  public async execute<E extends NFe, T extends E | E[]>(
-    payload: IAutorizacaoPayload<E, T>,
+  public async execute(
+    payload: NfeAuthorizerPayload<string>,
     options?: Pick<NfeTransmitterOptions, 'schema'>,
-  ): Promise<Either<NFeTsError, PipelineAuthorizerResponse<E, T>>> {
+  ): Promise<Either<NFeTsError, PipelineAuthorizerResponse<NFe>>> {
     const certificateOrLeft = await this.certificates.read(this.certificate);
     if (certificateOrLeft.isLeft()) return certificateOrLeft;
 
     const nfeBatchOrLeft = await this.handleNfeBatch(
       certificateOrLeft.value,
-      payload.NFe,
+      payload.xml,
     );
 
     if (nfeBatchOrLeft.isLeft()) return nfeBatchOrLeft;
@@ -63,14 +76,11 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
     if (responseOrLeft.isLeft()) return responseOrLeft;
     const response = responseOrLeft.value;
 
-    if (this.isSyncResponse<E, T>(response)) {
-      return right(await this.response<E, T>(nfeBatchOrLeft.value, response));
+    if (this.isSyncResponse(response)) {
+      return right(await this.response(nfeBatchOrLeft.value, response));
     }
 
-    return await this.handleAsyncResponse<E, T>(
-      nfeBatchOrLeft.value,
-      response as AsynchronousAutorizacaoResponse,
-    );
+    return await this.handleAsyncResponse(nfeBatchOrLeft.value, response);
   }
 
   protected async protocol(NFe: NFe, protNFe: ProtNFe) {
@@ -120,16 +130,22 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
 
   protected async handleNfeBatch(
     certificate: ReadCertificateResponse,
-    NFe: NFe | NFe[],
+    xml: string | string[],
   ) {
-    if (!Array.isArray(NFe)) {
+    if (!Array.isArray(xml)) {
+      const NFe = await this.toolkit.parse<SignedEntity<NFe>>(xml);
       const signedOrLeft = await this.signNfe(certificate, NFe);
       if (signedOrLeft.isLeft()) return left(signedOrLeft.value);
       return right([signedOrLeft.value]);
     }
 
     const batch = await Promise.all(
-      NFe.map((nfe) => this.signNfe(certificate, nfe)),
+      xml.map(async (nfe) =>
+        this.signNfe(
+          certificate,
+          await this.toolkit.parse<SignedEntity<NFe>>(nfe),
+        ),
+      ),
     );
 
     if (batch.some((it): it is Left<NFeTsError> => it.isLeft())) {
@@ -149,10 +165,10 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
     return 'protNFe' in response.retEnviNFe && !!response.retEnviNFe.protNFe;
   }
 
-  protected async handleAsyncResponse<E extends NFe, T extends E | E[]>(
+  protected async handleAsyncResponse(
     NFe: SignedEntity<NFe>[],
     response: AsynchronousAutorizacaoResponse,
-  ): Promise<Either<NFeTsError, PipelineAuthorizerResponse<E, T>>> {
+  ): Promise<Either<NFeTsError, PipelineAuthorizerResponse<NFe>>> {
     const {
       tpAmb,
       infRec: { nRec },
@@ -175,12 +191,12 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
         }
 
         return right(
-          await this.response<E, T>(NFe, {
+          await this.response(NFe, {
             retEnviNFe: {
               ...responseOrLeft.value.retConsReciNFe,
-              protNFe: protNFe as T extends E[] ? ProtNFe[] : ProtNFe,
+              protNFe: protNFe,
             },
-          } as SynchronousAutorizacaoResponse<T>),
+          } as SynchronousAutorizacaoResponse<NFe>),
         );
       } finally {
         attempt++;

@@ -1,15 +1,17 @@
-import path from 'node:path';
-import { right } from '@nfets/core';
-import { NfeXmlBuilder } from '../../xml-builder/nfe-xml-builder';
-import type {
-  AssembleNfeBuilder,
-  IdeBuilder,
-  InfNFeBuilder,
-} from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
 import type { Either } from '@nfets/core/shared';
 import type { NFeTsError, ReadCertificateRequest } from '@nfets/core/domain';
-import { schemas, type Schema } from '@nfets/nfe/domain';
+import type {
+  IdeBuilder,
+  InfNFeBuilder,
+  AssembleNfeBuilder,
+} from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
+
+import path from 'node:path';
+
+import { right } from '@nfets/core';
 import { Pipeline } from '../pipeline';
+import { NfeXmlBuilder } from '../../xml-builder/nfe-xml-builder';
+import { schemas, type Schema } from '@nfets/nfe/domain';
 
 export class NfeXmlBuilderPipeline<T extends object> extends Pipeline {
   protected readonly builder:
@@ -27,10 +29,6 @@ export class NfeXmlBuilderPipeline<T extends object> extends Pipeline {
     build: (builder: InfNFeBuilder<T> & IdeBuilder<T>) => AssembleNfeBuilder<T>,
   ) {
     return (build(this.builder as InfNFeBuilder<T> & IdeBuilder<T>), this);
-  }
-
-  public toObject(): Either<NFeTsError, T> {
-    return (this.builder as AssembleNfeBuilder<T>).toObject();
   }
 
   public async assemble(): Promise<Either<NFeTsError, string>> {
