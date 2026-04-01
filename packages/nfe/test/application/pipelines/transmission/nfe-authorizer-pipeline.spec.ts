@@ -1,24 +1,29 @@
-import { Environment, StateCodes, type StateCode } from '@nfets/core/domain';
-import { expectIsRight } from '@nfets/test/expects';
-import { NfeAuthorizerPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-authorizer-pipeline';
-import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
-import { right } from '@nfets/core/shared';
-import contingency from '@nfets/nfe/services/contingency-webservices-mod55';
-
+import type { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
+import type { NfeRemoteClient } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
 import type { ReadCertificateRequest } from '@nfets/core/domain';
 import type { RemoteTransmissionRepository } from '@nfets/core/domain';
-import type { NfeRemoteClient } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
-import type { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
-import { type SynchronousAutorizacaoResponse } from '@nfets/nfe/domain/entities/services/autorizacao';
-import {
-  getCertificatePassword,
-  getCnpjCertificate,
-} from '@nfets/test/certificates';
-import { NfeRemoteTransmitter } from '@nfets/nfe/application/transmission/nfe-transmitter';
-import { MemoryCacheAdapter, NativeCertificateRepository } from '@nfets/core';
+import type { SynchronousAutorizacaoResponse } from '@nfets/nfe/domain/entities/services/autorizacao';
+
 import axios from 'axios';
-import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
+import contingency from '@nfets/nfe/services/contingency-webservices-mod55';
+
+import { right } from '@nfets/core/shared';
+import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
+import { expectIsRight } from '@nfets/test/expects';
+import { NfeRemoteTransmitter } from '@nfets/nfe/application/transmission/nfe-transmitter';
+import { NfeAuthorizerPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-authorizer-pipeline';
 import { NfeXmlBuilderPipeline } from '@nfets/nfe/application';
+import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
+import { Environment, StateCodes, type StateCode } from '@nfets/core/domain';
+import {
+  getCnpjCertificate,
+  getCertificatePassword,
+} from '@nfets/test/certificates';
+import {
+  Xml2JsToolkit,
+  MemoryCacheAdapter,
+  NativeCertificateRepository,
+} from '@nfets/core';
 
 const NORMAL_WEBSERVICE_URLS: Record<StateCode, string> = {
   [StateCodes.AC]:
@@ -91,117 +96,122 @@ const getContingencyWebserviceUrl = (cUF: StateCode): string => {
   return CONTINGENCY_URLS[contingencyType];
 };
 
-const entity = (
+const toolkit = new Xml2JsToolkit();
+
+const buildXml = (
   cUF: StateCode,
   tpEmis: TpEmis,
   options?: { xJust?: string; dhCont?: string },
-): NFe => {
-  return {
-    $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
-    infNFe: {
-      $: { versao: '4.00' },
-      ide: {
-        cUF,
-        cNF: '12345678',
-        natOp: 'Venda',
-        mod: '55',
-        serie: '1',
-        nNF: '1',
-        dhEmi: '2024-01-01T10:00:00-03:00',
-        tpNF: '1',
-        idDest: '2',
-        cMunFG: '3550308',
-        tpImp: '1',
-        tpEmis,
-        cDV: '1',
-        tpAmb: Environment.Homolog,
-        finNFe: '1',
-        indFinal: '0',
-        indPres: '1',
-        procEmi: '0',
-        verProc: 'test',
-        ...(options?.xJust && { xJust: options.xJust }),
-        ...(options?.dhCont && { dhCont: options.dhCont }),
-      },
-      emit: {
-        CNPJ: '12345678000190',
-        xNome: 'Teste',
-        enderEmit: {
-          xLgr: 'Rua Teste',
-          nro: '123',
-          xBairro: 'Centro',
-          cMun: '3550308',
-          xMun: 'Sao Paulo',
-          UF: 'SP',
-          CEP: '01000000',
-          cPais: '1058',
-          xPais: 'Brasil',
+): Promise<string> => {
+  return toolkit.build(
+    {
+      $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
+      infNFe: {
+        $: { versao: '4.00' },
+        ide: {
+          cUF,
+          cNF: '12345678',
+          natOp: 'Venda',
+          mod: '55',
+          serie: '1',
+          nNF: '1',
+          dhEmi: '2024-01-01T10:00:00-03:00',
+          tpNF: '1',
+          idDest: '2',
+          cMunFG: '3550308',
+          tpImp: '1',
+          tpEmis,
+          cDV: '1',
+          tpAmb: Environment.Homolog,
+          finNFe: '1',
+          indFinal: '0',
+          indPres: '1',
+          procEmi: '0',
+          verProc: 'test',
+          ...(options?.xJust && { xJust: options.xJust }),
+          ...(options?.dhCont && { dhCont: options.dhCont }),
         },
-        IE: '123456789012',
-        CRT: '1',
-      },
-      det: [
-        {
-          $: { nItem: '1' },
-          prod: {
-            cProd: '1',
-            cEAN: 'SEM GTIN',
-            xProd: 'Produto',
-            NCM: '00000000',
-            CFOP: '5102',
-            uCom: 'UN',
-            qCom: '1',
-            vUnCom: '0',
-            vProd: '0',
-            cEANTrib: 'SEM GTIN',
-            uTrib: 'UN',
-            qTrib: '1',
-            vUnTrib: '0',
-            indTot: '1',
+        emit: {
+          CNPJ: '12345678000190',
+          xNome: 'Teste',
+          enderEmit: {
+            xLgr: 'Rua Teste',
+            nro: '123',
+            xBairro: 'Centro',
+            cMun: '3550308',
+            xMun: 'Sao Paulo',
+            UF: 'SP',
+            CEP: '01000000',
+            cPais: '1058',
+            xPais: 'Brasil',
           },
-          imposto: {
-            vTotTrib: 0,
-            ICMS: {
-              ICMS00: {
-                orig: '0',
-                CST: '00',
-                modBC: '0',
-                vBC: '0',
-                pICMS: '0',
-                vICMS: '0',
+          IE: '123456789012',
+          CRT: '1',
+        },
+        det: [
+          {
+            $: { nItem: '1' },
+            prod: {
+              cProd: '1',
+              cEAN: 'SEM GTIN',
+              xProd: 'Produto',
+              NCM: '00000000',
+              CFOP: '5102',
+              uCom: 'UN',
+              qCom: '1',
+              vUnCom: '0',
+              vProd: '0',
+              cEANTrib: 'SEM GTIN',
+              uTrib: 'UN',
+              qTrib: '1',
+              vUnTrib: '0',
+              indTot: '1',
+            },
+            imposto: {
+              vTotTrib: 0,
+              ICMS: {
+                ICMS00: {
+                  orig: '0',
+                  CST: '00',
+                  modBC: '0',
+                  vBC: '0',
+                  pICMS: '0',
+                  vICMS: '0',
+                },
               },
             },
           },
+        ],
+        total: {
+          ICMSTot: {
+            vBC: '0',
+            vICMS: '0',
+            vICMSDeson: '0',
+            vFCP: '0',
+            vBCST: '0',
+            vST: '0',
+            vFCPST: '0',
+            vFCPSTRet: '0',
+            vProd: '0',
+            vFrete: '0',
+            vSeg: '0',
+            vDesc: '0',
+            vII: '0',
+            vIPI: '0',
+            vIPIDevol: '0',
+            vPIS: '0',
+            vCOFINS: '0',
+            vOutro: '0',
+            vNF: '0',
+            vTotTrib: '0',
+          },
         },
-      ],
-      total: {
-        ICMSTot: {
-          vBC: '0',
-          vICMS: '0',
-          vICMSDeson: '0',
-          vFCP: '0',
-          vBCST: '0',
-          vST: '0',
-          vFCPST: '0',
-          vFCPSTRet: '0',
-          vProd: '0',
-          vFrete: '0',
-          vSeg: '0',
-          vDesc: '0',
-          vII: '0',
-          vIPI: '0',
-          vIPIDevol: '0',
-          vPIS: '0',
-          vCOFINS: '0',
-          vOutro: '0',
-          vNF: '0',
-          vTotTrib: '0',
-        },
+        transp: { modFrete: '9' },
+        pag: { detPag: [{ tPag: '01', vPag: '0' }] },
       },
-      transp: { modFrete: '9' },
-      pag: { detPag: [{ tPag: '01', vPag: '0' }] },
     },
-  };
+    { rootName: 'NFe' },
+  );
 };
 
 describe('nfe authorizer pipeline (contingency) (unit)', () => {
@@ -278,10 +288,9 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
 
   states.forEach(([acronym, cUF]) => {
     it(`should use normal webservice for ${acronym} (${cUF})`, async () => {
-      const NFe = entity(cUF, TpEmis.Normal);
-
+      const xml = await buildXml(cUF, TpEmis.Normal);
       const url = getNormalWebserviceUrl(cUF);
-      const result = await pipeline.execute({ NFe, idLote: '1' });
+      const result = await pipeline.execute({ xml, idLote: '1' });
 
       expectIsRight(result);
       expect(spy).toHaveBeenCalledWith(expect.objectContaining({ url }));
@@ -290,13 +299,12 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
     it(`should use contingency webservice (${
       contingency[cUF as keyof typeof contingency]
     }) for ${acronym} (${cUF})`, async () => {
-      const NFe = entity(cUF, TpEmis.SVCAN, {
+      const xml = await buildXml(cUF, TpEmis.SVCAN, {
         xJust: 'Contingência',
         dhCont: new Date().toISOString(),
       });
-
       const url = getContingencyWebserviceUrl(cUF);
-      const result = await pipeline.execute({ NFe, idLote: '1' });
+      const result = await pipeline.execute({ xml, idLote: '1' });
 
       expectIsRight(result);
       expect(spy).toHaveBeenCalledWith(expect.objectContaining({ url }));
@@ -671,11 +679,8 @@ ${NFe}`
         .trim(),
     );
 
-    const NFeOrLeft = builder.toObject();
-    expectIsRight(NFeOrLeft);
-
     const result = await pipeline.execute({
-      NFe: NFeOrLeft.value,
+      xml: xmlOrLeft.value,
       idLote: '1',
     });
 

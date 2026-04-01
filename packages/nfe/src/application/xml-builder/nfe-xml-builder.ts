@@ -1,80 +1,78 @@
-import { type XmlToolkit, Environment, NFeTsError } from '@nfets/core/domain';
-import { type DeepPartial, left, right } from '@nfets/core/shared';
-import { ValidateErrorsMetadata, Validates } from '@nfets/core/application';
-
-import type { InfNFeAttributes as IInfNFeAttributes } from '@nfets/nfe/domain/entities/nfe/inf-nfe';
 import type { Ide as IIde } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
-import type { Cobr as ICobr } from '@nfets/nfe/domain/entities/nfe/inf-nfe/cobr';
-import type { Emit as IEmit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
-import type { Pag as IPag } from '@nfets/nfe/domain/entities/nfe/inf-nfe/pag';
-import type { Transp as ITransp } from '@nfets/nfe/domain/entities/nfe/inf-nfe/transp';
-import type { Total as ITotal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
 import type { Det as IDet } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det';
-import type { InfIntermed as IInfIntermed } from '@nfets/nfe/domain/entities/nfe/inf-nfe/infintermed';
-import type { Exporta as IExporta } from '@nfets/nfe/domain/entities/nfe/inf-nfe/exporta';
-import type { Compra as ICompra } from '@nfets/nfe/domain/entities/nfe/inf-nfe/compra';
+import type { Pag as IPag } from '@nfets/nfe/domain/entities/nfe/inf-nfe/pag';
+import type { NFe as INFe } from '@nfets/nfe/domain/entities/nfe/nfe';
+import type { Emit as IEmit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
 import type { Cana as ICana } from '@nfets/nfe/domain/entities/nfe/inf-nfe/cana';
-import type { InfRespTec as IInfRespTec } from '@nfets/nfe/domain/entities/nfe/inf-nfe/infresptec';
-import type { InfSolicNFF as ISolicNFF } from '@nfets/nfe/domain/entities/nfe/inf-nfe/inf-solic-nff';
-import type { InfAdic as IInfAdic } from '@nfets/nfe/domain/entities/nfe/inf-nfe/infadic';
+import type { Cobr as ICobr } from '@nfets/nfe/domain/entities/nfe/inf-nfe/cobr';
+import type { Dest as IDest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/dest';
+import type { Total as ITotal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
+import type { Local as ILocal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/local';
 import type { Avulsa as IAvulsa } from '@nfets/nfe/domain/entities/nfe/inf-nfe/avulsa';
 import type { AutXML as IAutXML } from '@nfets/nfe/domain/entities/nfe/inf-nfe/autxml';
-import type { Local as ILocal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/local';
-import type { Dest as IDest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/dest';
-
+import type { Transp as ITransp } from '@nfets/nfe/domain/entities/nfe/inf-nfe/transp';
+import type { Compra as ICompra } from '@nfets/nfe/domain/entities/nfe/inf-nfe/compra';
+import type { InfAdic as IInfAdic } from '@nfets/nfe/domain/entities/nfe/inf-nfe/infadic';
+import type { Exporta as IExporta } from '@nfets/nfe/domain/entities/nfe/inf-nfe/exporta';
+import type { InfSolicNFF as ISolicNFF } from '@nfets/nfe/domain/entities/nfe/inf-nfe/inf-solic-nff';
+import type { InfRespTec as IInfRespTec } from '@nfets/nfe/domain/entities/nfe/inf-nfe/infresptec';
+import type { InfIntermed as IInfIntermed } from '@nfets/nfe/domain/entities/nfe/inf-nfe/infintermed';
+import type { InfNFeAttributes as IInfNFeAttributes } from '@nfets/nfe/domain/entities/nfe/inf-nfe';
 import type {
-  INfeXmlBuilder,
-  InfNFeBuilder,
   IdeBuilder,
   TotalBuilder,
   TranspBuilder,
+  InfNFeBuilder,
+  INfeXmlBuilder,
 } from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
-import type { NFe as INFe } from '@nfets/nfe/domain/entities/nfe/nfe';
+
+import Schemas from '@nfets/nfe/domain/entities/transmission/schemas';
+import webservices from '@nfets/nfe/services/contingency-webservices-mod55';
 
 import { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
-import { InfNFeAttributes } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/inf-nfe';
+import { Pag } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/pag';
 import { Ide } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/ide';
 import { Emit } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/emit';
+import { Cobr } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/cobr';
+import { Cana } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/cana';
+import { Dest } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/dest';
 import { Total } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/total';
-import { Pag } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/pag';
+import { Local } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/local';
 import { Transp } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/transp';
+import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
+import { Schema } from '@nfets/nfe/domain';
+import { Avulsa } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/avulsa';
+import { AutXML } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/autxml';
+import { Compra } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/compra';
+import { Exporta } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/exporta';
+import { InfAdic } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/infadic';
+import { InfRespTec } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/infresptec';
+import { InfSolicNFF } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/inf-solic-nff';
+import { InfIntermed } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/infintermed';
+import { plainToInstance } from '@nfets/core/application/validations/transformers/plain-to-instance';
+import { InfNFeAttributes } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/inf-nfe';
 import { AccessKeyBuilder } from '@nfets/nfe/application/access-key/access-key-builder';
-import {
-  AssembleDetXmlBuilder,
-  ProdBuilder,
-} from '@nfets/nfe/domain/entities/xml-builder/nfe-det-xml-builder';
 import { NfeDetXmlBuilder } from '@nfets/nfe/application/xml-builder/nfe-det-xml-builder';
-
+import { ContingencyOptions } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
+import { type DeepPartial, left, right } from '@nfets/core/shared';
+import { ValidateErrorsMetadata, Validates } from '@nfets/core/application';
+import { type XmlToolkit, Environment, NFeTsError } from '@nfets/core/domain';
+import {
+  ProdBuilder,
+  AssembleDetXmlBuilder,
+} from '@nfets/nfe/domain/entities/xml-builder/nfe-det-xml-builder';
 import {
   DefaultDetBuilderAggregator,
   type DetBuilderAggregator,
 } from '@nfets/nfe/application/aggregator/det-builder-aggregator';
-import { plainToInstance } from '@nfets/core/application/validations/transformers/plain-to-instance';
 import {
   DefaultTotalBuilderAggregator,
   type TotalBuilderAggregator,
 } from '@nfets/nfe/application/aggregator/total-builder-aggregator';
-import { Cobr } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/cobr';
-import { InfRespTec } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/infresptec';
-import { InfSolicNFF } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/inf-solic-nff';
-import { Avulsa } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/avulsa';
-import { Dest } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/dest';
-import { Local } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/local';
-import { AutXML } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/autxml';
-import { InfIntermed } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/infintermed';
-import { Exporta } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/exporta';
-import { Compra } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/compra';
-import { InfAdic } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/infadic';
-import { Cana } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/cana';
-import { ContingencyOptions } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
-import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
-import webservices from '@nfets/nfe/services/contingency-webservices-mod55';
-import { Schema } from '@nfets/nfe/domain';
-import Schemas from '@nfets/nfe/domain/entities/transmission/schemas';
 
-export class NfeXmlBuilder<T extends object = INFe>
-  implements INfeXmlBuilder<T>
-{
+export class NfeXmlBuilder<
+  T extends object = INFe,
+> implements INfeXmlBuilder<T> {
   protected readonly data = {
     $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
     infNFe: {
@@ -170,7 +168,7 @@ export class NfeXmlBuilder<T extends object = INFe>
         this.nfeDetXmlBuilder.det({ nItem: (index + 1).toString() }),
         item,
       );
-      return this.collect(builder), builder.assemble();
+      return (this.collect(builder), builder.assemble());
     }) as [IDet, ...IDet[]];
     return this;
   }
@@ -295,7 +293,7 @@ export class NfeXmlBuilder<T extends object = INFe>
     return this;
   }
 
-  public toObject() {
+  protected toObject() {
     if (this.$data !== void 0) return right(this.$data);
     const errors = this.errors();
     if (errors) return left(new NFeTsError(errors.join(', ')));
@@ -342,9 +340,9 @@ export class NfeXmlBuilder<T extends object = INFe>
     const contingency = webservices[cUF];
     switch (contingency) {
       case 'SVCAN':
-        return (this.data.infNFe.ide.tpEmis = TpEmis.SVCAN), void 0;
+        return ((this.data.infNFe.ide.tpEmis = TpEmis.SVCAN), void 0);
       case 'SVCRS':
-        return (this.data.infNFe.ide.tpEmis = TpEmis.SVCRS), void 0;
+        return ((this.data.infNFe.ide.tpEmis = TpEmis.SVCRS), void 0);
     }
   }
 

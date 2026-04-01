@@ -1,5 +1,4 @@
 import type { Schema } from '@nfets/nfe/domain';
-import type { Either } from '@nfets/core/shared';
 import type { NFCe, NfceTransmitterOptions } from '@nfets/nfe/domain';
 import type {
   IdeBuilder,
@@ -15,7 +14,6 @@ import {
 import { NfceQrcode } from '../../transmission/nfce-qrcode';
 import { left, right } from '@nfets/core/shared';
 import { unreachable } from '@nfets/core/shared';
-import { leftFromError } from '@nfets/core/shared/left-from-error';
 import { NfceXmlBuilder } from '../../xml-builder/nfce-xml-builder';
 import { NfeXmlBuilderPipeline } from './nfe-xml-builder-pipeline';
 import { NfceRemoteTransmitter } from '../../transmission/nfce-transmitter';
@@ -45,8 +43,11 @@ export class NfceXmlBuilderPipeline<
     this.schema,
   );
 
-  public override async assemble(): Promise<Either<NFeTsError, string>> {
-    if (!this.options?.qrCode) return super.assemble();
+  protected override async assertXmlSignedAndValidated(xml: string) {
+    const assertionOrLeft = await super.assertXmlSignedAndValidated(xml);
+    if (assertionOrLeft.isLeft()) return assertionOrLeft;
+
+    if (!this.options?.qrCode) return assertionOrLeft;
     if (!this.certificate)
       return left(
         new NFeTsError(
@@ -54,26 +55,22 @@ export class NfceXmlBuilderPipeline<
         ),
       );
 
-    const xmlOrLeft = await super.assemble();
-    if (xmlOrLeft.isLeft()) return xmlOrLeft;
-
-    const entityOrLeft = await this.parseSignedNfce(xmlOrLeft.value);
-    if (entityOrLeft.isLeft()) return entityOrLeft;
-
-    const infNFeSupl = await this.generateQrCode(
-      entityOrLeft.value,
+    const signed = await this.toolkit.parse<SignedEntity<NFCe>>(
+      assertionOrLeft.value,
+    );
+    const infNFeSuplOrLeft = await this.generateQrCode(
+      signed,
       this.options,
       this.certificate,
     );
-    if (infNFeSupl.isLeft()) return infNFeSupl;
+    if (infNFeSuplOrLeft.isLeft()) return infNFeSuplOrLeft;
 
-    const xmlString = await this.toolkit.build(entityOrLeft.value, {
+    const xmlString = await this.toolkit.build(signed, {
       rootName: 'NFe',
     });
-    const infNFeSuplString = await this.toolkit.build(infNFeSupl.value, {
+    const infNFeSuplString = await this.toolkit.build(infNFeSuplOrLeft.value, {
       rootName: 'infNFeSupl',
     });
-
     const xmlWithQrCode = this.toolkit.insertBefore(
       xmlString,
       'Signature',
@@ -118,15 +115,6 @@ export class NfceXmlBuilderPipeline<
       }
       default:
         return unreachable(qrCode.version as never);
-    }
-  }
-
-  private async parseSignedNfce(xml: string) {
-    try {
-      const parsed = await this.toolkit.parse<SignedEntity<NFCe>>(xml);
-      return right(parsed);
-    } catch (e) {
-      return leftFromError(e);
     }
   }
 }

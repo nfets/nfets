@@ -191,12 +191,12 @@ export interface InfSolicNFFBuilder<T extends object> {
 
 export interface AssembleNfeBuilder<T extends object> {
   quiet(): AssembleNfeBuilder<T>;
-  toObject(): Either<NFeTsError, T>;
   assemble(): Promise<Either<NFeTsError, string>>;
 }
 
 export interface INfeXmlBuilder<T extends object>
-  extends InfNFeBuilder<T>,
+  extends
+    InfNFeBuilder<T>,
     IdeBuilder<T>,
     DetGroupBuilder<T>,
     DestBuilder<T>,
