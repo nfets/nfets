@@ -44,7 +44,7 @@ export interface EmitBuilder<T extends object> {
 
 export interface AvulsaBuilder<T extends object> {
   avulsa(
-    payload: IAvulsa,
+    payload?: IAvulsa,
   ): DestBuilder<T> &
     RetiradaBuilder<T> &
     EntregaBuilder<T> &
@@ -54,7 +54,7 @@ export interface AvulsaBuilder<T extends object> {
 
 export interface DestBuilder<T extends object> {
   dest(
-    payload: IDest,
+    payload?: IDest,
   ): RetiradaBuilder<T> &
     EntregaBuilder<T> &
     AutXMLBuilder<T> &
@@ -63,18 +63,18 @@ export interface DestBuilder<T extends object> {
 
 export interface RetiradaBuilder<T extends object> {
   retirada(
-    payload: ILocal,
+    payload?: ILocal,
   ): DestBuilder<T> & EntregaBuilder<T> & AutXMLBuilder<T> & DetGroupBuilder<T>;
 }
 
 export interface EntregaBuilder<T extends object> {
   entrega(
-    payload: ILocal,
+    payload?: ILocal,
   ): DestBuilder<T> & AutXMLBuilder<T> & DetGroupBuilder<T>;
 }
 
 export interface AutXMLBuilder<T extends object> {
-  autXML(payload: IAutXML): AutXMLBuilder<T> & DetGroupBuilder<T>;
+  autXML(payload?: IAutXML): AutXMLBuilder<T> & DetGroupBuilder<T>;
 }
 
 export interface DetGroupBuilder<T extends object> {
@@ -99,7 +99,7 @@ export interface TranspBuilder<T extends object> {
 }
 
 export interface CobrBuilder<T extends object> {
-  cobr(payload: ICobr): PagBuilder<T>;
+  cobr(payload?: ICobr): PagBuilder<T>;
 }
 
 export interface PagBuilder<T extends object> {
@@ -118,7 +118,7 @@ export interface PagBuilder<T extends object> {
 
 export interface InfIntermedBuilder<T extends object> {
   infIntermed(
-    payload: IInfIntermed,
+    payload?: IInfIntermed,
   ): AssembleNfeBuilder<T> &
     AvulsaBuilder<T> &
     InfAdicBuilder<T> &
@@ -131,7 +131,7 @@ export interface InfIntermedBuilder<T extends object> {
 
 export interface InfAdicBuilder<T extends object> {
   infAdic(
-    payload: IInfAdic,
+    payload?: IInfAdic,
   ): AssembleNfeBuilder<T> &
     AvulsaBuilder<T> &
     InfAdicBuilder<T> &
@@ -143,7 +143,7 @@ export interface InfAdicBuilder<T extends object> {
 }
 export interface ExportaBuilder<T extends object> {
   exporta(
-    payload: IExporta,
+    payload?: IExporta,
   ): AssembleNfeBuilder<T> &
     AvulsaBuilder<T> &
     InfAdicBuilder<T> &
@@ -155,7 +155,7 @@ export interface ExportaBuilder<T extends object> {
 
 export interface CompraBuilder<T extends object> {
   compra(
-    payload: ICompra,
+    payload?: ICompra,
   ): AssembleNfeBuilder<T> &
     AvulsaBuilder<T> &
     InfAdicBuilder<T> &
@@ -166,7 +166,7 @@ export interface CompraBuilder<T extends object> {
 
 export interface CanaBuilder<T extends object> {
   cana(
-    payload: ICana,
+    payload?: ICana,
   ): AssembleNfeBuilder<T> &
     AvulsaBuilder<T> &
     InfAdicBuilder<T> &
@@ -176,7 +176,7 @@ export interface CanaBuilder<T extends object> {
 
 export interface InfRespTecBuilder<T extends object> {
   infRespTec(
-    payload: IInfRespTec,
+    payload?: IInfRespTec,
   ): AssembleNfeBuilder<T> &
     AvulsaBuilder<T> &
     InfAdicBuilder<T> &
@@ -185,7 +185,7 @@ export interface InfRespTecBuilder<T extends object> {
 
 export interface InfSolicNFFBuilder<T extends object> {
   infSolicNFF(
-    payload: ISolicNFF,
+    payload?: ISolicNFF,
   ): AssembleNfeBuilder<T> & InfAdicBuilder<T> & AvulsaBuilder<T>;
 }
 

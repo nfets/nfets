@@ -55,24 +55,22 @@ export class NfceXmlBuilderPipeline<
         ),
       );
 
-    const signed = await this.toolkit.parse<SignedEntity<NFCe>>(
-      assertionOrLeft.value,
-    );
+    const signedXml = assertionOrLeft.value;
+    const signedEntity =
+      await this.toolkit.parse<SignedEntity<NFCe>>(signedXml);
     const infNFeSuplOrLeft = await this.generateQrCode(
-      signed,
+      signedEntity,
       this.options,
       this.certificate,
     );
     if (infNFeSuplOrLeft.isLeft()) return infNFeSuplOrLeft;
 
-    const xmlString = await this.toolkit.build(signed, {
-      rootName: 'NFe',
-    });
     const infNFeSuplString = await this.toolkit.build(infNFeSuplOrLeft.value, {
       rootName: 'infNFeSupl',
     });
+
     const xmlWithQrCode = this.toolkit.insertBefore(
-      xmlString,
+      signedXml,
       'Signature',
       infNFeSuplString,
     );

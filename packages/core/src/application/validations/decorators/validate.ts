@@ -40,7 +40,7 @@ export const Validates = <T extends object>(klass: new () => T) => {
   ) => {
     const original = descriptor.value;
 
-    descriptor.value = function (...args: [T, ...object[]]) {
+    descriptor.value = function (...args: [T | undefined, ...object[]]) {
       const skipAllValidations = Reflect.getMetadata(
         SkipValidationMetadata,
         this.constructor,
@@ -55,10 +55,14 @@ export const Validates = <T extends object>(klass: new () => T) => {
 
       if (skipValidation === true || skipAllValidations === true) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return original?.apply(this, args);
+        return original?.apply(this, args as [T, ...object[]]);
       }
 
       const [payload, ...rest] = args;
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      if (!payload) return original?.apply(this, args as [T, ...object[]]);
+
       const instance = plainToInstance<T>(payload, klass);
       const errors = validateSync(instance, { whitelist: true });
       clearEmptyValues(instance);

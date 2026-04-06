@@ -223,6 +223,43 @@ describe('Validates decorator (unit)', () => {
     });
   });
 
+  describe('with undefined or null payload (optional DTO)', () => {
+    class TestService {
+      @Validates(ValidPayload)
+      public process(payload: ValidPayload | undefined, suffix = ''): string {
+        if (payload == null) return `empty${suffix}`;
+        return `Processed: ${payload.name}${suffix}`;
+      }
+    }
+
+    it('should not throw and forward undefined without validating', () => {
+      const service = new TestService();
+      expect(() =>
+        service.process(undefined as unknown as ValidPayload),
+      ).not.toThrow();
+      expect(service.process(undefined as unknown as ValidPayload)).toBe(
+        'empty',
+      );
+      const errors = Reflect.getMetadata(ValidateErrorsMetadata, service);
+      expect(errors).toBeUndefined();
+    });
+
+    it('should not throw and forward null without validating', () => {
+      const service = new TestService();
+      expect(() =>
+        service.process(null as unknown as ValidPayload),
+      ).not.toThrow();
+      expect(service.process(null as unknown as ValidPayload)).toBe('empty');
+    });
+
+    it('should preserve extra args when payload is undefined', () => {
+      const service = new TestService();
+      expect(service.process(undefined as unknown as ValidPayload, '!')).toBe(
+        'empty!',
+      );
+    });
+  });
+
   describe('mapConstraintsToErrors', () => {
     it('should map errors with parent path', () => {
       const errors: ValidationError[] = [

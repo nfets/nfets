@@ -129,31 +129,32 @@ export class NfeXmlBuilder<
   }
 
   @Validates(Avulsa)
-  public avulsa(payload: IAvulsa) {
+  public avulsa(payload?: IAvulsa) {
     this.data.infNFe.avulsa = payload;
     return this;
   }
 
   @Validates(Dest)
-  public dest(payload: IDest) {
+  public dest(payload?: IDest) {
     this.data.infNFe.dest = payload;
     return this;
   }
 
   @Validates(Local)
-  public retirada(payload: ILocal) {
+  public retirada(payload?: ILocal) {
     this.data.infNFe.retirada = payload;
     return this;
   }
 
   @Validates(Local)
-  public entrega(payload: ILocal) {
+  public entrega(payload?: ILocal) {
     this.data.infNFe.entrega = payload;
     return this;
   }
 
   @Validates(AutXML)
-  public autXML(payload: IAutXML) {
+  public autXML(payload?: IAutXML) {
+    if (payload == null) return this;
     this.data.infNFe.autXML ??= [] as IAutXML[];
     this.data.infNFe.autXML.push(payload);
     return this;
@@ -235,7 +236,7 @@ export class NfeXmlBuilder<
   }
 
   @Validates(Cobr)
-  public cobr(payload: ICobr) {
+  public cobr(payload?: ICobr) {
     this.data.infNFe.cobr = payload;
     return this;
   }
@@ -247,43 +248,43 @@ export class NfeXmlBuilder<
   }
 
   @Validates(InfIntermed)
-  public infIntermed(payload: IInfIntermed) {
+  public infIntermed(payload?: IInfIntermed) {
     this.data.infNFe.infIntermed = payload;
     return this;
   }
 
   @Validates(InfAdic)
-  public infAdic(payload: IInfAdic) {
+  public infAdic(payload?: IInfAdic) {
     this.data.infNFe.infAdic = payload;
     return this;
   }
 
   @Validates(Exporta)
-  public exporta(payload: IExporta) {
+  public exporta(payload?: IExporta) {
     this.data.infNFe.exporta = payload;
     return this;
   }
 
   @Validates(Compra)
-  public compra(payload: ICompra) {
+  public compra(payload?: ICompra) {
     this.data.infNFe.compra = payload;
     return this;
   }
 
   @Validates(Cana)
-  public cana(payload: ICana) {
+  public cana(payload?: ICana) {
     this.data.infNFe.cana = payload;
     return this;
   }
 
   @Validates(InfRespTec)
-  public infRespTec(payload: IInfRespTec) {
+  public infRespTec(payload?: IInfRespTec) {
     this.data.infNFe.infRespTec = payload;
     return this;
   }
 
   @Validates(InfSolicNFF)
-  public infSolicNFF(payload: ISolicNFF) {
+  public infSolicNFF(payload?: ISolicNFF) {
     this.data.infNFe.infSolicNFF = payload;
     return this;
   }
