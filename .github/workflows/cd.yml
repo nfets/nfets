@@ -275,7 +275,7 @@ jobs:
         if: steps.should-skip-cd.outputs.skip != 'true'
         with:
           os: ${{ matrix.os }}
-          node-version: 22.x
+          node-version: 24.x
           architecture: ${{ matrix.arch }}
 
       - name: Install dependencies and Build package
@@ -389,7 +389,6 @@ jobs:
       - name: Publish to npm using Trusted Publishing
         if: steps.should-skip-cd.outputs.skip != 'true'
         run: |
-          # Trusted publishing requires npm CLI >= 11.5.1 (Node 22 may ship npm 10).
-          npm install -g npm@^11.5.1
+          npm --version
           # setup-node wrote .npmrc for OIDC; do not set NODE_AUTH_TOKEN here (breaks OIDC / may cause E404).
           pnpm publish --no-git-checks
