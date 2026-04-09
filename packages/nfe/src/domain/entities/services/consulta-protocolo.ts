@@ -3,9 +3,9 @@ import type { EventoItem } from './evento';
 import type { ProtNFe } from '../nfe/prot-nfe';
 
 export interface ConsultaProtocoloPayload {
-  tpAmb?: EnvironmentCode;
-  xServ?: 'CONSULTAR';
+  tpAmb: EnvironmentCode;
   chNFe: string;
+  xServ?: 'CONSULTAR';
 }
 
 export interface ConsultaProtocoloRequest {

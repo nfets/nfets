@@ -4,7 +4,7 @@ import { IsEnum, IsOptional, IsString, Length, Matches } from 'class-validator';
 
 export class ConsultaProtocoloPayload implements IConsultaProtocoloPayload {
   @IsEnum(Environment)
-  public tpAmb?: EnvironmentCode;
+  public tpAmb!: EnvironmentCode;
 
   @IsOptional()
   public xServ = 'CONSULTAR' as const;

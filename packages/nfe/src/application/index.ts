@@ -7,12 +7,14 @@ export * from './pipelines/transmission/nfe-cancel-pipeline';
 export * from './pipelines/transmission/nfe-authorizer-pipeline';
 export * from './pipelines/transmission/nfe-void-range-pipeline';
 export * from './pipelines/transmission/nfe-consult-status-pipeline';
+export * from './pipelines/transmission/nfe-consult-protocolo-pipeline';
 export * from './pipelines/transmission/nfe-authorization-response-pipeline';
 
 export * from './pipelines/transmission/nfce-cancel-pipeline';
 export * from './pipelines/transmission/nfce-authorizer-pipeline';
 export * from './pipelines/transmission/nfce-void-range-pipeline';
 export * from './pipelines/transmission/nfce-consult-status-pipeline';
+export * from './pipelines/transmission/nfce-consult-protocolo-pipeline';
 
 export * from './pipelines/xml/nfe-xml-builder-pipeline';
 export * from './pipelines/xml/nfce-xml-builder-pipeline';
