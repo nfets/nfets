@@ -26,6 +26,29 @@ import { left, right } from '../../shared/either';
 import { leftFromError } from '../../shared/left-from-error';
 import { NFeTsError } from '@nfets/core/domain';
 
+type XmlNode = {
+  parentNode: XmlParentNode | null;
+};
+
+type XmlParentNode = {
+  insertBefore<T extends XmlNode>(node: T, child: XmlNode | null): T;
+};
+
+type XmlNodeList<T> = {
+  item(index: number): T | null;
+};
+
+type XmlElement = XmlNode & {
+  firstChild: XmlNode | null;
+  getAttribute(name: string): string | null;
+  getElementsByTagName(tagName: string): XmlNodeList<XmlElement>;
+  appendChild<T extends XmlNode>(node: T): T;
+};
+
+type XmlDocument = {
+  documentElement: XmlElement | null;
+};
+
 export class Xml2JsToolkit implements XmlToolkit {
   public constructor(private readonly xml2js = Xml2js) {
     setNodeDependencies({
@@ -84,7 +107,10 @@ export class Xml2JsToolkit implements XmlToolkit {
     xml: string,
     options: CanonicalizeOptions = defaultCanonicalizeOptions,
   ): string {
-    const parsed = XmlDsig.Parse(this.clear(xml));
+    const parsed = new xmldom.DOMParser().parseFromString(
+      this.clear(xml),
+      'application/xml',
+    );
     return new XmlDsig.XmlCanonicalizer(
       options.includeComments,
       options.exclusive,
@@ -92,48 +118,69 @@ export class Xml2JsToolkit implements XmlToolkit {
   }
 
   public getNode(xml: string, tag: string): string | null {
-    const parsed = XmlDsig.Parse(xml);
-    const element = parsed.documentElement.getElementsByTagName(tag).item(0);
-    return element ? this.clear(XmlDsig.Stringify(element)) : null;
+    const parsed = this.parseXml(xml);
+    const root = this.getDocumentElement(parsed);
+    const element = root.getElementsByTagName(tag).item(0);
+    return element ? this.clear(this.serializeXml(element)) : null;
   }
 
   public getFirstNode(xml: string): string | null {
-    const parsed = XmlDsig.Parse(xml);
-    const element = parsed.documentElement.firstChild;
-    return element ? this.clear(XmlDsig.Stringify(element)) : null;
+    const parsed = this.parseXml(xml);
+    const root = this.getDocumentElement(parsed);
+    const element = root.firstChild;
+    return element ? this.clear(this.serializeXml(element)) : null;
   }
 
   public getAttribute(xml: string, tag: string): string | null {
-    const parsed = XmlDsig.Parse(xml);
-    return parsed.documentElement.getAttribute(tag);
+    const parsed = this.parseXml(xml);
+    return this.getDocumentElement(parsed).getAttribute(tag);
   }
 
   public appendNode(xml: string, node: string): string {
-    const parsed = XmlDsig.Parse(xml);
-    const { documentElement } = XmlDsig.Parse(node);
-    parsed.documentElement.appendChild(documentElement);
-    return this.clear(XmlDsig.Stringify(parsed));
+    const parsed = this.parseXml(xml);
+    const root = this.getDocumentElement(parsed);
+    const nodeRoot = this.getDocumentElement(this.parseXml(node));
+    root.appendChild(nodeRoot);
+    return this.clear(this.serializeXml(parsed));
   }
 
   public insertBefore(xml: string, referenceTag: string, node: string): string {
-    const parsed = XmlDsig.Parse(xml);
-    const reference = parsed.documentElement
-      .getElementsByTagName(referenceTag)
-      .item(0);
+    const parsed = this.parseXml(xml);
+    const root = this.getDocumentElement(parsed);
+    const reference = root.getElementsByTagName(referenceTag).item(0);
 
     if (!reference?.parentNode)
       throw new NFeTsError(
         `No element found with tag "${referenceTag}" to insert before`,
       );
 
-    const { documentElement } = XmlDsig.Parse(node);
-    reference.parentNode.insertBefore(documentElement, reference);
-    return this.clear(XmlDsig.Stringify(parsed));
+    const nodeRoot = this.getDocumentElement(this.parseXml(node));
+    reference.parentNode.insertBefore(nodeRoot, reference);
+    return this.clear(this.serializeXml(parsed));
   }
 
   private hash(data: string, algorithm: SignatureAlgorithm): string {
     const hash = crypto.createHash(algorithm);
     return hash.update(data, 'utf8').digest().toString('base64');
+  }
+
+  private parseXml(xml: string): XmlDocument {
+    return new xmldom.DOMParser().parseFromString(
+      xml,
+      'application/xml',
+    ) as XmlDocument;
+  }
+
+  private getDocumentElement(document: XmlDocument): XmlElement {
+    if (!document.documentElement) {
+      throw new NFeTsError('Invalid xml provided. Missing root element.');
+    }
+
+    return document.documentElement;
+  }
+
+  private serializeXml(node: XmlNode | XmlElement | XmlDocument): string {
+    return new xmldom.XMLSerializer().serializeToString(node as never);
   }
 
   private clear(xml: string): string {

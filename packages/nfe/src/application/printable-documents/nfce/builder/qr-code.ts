@@ -27,7 +27,6 @@ export class QRCode implements Builder {
 
   protected async getQrSvgString(content: string): Promise<string> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-base-to-string
       return await QRCodeLib.toString(content, {
         margin: 0,
         type: 'svg',
