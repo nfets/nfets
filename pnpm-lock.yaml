@@ -50,7 +50,7 @@ importers:
         version: 25.6.0
       '@types/pdfkit':
         specifier: ^0.17.3
-        version: 0.17.5
+        version: 0.17.6
       '@typescript-eslint/parser':
         specifier: ^8.21.0
         version: 8.58.2(eslint@9.39.2)(typescript@5.9.2)
@@ -1102,8 +1102,8 @@ packages:
   '@types/node@25.6.0':
     resolution: {integrity: sha512-+qIYRKdNYJwY3vRCZMdJbPLJAtGjQBudzZzdzwQYkEPQd+PJGixUL5QfvCLDaULoLv+RhT3LDkwEfKaAkgSmNQ==}
 
-  '@types/pdfkit@0.17.5':
-    resolution: {integrity: sha512-T3ZHnvF91HsEco5ClhBCOuBwobZfPcI2jaiSHybkkKYq4KhVIIurod94JVKvDIG0JXT6o3KiERC0X0//m8dyrg==}
+  '@types/pdfkit@0.17.6':
+    resolution: {integrity: sha512-tIwzxk2uWKp0Cq9JIluQXJid77lYhF52EsIOwhsMF4iWLA6YneoBR1xVKYYdAysHuepUB0OX4tdwMiUDdGKmig==}
 
   '@types/qrcode@1.5.6':
     resolution: {integrity: sha512-te7NQcV2BOvdj2b1hCAHzAoMNuj65kNBMz0KBaxM6c3VGBOhU0dURQKOtH8CFNI/dsKkwlv32p26qYQTWoB5bw==}
@@ -4217,7 +4217,7 @@ snapshots:
     dependencies:
       undici-types: 7.19.2
 
-  '@types/pdfkit@0.17.5':
+  '@types/pdfkit@0.17.6':
     dependencies:
       '@types/node': 25.6.0
 
