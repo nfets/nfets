@@ -1,3 +1,4 @@
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto, { type X509Certificate, type KeyObject } from 'node:crypto';
@@ -19,12 +20,16 @@ import type { SignerRepository } from '@nfets/core/domain/repositories/signer-re
 
 import { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
 import { ASN1 } from '@nfets/core/application';
+import { WincryptSignerRepository } from './wincrypt-signer-repository';
+import { CryptoSignerRepository } from './crypto-signer-repository';
 
 export class NativeCertificateRepository implements CertificateRepository {
   public constructor(
     private readonly httpClient: HttpClient,
-    private readonly signer: SignerRepository,
     private readonly cache: CacheAdapter = new NullCacheAdapter(),
+    private readonly signer: SignerRepository = os.platform() === 'win32'
+      ? new WincryptSignerRepository()
+      : new CryptoSignerRepository(),
   ) {}
 
   public async read(

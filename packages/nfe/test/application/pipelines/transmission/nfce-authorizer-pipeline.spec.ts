@@ -13,13 +13,8 @@ import { expectIsRight } from '@nfets/test/expects';
 import { NfeRemoteTransmitter } from '@nfets/nfe/application/transmission/nfe-transmitter';
 import { NfeXmlBuilderPipeline } from '@nfets/nfe/application';
 import { NfeAuthorizerPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-authorizer-pipeline';
-import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 import { Environment, StateCodes, type StateCode } from '@nfets/core/domain';
-import {
-  getCnpjCertificate,
-  getCertificatePassword,
-  getCnpjCertificateReadRequest,
-} from '@nfets/test/certificates';
+import { getCnpjCertificateReadRequest } from '@nfets/test/certificates';
 import {
   Xml2JsToolkit,
   MemoryCacheAdapter,
@@ -216,8 +211,7 @@ const buildXml = async (
 };
 
 describe('nfe authorizer pipeline (contingency) (unit)', () => {
-  const password = getCertificatePassword(),
-    pfxPathOrBase64 = getCnpjCertificate();
+  const certificateRequest = getCnpjCertificateReadRequest();
 
   let pipeline: NfeAuthorizerPipeline;
   let spy: jest.SpyInstance;
@@ -225,11 +219,10 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
   beforeAll(async () => {
     const certificates = new NativeCertificateRepository(
       axios.create(),
-      new CryptoSignerRepository(),
       new MemoryCacheAdapter(),
     );
 
-    const certificate = await certificates.read({ pfxPathOrBase64, password });
+    const certificate = await certificates.read(certificateRequest);
     certificates.read = jest.fn().mockResolvedValue(certificate);
 
     class MockableNfeAuthorizerPipeline extends NfeAuthorizerPipeline {
@@ -276,10 +269,7 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
       }
     }
 
-    pipeline = new MockableNfeAuthorizerPipeline({
-      pfxPathOrBase64,
-      password,
-    });
+    pipeline = new MockableNfeAuthorizerPipeline(certificateRequest);
   });
 
   const states = Object.entries(StateCodes) as [
@@ -314,19 +304,17 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
 });
 
 describe('nfe success authorizer pipeline (unit)', () => {
-  const password = getCertificatePassword(),
-    pfxPathOrBase64 = getCnpjCertificate();
+  const certificateRequest = getCnpjCertificateReadRequest();
 
   let pipeline: NfeAuthorizerPipeline;
 
   beforeAll(async () => {
     const certificates = new NativeCertificateRepository(
       axios.create(),
-      new CryptoSignerRepository(),
       new MemoryCacheAdapter(),
     );
 
-    const certificate = await certificates.read({ pfxPathOrBase64, password });
+    const certificate = await certificates.read(certificateRequest);
     certificates.read = jest.fn().mockResolvedValue(certificate);
 
     class MockableNfeAuthorizerPipeline extends NfeAuthorizerPipeline {
@@ -369,10 +357,7 @@ describe('nfe success authorizer pipeline (unit)', () => {
       protected override readonly certificates = certificates;
     }
 
-    pipeline = new MockableNfeAuthorizerPipeline({
-      pfxPathOrBase64,
-      password,
-    });
+    pipeline = new MockableNfeAuthorizerPipeline(certificateRequest);
   });
 
   it('should authorize a single nfe and return the correct response with protocol', async () => {
@@ -731,19 +716,17 @@ ${NFe}
 });
 
 describe('nfe with failures authorizer pipeline (unit)', () => {
-  const password = getCertificatePassword(),
-    pfxPathOrBase64 = getCnpjCertificate();
+  const certificateRequest = getCnpjCertificateReadRequest();
 
   let pipeline: NfeAuthorizerPipeline;
 
   beforeAll(async () => {
     const certificates = new NativeCertificateRepository(
       axios.create(),
-      new CryptoSignerRepository(),
       new MemoryCacheAdapter(),
     );
 
-    const certificate = await certificates.read({ pfxPathOrBase64, password });
+    const certificate = await certificates.read(certificateRequest);
     certificates.read = jest.fn().mockResolvedValue(certificate);
 
     class MockableNfeAuthorizerPipeline extends NfeAuthorizerPipeline {
@@ -803,10 +786,7 @@ describe('nfe with failures authorizer pipeline (unit)', () => {
       protected override readonly certificates = certificates;
     }
 
-    pipeline = new MockableNfeAuthorizerPipeline({
-      pfxPathOrBase64,
-      password,
-    });
+    pipeline = new MockableNfeAuthorizerPipeline(certificateRequest);
   });
 
   it('should attempt to authorize a batch of nfe and return the correct response with protocol to first and not to second, due the rejection', async () => {

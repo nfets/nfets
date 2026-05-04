@@ -29,7 +29,6 @@ import {
   type SynchronousAutorizacaoResponse,
 } from '@nfets/nfe/domain';
 import { type ProtNFe } from '@nfets/nfe/domain/entities/nfe/prot-nfe';
-import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 
 const SEFAZ_TIMEOUT_SC = 60 * 1000;
 
@@ -52,7 +51,6 @@ describe('soap nfce remote transmission (integration) (destructive)', () => {
   beforeAll(async () => {
     repository = new NativeCertificateRepository(
       axios.create(),
-      new CryptoSignerRepository(),
       new MemoryCacheAdapter(),
     );
 

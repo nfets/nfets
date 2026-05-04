@@ -25,7 +25,6 @@ import axios from 'axios';
 import type { Emit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
 import type { Ide } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
-import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 import {
   type AutorizacaoResponse,
   type SynchronousAutorizacaoResponse,
@@ -47,7 +46,6 @@ describe('soap nfe remote transmission (integration) (not destructive)', () => {
   beforeAll(async () => {
     repository = new NativeCertificateRepository(
       axios.create(),
-      new CryptoSignerRepository(),
       new MemoryCacheAdapter(),
     );
 
@@ -122,7 +120,6 @@ describe('soap nfe remote transmission (integration) (destructive)', () => {
   beforeAll(async () => {
     repository = new NativeCertificateRepository(
       axios.create(),
-      new CryptoSignerRepository(),
       new MemoryCacheAdapter(),
     );
 

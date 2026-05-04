@@ -1,5 +1,4 @@
 import axios from 'axios';
-import os from 'node:os';
 
 import type {
   CacheAdapter,
@@ -22,8 +21,6 @@ import {
 } from '@nfets/core/application';
 
 import type { NfeRemoteClient } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
-import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
-import { WincryptSignerRepository } from '@nfets/core/infrastructure/repositories/wincrypt-signer-repository';
 
 export abstract class Pipeline {
   protected readonly xmlns = 'http://www.portalfiscal.inf.br/nfe';
@@ -34,14 +31,9 @@ export abstract class Pipeline {
 
   protected readonly caching: CacheAdapter = new MemoryCacheAdapter();
 
-  protected readonly signerRepository =
-    os.platform() === 'win32'
-      ? new WincryptSignerRepository()
-      : new CryptoSignerRepository();
   protected readonly certificates: CertificateRepository =
     new NativeCertificateRepository(
       this.http,
-      this.signerRepository,
       this.caching,
     );
 
