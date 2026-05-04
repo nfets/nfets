@@ -70,3 +70,11 @@ export const getCnpjCertificateReadRequest =
       getCertificatePassword(),
     );
   };
+
+export const getCpfCertificateReadRequest =
+  (): ReadCertificateRequestForPipelineTests => {
+    return readCertificateRequestForPipelineTests(
+      getCpfCertificate(),
+      getCertificatePassword(),
+    );
+  };

@@ -8,8 +8,7 @@ import { NativeCertificateRepository } from '@nfets/core/infrastructure/reposito
 import { MemoryCacheAdapter } from '@nfets/core/infrastructure/repositories/memory-cache-adapter';
 import type { ReadCertificateResponse } from '@nfets/core/domain/entities/certificate/certificate';
 import {
-  getCertificatePassword,
-  getCnpjCertificate,
+  getCnpjCertificateReadRequest,
 } from '@nfets/test/certificates';
 import type { CertificateRepository } from '@nfets/core/domain/repositories/certificate-repository';
 import type { XmlToolkit } from '@nfets/core/domain/entities/xml/xml-toolkit';
@@ -77,8 +76,7 @@ describe('wincrypt xml signer (unit)', () => {
   // you must install the certificates located in the packages/test/fixtures/certificates directory in the certificate store
   // double click on the certificate pfx file to install it
   // password is: 123456
-  const password = getCertificatePassword(),
-    validCnpjPfxCertificate = getCnpjCertificate();
+  const certificateRequest = getCnpjCertificateReadRequest();
 
   const toolkit: XmlToolkit = new Xml2JsToolkit();
   let certificate: ReadCertificateResponse | undefined;
@@ -89,10 +87,9 @@ describe('wincrypt xml signer (unit)', () => {
       new MemoryCacheAdapter(),
     );
 
-    const certificateOrError = await certificateRepository.read({
-      pfxPathOrBase64: validCnpjPfxCertificate,
-      password,
-    });
+    const certificateOrError = await certificateRepository.read(
+      certificateRequest,
+    );
 
     if (certificateOrError.isLeft()) return;
     certificate = certificateOrError.value;
