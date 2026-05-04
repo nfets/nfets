@@ -1,11 +1,15 @@
 import { NfeXmlBuilderPipeline } from '@nfets/nfe/application/pipelines/xml/nfe-xml-builder-pipeline';
 import { TpEmis, type NFe } from '@nfets/nfe/domain';
-import {
-  getCnpjCertificateReadRequest,
-} from '@nfets/test/certificates';
+import { getCnpjCertificateReadRequest } from '@nfets/test/certificates';
 import { expectIsRight } from '@nfets/test/expects';
+import { ensurePlatform } from '@nfets/test/ensure-platform';
 
 describe('NfeXmlBuilderPipeline', () => {
+  if (process.env.CI && ensurePlatform('win32'))
+    return it.skip(
+      "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
+    );
+
   const certificateRequest = getCnpjCertificateReadRequest();
 
   it('should build a valid nfe (55) xml', async () => {

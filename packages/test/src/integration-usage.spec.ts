@@ -1,29 +1,31 @@
 import path from 'node:path';
-import axios from 'axios';
 import {
   getCnpjCertificate,
   getCertificatePassword,
 } from '../src/certificates';
-
-const nullCacheAdapterPath = path.resolve(
-  __dirname,
-  '../../core/dist/infrastructure/repositories/null-cache-adapter.js',
-);
+import { ensurePlatform } from './ensure-platform';
 
 describe('Real-world Usage Simulation', () => {
+  if (process.env.CI && ensurePlatform('win32')) {
+    return it.skip(`Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.
+      The Typical Root Cause: The Certificate Location
+      The primary reason you cannot access the certificate is likely that your application is trying to access a certificate installed in a user-specific store,
+      but the GitHub Actions runner process is running under a system or service account that does not have access to that specific user's store. `, () =>
+      void 0);
+  }
+
   describe('Using @nfets/core for signing', () => {
     it('should be able to create a XmlSigner instance', async () => {
       const corePath = path.resolve(__dirname, '../../core/dist/index.js');
       const { XmlSigner, NativeCertificateRepository } = await import(corePath);
-      const { NullCacheAdapter } = await import(nullCacheAdapterPath);
 
       const certificatePath = getCnpjCertificate();
       const password = getCertificatePassword();
 
-      const certificateRepository = new NativeCertificateRepository(
-        axios.create(),
-        new NullCacheAdapter(),
-      );
+      const certificateRepository = new NativeCertificateRepository({
+        pfx: certificatePath,
+        password,
+      });
 
       const signer = new XmlSigner(certificateRepository);
 
@@ -36,15 +38,14 @@ describe('Real-world Usage Simulation', () => {
       const { EntitySigner, NativeCertificateRepository } = await import(
         corePath
       );
-      const { NullCacheAdapter } = await import(nullCacheAdapterPath);
 
       const certificatePath = getCnpjCertificate();
       const password = getCertificatePassword();
 
-      const certificateRepository = new NativeCertificateRepository(
-        axios.create(),
-        new NullCacheAdapter(),
-      );
+      const certificateRepository = new NativeCertificateRepository({
+        pfx: certificatePath,
+        password,
+      });
 
       const signer = new EntitySigner(certificateRepository);
 
@@ -114,15 +115,13 @@ describe('Real-world Usage Simulation', () => {
       const core = await import(corePath);
       const nfe = await import(nfePath);
 
-      const { NullCacheAdapter } = await import(nullCacheAdapterPath);
-
       const certificatePath = getCnpjCertificate();
       const password = getCertificatePassword();
 
-      const certificateRepository = new core.NativeCertificateRepository(
-        axios.create(),
-        new NullCacheAdapter(),
-      );
+      const certificateRepository = new core.NativeCertificateRepository({
+        pfx: certificatePath,
+        password,
+      });
 
       const signer = new core.XmlSigner(certificateRepository);
       const nfeBuilder = new nfe.NfeXmlBuilder();

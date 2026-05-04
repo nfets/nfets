@@ -28,6 +28,7 @@ import {
   getCnpjCertificate,
   getCertificatePassword,
 } from '@nfets/test/certificates';
+import { ensurePlatform } from '@nfets/test/ensure-platform';
 import {
   createValidIde,
   createValidPag,
@@ -525,6 +526,11 @@ describe('NfceQrcode', () => {
 
   /** Monta NFe com `NfeXmlBuilder` (PL_009_V4) e valida o XML assinado com `nfe_v4.00.xsd` do PL_010_V1.30 — inclusive os `xs:pattern` de `infNFeSupl/qrCode`. */
   describe('validação XSD (PL_010_V1.30 / nfe_v4.00.xsd)', () => {
+    if (process.env.CI && ensurePlatform('win32'))
+      return it.skip(
+        "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
+      );
+
     let toolkit: XmlToolkit;
     let signer: XmlSigner;
     let certificate: ReadCertificateResponse;
