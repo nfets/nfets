@@ -7,15 +7,16 @@ import { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
 import { NativeCertificateRepository } from '@nfets/core/infrastructure/repositories/native-certificate-repository';
 import { MemoryCacheAdapter } from '@nfets/core/infrastructure/repositories/memory-cache-adapter';
 import type { ReadCertificateResponse } from '@nfets/core/domain/entities/certificate/certificate';
-import {
-  getCnpjCertificateReadRequest,
-} from '@nfets/test/certificates';
+import { getCnpjCertificateReadRequest } from '@nfets/test/certificates';
 import type { CertificateRepository } from '@nfets/core/domain/repositories/certificate-repository';
 import type { XmlToolkit } from '@nfets/core/domain/entities/xml/xml-toolkit';
 
 import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
+import { ensurePlatform } from '@nfets/test/ensure-platform';
 
 describe('xml signer (integration)', () => {
+  if (!ensurePlatform('linux')) return;
+
   let certificate: ReadCertificateResponse | undefined;
   const toolkit: XmlToolkit = new Xml2JsToolkit();
   let certificateRepository: CertificateRepository;
@@ -75,9 +76,8 @@ describe('xml signer (unit)', () => {
       new MemoryCacheAdapter(),
     );
 
-    const certificateOrError = await certificateRepository.read(
-      certificateRequest,
-    );
+    const certificateOrError =
+      await certificateRepository.read(certificateRequest);
 
     if (certificateOrError.isLeft()) return;
     certificate = certificateOrError.value;

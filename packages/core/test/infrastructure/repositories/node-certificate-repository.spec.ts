@@ -19,10 +19,12 @@ import { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
 import { ensurePlatform } from '@nfets/test/ensure-platform';
 
 describe('node certificate repository (unit)', () => {
+  if (!ensurePlatform('linux')) return;
+
   const password = getCertificatePassword(),
     validCnpjPfxCertificate = getCnpjCertificate();
-  const cnpjCertificateRequest = getCnpjCertificateReadRequest();
   const cpfCertificateRequest = getCpfCertificateReadRequest();
+  const cnpjCertificateRequest = getCnpjCertificateReadRequest();
 
   const repository = new NativeCertificateRepository(
     axios.create(),
