@@ -1,3 +1,5 @@
+import os from 'node:os';
+
 import type { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
 import type { NfeRemoteClient } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
 import type { ReadCertificateRequest } from '@nfets/core/domain';
@@ -25,6 +27,7 @@ import {
   MemoryCacheAdapter,
   NativeCertificateRepository,
 } from '@nfets/core';
+import { WincryptSignerRepository } from '@nfets/core/infrastructure/repositories/wincrypt-signer-repository';
 
 const NORMAL_WEBSERVICE_URLS: Record<StateCode, string> = {
   [StateCodes.AC]:
@@ -223,9 +226,13 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
   let spy: jest.SpyInstance;
 
   beforeAll(async () => {
+    const signerRepositpry =
+      os.platform() === 'win32'
+        ? new WincryptSignerRepository()
+        : new CryptoSignerRepository();
     const certificates = new NativeCertificateRepository(
       axios.create(),
-      new CryptoSignerRepository(),
+      signerRepositpry,
       new MemoryCacheAdapter(),
     );
 
@@ -320,9 +327,13 @@ describe('nfe authorizer pipeline (unit)', () => {
   let pipeline: NfeAuthorizerPipeline;
 
   beforeAll(async () => {
+    const signerRepositpry =
+      os.platform() === 'win32'
+        ? new WincryptSignerRepository()
+        : new CryptoSignerRepository();
     const certificates = new NativeCertificateRepository(
       axios.create(),
-      new CryptoSignerRepository(),
+      signerRepositpry,
       new MemoryCacheAdapter(),
     );
 
