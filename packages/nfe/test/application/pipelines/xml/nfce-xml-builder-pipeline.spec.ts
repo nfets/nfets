@@ -1,7 +1,4 @@
-import {
-  getCnpjCertificate,
-  getCertificatePassword,
-} from '@nfets/test/certificates';
+import { getCnpjCertificateReadRequest } from '@nfets/test/certificates';
 import {
   expectInOrder,
   expectIsLeft,
@@ -22,10 +19,7 @@ import type { NFe, NfceTransmitterOptions } from '@nfets/nfe/domain';
 describe('NfceXmlBuilderPipeline', () => {
   const CHAVE = '52240646755763000143550990000080181785272515';
 
-  const certificate = {
-    pfxPathOrBase64: getCnpjCertificate(),
-    password: getCertificatePassword(),
-  };
+  const certificate = getCnpjCertificateReadRequest();
 
   const buildNfceMod65Sample = (
     pipeline: NfceXmlBuilderPipeline<NFe>,

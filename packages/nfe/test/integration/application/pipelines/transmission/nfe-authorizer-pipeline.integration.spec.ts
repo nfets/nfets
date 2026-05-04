@@ -7,6 +7,7 @@ import { NfeXmlBuilder } from '@nfets/nfe';
 import { expectIsRight } from '@nfets/test/expects';
 import { NfeAuthorizerPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-authorizer-pipeline';
 import { Decimal, Xml2JsToolkit } from '@nfets/core/infrastructure';
+import { readCertificateRequestForPipelineTests } from '@nfets/test/certificates';
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
 import { StateCodes, Environment, type StateAcronym } from '@nfets/core/domain';
 
@@ -25,10 +26,12 @@ describe('nfe authorizer pipeline (integration) (destructive)', () => {
   let pipeline: NfeAuthorizerPipeline;
 
   beforeAll(() => {
-    pipeline = new NfeAuthorizerPipeline({
-      pfxPathOrBase64: certificateFromEnvironment.certificatePath,
-      password: certificateFromEnvironment.password,
-    });
+    pipeline = new NfeAuthorizerPipeline(
+      readCertificateRequestForPipelineTests(
+        certificateFromEnvironment.certificatePath,
+        certificateFromEnvironment.password,
+      ),
+    );
   });
 
   it(

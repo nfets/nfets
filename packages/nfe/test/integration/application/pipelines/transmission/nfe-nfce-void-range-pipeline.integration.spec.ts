@@ -1,7 +1,8 @@
 import { Environment, StateCodes, type StateAcronym } from '@nfets/core/domain';
+import { readCertificateRequestForPipelineTests } from '@nfets/test/certificates';
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
 import { expectIsRight } from '@nfets/test/expects';
-import { NfeNfceVoidRangePipeline } from '@nfets/nfe/application/pipelines/transmission/nfce-void-range-pipeline';
+import { NfceVoidRangePipeline } from '@nfets/nfe/application/pipelines/transmission/nfce-void-range-pipeline';
 
 const SEFAZ_TIMEOUT_SC = 60 * 1000;
 
@@ -14,13 +15,15 @@ describe('nfe nfce void range (inutilização) pipeline (integration) (destructi
     ensureIntegrationTestsHasValidCertificate();
   if (certificateFromEnvironment === undefined) return;
 
-  let pipeline: NfeNfceVoidRangePipeline;
+  let pipeline: NfceVoidRangePipeline;
 
   beforeAll(() => {
-    pipeline = new NfeNfceVoidRangePipeline({
-      pfxPathOrBase64: certificateFromEnvironment.certificatePath,
-      password: certificateFromEnvironment.password,
-    });
+    pipeline = new NfceVoidRangePipeline(
+      readCertificateRequestForPipelineTests(
+        certificateFromEnvironment.certificatePath,
+        certificateFromEnvironment.password,
+      ),
+    );
   });
 
   it(

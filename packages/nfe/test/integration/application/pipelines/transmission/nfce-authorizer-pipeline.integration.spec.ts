@@ -6,6 +6,7 @@ import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 import { expectIsRight } from '@nfets/test/expects';
 import { Decimal, Xml2JsToolkit } from '@nfets/core/infrastructure';
 import { NfceAuthorizerPipeline, NfceXmlBuilder } from '@nfets/nfe/application';
+import { readCertificateRequestForPipelineTests } from '@nfets/test/certificates';
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
 import { StateCodes, Environment, type StateAcronym } from '@nfets/core/domain';
 
@@ -24,10 +25,12 @@ describe('nfce authorizer pipeline (integration) (destructive)', () => {
   let pipeline: NfceAuthorizerPipeline;
 
   beforeAll(() => {
-    pipeline = new NfceAuthorizerPipeline({
-      pfxPathOrBase64: certificateFromEnvironment.certificatePath,
-      password: certificateFromEnvironment.password,
-    });
+    pipeline = new NfceAuthorizerPipeline(
+      readCertificateRequestForPipelineTests(
+        certificateFromEnvironment.certificatePath,
+        certificateFromEnvironment.password,
+      ),
+    );
   });
 
   it(

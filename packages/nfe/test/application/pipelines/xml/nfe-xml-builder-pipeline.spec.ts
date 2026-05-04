@@ -1,14 +1,12 @@
 import { NfeXmlBuilderPipeline } from '@nfets/nfe/application/pipelines/xml/nfe-xml-builder-pipeline';
 import { TpEmis, type NFe } from '@nfets/nfe/domain';
 import {
-  getCertificatePassword,
-  getCnpjCertificate,
+  getCnpjCertificateReadRequest,
 } from '@nfets/test/certificates';
 import { expectIsRight } from '@nfets/test/expects';
 
 describe('NfeXmlBuilderPipeline', () => {
-  const password = getCertificatePassword(),
-    validCnpjPfxCertificate = getCnpjCertificate();
+  const certificateRequest = getCnpjCertificateReadRequest();
 
   it('should build a valid nfe (55) xml', async () => {
     interface Item {
@@ -31,10 +29,7 @@ describe('NfeXmlBuilderPipeline', () => {
       },
     ] as [Item, ...Item[]];
 
-    const pipeline = new NfeXmlBuilderPipeline<NFe>({
-      pfxPathOrBase64: validCnpjPfxCertificate,
-      password,
-    });
+    const pipeline = new NfeXmlBuilderPipeline<NFe>(certificateRequest);
 
     const builder = pipeline.build((builder) =>
       builder
