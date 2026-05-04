@@ -15,6 +15,7 @@ import {
 
 import type { Client, CertificateRepository } from '@nfets/core/domain';
 import { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
+import { ensurePlatform } from '@nfets/test/ensure-platform';
 
 type TestSoapClient = Client & {
   nfeStatusServicoNF(args: { consStatServ: unknown }): Promise<{
@@ -27,7 +28,9 @@ type TestSoapClient = Client & {
 
 class TestSoapRemoteTransmissionRepository extends SoapRemoteTransmissionRepository<TestSoapClient> {}
 
-describe('soap remote transmission nfe (integration) (not destructive)', () => {
+describe('soap remote transmission nfe (integration) (not destructive) (linux)', () => {
+  if (!ensurePlatform('linux')) return;
+
   const certificateFromEnvironment =
     ensureIntegrationTestsHasValidCertificate();
   if (certificateFromEnvironment === undefined) return;
@@ -68,6 +71,125 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
       const agent = (transmissionWithoutCert as any).httpsAgent;
       expect(agent).toBeDefined();
     });
+  });
+
+  it('should not return schema failed when payload is invalid, due the xsd validation', async () => {
+    const response = await transmission.send({
+      root: 'nfeDadosMsg',
+      xsd: path.resolve(
+        __dirname,
+        '../../../../nfe/schemas/PL_009_V4',
+        'consStatServ_v4.00.xsd',
+      ),
+      payload: {
+        consStatServ: {
+          $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
+          someInvalidTag: 'xD',
+        },
+      },
+      method: 'nfeStatusServicoNF',
+      url: 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx',
+    });
+
+    expectIsLeft(response);
+    expect(response.value).toStrictEqual(
+      new NFeTsError(
+        `Invalid xml schema: Element '{http://www.portalfiscal.inf.br/nfe}someInvalidTag': This element is not expected. Expected is ( {http://www.portalfiscal.inf.br/nfe}tpAmb ).
+`,
+      ),
+    );
+  });
+
+  it('should return rejection result when payload is invalid and valid xml content', async () => {
+    const consStatServ = {
+      $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
+      tpAmb: '2',
+      cUF: '42',
+      xServ: 'STATUS',
+    };
+
+    const response = await transmission.send({
+      root: 'nfeDadosMsg',
+      xsd: path.resolve(
+        __dirname,
+        '../../../../nfe/schemas/PL_009_V4',
+        'consStatServ_v4.00.xsd',
+      ),
+      payload: { consStatServ },
+      method: 'nfeStatusServicoNF',
+      url: 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx',
+    });
+
+    expectIsRight(response);
+    expect(response.value).toMatchObject({
+      retConsStatServ: {
+        cStat: '289',
+        xMotivo: 'Rejeição: Código da UF informada diverge da UF solicitada',
+      },
+    });
+  });
+
+  it('should return schema result when payload is valid and valid xml content', async () => {
+    const consStatServ = {
+      $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
+      tpAmb: '2',
+      cUF: '35',
+      xServ: 'STATUS',
+    };
+
+    const response = await transmission.send({
+      root: 'nfeDadosMsg',
+      payload: { consStatServ },
+      xsd: path.resolve(
+        __dirname,
+        '../../../../nfe/schemas/PL_009_V4',
+        'consStatServ_v4.00.xsd',
+      ),
+      method: 'nfeStatusServicoNF',
+      url: 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx',
+    });
+
+    expectIsRight(response);
+    expect(response.value).toMatchObject({
+      retConsStatServ: {
+        cStat: '107',
+        xMotivo: 'Serviço em Operação',
+      },
+    });
+  });
+});
+
+describe('soap remote transmission nfe (integration) (windows)', () => {
+  if (process.platform !== 'win32')
+    return (it.skip('test only for win32 platform', () => void 0), void 0);
+
+  const certificateFromEnvironment =
+    ensureIntegrationTestsHasValidCertificate();
+  if (certificateFromEnvironment === undefined) return;
+
+  const toolkit = new Xml2JsToolkit();
+
+  let transmission: TestSoapRemoteTransmissionRepository;
+  let repository: CertificateRepository;
+
+  beforeAll(async () => {
+    repository = new NativeCertificateRepository(
+      axios.create(),
+      new MemoryCacheAdapter(),
+    );
+    transmission = new TestSoapRemoteTransmissionRepository(
+      toolkit,
+      repository,
+    );
+
+    const result = await repository.read({
+      pfxPathOrBase64: certificateFromEnvironment.certificatePath,
+      password: certificateFromEnvironment.password,
+    });
+
+    if (result.isRight()) {
+      transmission.setCertificate(result.value);
+    }
   });
 
   it('should not return schema failed when payload is invalid, due the xsd validation', async () => {
