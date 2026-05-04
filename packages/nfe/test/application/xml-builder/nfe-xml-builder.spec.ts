@@ -39,12 +39,18 @@ import {
   expectNotNull,
 } from '@nfets/test/expects';
 import { getCnpjCertificateReadRequest } from '@nfets/test/certificates';
+import { ensurePlatform } from '@nfets/test/ensure-platform';
 import Schemas, {
   schemas,
 } from '@nfets/nfe/domain/entities/transmission/schemas';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 
 describe('xml builder with xml2js builder', () => {
+  if (process.env.CI && ensurePlatform('win32'))
+    return it.skip(
+      "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
+    );
+
   const toolkit: XmlToolkit = new Xml2JsToolkit();
   const leiauteNFe4_00 = path.resolve(
     schemas(),
@@ -64,9 +70,8 @@ describe('xml builder with xml2js builder', () => {
       new MemoryCacheAdapter(),
     );
 
-    const certificateOrError = await certificateRepository.read(
-      certificateRequest,
-    );
+    const certificateOrError =
+      await certificateRepository.read(certificateRequest);
 
     signer = new XmlSigner(
       toolkit,

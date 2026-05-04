@@ -15,6 +15,7 @@ import { NfeXmlBuilderPipeline } from '@nfets/nfe/application';
 import { NfeAuthorizerPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-authorizer-pipeline';
 import { Environment, StateCodes, type StateCode } from '@nfets/core/domain';
 import { getCnpjCertificateReadRequest } from '@nfets/test/certificates';
+import { ensurePlatform } from '@nfets/test/ensure-platform';
 import {
   Xml2JsToolkit,
   MemoryCacheAdapter,
@@ -211,6 +212,11 @@ const buildXml = async (
 };
 
 describe('nfe authorizer pipeline (contingency) (unit)', () => {
+  if (process.env.CI && ensurePlatform('win32'))
+    return it.skip(
+      "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
+    );
+
   const certificateRequest = getCnpjCertificateReadRequest();
 
   let pipeline: NfeAuthorizerPipeline;
@@ -304,6 +310,11 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
 });
 
 describe('nfe success authorizer pipeline (unit)', () => {
+  if (process.env.CI && ensurePlatform('win32'))
+    return it.skip(
+      "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
+    );
+
   const certificateRequest = getCnpjCertificateReadRequest();
 
   let pipeline: NfeAuthorizerPipeline;
@@ -716,6 +727,11 @@ ${NFe}
 });
 
 describe('nfe with failures authorizer pipeline (unit)', () => {
+  if (process.env.CI && ensurePlatform('win32'))
+    return it.skip(
+      "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
+    );
+
   const certificateRequest = getCnpjCertificateReadRequest();
 
   let pipeline: NfeAuthorizerPipeline;

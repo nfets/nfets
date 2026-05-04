@@ -15,8 +15,14 @@ import {
 } from '../../../fixtures/data';
 import type { StateCode } from '@nfets/core/domain';
 import type { NFe, NfceTransmitterOptions } from '@nfets/nfe/domain';
+import { ensurePlatform } from '@nfets/test/ensure-platform';
 
 describe('NfceXmlBuilderPipeline', () => {
+  if (process.env.CI && ensurePlatform('win32'))
+    return it.skip(
+      "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
+    );
+
   const CHAVE = '52240646755763000143550990000080181785272515';
 
   const certificate = getCnpjCertificateReadRequest();
