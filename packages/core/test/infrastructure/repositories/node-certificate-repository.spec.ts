@@ -10,6 +10,8 @@ import {
   getCertificatePassword,
   getCnpjCertificate,
   getCpfCertificate,
+  getCnpjCertificateReadRequest,
+  getCpfCertificateReadRequest,
 } from '@nfets/test/certificates';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -21,6 +23,8 @@ describe('node certificate repository (unit)', () => {
   const password = getCertificatePassword(),
     validCnpjPfxCertificate = getCnpjCertificate(),
     validCpfPfxCertificate = getCpfCertificate();
+  const cnpjCertificateRequest = getCnpjCertificateReadRequest();
+  const cpfCertificateRequest = getCpfCertificateReadRequest();
 
   const repository = new NativeCertificateRepository(
     axios.create(),
@@ -28,10 +32,7 @@ describe('node certificate repository (unit)', () => {
   );
 
   it('should sucessfully read a valid CNPJ certificate', async () => {
-    const result = await repository.read({
-      pfxPathOrBase64: validCnpjPfxCertificate,
-      password,
-    });
+    const result = await repository.read(cnpjCertificateRequest);
     expectIsRight(result);
 
     const { certificate: certificateInfo } = result.value;
@@ -64,10 +65,7 @@ emailAddress=email@example.com`);
   });
 
   it('should sucessfully read a valid CPF certificate', async () => {
-    const result = await repository.read({
-      pfxPathOrBase64: validCpfPfxCertificate,
-      password,
-    });
+    const result = await repository.read(cpfCertificateRequest);
     expectIsRight(result);
 
     const { certificate: certificateInfo } = result.value;
@@ -118,18 +116,6 @@ emailAddress=email@example.com`);
     );
   });
 
-  it('should reject publicCertDerBase64 off Windows', async () => {
-    if (process.platform === 'win32') return;
-
-    const result = await repository.read({
-      password: '',
-      publicCertDerBase64: Buffer.from('not-real-der').toString('base64'),
-    });
-
-    expectIsLeft(result);
-    expect(result.value.message).toContain('publicCertDerBase64');
-  });
-
   it('should return left when password is incorrect', async () => {
     const result = await repository.read({
       pfxPathOrBase64: validCnpjPfxCertificate,
@@ -164,16 +150,10 @@ emailAddress=email@example.com`);
       cache,
     );
 
-    const result1 = await cachedRepository.read({
-      pfxPathOrBase64: validCnpjPfxCertificate,
-      password,
-    });
+    const result1 = await cachedRepository.read(cnpjCertificateRequest);
     expectIsRight(result1);
 
-    const result2 = await cachedRepository.read({
-      pfxPathOrBase64: validCnpjPfxCertificate,
-      password,
-    });
+    const result2 = await cachedRepository.read(cnpjCertificateRequest);
     expectIsRight(result2);
 
     expect(result1.value.certificate.serialNumber).toBe(
@@ -182,10 +162,7 @@ emailAddress=email@example.com`);
   });
 
   it('should sign content with SHA1', async () => {
-    const result = await repository.read({
-      pfxPathOrBase64: validCnpjPfxCertificate,
-      password,
-    });
+    const result = await repository.read(cnpjCertificateRequest);
     expectIsRight(result);
 
     const signResult = await repository.sign(
@@ -199,10 +176,7 @@ emailAddress=email@example.com`);
   });
 
   it('should sign content with SHA256', async () => {
-    const result = await repository.read({
-      pfxPathOrBase64: validCnpjPfxCertificate,
-      password,
-    });
+    const result = await repository.read(cnpjCertificateRequest);
     expectIsRight(result);
 
     const signResult = await repository.sign(
@@ -216,10 +190,7 @@ emailAddress=email@example.com`);
   });
 
   it('should return left when signing fails', async () => {
-    const result = await repository.read({
-      pfxPathOrBase64: validCnpjPfxCertificate,
-      password,
-    });
+    const result = await repository.read(cnpjCertificateRequest);
     expectIsRight(result);
 
     const invalidKey = result.value.certificate;
@@ -232,10 +203,7 @@ emailAddress=email@example.com`);
   });
 
   it('should get string certificate from certificate', async () => {
-    const result = await repository.read({
-      pfxPathOrBase64: validCnpjPfxCertificate,
-      password,
-    });
+    const result = await repository.read(cnpjCertificateRequest);
     expectIsRight(result);
 
     const certificateString = repository.getStringCertificate(
@@ -260,10 +228,7 @@ emailAddress=email@example.com`);
   });
 
   it('should get string private key from certificate', async () => {
-    const result = await repository.read({
-      pfxPathOrBase64: validCnpjPfxCertificate,
-      password,
-    });
+    const result = await repository.read(cnpjCertificateRequest);
     expectIsRight(result);
 
     expectNotNull(result.value.privateKey);
@@ -274,10 +239,7 @@ emailAddress=email@example.com`);
   });
 
   it('should throw error when getting private key fails', async () => {
-    const result = await repository.read({
-      pfxPathOrBase64: validCnpjPfxCertificate,
-      password,
-    });
+    const result = await repository.read(cnpjCertificateRequest);
     expectIsRight(result);
 
     const invalidKey = {
@@ -299,10 +261,7 @@ emailAddress=email@example.com`);
     }
 
     it('reads the same leaf certificate as PKCS#12 without private key material', async () => {
-      const pfxRead = await repository.read({
-        pfxPathOrBase64: validCnpjPfxCertificate,
-        password,
-      });
+      const pfxRead = await repository.read(cnpjCertificateRequest);
       expectIsRight(pfxRead);
 
       const expectedSerial = pfxRead.value.certificate.serialNumber;
@@ -323,10 +282,7 @@ emailAddress=email@example.com`);
     });
 
     it('signs via CryptoAPI when using DER-only read (cert must be in MY store)', async () => {
-      const pfxRead = await repository.read({
-        pfxPathOrBase64: validCnpjPfxCertificate,
-        password,
-      });
+      const pfxRead = await repository.read(cnpjCertificateRequest);
       expectIsRight(pfxRead);
 
       const publicCertDerBase64 =

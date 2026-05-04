@@ -4,15 +4,13 @@ import { NativeCertificateRepository } from '@nfets/core/infrastructure/reposito
 import { MemoryCacheAdapter } from '@nfets/core/infrastructure/repositories/memory-cache-adapter';
 import { expectIsRight } from '@nfets/test/expects';
 import {
-  getCertificatePassword,
-  getCnpjCertificate,
-  getCpfCertificate,
+  getCnpjCertificateReadRequest,
+  getCpfCertificateReadRequest,
 } from '@nfets/test/certificates';
 
 describe('ASN1 (unit)', () => {
-  const password = getCertificatePassword();
-  const validCnpjPfxCertificate = getCnpjCertificate();
-  const validCpfPfxCertificate = getCpfCertificate();
+  const cnpjCertificateRequest = getCnpjCertificateReadRequest();
+  const cpfCertificateRequest = getCpfCertificateReadRequest();
 
   const certificateRepository = new NativeCertificateRepository(
     axios.create(),
@@ -22,10 +20,7 @@ describe('ASN1 (unit)', () => {
   const asn1 = new ASN1();
 
   it('should extract certificate info from CNPJ certificate', async () => {
-    const result = await certificateRepository.read({
-      pfxPathOrBase64: validCnpjPfxCertificate,
-      password,
-    });
+    const result = await certificateRepository.read(cnpjCertificateRequest);
     expectIsRight(result);
 
     const certificateInfo = asn1.extractCertificateInfo(
@@ -44,10 +39,7 @@ describe('ASN1 (unit)', () => {
   });
 
   it('should extract certificate info from CPF certificate', async () => {
-    const result = await certificateRepository.read({
-      pfxPathOrBase64: validCpfPfxCertificate,
-      password,
-    });
+    const result = await certificateRepository.read(cpfCertificateRequest);
     expectIsRight(result);
 
     const certificateInfo = asn1.extractCertificateInfo(
@@ -69,10 +61,7 @@ describe('ASN1 (unit)', () => {
   });
 
   it('should handle certificate with CN containing colon', async () => {
-    const result = await certificateRepository.read({
-      pfxPathOrBase64: validCnpjPfxCertificate,
-      password,
-    });
+    const result = await certificateRepository.read(cnpjCertificateRequest);
     expectIsRight(result);
 
     const mockSubject = result.value.certificate.subject.replace(

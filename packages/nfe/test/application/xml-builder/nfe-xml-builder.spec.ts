@@ -38,8 +38,7 @@ import {
   expectIsRight,
   expectNotNull,
 } from '@nfets/test/expects';
-import { getCnpjCertificate } from '@nfets/test/certificates';
-import { getCertificatePassword } from '@nfets/test/certificates';
+import { getCnpjCertificateReadRequest } from '@nfets/test/certificates';
 import Schemas, {
   schemas,
 } from '@nfets/nfe/domain/entities/transmission/schemas';
@@ -53,8 +52,7 @@ describe('xml builder with xml2js builder', () => {
     'nfe_v4.00.xsd',
   );
 
-  const password = getCertificatePassword(),
-    validCnpjPfxCertificate = getCnpjCertificate();
+  const certificateRequest = getCnpjCertificateReadRequest();
 
   let signer: XmlSigner;
   let certificate: ReadCertificateResponse;
@@ -66,10 +64,9 @@ describe('xml builder with xml2js builder', () => {
       new MemoryCacheAdapter(),
     );
 
-    const certificateOrError = await certificateRepository.read({
-      pfxPathOrBase64: validCnpjPfxCertificate,
-      password,
-    });
+    const certificateOrError = await certificateRepository.read(
+      certificateRequest,
+    );
 
     signer = new XmlSigner(
       toolkit,
