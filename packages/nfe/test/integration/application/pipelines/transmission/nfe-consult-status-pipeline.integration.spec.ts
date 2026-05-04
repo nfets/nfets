@@ -1,4 +1,5 @@
 import { StateCodes, Environment } from '@nfets/core/domain';
+import { readCertificateRequestForPipelineTests } from '@nfets/test/certificates';
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
 import { expectIsRight } from '@nfets/test/expects';
 
@@ -18,10 +19,12 @@ describe('nfe consult status pipeline (integration) (destructive)', () => {
   let pipeline: NfeConsultStatusPipeline;
 
   beforeAll(() => {
-    pipeline = new NfeConsultStatusPipeline({
-      pfxPathOrBase64: certificateFromEnvironment.certificatePath,
-      password: certificateFromEnvironment.password,
-    });
+    pipeline = new NfeConsultStatusPipeline(
+      readCertificateRequestForPipelineTests(
+        certificateFromEnvironment.certificatePath,
+        certificateFromEnvironment.password,
+      ),
+    );
   });
 
   it(

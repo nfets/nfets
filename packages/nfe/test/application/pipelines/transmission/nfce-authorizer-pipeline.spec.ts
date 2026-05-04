@@ -18,6 +18,7 @@ import { Environment, StateCodes, type StateCode } from '@nfets/core/domain';
 import {
   getCnpjCertificate,
   getCertificatePassword,
+  getCnpjCertificateReadRequest,
 } from '@nfets/test/certificates';
 import {
   Xml2JsToolkit,
@@ -395,10 +396,9 @@ describe('nfe success authorizer pipeline (unit)', () => {
       },
     ] as [Item, ...Item[]];
 
-    const xmlBuilderPipeline = new NfeXmlBuilderPipeline<NFe>({
-      pfxPathOrBase64,
-      password,
-    });
+    const xmlBuilderPipeline = new NfeXmlBuilderPipeline<NFe>(
+      getCnpjCertificateReadRequest(),
+    );
 
     const builder = xmlBuilderPipeline.build((builder) =>
       builder
@@ -830,10 +830,9 @@ describe('nfe with failures authorizer pipeline (unit)', () => {
       },
     ] as [Item, ...Item[]];
 
-    const xmlBuilderPipeline = new NfeXmlBuilderPipeline<NFe>({
-      pfxPathOrBase64,
-      password,
-    });
+    const xmlBuilderPipeline = new NfeXmlBuilderPipeline<NFe>(
+      getCnpjCertificateReadRequest(),
+    );
 
     const firstBuilder = xmlBuilderPipeline.build((builder) =>
       builder

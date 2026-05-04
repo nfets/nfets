@@ -1,4 +1,5 @@
 import { Environment } from '@nfets/core/domain';
+import { readCertificateRequestForPipelineTests } from '@nfets/test/certificates';
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
 import { expectIsRight } from '@nfets/test/expects';
 import { NfeCancelPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-cancel-pipeline';
@@ -17,10 +18,12 @@ describe('nfe nfce cancel pipeline (integration) (destructive)', () => {
   let pipeline: NfeCancelPipeline;
 
   beforeAll(() => {
-    pipeline = new NfeCancelPipeline({
-      pfxPathOrBase64: certificateFromEnvironment.certificatePath,
-      password: certificateFromEnvironment.password,
-    });
+    pipeline = new NfeCancelPipeline(
+      readCertificateRequestForPipelineTests(
+        certificateFromEnvironment.certificatePath,
+        certificateFromEnvironment.password,
+      ),
+    );
   });
 
   it(
