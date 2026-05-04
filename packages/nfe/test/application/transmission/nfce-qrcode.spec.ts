@@ -529,6 +529,7 @@ describe('NfceQrcode', () => {
     if (process.env.CI && ensurePlatform('win32'))
       return it.skip(
         "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
+        () => void 0,
       );
 
     let toolkit: XmlToolkit;
