@@ -60,6 +60,10 @@ describe('xml signer (integration)', () => {
 });
 
 describe('xml signer (unit)', () => {
+  if (process.platform === 'win32') {
+    return (it.skip('test only for non-win32 platform', () => void 0), void 0);
+  }
+
   const certificateRequest = getCnpjCertificateReadRequest();
 
   const toolkit: XmlToolkit = new Xml2JsToolkit();
