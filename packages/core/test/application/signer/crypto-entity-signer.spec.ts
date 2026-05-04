@@ -14,7 +14,6 @@ import type { CertificateRepository } from '@nfets/core/domain/repositories/cert
 import type { XmlToolkit } from '@nfets/core/domain/entities/xml/xml-toolkit';
 
 import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
-import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 
 describe('entity signer (integration)', () => {
   let certificate: ReadCertificateResponse | undefined;
@@ -27,7 +26,6 @@ describe('entity signer (integration)', () => {
   beforeAll(async () => {
     certificateRepository = new NativeCertificateRepository(
       axios.create(),
-      new CryptoSignerRepository(),
       new MemoryCacheAdapter(),
     );
 
@@ -72,7 +70,6 @@ describe('entity signer (unit)', () => {
   beforeAll(async () => {
     certificateRepository = new NativeCertificateRepository(
       axios.create(),
-      new CryptoSignerRepository(),
       new MemoryCacheAdapter(),
     );
 

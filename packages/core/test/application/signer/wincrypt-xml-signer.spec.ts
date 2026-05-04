@@ -15,7 +15,6 @@ import type { CertificateRepository } from '@nfets/core/domain/repositories/cert
 import type { XmlToolkit } from '@nfets/core/domain/entities/xml/xml-toolkit';
 
 import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
-import { WincryptSignerRepository } from '@nfets/core/infrastructure/repositories/wincrypt-signer-repository';
 import { ensurePlatform } from '@nfets/test/ensure-platform';
 
 describe('wincrypt xml signer (integration)', () => {
@@ -24,7 +23,6 @@ describe('wincrypt xml signer (integration)', () => {
   let certificate: ReadCertificateResponse | undefined;
   const toolkit: XmlToolkit = new Xml2JsToolkit();
   let certificateRepository: CertificateRepository;
-  const signerRepository = new WincryptSignerRepository();
 
   const cert = ensureIntegrationTestsHasValidCertificate();
   if (cert === undefined) return;
@@ -32,7 +30,6 @@ describe('wincrypt xml signer (integration)', () => {
   beforeAll(async () => {
     certificateRepository = new NativeCertificateRepository(
       axios.create(),
-      signerRepository,
       new MemoryCacheAdapter(),
     );
 
@@ -86,12 +83,9 @@ describe('wincrypt xml signer (unit)', () => {
   const toolkit: XmlToolkit = new Xml2JsToolkit();
   let certificate: ReadCertificateResponse | undefined;
   let certificateRepository: CertificateRepository;
-  const signerRepository = new WincryptSignerRepository();
-
   beforeAll(async () => {
     certificateRepository = new NativeCertificateRepository(
       axios.create(),
-      signerRepository,
       new MemoryCacheAdapter(),
     );
 

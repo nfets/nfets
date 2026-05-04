@@ -15,7 +15,6 @@ import {
 
 import type { Client, CertificateRepository } from '@nfets/core/domain';
 import { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
-import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 
 type TestSoapClient = Client & {
   nfeStatusServicoNF(args: { consStatServ: unknown }): Promise<{
@@ -41,7 +40,6 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
   beforeAll(async () => {
     repository = new NativeCertificateRepository(
       axios.create(),
-      new CryptoSignerRepository(),
       new MemoryCacheAdapter(),
     );
     transmission = new TestSoapRemoteTransmissionRepository(
@@ -165,7 +163,6 @@ describe('soap remote transmission — certificate period guard (unit)', () => {
       const toolkit = new Xml2JsToolkit();
       const repository = new NativeCertificateRepository(
         axios.create(),
-        new CryptoSignerRepository(),
         new MemoryCacheAdapter(),
       );
       const transmission = new TestSoapRemoteTransmissionRepository(

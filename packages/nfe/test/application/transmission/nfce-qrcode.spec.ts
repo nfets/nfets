@@ -15,7 +15,6 @@ import { NfceQrcode } from '@nfets/nfe/application/transmission/nfce-qrcode';
 import { left, right } from '@nfets/core';
 import { NfeXmlBuilder } from '@nfets/nfe/application/xml-builder/nfe-xml-builder';
 import { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
-import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
 import Schemas, {
   schemas,
@@ -535,7 +534,6 @@ describe('NfceQrcode', () => {
       toolkit = new Xml2JsToolkit();
       certificateRepository = new NativeCertificateRepository(
         axios.create(),
-        new CryptoSignerRepository(),
         new MemoryCacheAdapter(),
       );
       signer = new XmlSigner(

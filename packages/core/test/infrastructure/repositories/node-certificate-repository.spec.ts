@@ -15,8 +15,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
 import { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
-import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
-import { WincryptSignerRepository } from '@nfets/core/infrastructure/repositories/wincrypt-signer-repository';
 import { ensurePlatform } from '@nfets/test/ensure-platform';
 
 describe('node certificate repository (unit)', () => {
@@ -26,7 +24,6 @@ describe('node certificate repository (unit)', () => {
 
   const repository = new NativeCertificateRepository(
     axios.create(),
-    new CryptoSignerRepository(),
     new MemoryCacheAdapter(),
   );
 
@@ -162,10 +159,8 @@ emailAddress=email@example.com`);
 
   it('should use cache when reading same certificate twice', async () => {
     const cache = new MemoryCacheAdapter();
-    const signerRepository = new CryptoSignerRepository();
     const cachedRepository = new NativeCertificateRepository(
       axios.create(),
-      signerRepository,
       cache,
     );
 
@@ -339,7 +334,6 @@ emailAddress=email@example.com`);
 
       const wincryptRepository = new NativeCertificateRepository(
         axios.create(),
-        new WincryptSignerRepository(),
         new MemoryCacheAdapter(),
       );
 
@@ -371,7 +365,6 @@ emailAddress=email@example.com`);
 
       const remoteRepository = new NativeCertificateRepository(
         mockAxios as never,
-        new CryptoSignerRepository(),
         new MemoryCacheAdapter(),
       );
 
@@ -393,7 +386,6 @@ emailAddress=email@example.com`);
 
       const remoteRepository = new NativeCertificateRepository(
         mockAxios as never,
-        new CryptoSignerRepository(),
         new MemoryCacheAdapter(),
       );
 

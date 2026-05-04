@@ -44,7 +44,6 @@ import Schemas, {
   schemas,
 } from '@nfets/nfe/domain/entities/transmission/schemas';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
-import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 
 describe('xml builder with xml2js builder', () => {
   const toolkit: XmlToolkit = new Xml2JsToolkit();
@@ -64,7 +63,6 @@ describe('xml builder with xml2js builder', () => {
   beforeAll(async () => {
     certificateRepository = new NativeCertificateRepository(
       axios.create(),
-      new CryptoSignerRepository(),
       new MemoryCacheAdapter(),
     );
 

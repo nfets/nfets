@@ -8,7 +8,6 @@ import {
   getCnpjCertificate,
   getCpfCertificate,
 } from '@nfets/test/certificates';
-import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
 
 describe('ASN1 (unit)', () => {
   const password = getCertificatePassword();
@@ -17,7 +16,6 @@ describe('ASN1 (unit)', () => {
 
   const certificateRepository = new NativeCertificateRepository(
     axios.create(),
-    new CryptoSignerRepository(),
     new MemoryCacheAdapter(),
   );
 

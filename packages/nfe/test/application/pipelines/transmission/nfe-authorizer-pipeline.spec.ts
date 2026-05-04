@@ -1,5 +1,3 @@
-import os from 'node:os';
-
 import type { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
 import type { NfeRemoteClient } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
 import type { ReadCertificateRequest } from '@nfets/core/domain';
@@ -15,19 +13,13 @@ import { expectIsRight } from '@nfets/test/expects';
 import { NfeRemoteTransmitter } from '@nfets/nfe/application/transmission/nfe-transmitter';
 import { NfeAuthorizerPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-authorizer-pipeline';
 import { NfeXmlBuilderPipeline } from '@nfets/nfe/application';
-import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
+import { getCnpjCertificateReadRequest } from '@nfets/test/certificates';
 import { Environment, StateCodes, type StateCode } from '@nfets/core/domain';
-import {
-  getCnpjCertificate,
-  getCertificatePassword,
-  getCnpjCertificateReadRequest,
-} from '@nfets/test/certificates';
 import {
   Xml2JsToolkit,
   MemoryCacheAdapter,
   NativeCertificateRepository,
 } from '@nfets/core';
-import { WincryptSignerRepository } from '@nfets/core/infrastructure/repositories/wincrypt-signer-repository';
 
 const NORMAL_WEBSERVICE_URLS: Record<StateCode, string> = {
   [StateCodes.AC]:
@@ -219,24 +211,18 @@ const buildXml = (
 };
 
 describe('nfe authorizer pipeline (contingency) (unit)', () => {
-  const password = getCertificatePassword(),
-    pfxPathOrBase64 = getCnpjCertificate();
+  const certificateRequest = getCnpjCertificateReadRequest();
 
   let pipeline: NfeAuthorizerPipeline;
   let spy: jest.SpyInstance;
 
   beforeAll(async () => {
-    const signerRepositpry =
-      os.platform() === 'win32'
-        ? new WincryptSignerRepository()
-        : new CryptoSignerRepository();
     const certificates = new NativeCertificateRepository(
       axios.create(),
-      signerRepositpry,
       new MemoryCacheAdapter(),
     );
 
-    const certificate = await certificates.read({ pfxPathOrBase64, password });
+    const certificate = await certificates.read(certificateRequest);
     certificates.read = jest.fn().mockResolvedValue(certificate);
 
     class MockableNfeAuthorizerPipeline extends NfeAuthorizerPipeline {
@@ -283,10 +269,7 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
       }
     }
 
-    pipeline = new MockableNfeAuthorizerPipeline({
-      pfxPathOrBase64,
-      password,
-    });
+    pipeline = new MockableNfeAuthorizerPipeline(certificateRequest);
   });
 
   const states = Object.entries(StateCodes) as [
@@ -321,23 +304,17 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
 });
 
 describe('nfe authorizer pipeline (unit)', () => {
-  const password = getCertificatePassword(),
-    pfxPathOrBase64 = getCnpjCertificate();
+  const certificateRequest = getCnpjCertificateReadRequest();
 
   let pipeline: NfeAuthorizerPipeline;
 
   beforeAll(async () => {
-    const signerRepositpry =
-      os.platform() === 'win32'
-        ? new WincryptSignerRepository()
-        : new CryptoSignerRepository();
     const certificates = new NativeCertificateRepository(
       axios.create(),
-      signerRepositpry,
       new MemoryCacheAdapter(),
     );
 
-    const certificate = await certificates.read({ pfxPathOrBase64, password });
+    const certificate = await certificates.read(certificateRequest);
     certificates.read = jest.fn().mockResolvedValue(certificate);
 
     class MockableNfeAuthorizerPipeline extends NfeAuthorizerPipeline {
@@ -380,10 +357,7 @@ describe('nfe authorizer pipeline (unit)', () => {
       protected override readonly certificates = certificates;
     }
 
-    pipeline = new MockableNfeAuthorizerPipeline({
-      pfxPathOrBase64,
-      password,
-    });
+    pipeline = new MockableNfeAuthorizerPipeline(certificateRequest);
   });
 
   it('should authorize a single nfe and return the correct response with protocol', async () => {
