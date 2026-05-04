@@ -8,10 +8,25 @@ import { NativeCertificateRepository } from '@nfets/core/infrastructure/reposito
 import { SoapRemoteTransmissionRepository } from '@nfets/core/infrastructure/repositories/soap-remote-transmission-repository';
 
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
+import {
+  getCertificatePassword,
+  getCnpjCertificate,
+} from '@nfets/test/certificates';
 
 import type { Client, CertificateRepository } from '@nfets/core/domain';
 import { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
 import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
+
+type TestSoapClient = Client & {
+  nfeStatusServicoNF(args: { consStatServ: unknown }): Promise<{
+    retConsStatServ: {
+      cStat: string;
+      xMotivo: string;
+    };
+  }>;
+};
+
+class TestSoapRemoteTransmissionRepository extends SoapRemoteTransmissionRepository<TestSoapClient> {}
 
 describe('soap remote transmission nfe (integration) (not destructive)', () => {
   const certificateFromEnvironment =
@@ -19,17 +34,6 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
   if (certificateFromEnvironment === undefined) return;
 
   const toolkit = new Xml2JsToolkit();
-
-  type TestClient = Client & {
-    nfeStatusServicoNF(args: { consStatServ: unknown }): Promise<{
-      retConsStatServ: {
-        cStat: string;
-        xMotivo: string;
-      };
-    }>;
-  };
-
-  class TestSoapRemoteTransmissionRepository extends SoapRemoteTransmissionRepository<TestClient> {}
 
   let transmission: TestSoapRemoteTransmissionRepository;
   let repository: CertificateRepository;
@@ -151,5 +155,48 @@ describe('soap remote transmission nfe (integration) (not destructive)', () => {
         xMotivo: 'Serviço em Operação',
       },
     });
+  });
+});
+
+describe('soap remote transmission — certificate period guard (unit)', () => {
+  it('returns left when certificate is past validToDate (before SOAP)', async () => {
+    jest.useFakeTimers({ now: new Date('2040-06-01T00:00:00.000Z') });
+    try {
+      const toolkit = new Xml2JsToolkit();
+      const repository = new NativeCertificateRepository(
+        axios.create(),
+        new CryptoSignerRepository(),
+        new MemoryCacheAdapter(),
+      );
+      const transmission = new TestSoapRemoteTransmissionRepository(
+        toolkit,
+        repository,
+      );
+
+      const read = await repository.read({
+        pfxPathOrBase64: getCnpjCertificate(),
+        password: getCertificatePassword(),
+      });
+      expectIsRight(read);
+      transmission.setCertificate(read.value);
+
+      const result = await transmission.send({
+        root: 'nfeDadosMsg',
+        url: 'https://0.0.0.0/unused',
+        xsd: path.resolve(
+          __dirname,
+          '../../../../nfe/schemas/PL_009_V4',
+          'consStatServ_v4.00.xsd',
+        ),
+        method: 'nfeStatusServicoNF',
+        payload: { consStatServ: {} },
+      } as never);
+
+      expectIsLeft(result);
+      expect(result.value).toBeInstanceOf(NFeTsError);
+      expect(result.value.message).toMatch(/expired/i);
+    } finally {
+      jest.useRealTimers();
+    }
   });
 });

@@ -1,11 +1,13 @@
 import os from 'node:os';
+import date from '@nfets/core/application/date/date-toolkit';
 import { constants } from 'node:crypto';
 import { Agent as HttpsAgent } from 'node:https';
 import { createClientAsync } from 'soap';
 import axios, { type AxiosInstance } from 'axios';
 
-import { right } from '@nfets/core/shared/either';
+import { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
 import { leftFromError } from '@nfets/core/shared/left-from-error';
+import { left, right, type Either } from '@nfets/core/shared/either';
 
 import type { XmlToolkit } from '@nfets/core/domain';
 import type { RemoteTransmissionRepository } from '@nfets/core/domain/repositories/remote-transmission-repository';
@@ -30,6 +32,35 @@ export class SoapRemoteTransmissionRepository<
 
   public setCertificate(certificate: ReadCertificateResponse) {
     return ((this.certificate = certificate), this);
+  }
+
+  private validateCertificatePeriod(): Either<NFeTsError, void> {
+    if (!this.certificate) return right(undefined);
+
+    const { certificate } = this.certificate;
+    const now = new Date();
+
+    if (now > new Date(certificate.validTo)) {
+      return left(
+        new NFeTsError(
+          `Certificado expirado (${date(certificate.validTo).format(
+            'DD/MM/YYYY',
+          )}). Renove o certificado.`,
+        ),
+      );
+    }
+
+    if (now < new Date(certificate.validFrom)) {
+      return left(
+        new NFeTsError(
+          `O certificado ainda não está válido (${date(
+            certificate.validFrom,
+          ).format('DD/MM/YYYY')}).`,
+        ),
+      );
+    }
+
+    return right(undefined);
   }
 
   protected get httpsAgent(): HttpsAgent {
@@ -78,6 +109,9 @@ export class SoapRemoteTransmissionRepository<
   }
 
   public async send<P extends SendTransmissionPayload<C>>(params: P) {
+    const periodOrLeft = this.validateCertificatePeriod();
+    if (periodOrLeft.isLeft()) return periodOrLeft;
+
     try {
       const request = this.request;
       const client = await createClientAsync(`${params.url}?wsdl`, {
