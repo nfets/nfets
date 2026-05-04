@@ -9,7 +9,6 @@ import {
 import {
   getCertificatePassword,
   getCnpjCertificate,
-  getCpfCertificate,
   getCnpjCertificateReadRequest,
   getCpfCertificateReadRequest,
 } from '@nfets/test/certificates';
@@ -21,8 +20,7 @@ import { ensurePlatform } from '@nfets/test/ensure-platform';
 
 describe('node certificate repository (unit)', () => {
   const password = getCertificatePassword(),
-    validCnpjPfxCertificate = getCnpjCertificate(),
-    validCpfPfxCertificate = getCpfCertificate();
+    validCnpjPfxCertificate = getCnpjCertificate();
   const cnpjCertificateRequest = getCnpjCertificateReadRequest();
   const cpfCertificateRequest = getCpfCertificateReadRequest();
 
@@ -118,7 +116,7 @@ emailAddress=email@example.com`);
 
   it('should return left when password is incorrect', async () => {
     const result = await repository.read({
-      pfxPathOrBase64: validCnpjPfxCertificate,
+      ...cnpjCertificateRequest,
       password: 'wrong-password',
     });
     expectIsLeft(result);
@@ -128,8 +126,8 @@ emailAddress=email@example.com`);
     const pfxBuffer = fs.readFileSync(validCnpjPfxCertificate);
     const base64 = pfxBuffer.toString('base64');
     const result = await repository.read({
+      ...cnpjCertificateRequest,
       pfxPathOrBase64: base64,
-      password,
     });
     expectIsRight(result);
   });
@@ -137,8 +135,8 @@ emailAddress=email@example.com`);
   it('should handle absolute path', async () => {
     const absolutePath = path.resolve(validCnpjPfxCertificate);
     const result = await repository.read({
+      ...cnpjCertificateRequest,
       pfxPathOrBase64: absolutePath,
-      password,
     });
     expectIsRight(result);
   });

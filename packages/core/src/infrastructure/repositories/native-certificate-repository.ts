@@ -40,10 +40,14 @@ export class NativeCertificateRepository implements CertificateRepository {
       const derB64 = publicCertDerBase64?.trim();
       const pfxRef = pfxPathOrBase64?.trim();
 
-      if (this.signer instanceof WincryptSignerRepository) {
-        if (!derB64)
-          return left(new NFeTsError('publicCertDerBase64 is required'));
+      if (derB64 && pfxRef)
+        return left(
+          new NFeTsError(
+            'Use either pfxPathOrBase64 or publicCertDerBase64, not both',
+          ),
+        );
 
+      if (derB64) {
         try {
           const der = Buffer.from(derB64, 'base64');
           const certificate = new crypto.X509Certificate(der);
