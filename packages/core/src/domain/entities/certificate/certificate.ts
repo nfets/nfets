@@ -1,8 +1,14 @@
 import type { KeyObject, X509Certificate } from 'node:crypto';
 
 export interface ReadCertificateRequest {
-  pfxPathOrBase64: string;
   password: string;
+  /** PKCS#12 file path, URL, or base64 payload. Omit when using {@link publicCertDerBase64}. */
+  pfxPathOrBase64?: string;
+  /**
+   * Base64-encoded DER of the leaf certificate installed in Windows MY (non-exportable keys).
+   * When set, signing on Windows uses CryptoAPI/CNG via native addon; {@link pfxPathOrBase64} must be omitted.
+   */
+  publicCertDerBase64?: string;
 }
 
 export interface ReadCertificateResponse {

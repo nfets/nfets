@@ -31,11 +31,48 @@ export class NativeCertificateRepository implements CertificateRepository {
     request: ReadCertificateRequest,
   ): Promise<Either<NFeTsError, ReadCertificateResponse>> {
     try {
-      const { password, pfxPathOrBase64 } = request;
-      if (!pfxPathOrBase64)
-        return left(new NFeTsError('Certificate path is required'));
+      const { password, pfxPathOrBase64, publicCertDerBase64 } = request;
+      const derB64 = publicCertDerBase64?.trim();
+      const pfxRef = pfxPathOrBase64?.trim();
 
-      const pfxBufferOrError = await this.getPfxBuffer(request);
+      if (derB64) {
+        if (pfxRef)
+          return left(
+            new NFeTsError(
+              'Use either pfxPathOrBase64 or publicCertDerBase64, not both',
+            ),
+          );
+
+        if (process.platform !== 'win32')
+          return left(
+            new NFeTsError(
+              'publicCertDerBase64 is only supported on Windows (certificate signing uses the system store)',
+            ),
+          );
+
+        try {
+          const der = Buffer.from(derB64, 'base64');
+          const certificate = new crypto.X509Certificate(der);
+          return right({
+            ca: [],
+            password,
+            certificate,
+            privateKey: undefined,
+          } satisfies ReadCertificateResponse);
+        } catch (e) {
+          return leftFromError(e);
+        }
+      }
+
+      if (!pfxRef)
+        return left(
+          new NFeTsError('Certificate path (pfxPathOrBase64) is required'),
+        );
+
+      const pfxBufferOrError = await this.getPfxBuffer({
+        ...request,
+        pfxPathOrBase64: pfxRef,
+      });
       if (pfxBufferOrError.isLeft()) return pfxBufferOrError;
 
       const p12Asn1 = forge.asn1.fromDer(
@@ -111,7 +148,7 @@ export class NativeCertificateRepository implements CertificateRepository {
   }
 
   private async getPfxBuffer(
-    request: ReadCertificateRequest,
+    request: ReadCertificateRequest & { pfxPathOrBase64: string },
   ): Promise<Either<NFeTsError, Buffer>> {
     const { pfxPathOrBase64, password } = request;
     const key = this.getCacheKey(pfxPathOrBase64, password);
