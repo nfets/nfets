@@ -194,7 +194,7 @@ describe('soap remote transmission — certificate period guard (unit)', () => {
 
       expectIsLeft(result);
       expect(result.value).toBeInstanceOf(NFeTsError);
-      expect(result.value.message).toMatch(/expired/i);
+      expect(result.value.message).toMatch(/Certificado expirado/);
     } finally {
       jest.useRealTimers();
     }
