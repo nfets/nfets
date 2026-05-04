@@ -16,6 +16,8 @@ import path from 'node:path';
 import { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
 import { SignatureAlgorithm } from '@nfets/core/domain/entities/signer/algo';
 import { CryptoSignerRepository } from '@nfets/core/infrastructure/repositories/crypto-signer-repository';
+import { WincryptSignerRepository } from '@nfets/core/infrastructure/repositories/wincrypt-signer-repository';
+import { ensurePlatform } from '@nfets/test/ensure-platform';
 
 describe('node certificate repository (unit)', () => {
   const password = getCertificatePassword(),
@@ -108,16 +110,27 @@ emailAddress=email@example.com`);
     expectIsLeft(result);
   });
 
-  it('should return left (Certificate path is required) when certificate path is undefined', async () => {
+  it('should return left when certificate path is undefined', async () => {
     const result = await repository.read({
-      pfxPathOrBase64: undefined as never,
       password: 'password',
     });
 
     expectIsLeft(result);
     expect(result.value).toStrictEqual(
-      new NFeTsError('Certificate path is required'),
+      new NFeTsError('Certificate path (pfxPathOrBase64) is required'),
     );
+  });
+
+  it('should reject publicCertDerBase64 off Windows', async () => {
+    if (process.platform === 'win32') return;
+
+    const result = await repository.read({
+      password: '',
+      publicCertDerBase64: Buffer.from('not-real-der').toString('base64'),
+    });
+
+    expectIsLeft(result);
+    expect(result.value.message).toContain('publicCertDerBase64');
   });
 
   it('should return left when password is incorrect', async () => {
@@ -280,6 +293,70 @@ emailAddress=email@example.com`);
     expect(() => {
       repository.getStringPrivateKey(invalidKey as never);
     }).toThrow(NFeTsError);
+  });
+
+  describe('read via publicCertDerBase64 (Windows)', () => {
+    if (!ensurePlatform('win32')) return;
+
+    if (process.env.CI) {
+      return it.skip('Skipping on CI: needs Windows user certificate store (same constraints as wincrypt integration tests).', () =>
+        void 0);
+    }
+
+    it('reads the same leaf certificate as PKCS#12 without private key material', async () => {
+      const pfxRead = await repository.read({
+        pfxPathOrBase64: validCnpjPfxCertificate,
+        password,
+      });
+      expectIsRight(pfxRead);
+
+      const expectedSerial = pfxRead.value.certificate.serialNumber;
+      const publicCertDerBase64 =
+        pfxRead.value.certificate.raw.toString('base64');
+
+      const derRead = await repository.read({
+        password: '',
+        publicCertDerBase64,
+      });
+
+      expectIsRight(derRead);
+      expect(derRead.value.privateKey).toBeUndefined();
+      expect(derRead.value.certificate.serialNumber).toBe(expectedSerial);
+      expect(derRead.value.certificate.subject).toBe(
+        pfxRead.value.certificate.subject,
+      );
+    });
+
+    it('signs via CryptoAPI when using DER-only read (cert must be in MY store)', async () => {
+      const pfxRead = await repository.read({
+        pfxPathOrBase64: validCnpjPfxCertificate,
+        password,
+      });
+      expectIsRight(pfxRead);
+
+      const publicCertDerBase64 =
+        pfxRead.value.certificate.raw.toString('base64');
+
+      const wincryptRepository = new NativeCertificateRepository(
+        axios.create(),
+        new WincryptSignerRepository(),
+        new MemoryCacheAdapter(),
+      );
+
+      const derRead = await wincryptRepository.read({
+        password: '',
+        publicCertDerBase64,
+      });
+      expectIsRight(derRead);
+
+      const signResult = await wincryptRepository.sign(
+        'test content',
+        derRead.value,
+        SignatureAlgorithm.SHA1,
+      );
+      expectIsRight(signResult);
+      expect(signResult.value.length).toBeGreaterThan(0);
+    });
   });
 
   describe('remote URL handling', () => {
