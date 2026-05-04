@@ -135,6 +135,14 @@ jobs:
         with:
           os: ${{ matrix.os }}
 
+      - name: Setup Node.js
+        uses: ./.github/actions/setup-nodejs
+        if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
+        with:
+          os: ${{ matrix.os }}
+          node-version: ${{ matrix.node-version }}
+          architecture: ${{ matrix.arch }}
+
       - name: Build native addon
         if: steps.check-changes-or-artifact-expired.outputs.skip != 'true' && steps.should-skip-cd.outputs.skip != 'true'
         shell: bash
