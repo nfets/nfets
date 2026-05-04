@@ -6,13 +6,11 @@ import {
 import { ensurePlatform } from './ensure-platform';
 
 describe('Real-world Usage Simulation', () => {
-  if (process.env.CI && ensurePlatform('win32')) {
-    return it.skip(`Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.
-      The Typical Root Cause: The Certificate Location
-      The primary reason you cannot access the certificate is likely that your application is trying to access a certificate installed in a user-specific store,
-      but the GitHub Actions runner process is running under a system or service account that does not have access to that specific user's store. `, () =>
-      void 0);
-  }
+  if (process.env.CI && ensurePlatform('win32'))
+    return it.skip(
+      "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
+      () => void 0,
+    );
 
   describe('Using @nfets/core for signing', () => {
     it('should be able to create a XmlSigner instance', async () => {
