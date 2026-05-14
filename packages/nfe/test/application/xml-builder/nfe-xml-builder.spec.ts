@@ -47,10 +47,8 @@ import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 
 describe('xml builder with xml2js builder', () => {
   if (process.env.CI && ensurePlatform('win32'))
-    return it.skip(
-      "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
-      () => void 0,
-    );
+    return it.skip("Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.", () =>
+      void 0);
 
   const toolkit: XmlToolkit = new Xml2JsToolkit();
   const leiauteNFe4_00 = path.resolve(
@@ -190,7 +188,7 @@ describe('xml builder with xml2js builder', () => {
     expect(xml.value).toBeDefined();
     expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
-  <infNFe Id="NFe52240600000000000000[object Object]001000000001112345678NaN" versao="4.00">
+  <infNFe Id="NFe52240600000000000000[object Object]0010000000011123456788" versao="4.00">
     <ide>
       <cUF>52</cUF>
       <cNF>12345678</cNF>
@@ -201,7 +199,7 @@ describe('xml builder with xml2js builder', () => {
       <nNF>1</nNF>
       <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
       <tpEmis>1</tpEmis>
-      <cDV>N</cDV>
+      <cDV>8</cDV>
     </ide>
     <emit>
       <CPF>00000000000</CPF>
