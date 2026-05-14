@@ -11,6 +11,6 @@ export class ConsultaProtocoloPayload implements IConsultaProtocoloPayload {
 
   @IsString()
   @Length(44, 44)
-  @Matches(/^[0-9]{44}$/)
+  @Matches(/^[A-Z0-9]{44}$/)
   public chNFe!: string;
 }

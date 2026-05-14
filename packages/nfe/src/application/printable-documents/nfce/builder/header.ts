@@ -87,7 +87,7 @@ export class Header implements Builder {
     const { CNPJ, CPF } = emit;
     if (CNPJ?.length === 14)
       return `CNPJ ${CNPJ.replace(
-        /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,
+        /([A-Z0-9]{2})([A-Z0-9]{3})([A-Z0-9]{3})([A-Z0-9]{4})([A-Z0-9]{2})/,
         '$1.$2.$3/$4-$5',
       )}`;
     if (CPF?.length === 11)
