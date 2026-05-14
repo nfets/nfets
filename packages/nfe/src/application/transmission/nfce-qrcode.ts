@@ -117,7 +117,7 @@ export class NfceQrcode {
     const digits = CPF
       ? CPF.replace(/\D/g, '')
       : CNPJ
-        ? CNPJ.replace(/\D/g, '')
+        ? CNPJ.replace(/[^A-Z0-9]/g, '')
         : idEstrangeiro?.replace(/\D/g, '');
 
     if (!digits) return { tipo: '', documento: '' };

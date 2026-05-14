@@ -22,7 +22,7 @@ export class AccessKeyBuilder {
   public decompile(accessKey: string): VerifiedAccessKey | undefined {
     if (accessKey.length !== 44) return;
     const regex =
-      /^([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{14})([0-9]{2})([0-9]{3})([0-9]{9})([0-9]{1})([0-9]{8})([0-9]{1})$/;
+      /^([0-9]{2})([0-9]{2})([0-9]{2})([A-Z0-9]{14})([0-9]{2})([0-9]{3})([0-9]{9})([0-9]{1})([0-9]{8})([0-9]{1})$/;
 
     const matches = regex.exec(accessKey);
     if (!matches) return;
@@ -91,23 +91,24 @@ export class AccessKeyBuilder {
     return !~invalid.indexOf(code);
   }
 
-  private verifyingDigit(accessKey: string) {
-    const multipliers = [2, 3, 4, 5, 6, 7, 8, 9];
+  private verifyingDigit(accessKeyWithoutVerificationDigit: string) {
+    const multipliers = [
+      4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4,
+      3, 2, 9, 8, 7, 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2,
+    ];
+    const baseValue = 48;
+    const cnpjLengthWithoutVerificationDigit = 43;
 
-    let i = 42,
-      sum = 0;
+    let sum = 0;
+    for (let i = 0; i < cnpjLengthWithoutVerificationDigit; i++) {
+      const asciiDigit =
+        accessKeyWithoutVerificationDigit.charCodeAt(i) - baseValue;
 
-    while (i >= 0) {
-      for (let count = 0; count < 8 && i >= 0; count++) {
-        const sub = parseInt(accessKey[i]);
-        sum += sub * multipliers[count];
-        i--;
-      }
+      sum += asciiDigit * multipliers[i];
     }
 
-    const digit = 11 - (sum % 11);
+    const digit = sum % 11 < 2 ? 0 : 11 - (sum % 11);
 
-    if (digit > 9) return 0;
     return digit;
   }
 }
