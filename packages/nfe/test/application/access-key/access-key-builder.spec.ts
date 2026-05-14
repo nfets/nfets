@@ -108,6 +108,36 @@ describe('access key builder (unit)', () => {
     expect(accessKey).toBeUndefined();
   });
 
+  it('should compile and decompile an access key with alphanumeric identification', () => {
+    const accessKey = accessKeyBuilder.compile({
+      cUF: '42',
+      year: '25',
+      month: '01',
+      identification: 'AB12CD34EF56GH',
+      mod: '55',
+      serie: '001',
+      nNF: '000012312',
+      tpEmis: '1',
+      cNF: '12837181',
+    });
+
+    expect(accessKey).toStrictEqual(
+      '422501AB12CD34EF56GH550010000123121128371810',
+    );
+    expect(accessKeyBuilder.decompile(accessKey)).toStrictEqual({
+      cUF: '42',
+      year: '25',
+      month: '01',
+      identification: 'AB12CD34EF56GH',
+      mod: '55',
+      serie: '001',
+      nNF: '000012312',
+      tpEmis: '1',
+      cNF: '12837181',
+      vd: '0',
+    });
+  });
+
   it('should compile a valid string access key falling back to another code generation when generated code is invalid', () => {
     const originalMathRandom = Math.random;
 
