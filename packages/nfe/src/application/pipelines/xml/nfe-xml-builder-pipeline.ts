@@ -8,10 +8,11 @@ import type {
 
 import path from 'node:path';
 
-import { right } from '@nfets/core';
+import { left, right } from '@nfets/core';
 import { Pipeline } from '../pipeline';
 import { NfeXmlBuilder } from '../../xml-builder/nfe-xml-builder';
 import { schemas, type Schema } from '@nfets/nfe/domain';
+import { XmlValidationError } from '@nfets/nfe/domain/errors/xml-validation-error';
 
 export class NfeXmlBuilderPipeline<T extends object> extends Pipeline {
   protected readonly builder:
@@ -66,7 +67,13 @@ export class NfeXmlBuilderPipeline<T extends object> extends Pipeline {
     xml: string,
   ): Promise<Either<NFeTsError, string>> {
     const validatedOrLeft = await this.toolkit.validate(xml, this.nfeXsdSchema);
-    if (validatedOrLeft.isLeft()) return validatedOrLeft;
+    if (validatedOrLeft.isLeft()) {
+      return left(
+        new XmlValidationError(validatedOrLeft.value.message, xml, {
+          cause: validatedOrLeft.value.cause,
+        }),
+      );
+    }
     return right(xml);
   }
 }

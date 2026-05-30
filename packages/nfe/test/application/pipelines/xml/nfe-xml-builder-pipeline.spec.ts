@@ -1,17 +1,42 @@
+import { left, NFeTsError, type XmlToolkit } from '@nfets/core';
 import { NfeXmlBuilderPipeline } from '@nfets/nfe/application/pipelines/xml/nfe-xml-builder-pipeline';
+import { XmlValidationError } from '@nfets/nfe/domain/errors/xml-validation-error';
 import { TpEmis, type NFe } from '@nfets/nfe/domain';
 import { getCnpjCertificateReadRequest } from '@nfets/test/certificates';
-import { expectIsRight } from '@nfets/test/expects';
+import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
 import { ensurePlatform } from '@nfets/test/ensure-platform';
 
 describe('NfeXmlBuilderPipeline', () => {
   if (process.env.CI && ensurePlatform('win32'))
-    return it.skip(
-      "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
-      () => void 0,
-    );
+    return it.skip("Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.", () =>
+      void 0);
 
   const certificateRequest = getCnpjCertificateReadRequest();
+
+  it('should return XmlValidationError with xml when xsd validation fails', async () => {
+    const pipeline = new NfeXmlBuilderPipeline<NFe>();
+    const xml = '<NFe xmlns="http://www.portalfiscal.inf.br/nfe"/>';
+    const harness = pipeline as unknown as {
+      toolkit: XmlToolkit;
+      validateXmlString(
+        xml: string,
+      ): ReturnType<NfeXmlBuilderPipeline<NFe>['assemble']>;
+    };
+    const validateSpy = jest
+      .spyOn(harness.toolkit, 'validate')
+      .mockResolvedValueOnce(left(new NFeTsError('Invalid xml schema: test')));
+
+    const result = await harness.validateXmlString(xml);
+
+    expectIsLeft(result);
+    expect(result.value).toBeInstanceOf(XmlValidationError);
+    expect(result.value).toMatchObject({
+      message: 'Invalid xml schema: test',
+      xml,
+    });
+
+    validateSpy.mockRestore();
+  });
 
   it('should build a valid nfe (55) xml', async () => {
     interface Item {
