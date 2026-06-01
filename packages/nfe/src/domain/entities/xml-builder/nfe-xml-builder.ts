@@ -7,7 +7,11 @@ import type { Emit as IEmit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit'
 import type { Dest as IDest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/dest';
 import type { Pag as IPag } from '@nfets/nfe/domain/entities/nfe/inf-nfe/pag';
 import type { AssembleDetXmlBuilder, ProdBuilder } from './nfe-det-xml-builder';
-import type { Total as ITotal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
+import type {
+  ICMSTot as IICMSTot,
+  ISSQNTot as IISSQNTot,
+  Total as ITotal,
+} from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
 import type { Transp as ITransp } from '@nfets/nfe/domain/entities/nfe/inf-nfe/transp';
 import type { Cobr as ICobr } from '@nfets/nfe/domain/entities/nfe/inf-nfe/cobr';
 import type { InfIntermed as IInfIntermed } from '@nfets/nfe/domain/entities/nfe/inf-nfe/infintermed';
@@ -21,6 +25,7 @@ import type { Avulsa as IAvulsa } from '@nfets/nfe/domain/entities/nfe/inf-nfe/a
 import type { Local as ILocal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/local';
 import type { AutXML as IAutXML } from '@nfets/nfe/domain/entities/nfe/inf-nfe/autxml';
 import type { Det as IDet } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det';
+
 import { type Schema } from '../transmission/schemas';
 
 export interface InfNFeBuilder<T extends object> {
@@ -86,6 +91,8 @@ export interface DetGroupBuilder<T extends object> {
 
 export interface TotalBuilder<T extends object> {
   total(payload: ITotal): TranspBuilder<T>;
+  ISSQNTot(payload: Partial<IISSQNTot>): TranspBuilder<T>;
+  ICMSTot(payload: Partial<IICMSTot>): TranspBuilder<T>;
   increment(
     callback: (
       context: DeepPartial<ITotal>,
@@ -191,6 +198,7 @@ export interface InfSolicNFFBuilder<T extends object> {
 
 export interface AssembleNfeBuilder<T extends object> {
   quiet(): AssembleNfeBuilder<T>;
+  toObject(): Either<NFeTsError, T>;
   assemble(): Promise<Either<NFeTsError, string>>;
 }
 

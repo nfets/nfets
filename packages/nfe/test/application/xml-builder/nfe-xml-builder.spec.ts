@@ -646,6 +646,143 @@ describe('xml builder with xml2js builder', () => {
     expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
+  it('should build NFe with ISSQN imposto and ISSQNtot using ISSQNTot method', async () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide(createValidIde())
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx.prod(createIssqnServiceProd(item)).issqn(createIssqnPayload()),
+      )
+      .ISSQNTot({ dCompet: '2025-06-12' })
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const xml = await builder.assemble();
+    expectIsRight(xml);
+    expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
+<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
+  <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
+    <ide>
+      <cUF>52</cUF>
+      <cNF>78527251</cNF>
+      <natOp>Venda de mercadoria</natOp>
+      <mod>55</mod>
+      <serie>99</serie>
+      <nNF>8018</nNF>
+      <dhEmi>2024-06-12T06:55:26-03:00</dhEmi>
+      <dhSaiEnt>2024-06-12T06:57:56-03:00</dhSaiEnt>
+      <tpNF>1</tpNF>
+      <idDest>2</idDest>
+      <cMunFG>5212501</cMunFG>
+      <tpImp>1</tpImp>
+      <tpEmis>1</tpEmis>
+      <cDV>5</cDV>
+      <tpAmb>2</tpAmb>
+      <finNFe>1</finNFe>
+      <indFinal>0</indFinal>
+      <indPres>1</indPres>
+      <procEmi>0</procEmi>
+      <verProc>nfets-0.0.1</verProc>
+    </ide>
+    <emit>
+      <CNPJ>46755763000143</CNPJ>
+      <xNome>cliente de goias</xNome>
+      <xFant>cliente de goias</xFant>
+      <enderEmit>
+        <xLgr>14 897</xLgr>
+        <nro>13897</nro>
+        <xCpl>teste teste</xCpl>
+        <xBairro>Residencial Copaibas</xBairro>
+        <cMun>5212501</cMun>
+        <xMun>Luziania</xMun>
+        <UF>GO</UF>
+        <CEP>72831770</CEP>
+        <cPais>1058</cPais>
+        <fone>4934420122</fone>
+      </enderEmit>
+      <IE>109381599</IE>
+      <IM>123748</IM>
+      <CNAE>1234567</CNAE>
+      <CRT>1</CRT>
+    </emit>
+    <det nItem="1">
+      <prod>
+        <cProd>1</cProd>
+        <cEAN>SEM GTIN</cEAN>
+        <xProd>Product 1</xProd>
+        <NCM>00</NCM>
+        <CFOP>5933</CFOP>
+        <uCom>UN</uCom>
+        <qCom>1.0000</qCom>
+        <vUnCom>100.0000000000</vUnCom>
+        <vProd>100.00</vProd>
+        <cEANTrib>SEM GTIN</cEANTrib>
+        <uTrib>UN</uTrib>
+        <qTrib>1.0000</qTrib>
+        <vUnTrib>100.0000000000</vUnTrib>
+        <indTot>1</indTot>
+      </prod>
+      <imposto>
+        <ISSQN>
+          <vBC>100.00</vBC>
+          <vAliq>5.0000</vAliq>
+          <vISSQN>5.00</vISSQN>
+          <cMunFG>5212501</cMunFG>
+          <cListServ>01.01</cListServ>
+          <indISS>1</indISS>
+          <indIncentivo>2</indIncentivo>
+        </ISSQN>
+      </imposto>
+    </det>
+    <total>
+      <ICMSTot>
+        <vBC>0.00</vBC>
+        <vICMS>0.00</vICMS>
+        <vICMSDeson>0.00</vICMSDeson>
+        <vFCP>0.00</vFCP>
+        <vBCST>0.00</vBCST>
+        <vST>0.00</vST>
+        <vFCPST>0.00</vFCPST>
+        <vFCPSTRet>0.00</vFCPSTRet>
+        <vProd>100.00</vProd>
+        <vFrete>0.00</vFrete>
+        <vSeg>0.00</vSeg>
+        <vDesc>0.00</vDesc>
+        <vII>0.00</vII>
+        <vIPI>0.00</vIPI>
+        <vIPIDevol>0.00</vIPIDevol>
+        <vPIS>0.00</vPIS>
+        <vCOFINS>0.00</vCOFINS>
+        <vOutro>0.00</vOutro>
+        <vNF>100.00</vNF>
+      </ICMSTot>
+      <ISSQNtot>
+        <vISS>5.00</vISS>
+        <dCompet>2025-06-12</dCompet>
+      </ISSQNtot>
+    </total>
+    <transp>
+      <modFrete>9</modFrete>
+    </transp>
+    <pag>
+      <detPag>
+        <tPag>01</tPag>
+        <vPag>100.00</vPag>
+      </detPag>
+    </pag>
+  </infNFe>
+</NFe>`);
+
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
+    expectIsRight(signed);
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
+  });
+
   it('should accumulate ISSQNtot vISS from multiple det items with ISSQN', async () => {
     const serviceItems = [
       {

@@ -6,7 +6,11 @@ import type { Emit as IEmit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit'
 import type { Cana as ICana } from '@nfets/nfe/domain/entities/nfe/inf-nfe/cana';
 import type { Cobr as ICobr } from '@nfets/nfe/domain/entities/nfe/inf-nfe/cobr';
 import type { Dest as IDest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/dest';
-import type { Total as ITotal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
+import type {
+  Total as ITotal,
+  ICMSTot as IICMSTot,
+  ISSQNTot as IISSQNTot,
+} from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
 import type { Local as ILocal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/local';
 import type { Avulsa as IAvulsa } from '@nfets/nfe/domain/entities/nfe/inf-nfe/avulsa';
 import type { AutXML as IAutXML } from '@nfets/nfe/domain/entities/nfe/inf-nfe/autxml';
@@ -180,6 +184,23 @@ export class NfeXmlBuilder<
     return this;
   }
 
+  public ISSQNTot(payload: Partial<IISSQNTot>) {
+    this.data.infNFe.total.ISSQNtot ??= {} as IISSQNTot;
+    this.data.infNFe.total.ISSQNtot = {
+      ...this.data.infNFe.total.ISSQNtot,
+      ...payload,
+    };
+    return this;
+  }
+
+  public ICMSTot(payload: Partial<IICMSTot>) {
+    this.data.infNFe.total.ICMSTot = {
+      ...this.data.infNFe.total.ICMSTot,
+      ...payload,
+    };
+    return this;
+  }
+
   public increment(
     callback: (
       context: DeepPartial<ITotal>,
@@ -294,7 +315,7 @@ export class NfeXmlBuilder<
     return this;
   }
 
-  protected toObject() {
+  public toObject() {
     if (this.$data !== void 0) return right(this.$data);
     const errors = this.errors();
     if (errors) return left(new NFeTsError(errors.join(', ')));
