@@ -1,13 +1,13 @@
 import { IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ICMSTot } from './icmstot';
-import { ISSQNTot } from './issqntot';
+import { ISSQNtot } from './issqntot';
 import { RetTrib } from './ret-trib';
 
 import type {
   Total as ITotal,
   ICMSTot as IICMSTot,
-  ISSQNTot as IISSQNTot,
+  ISSQNtot as IISSQNTot,
   RetTrib as IRetTrib,
   IBSCBSTot as IIBSCBSTot,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
@@ -22,7 +22,7 @@ export class Total implements ITotal {
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => ISSQNTot)
+  @Type(() => ISSQNtot)
   public ISSQNtot?: IISSQNTot;
 
   @IsOptional()

@@ -646,7 +646,7 @@ describe('xml builder with xml2js builder', () => {
     expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
   });
 
-  it('should build NFe with ISSQN imposto and ISSQNtot using ISSQNTot method', async () => {
+  it('should build NFe with ISSQN imposto and ISSQNtot using ISSQNtot method', async () => {
     const builder = NfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
@@ -654,7 +654,7 @@ describe('xml builder with xml2js builder', () => {
       .det(createValidItems(), (ctx, item) =>
         ctx.prod(createIssqnServiceProd(item)).issqn(createIssqnPayload()),
       )
-      .ISSQNTot({ dCompet: '2025-06-12' })
+      .ISSQNtot({ dCompet: '2025-06-12' })
       .transp(createValidTransp())
       .pag(createValidPag());
 
