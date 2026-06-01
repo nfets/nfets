@@ -123,7 +123,7 @@ describe('DefaultDetBuilderAggregator ISSQNtot (unit)', () => {
 
 describe('DefaultDetBuilderAggregator ISSQNtot via NfeXmlBuilder (unit)', () => {
   class ExposedNfeXmlBuilder extends NfeXmlBuilder {
-    public get total() {
+    public get totalSpy() {
       return this.data.infNFe.total;
     }
   }
@@ -131,7 +131,6 @@ describe('DefaultDetBuilderAggregator ISSQNtot via NfeXmlBuilder (unit)', () => 
   const toolkit = new Xml2JsToolkit();
 
   it('should aggregate vISS from multiple det items with ISSQN', async () => {
-    const builder = ExposedNfeXmlBuilder.create(toolkit);
     const issqnSpy = jest.spyOn(DefaultDetBuilderAggregator.prototype, 'issqn');
     const items = [
       {
@@ -171,7 +170,7 @@ describe('DefaultDetBuilderAggregator ISSQNtot via NfeXmlBuilder (unit)', () => 
     const vISSQNByItem = ['4.00', '6.50'];
     let detIndex = 0;
 
-    builder
+    const builder = ExposedNfeXmlBuilder.create(toolkit)
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
       .emit(createValidEmit())
@@ -200,11 +199,15 @@ describe('DefaultDetBuilderAggregator ISSQNtot via NfeXmlBuilder (unit)', () => 
       .quiet();
 
     expect(issqnSpy).toHaveBeenCalledTimes(2);
-    expect(builder.total.ISSQNtot?.vISS).toBe('10.50');
+    expect((builder as ExposedNfeXmlBuilder).totalSpy.ISSQNtot?.vISS).toBe(
+      '10.50',
+    );
 
     const result = await builder.assemble();
     expectIsRight(result);
-    expect(builder.total.ISSQNtot?.vISS).toBe('10.50');
+    expect((builder as ExposedNfeXmlBuilder).totalSpy.ISSQNtot?.vISS).toBe(
+      '10.50',
+    );
 
     issqnSpy.mockRestore();
   });
