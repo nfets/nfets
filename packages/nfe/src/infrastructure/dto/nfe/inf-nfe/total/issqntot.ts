@@ -1,49 +1,50 @@
 import { IsOptional, IsString } from 'class-validator';
 import { ISSQNtot as IISSQNTot } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
+import { type DecimalValue, TransformDecimal } from '@nfets/core';
 
 export class ISSQNtot implements IISSQNTot {
   @IsOptional()
-  @IsString()
-  public vServ?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vServ?: DecimalValue;
 
   @IsOptional()
-  @IsString()
-  public vBC?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vBC?: DecimalValue;
 
   @IsOptional()
-  @IsString()
-  public vISS?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vISS?: DecimalValue;
 
   @IsOptional()
-  @IsString()
-  public vPIS?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vPIS?: DecimalValue;
 
   @IsOptional()
-  @IsString()
-  public vCOFINS?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vCOFINS?: DecimalValue;
 
   @IsString()
   public dCompet!: string;
 
   @IsOptional()
-  @IsString()
-  public vDeducao?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vDeducao?: DecimalValue;
 
   @IsOptional()
-  @IsString()
-  public vOutro?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vOutro?: DecimalValue;
 
   @IsOptional()
-  @IsString()
-  public vDescIncond?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vDescIncond?: DecimalValue;
 
   @IsOptional()
-  @IsString()
-  public vDescCond?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vDescCond?: DecimalValue;
 
   @IsOptional()
-  @IsString()
-  public vISSRet?: string;
+  @TransformDecimal({ fixed: 2 })
+  public vISSRet?: DecimalValue;
 
   @IsOptional()
   @IsString()
