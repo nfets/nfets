@@ -1,7 +1,7 @@
 import { IsOptional, IsString } from 'class-validator';
-import { ISSQNTot as IISSQNTot } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
+import { ISSQNtot as IISSQNTot } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
 
-export class ISSQNTot implements IISSQNTot {
+export class ISSQNtot implements IISSQNTot {
   @IsOptional()
   @IsString()
   public vServ?: string;

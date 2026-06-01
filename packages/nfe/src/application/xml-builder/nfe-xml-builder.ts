@@ -9,7 +9,7 @@ import type { Dest as IDest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/dest'
 import type {
   Total as ITotal,
   ICMSTot as IICMSTot,
-  ISSQNTot as IISSQNTot,
+  ISSQNtot as IISSQNTot,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
 import type { Local as ILocal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/local';
 import type { Avulsa as IAvulsa } from '@nfets/nfe/domain/entities/nfe/inf-nfe/avulsa';
@@ -134,24 +134,28 @@ export class NfeXmlBuilder<
 
   @Validates(Avulsa)
   public avulsa(payload?: IAvulsa) {
+    if (payload == null) return this;
     this.data.infNFe.avulsa = payload;
     return this;
   }
 
   @Validates(Dest)
   public dest(payload?: IDest) {
+    if (payload == null) return this;
     this.data.infNFe.dest = payload;
     return this;
   }
 
   @Validates(Local)
   public retirada(payload?: ILocal) {
+    if (payload == null) return this;
     this.data.infNFe.retirada = payload;
     return this;
   }
 
   @Validates(Local)
   public entrega(payload?: ILocal) {
+    if (payload == null) return this;
     this.data.infNFe.entrega = payload;
     return this;
   }
@@ -179,12 +183,14 @@ export class NfeXmlBuilder<
   }
 
   @Validates(Total)
-  public total(payload: ITotal) {
+  public total(payload?: ITotal) {
+    if (payload == null) return this;
     this.data.infNFe.total = payload;
     return this;
   }
 
-  public ISSQNTot(payload: Partial<IISSQNTot>) {
+  public ISSQNtot(payload?: Partial<IISSQNTot>) {
+    if (payload == null) return this;
     this.data.infNFe.total.ISSQNtot ??= {} as IISSQNTot;
     this.data.infNFe.total.ISSQNtot = {
       ...this.data.infNFe.total.ISSQNtot,
@@ -193,7 +199,8 @@ export class NfeXmlBuilder<
     return this;
   }
 
-  public ICMSTot(payload: Partial<IICMSTot>) {
+  public ICMSTot(payload?: Partial<IICMSTot>) {
+    if (payload == null) return this;
     this.data.infNFe.total.ICMSTot = {
       ...this.data.infNFe.total.ICMSTot,
       ...payload,
@@ -251,61 +258,71 @@ export class NfeXmlBuilder<
   }
 
   @Validates(Transp)
-  public transp(payload: ITransp) {
+  public transp(payload?: ITransp) {
+    if (payload == null) return this;
     this.data.infNFe.transp = payload;
     return this;
   }
 
   @Validates(Cobr)
   public cobr(payload?: ICobr) {
+    if (payload == null) return this;
     this.data.infNFe.cobr = payload;
     return this;
   }
 
   @Validates(Pag)
-  public pag(payload: IPag) {
+  public pag(payload?: IPag) {
+    if (payload == null) return this;
     this.data.infNFe.pag = payload;
     return this;
   }
 
   @Validates(InfIntermed)
   public infIntermed(payload?: IInfIntermed) {
+    if (payload == null) return this;
     this.data.infNFe.infIntermed = payload;
     return this;
   }
 
   @Validates(InfAdic)
   public infAdic(payload?: IInfAdic) {
+    if (payload == null) return this;
     this.data.infNFe.infAdic = payload;
     return this;
   }
 
   @Validates(Exporta)
   public exporta(payload?: IExporta) {
+    if (payload == null) return this;
     this.data.infNFe.exporta = payload;
     return this;
   }
 
   @Validates(Compra)
   public compra(payload?: ICompra) {
+    if (payload == null) return this;
     this.data.infNFe.compra = payload;
     return this;
   }
 
   @Validates(Cana)
   public cana(payload?: ICana) {
+    if (payload == null) return this;
     this.data.infNFe.cana = payload;
     return this;
   }
 
   @Validates(InfRespTec)
   public infRespTec(payload?: IInfRespTec) {
+    if (payload == null) return this;
     this.data.infNFe.infRespTec = payload;
     return this;
   }
 
   @Validates(InfSolicNFF)
   public infSolicNFF(payload?: ISolicNFF) {
+    if (payload == null) return this;
     this.data.infNFe.infSolicNFF = payload;
     return this;
   }

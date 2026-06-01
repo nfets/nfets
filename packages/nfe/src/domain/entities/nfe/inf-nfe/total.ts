@@ -32,7 +32,7 @@ export interface ICMSTot {
   vTotTrib?: DecimalValue;
 }
 
-export interface ISSQNTot {
+export interface ISSQNtot {
   vServ?: DecimalValue;
   vBC?: DecimalValue;
   vISS?: DecimalValue;
@@ -59,7 +59,7 @@ export interface RetTrib {
 
 export interface Total {
   ICMSTot: ICMSTot;
-  ISSQNtot?: ISSQNTot;
+  ISSQNtot?: ISSQNtot;
   retTrib?: RetTrib;
   IBSCBSTot?: IBSCBSTot;
   vNFTot?: DecimalValue;

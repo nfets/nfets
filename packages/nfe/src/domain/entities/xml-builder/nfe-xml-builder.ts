@@ -9,7 +9,7 @@ import type { Pag as IPag } from '@nfets/nfe/domain/entities/nfe/inf-nfe/pag';
 import type { AssembleDetXmlBuilder, ProdBuilder } from './nfe-det-xml-builder';
 import type {
   ICMSTot as IICMSTot,
-  ISSQNTot as IISSQNTot,
+  ISSQNtot as IISSQNTot,
   Total as ITotal,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
 import type { Transp as ITransp } from '@nfets/nfe/domain/entities/nfe/inf-nfe/transp';
@@ -91,8 +91,8 @@ export interface DetGroupBuilder<T extends object> {
 
 export interface TotalBuilder<T extends object> {
   total(payload: ITotal): TranspBuilder<T>;
-  ISSQNTot(payload: Partial<IISSQNTot>): TranspBuilder<T>;
-  ICMSTot(payload: Partial<IICMSTot>): TranspBuilder<T>;
+  ISSQNtot(payload?: Partial<IISSQNTot>): TranspBuilder<T>;
+  ICMSTot(payload?: Partial<IICMSTot>): TranspBuilder<T>;
   increment(
     callback: (
       context: DeepPartial<ITotal>,
