@@ -6,19 +6,21 @@ import type { ICMS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ic
 import type { COFINS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/cofins';
 import type { INfeXmlBuilder } from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
 import type { UnionToIntersection } from '@nfets/core/shared';
+import type { ISSQN } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/issqn';
 
 type ICMSIntersection = UnionToIntersection<NonNullable<ICMS[keyof ICMS]>>;
 
 export interface DetBuilderAggregator {
   prod(payload: Prod): void;
+  issqn(payload: ISSQN): void;
   icms(payload: ICMS): void;
   pis(payload: PIS): void;
   cofins(payload: COFINS): void;
 }
 
-export class DefaultDetBuilderAggregator<T extends object>
-  implements DetBuilderAggregator
-{
+export class DefaultDetBuilderAggregator<
+  T extends object,
+> implements DetBuilderAggregator {
   public constructor(private readonly builder: INfeXmlBuilder<T>) {}
 
   public prod(payload: Prod): void {
@@ -38,6 +40,14 @@ export class DefaultDetBuilderAggregator<T extends object>
         vOutro: Decimal.newOrZero(ICMSTot?.vOutro)
           .add(payload.vOutro ?? zero)
           .toFixed(2),
+      },
+    }));
+  }
+
+  public issqn(payload: ISSQN): void {
+    this.builder.increment(({ ISSQNtot }) => ({
+      ISSQNtot: {
+        vISS: Decimal.newOrZero(ISSQNtot?.vISS).add(payload.vISSQN).toFixed(2),
       },
     }));
   }

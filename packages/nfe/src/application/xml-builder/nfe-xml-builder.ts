@@ -196,7 +196,7 @@ export class NfeXmlBuilder<
       ICMSTot: { ...this.data.infNFe.total.ICMSTot, ...result.ICMSTot },
       ISSQNtot: result.ISSQNtot
         ? { ...this.data.infNFe.total.ISSQNtot, ...result.ISSQNtot }
-        : void 0,
+        : this.data.infNFe.total.ISSQNtot,
     };
 
     if (this.schema !== Schemas.PL_009_V4) this.buildTotalForPL_010(result);

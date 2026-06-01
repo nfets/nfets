@@ -1,9 +1,19 @@
 import { Decimal } from '@nfets/core/infrastructure';
 import type { Emit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
 import type { Ide } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
+import type { ISSQN } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/issqn';
 import type { Pag } from '@nfets/nfe/domain/entities/nfe/inf-nfe/pag';
 import type { Transp } from '@nfets/nfe/domain/entities/nfe/inf-nfe/transp';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
+
+export type ValidItem = {
+  description: string;
+  code: string;
+  price: number;
+  quantity: number;
+  unit: string;
+  total: number;
+};
 
 export const createValidIde = (): Ide => ({
   cUF: '52',
@@ -60,24 +70,35 @@ export const createValidItems = () =>
       unit: 'UN',
       total: 100,
     },
-  ] as [
-    {
-      description: string;
-      code: string;
-      price: number;
-      quantity: number;
-      unit: string;
-      total: number;
-    },
-    ...{
-      description: string;
-      code: string;
-      price: number;
-      quantity: number;
-      unit: string;
-      total: number;
-    }[],
-  ];
+  ] as [ValidItem, ...ValidItem[]];
+
+export const createIssqnPayload = (overrides: Partial<ISSQN> = {}): ISSQN => ({
+  vBC: '100.00',
+  vAliq: '5.0000',
+  vISSQN: '5.00',
+  cMunFG: '5212501',
+  cListServ: '01.01',
+  indISS: '1',
+  indIncentivo: '2',
+  ...overrides,
+});
+
+export const createIssqnServiceProd = (item: ValidItem) => ({
+  cProd: item.code,
+  cEAN: 'SEM GTIN',
+  xProd: item.description,
+  NCM: '00',
+  CFOP: '5933',
+  uCom: item.unit,
+  qCom: item.quantity,
+  vUnCom: item.price,
+  vProd: item.total,
+  cEANTrib: 'SEM GTIN',
+  uTrib: item.unit,
+  qTrib: item.quantity,
+  vUnTrib: item.price,
+  indTot: '1',
+});
 
 export const createValidTransp = (): Transp => ({ modFrete: '9' });
 

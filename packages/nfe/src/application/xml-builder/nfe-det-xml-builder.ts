@@ -96,6 +96,7 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   public issqn(payload: IISSQN) {
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.ISSQN = payload;
+    this.listener?.issqn(payload);
     return this;
   }
 

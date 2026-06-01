@@ -31,6 +31,13 @@ describe('Imposto Choice validation', () => {
   it('should be valid when only ISSQN is set', () => {
     const imposto = new Imposto();
     const issqn = new ISSQN();
+    issqn.vBC = '10.00';
+    issqn.vAliq = '10.00';
+    issqn.vISSQN = '10.00';
+    issqn.cMunFG = '189731';
+    issqn.cListServ = '10.00';
+    issqn.indISS = '1';
+    issqn.indIncentivo = '2';
     imposto.ISSQN = issqn;
 
     const errors = validateSync(imposto);
