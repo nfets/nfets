@@ -5,9 +5,7 @@ import type {
 import type { DanfcePdfDocument } from '../danfce';
 import type { InfProt, ProtNFe } from '@nfets/nfe/domain/entities/nfe/prot-nfe';
 import type { Builder } from '@nfets/nfe/domain/entities/printable-documents/builder';
-import timezones from '@nfets/core/domain/entities/brazil/timezone';
-
-import date from '@nfets/core/application/date/date-toolkit';
+import { dateToolkit, timezones } from '@nfets/core';
 
 export class Protocols implements Builder {
   protected static _instance?: Protocols;
@@ -50,7 +48,7 @@ export class Protocols implements Builder {
 
     const { cUF } = this.context.data.infNFe.ide;
     const timezone = timezones[cUF];
-    const dhEmi = date(_dhEmi).tz(timezone).format('DD/MM/YYYY HH:mm:ss');
+    const dhEmi = dateToolkit(_dhEmi).tz(timezone).format('DD/MM/YYYY HH:mm:ss');
 
     const font = this.context.defaults.font,
       bold = `${font}-Bold`;
@@ -74,7 +72,7 @@ export class Protocols implements Builder {
     const timezone = timezones[cUF];
 
     const protocol = nProt.replace(/([0-9]{3})([0-9]{10})(.*)/g, '$1 $2 $3');
-    const authorized = date(dhRecbto)
+    const authorized = dateToolkit(dhRecbto)
       .tz(timezone)
       .format('DD/MM/YYYY HH:mm:ss');
 
