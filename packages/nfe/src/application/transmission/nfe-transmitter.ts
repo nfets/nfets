@@ -172,7 +172,10 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
   public async autorizacao<
     E extends NFe,
     T extends SignedEntity<E> | SignedEntity<E>[],
-  >(payload: IAutorizacaoPayload<E, T>) {
+  >(
+    payload: IAutorizacaoPayload<E, T>,
+    options: { timeout?: number } = { timeout: 60_000 },
+  ) {
     const payloadOrError = this.validate(payload);
     if (payloadOrError.isLeft()) return payloadOrError;
 
@@ -182,7 +185,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
-      timeout: data.timeout,
+      timeout: options.timeout,
       xsd: this.xsd('enviNFe_v4.00.xsd'),
       payload: {
         enviNFe: this.ns(data, service.version),

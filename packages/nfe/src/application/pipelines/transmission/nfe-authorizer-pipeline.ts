@@ -40,13 +40,12 @@ export interface NfeAuthorizerPayload<
   idLote?: string;
   indSinc?: '0' | '1';
   xml: T;
-  timeout?: number;
 }
 
 export class NfeAuthorizerPipeline extends TransmissionPipeline {
   public async execute(
     payload: NfeAuthorizerPayload<string>,
-    options?: Pick<NfeTransmitterOptions, 'schema'>,
+    options?: Pick<NfeTransmitterOptions, 'schema' | 'timeout'>,
   ): Promise<Either<NFeTsError, PipelineAuthorizerResponse<NFe>>> {
     const certificateOrLeft = await this.certificates.read(this.certificate);
     if (certificateOrLeft.isLeft()) return certificateOrLeft;
@@ -69,11 +68,13 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
 
     payload.idLote ??= new Date().getTime().toString().slice(0, 15);
 
-    const responseOrLeft = await this.transmitter.autorizacao({
-      ...payload,
-      NFe: nfeBatchOrLeft.value,
-      timeout: payload.timeout,
-    });
+    const responseOrLeft = await this.transmitter.autorizacao(
+      {
+        ...payload,
+        NFe: nfeBatchOrLeft.value,
+      },
+      { timeout: options?.timeout },
+    );
 
     if (responseOrLeft.isLeft()) return responseOrLeft;
     const response = responseOrLeft.value;
