@@ -40,6 +40,7 @@ export interface NfeAuthorizerPayload<
   idLote?: string;
   indSinc?: '0' | '1';
   xml: T;
+  timeout?: number;
 }
 
 export class NfeAuthorizerPipeline extends TransmissionPipeline {
@@ -71,6 +72,7 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
     const responseOrLeft = await this.transmitter.autorizacao({
       ...payload,
       NFe: nfeBatchOrLeft.value,
+      timeout: payload.timeout,
     });
 
     if (responseOrLeft.isLeft()) return responseOrLeft;

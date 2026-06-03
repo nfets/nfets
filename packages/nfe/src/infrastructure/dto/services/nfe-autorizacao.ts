@@ -7,7 +7,13 @@ import {
 } from '@nfets/core/domain';
 import type { NFe as INFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 import type { AutorizacaoPayload as IAutorizacaoPayload } from '@nfets/nfe/domain/entities/services/autorizacao';
-import { IsEnum, IsOptional, IsString, IsNotEmpty } from 'class-validator';
+import {
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+} from 'class-validator';
 
 export class NfeAutorizacaoPayload<
   E extends INFe,
@@ -31,4 +37,8 @@ export class NfeAutorizacaoPayload<
 
   @IsNotEmpty()
   public NFe!: T;
+
+  @IsOptional()
+  @IsNumber()
+  public timeout: number = 60 * 1000;
 }

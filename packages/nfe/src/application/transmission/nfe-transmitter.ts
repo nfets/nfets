@@ -182,6 +182,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
+      timeout: data.timeout,
       xsd: this.xsd('enviNFe_v4.00.xsd'),
       payload: {
         enviNFe: this.ns(data, service.version),
