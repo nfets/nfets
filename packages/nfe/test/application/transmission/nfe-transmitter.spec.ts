@@ -314,6 +314,55 @@ describe('NfeRemoteTransmitter (unit)', () => {
         root: 'nfeDadosMsg',
         url: expect.stringContaining('nfe'),
         xsd: expect.stringContaining('enviNFe_v4.00.xsd'),
+        timeout: 60_000,
+        payload: {
+          enviNFe: expect.objectContaining({
+            $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
+            tpAmb: Environment.Homolog,
+            cUF: StateCodes.RS,
+            idLote: '123',
+            NFe: { infNFe: {} },
+          }),
+        },
+        method: 'nfeAutorizacaoLote',
+      });
+    });
+
+    it('should call repository with correct with timeout payload when valid', async () => {
+      const mockResponse = {
+        retEnviNFe: {
+          $: { versao: '4.00' },
+          tpAmb: '2',
+          verAplic: 'RS202401251654',
+          cStat: '103',
+          xMotivo: 'Lote recebido com sucesso',
+          cUF: '43',
+          dhRecbto: '2024-01-01T10:00:00-03:00',
+          infRec: {
+            nRec: '432400000000001',
+            tMed: '1',
+          },
+        },
+      };
+
+      mockRepository.send.mockResolvedValue(
+        right(mockResponse as AsynchronousAutorizacaoResponse),
+      );
+
+      const response = await transmission.autorizacao({
+        tpAmb: Environment.Homolog,
+        cUF: StateCodes.RS,
+        idLote: '123',
+        timeout: 12_000,
+        NFe: { infNFe: {} } as never,
+      });
+
+      expectIsRight(response);
+      expect(mockRepository.send).toHaveBeenCalledWith({
+        root: 'nfeDadosMsg',
+        url: expect.stringContaining('nfe'),
+        xsd: expect.stringContaining('enviNFe_v4.00.xsd'),
+        timeout: 12_000,
         payload: {
           enviNFe: expect.objectContaining({
             $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '4.00' },
