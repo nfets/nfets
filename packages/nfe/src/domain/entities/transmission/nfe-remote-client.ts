@@ -64,6 +64,7 @@ export interface NfeTransmitterOptions extends TransmitterOptions {
   schema?: Schema;
   tpAmb: EnvironmentCode;
   contingency?: ContingencyOptions;
+  timeout?: number;
 }
 
 export interface NfeTransmitter extends Transmitter<NfeRemoteClient> {

@@ -1,4 +1,6 @@
-import { defineConfig } from 'tsup';
+import path from 'node:path';
+import { defineConfig, type Options } from 'tsup';
+import type { Plugin } from 'esbuild';
 
 const addDayjsPluginExtensions = () =>
   ({
@@ -13,7 +15,7 @@ const addDayjsPluginExtensions = () =>
         );
       return { code, map: null };
     },
-  } as const);
+  }) as const;
 
 const addCreateRequireBanner = () =>
   ({
@@ -24,7 +26,32 @@ const addCreateRequireBanner = () =>
         "import { createRequire } from 'module'; const require = createRequire(import.meta.url);";
       return { code: `${banner}\n${code}`, map: null };
     },
-  } as const);
+  }) as const;
+
+const isNfeSource = (importer: string) =>
+  importer.includes(`${path.sep}packages${path.sep}nfe${path.sep}`) ||
+  importer.includes(`${path.sep}lib${path.sep}nfe${path.sep}`);
+
+const externalizeNfetsCoreFromNfe = (): Plugin => ({
+  name: 'externalize-nfets-core-from-nfe',
+  setup(build) {
+    build.onResolve({ filter: /^@nfets\/core(\/.*)?$/ }, (args) => {
+      if (!args.importer || !isNfeSource(args.importer)) return null;
+      return { path: 'nfets/core', external: true };
+    });
+  },
+});
+
+const externalizePublishedSubpathsFromRoot = (): Plugin => ({
+  name: 'externalize-published-subpaths-from-root',
+  setup(build) {
+    build.onResolve({ filter: /^\.\/(core|nfe)$/ }, (args) => {
+      if (!args.importer.endsWith(`${path.sep}lib${path.sep}index.ts`))
+        return null;
+      return { path: `nfets/${args.path.slice(2)}`, external: true };
+    });
+  },
+});
 
 export default defineConfig({
   outDir: 'dist',
@@ -43,5 +70,9 @@ export default defineConfig({
   dts: { entry: ['lib/index.ts', 'lib/core/index.ts', 'lib/nfe/index.ts'] },
   watch: false,
   sourcemap: false,
+  esbuildPlugins: [
+    externalizeNfetsCoreFromNfe(),
+    externalizePublishedSubpathsFromRoot(),
+  ],
   plugins: [addDayjsPluginExtensions(), addCreateRequireBanner()],
-});
+} satisfies Options);

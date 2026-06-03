@@ -349,13 +349,15 @@ describe('NfeRemoteTransmitter (unit)', () => {
         right(mockResponse as AsynchronousAutorizacaoResponse),
       );
 
-      const response = await transmission.autorizacao({
-        tpAmb: Environment.Homolog,
-        cUF: StateCodes.RS,
-        idLote: '123',
-        timeout: 12_000,
-        NFe: { infNFe: {} } as never,
-      });
+      const response = await transmission.autorizacao(
+        {
+          tpAmb: Environment.Homolog,
+          cUF: StateCodes.RS,
+          idLote: '123',
+          NFe: { infNFe: {} } as never,
+        },
+        { timeout: 12_000 },
+      );
 
       expectIsRight(response);
       expect(mockRepository.send).toHaveBeenCalledWith({
