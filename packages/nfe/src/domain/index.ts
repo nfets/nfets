@@ -2,6 +2,8 @@ export type * from './entities/access-keys/access-key';
 export type * from './entities/events/index';
 export type * from './entities/services/index';
 
+export * from './errors/xml-validation-error';
+
 export * from './entities/constants/tp-emis';
 export * from './entities/constants/tp-event';
 

@@ -6,7 +6,7 @@ import { createClientAsync } from 'soap';
 import axios, { type AxiosInstance } from 'axios';
 
 import { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
-import { leftFromError } from '@nfets/core/shared/left-from-error';
+import { leftFromTransmissionError } from '@nfets/core/shared/left-from-transmission-error';
 import { left, right, type Either } from '@nfets/core/shared/either';
 
 import type { XmlToolkit } from '@nfets/core/domain';
@@ -89,23 +89,24 @@ export class SoapRemoteTransmissionRepository<
     };
   }
 
-  protected getDefaultRequest(): AxiosInstance {
-    const instance = axios.create();
+  protected getDefaultRequest(params: { timeout?: number }): AxiosInstance {
+    const instance = axios.create({ timeout: params.timeout });
     instance.defaults.httpsAgent = this.httpsAgent;
     return instance;
   }
 
-  protected get request(): AxiosInstance {
+  protected request(params: { timeout?: number }): AxiosInstance {
     if (os.platform() === 'win32') {
       try {
-        if (!this.certificate) return this.getDefaultRequest();
+        if (!this.certificate)
+          return this.getDefaultRequest({ timeout: params.timeout });
         return WinHttpClient.create(this.certificate);
       } catch (error) {
-        return this.getDefaultRequest();
+        return this.getDefaultRequest({ timeout: params.timeout });
       }
     }
 
-    return this.getDefaultRequest();
+    return this.getDefaultRequest({ timeout: params.timeout });
   }
 
   public async send<P extends SendTransmissionPayload<C>>(params: P) {
@@ -113,11 +114,11 @@ export class SoapRemoteTransmissionRepository<
     if (periodOrLeft.isLeft()) return periodOrLeft;
 
     try {
-      const request = this.request;
+      const request = this.request({ timeout: params.timeout });
       const client = await createClientAsync(`${params.url}?wsdl`, {
         request,
         attributesKey: '$',
-        wsdl_options: { request },
+        wsdl_options: { request, timeout: params.timeout },
         forceSoap12Headers: true,
       });
 
@@ -141,12 +142,12 @@ export class SoapRemoteTransmissionRepository<
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
       const [result] = await client[`${params.method}Async`](
         { _xml },
-        { request },
+        { request, timeout: params.timeout },
       );
 
       return right(result as ExtractReturnType<C, P>);
     } catch (e) {
-      return leftFromError(e);
+      return leftFromTransmissionError(e);
     }
   }
 }

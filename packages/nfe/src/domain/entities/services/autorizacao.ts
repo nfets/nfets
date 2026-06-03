@@ -8,6 +8,7 @@ export interface AutorizacaoPayload<E extends NFe, T extends E | E[]> {
   idLote?: string;
   indSinc?: '0' | '1';
   NFe: T;
+  timeout?: number;
 }
 
 export interface AutorizacaoRequest<E extends NFe, T extends E | E[]> {

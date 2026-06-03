@@ -14,6 +14,7 @@ export type * from './entities/xml/xml-parser';
 export type * from './entities/xml/xml-toolkit';
 
 export * from './errors/nfets-error';
+export * from './errors/transmission-error';
 export * from './errors/validation-error';
 
 export * from './repositories/pdf-builder';

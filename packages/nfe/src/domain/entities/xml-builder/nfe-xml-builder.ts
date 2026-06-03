@@ -91,8 +91,8 @@ export interface DetGroupBuilder<T extends object> {
 
 export interface TotalBuilder<T extends object> {
   total(payload: ITotal): TranspBuilder<T>;
-  ISSQNtot(payload?: Partial<IISSQNTot>): TranspBuilder<T>;
-  ICMSTot(payload?: Partial<IICMSTot>): TranspBuilder<T>;
+  ISSQNtot(payload?: Partial<IISSQNTot>): TranspBuilder<T> & TotalBuilder<T>;
+  ICMSTot(payload?: Partial<IICMSTot>): TranspBuilder<T> & TotalBuilder<T>;
   increment(
     callback: (
       context: DeepPartial<ITotal>,

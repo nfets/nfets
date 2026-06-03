@@ -10,7 +10,7 @@ import { readCertificateRequestForPipelineTests } from '@nfets/test/certificates
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
 import { StateCodes, Environment, type StateAcronym } from '@nfets/core/domain';
 
-const SEFAZ_TIMEOUT_SC = 60 * 1000;
+const SEFAZ_TIMEOUT_SC = 2 * 60 * 1000;
 
 describe('nfce authorizer pipeline (integration) (destructive)', () => {
   if (process.env.DESTRUCTIVE_TESTS !== '1') {
@@ -157,7 +157,11 @@ describe('nfce authorizer pipeline (integration) (destructive)', () => {
       const entityOrLeft = await builder.assemble();
       expectIsRight(entityOrLeft);
 
-      const response = await pipeline.execute({ xml: entityOrLeft.value });
+      const response = await pipeline.execute({
+        xml: entityOrLeft.value,
+        timeout: 5_000, // 5 seconds
+      });
+
       expectIsRight(response);
       const { retEnviNFe } = response.value.response;
       console.log('response:', JSON.stringify(retEnviNFe, null, 2));
