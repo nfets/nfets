@@ -18,6 +18,19 @@ describeIfBuilt('published bundle transmission errors (dist)', () => {
     expect(nfeBundle).not.toMatch(
       /static\{o\(this,"TransmissionTimeoutError"\)\}/,
     );
+    expect(nfeBundle).not.toMatch(/import\s+\w+\s+from["']nfets\/core["']/);
+  });
+
+  it('should export runtime helpers required by nfets/nfe from nfets/core', () => {
+    const core = requireFromPackage('./dist/core/index.cjs') as Record<
+      string,
+      unknown
+    >;
+
+    expect(core.left).toBeDefined();
+    expect(core.right).toBeDefined();
+    expect(core.dateToolkit).toBeDefined();
+    expect(core.timezones).toBeDefined();
   });
 
   it('should share TransmissionTimeoutError between nfets/core and nfets/nfe', () => {
