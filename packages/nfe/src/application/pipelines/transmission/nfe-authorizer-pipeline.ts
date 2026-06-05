@@ -68,13 +68,10 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
 
     payload.idLote ??= new Date().getTime().toString().slice(0, 15);
 
-    const responseOrLeft = await this.transmitter.autorizacao(
-      {
-        ...payload,
-        NFe: nfeBatchOrLeft.value,
-      },
-      { timeout: options?.timeout },
-    );
+    const responseOrLeft = await this.transmitter.autorizacao({
+      ...payload,
+      NFe: nfeBatchOrLeft.value,
+    });
 
     if (responseOrLeft.isLeft()) return responseOrLeft;
     const response = responseOrLeft.value;

@@ -49,8 +49,10 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     protected readonly remoteTransmissionRepository: RemoteTransmissionRepository<NfeRemoteClient>,
   ) {}
 
-  protected options: NfeTransmitterOptions = {} as NfeTransmitterOptions;
   protected readonly xmlns = 'http://www.portalfiscal.inf.br/nfe';
+  protected options: NfeTransmitterOptions = {
+    timeout: 60_000,
+  } as NfeTransmitterOptions;
 
   public configure(options: NfeTransmitterOptions) {
     this.options = { ...this.options, ...options };
@@ -172,10 +174,8 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
   public async autorizacao<
     E extends NFe,
     T extends SignedEntity<E> | SignedEntity<E>[],
-  >(
-    payload: IAutorizacaoPayload<E, T>,
-    options: { timeout?: number } = { timeout: 60_000 },
-  ) {
+  >(payload: IAutorizacaoPayload<E, T>) {
+    console.log('NfeRemoteTransmitter autorizacao timeout:', this.options);
     const payloadOrError = this.validate(payload);
     if (payloadOrError.isLeft()) return payloadOrError;
 
@@ -185,7 +185,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
       url: service.url,
-      timeout: options.timeout,
+      timeout: this.options.timeout,
       xsd: this.xsd('enviNFe_v4.00.xsd'),
       payload: {
         enviNFe: this.ns(data, service.version),

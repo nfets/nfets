@@ -33,7 +33,9 @@ export class NfceRemoteTransmitter
   extends NfeRemoteTransmitter
   implements NfceTransmitter
 {
-  protected options: NfceTransmitterOptions = {} as NfceTransmitterOptions;
+  protected options: NfceTransmitterOptions = {
+    timeout: 60_000,
+  } as NfceTransmitterOptions;
 
   public constructor(
     protected readonly remoteTransmissionRepository: RemoteTransmissionRepository<NfceRemoteClient>,

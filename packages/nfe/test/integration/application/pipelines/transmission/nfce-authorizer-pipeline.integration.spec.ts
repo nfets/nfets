@@ -157,10 +157,10 @@ describe('nfce authorizer pipeline (integration) (destructive)', () => {
       const entityOrLeft = await builder.assemble();
       expectIsRight(entityOrLeft);
 
-      const response = await pipeline.execute({
-        xml: entityOrLeft.value,
-        timeout: 5_000, // 5 seconds
-      });
+      const response = await pipeline.execute(
+        { xml: entityOrLeft.value },
+        { timeout: 15_000 },
+      );
 
       expectIsRight(response);
       const { retEnviNFe } = response.value.response;
