@@ -41,7 +41,7 @@ interface Transform<T extends string> {
 }
 
 interface DigestMethod {
-  $: { Algorithm: `${DigestAlgorithm}` };
+  $: { Algorithm: DigestAlgorithm };
 }
 
 interface KeyInfo {

@@ -12,6 +12,7 @@ export * from './pipelines/transmission/nfe-authorization-response-pipeline';
 
 export * from './pipelines/transmission/nfce-cancel-pipeline';
 export * from './pipelines/transmission/nfce-authorizer-pipeline';
+export * from './pipelines/transmission/nfce-contingency-xml-authorizer-pipeline';
 export * from './pipelines/transmission/nfce-void-range-pipeline';
 export * from './pipelines/transmission/nfce-consult-status-pipeline';
 export * from './pipelines/transmission/nfce-consult-protocolo-pipeline';
