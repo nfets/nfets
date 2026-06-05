@@ -175,7 +175,6 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     E extends NFe,
     T extends SignedEntity<E> | SignedEntity<E>[],
   >(payload: IAutorizacaoPayload<E, T>) {
-    console.log('NfeRemoteTransmitter autorizacao timeout:', this.options);
     const payloadOrError = this.validate(payload);
     if (payloadOrError.isLeft()) return payloadOrError;
 
