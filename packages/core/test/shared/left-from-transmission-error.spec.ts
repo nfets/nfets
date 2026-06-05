@@ -110,6 +110,25 @@ describe('mapTransmissionError (unit)', () => {
     expect(result).toBeInstanceOf(TransmissionTimeoutError);
   });
 
+  it('should map node tls read ECONNRESET system error to TransmissionTimeoutError', () => {
+    const error = Object.assign(new Error('read ECONNRESET'), {
+      errno: -54,
+      code: 'ECONNRESET',
+      syscall: 'read',
+    });
+
+    const mapped = leftFromTransmissionError(error);
+    expectIsLeft(mapped);
+    const result = mapped.value;
+
+    expect(result).toBeInstanceOf(TransmissionTimeoutError);
+    expect(result).toBeInstanceOf(TransmissionError);
+    expect(result).not.toBeInstanceOf(TransmissionHostNotFoundError);
+    expect(result.constructor).toBe(TransmissionTimeoutError);
+    expect(result.message).toBe('read ECONNRESET');
+    expect(result.cause).toBe(error);
+  });
+
   it('should fall back to NFeTsError for unrelated errors', () => {
     const error = new Error('certificate has expired');
 

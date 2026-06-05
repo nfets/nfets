@@ -43,7 +43,8 @@ const isTimeoutMessage = (message: string) => {
   return (
     normalized.includes('timeout') ||
     normalized.includes('timed out') ||
-    normalized.includes('time-out')
+    normalized.includes('time-out') ||
+    normalized.includes('read econnreset')
   );
 };
 
