@@ -244,8 +244,8 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
                   tpAmb: Environment.Homolog,
                   cUF: '35',
                   verAplic: '1.0',
-                  cStat: '103',
-                  xMotivo: 'Lote recebido com sucesso',
+                  cStat: '104',
+                  xMotivo: 'Lote processado',
                   dhRecbto: new Date().toISOString(),
                   protNFe: {
                     $: { versao: '4.00' },
@@ -342,8 +342,8 @@ describe('nfe success authorizer pipeline (unit)', () => {
                   tpAmb: Environment.Homolog,
                   cUF: '35',
                   verAplic: '1.0',
-                  cStat: '103',
-                  xMotivo: 'Lote recebido com sucesso',
+                  cStat: '104',
+                  xMotivo: 'Lote processado',
                   dhRecbto: new Date().toISOString(),
                   protNFe: {
                     $: { versao: '4.00' },
@@ -760,8 +760,8 @@ describe('nfe with failures authorizer pipeline (unit)', () => {
                   tpAmb: Environment.Homolog,
                   cUF: '35',
                   verAplic: '1.0',
-                  cStat: '103',
-                  xMotivo: 'Lote recebido com sucesso',
+                  cStat: '104',
+                  xMotivo: 'Lote processado',
                   dhRecbto: new Date().toISOString(),
                   protNFe: [
                     {

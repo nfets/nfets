@@ -3,12 +3,16 @@ import type { DecimalValue } from '@nfets/core/domain';
 export type ICMSStandard = Pick<
   ICMS,
   | 'ICMS00'
+  | 'ICMS02'
   | 'ICMS10'
+  | 'ICMS15'
   | 'ICMS20'
   | 'ICMS30'
   | 'ICMS40'
   | 'ICMS51'
+  | 'ICMS53'
   | 'ICMS60'
+  | 'ICMS61'
   | 'ICMS70'
   | 'ICMS90'
 >;
@@ -25,12 +29,16 @@ export type ICMSSN = Pick<
 
 export interface ICMS {
   ICMS00?: ICMS00;
+  ICMS02?: ICMS02;
   ICMS10?: ICMS10;
+  ICMS15?: ICMS15;
   ICMS20?: ICMS20;
   ICMS30?: ICMS30;
   ICMS40?: ICMS40;
   ICMS51?: ICMS51;
+  ICMS53?: ICMS53;
   ICMS60?: ICMS60;
+  ICMS61?: ICMS61;
   ICMS70?: ICMS70;
   ICMS90?: ICMS90;
   ICMSPart?: ICMSPart;
@@ -52,6 +60,14 @@ export interface ICMS00 {
   vICMS?: DecimalValue;
 }
 
+export interface ICMS02 {
+  orig: string;
+  CST: string;
+  qBCMono?: DecimalValue;
+  adRemICMS: DecimalValue;
+  vICMSMono: DecimalValue;
+}
+
 export interface ICMS10 {
   orig: string;
   CST: string;
@@ -63,6 +79,19 @@ export interface ICMS10 {
   vBCST?: DecimalValue;
   pICMSST?: DecimalValue;
   vICMSST?: DecimalValue;
+}
+
+export interface ICMS15 {
+  orig: string;
+  CST: string;
+  qBCMono?: DecimalValue;
+  adRemICMS: DecimalValue;
+  vICMSMono: DecimalValue;
+  qBCMonoReten?: DecimalValue;
+  adRemICMSReten: DecimalValue;
+  vICMSMonoReten: DecimalValue;
+  pRedAdRem?: DecimalValue;
+  motRedAdRem?: string;
 }
 
 export interface ICMS20 {
@@ -103,6 +132,19 @@ export interface ICMS51 {
   vICMSDif?: DecimalValue;
 }
 
+export interface ICMS53 {
+  orig: string;
+  CST: string;
+  qBCMono?: DecimalValue;
+  adRemICMS?: DecimalValue;
+  vICMSMonoOp?: DecimalValue;
+  pDif?: DecimalValue;
+  vICMSMonoDif?: DecimalValue;
+  vICMSMono?: DecimalValue;
+  qBCMonoDif?: DecimalValue;
+  adRemICMSDif?: DecimalValue;
+}
+
 export interface ICMS60 {
   orig: string;
   CST: string;
@@ -110,6 +152,14 @@ export interface ICMS60 {
   pST?: DecimalValue;
   vICMSSubstituto?: DecimalValue;
   vICMSSTRet?: DecimalValue;
+}
+
+export interface ICMS61 {
+  orig: string;
+  CST: string;
+  qBCMonoRet?: DecimalValue;
+  adRemICMSRet: DecimalValue;
+  vICMSMonoRet: DecimalValue;
 }
 
 export interface ICMS70 {

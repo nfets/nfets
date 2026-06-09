@@ -8,6 +8,7 @@ import axios, { type AxiosInstance } from 'axios';
 import { NFeTsError } from '@nfets/core/domain/errors/nfets-error';
 import { leftFromTransmissionError } from '@nfets/core/shared/left-from-transmission-error';
 import { left, right, type Either } from '@nfets/core/shared/either';
+import { normalizeTransmissionStrings } from '@nfets/core/shared/fix-utf8-mojibake';
 
 import type { XmlToolkit } from '@nfets/core/domain';
 import type { RemoteTransmissionRepository } from '@nfets/core/domain/repositories/remote-transmission-repository';
@@ -20,10 +21,10 @@ import type {
 } from '@nfets/core/domain/entities/transmission/payload';
 import { WinHttpClient } from './winhttp-client';
 
-export class SoapRemoteTransmissionRepository<
-  C extends Client,
-> implements RemoteTransmissionRepository<C> {
-  declare private certificate?: ReadCertificateResponse;
+export class SoapRemoteTransmissionRepository<C extends Client>
+  implements RemoteTransmissionRepository<C>
+{
+  private declare certificate?: ReadCertificateResponse;
 
   public constructor(
     private readonly toolkit: XmlToolkit,
@@ -31,7 +32,7 @@ export class SoapRemoteTransmissionRepository<
   ) {}
 
   public setCertificate(certificate: ReadCertificateResponse) {
-    return ((this.certificate = certificate), this);
+    return (this.certificate = certificate), this;
   }
 
   private validateCertificatePeriod(): Either<NFeTsError, void> {
@@ -145,7 +146,9 @@ export class SoapRemoteTransmissionRepository<
         { request, timeout: params.timeout },
       );
 
-      return right(result as ExtractReturnType<C, P>);
+      return right(
+        normalizeTransmissionStrings(result) as ExtractReturnType<C, P>,
+      );
     } catch (e) {
       return leftFromTransmissionError(e);
     }

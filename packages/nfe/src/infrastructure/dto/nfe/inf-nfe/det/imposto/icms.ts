@@ -5,12 +5,16 @@ import { Choice, TransformDecimal } from '@nfets/core/application';
 import type { DecimalValue } from '@nfets/core/domain';
 import type {
   ICMS00 as IICMS00,
+  ICMS02 as IICMS02,
   ICMS10 as IICMS10,
+  ICMS15 as IICMS15,
   ICMS20 as IICMS20,
   ICMS30 as IICMS30,
   ICMS40 as IICMS40,
   ICMS51 as IICMS51,
+  ICMS53 as IICMS53,
   ICMS60 as IICMS60,
+  ICMS61 as IICMS61,
   ICMS70 as IICMS70,
   ICMS90 as IICMS90,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/icms';
@@ -51,6 +55,24 @@ export class ICMS00 implements IICMS00 {
   public vICMS?: DecimalValue;
 }
 
+export class ICMS02 implements IICMS02 {
+  @IsString()
+  public orig!: string;
+
+  @IsString()
+  public CST!: string;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  public qBCMono?: DecimalValue;
+
+  @TransformDecimal({ fixed: 4 })
+  public adRemICMS!: DecimalValue;
+
+  @TransformDecimal({ fixed: 2 })
+  public vICMSMono!: DecimalValue;
+}
+
 export class ICMS10 implements IICMS10 {
   @IsString()
   public orig!: string;
@@ -89,6 +111,43 @@ export class ICMS10 implements IICMS10 {
   @IsOptional()
   @TransformDecimal({ fixed: 2 })
   public vICMSST?: DecimalValue;
+}
+
+export class ICMS15 implements IICMS15 {
+  @IsString()
+  public orig!: string;
+
+  @IsString()
+  public CST!: string;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  public qBCMono?: DecimalValue;
+
+  @TransformDecimal({ fixed: 4 })
+  public adRemICMS!: DecimalValue;
+
+  @TransformDecimal({ fixed: 2 })
+  public vICMSMono!: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  public qBCMonoReten?: DecimalValue;
+
+  @TransformDecimal({ fixed: 4 })
+  public adRemICMSReten!: DecimalValue;
+
+  @TransformDecimal({ fixed: 2 })
+  public vICMSMonoReten!: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  @Max(100)
+  public pRedAdRem?: DecimalValue;
+
+  @IsOptional()
+  @IsString()
+  public motRedAdRem?: string;
 }
 
 export class ICMS20 implements IICMS20 {
@@ -196,6 +255,47 @@ export class ICMS51 implements IICMS51 {
   public vICMSDif?: DecimalValue;
 }
 
+export class ICMS53 implements IICMS53 {
+  @IsString()
+  public orig!: string;
+
+  @IsString()
+  public CST!: string;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  public qBCMono?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  public adRemICMS?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 2 })
+  public vICMSMonoOp?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  @Max(100)
+  public pDif?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 2 })
+  public vICMSMonoDif?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 2 })
+  public vICMSMono?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  public qBCMonoDif?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  public adRemICMSDif?: DecimalValue;
+}
+
 export class ICMS60 implements IICMS60 {
   @IsString()
   public orig!: string;
@@ -218,6 +318,24 @@ export class ICMS60 implements IICMS60 {
   @IsOptional()
   @TransformDecimal({ fixed: 2 })
   public vICMSSTRet?: DecimalValue;
+}
+
+export class ICMS61 implements IICMS61 {
+  @IsString()
+  public orig!: string;
+
+  @IsString()
+  public CST!: string;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  public qBCMonoRet?: DecimalValue;
+
+  @TransformDecimal({ fixed: 4 })
+  public adRemICMSRet!: DecimalValue;
+
+  @TransformDecimal({ fixed: 2 })
+  public vICMSMonoRet!: DecimalValue;
 }
 
 export class ICMS70 implements IICMS70 {
@@ -551,12 +669,16 @@ export class ICMSSN900 implements IICMSSN900 {
 @Choice({
   properties: [
     'ICMS00',
+    'ICMS02',
     'ICMS10',
+    'ICMS15',
     'ICMS20',
     'ICMS30',
     'ICMS40',
     'ICMS51',
+    'ICMS53',
     'ICMS60',
+    'ICMS61',
     'ICMS70',
     'ICMS90',
     'ICMSPart',
@@ -577,8 +699,18 @@ export class ICMS implements IICMS {
 
   @IsOptional()
   @ValidateNested()
+  @Type(() => ICMS02)
+  public ICMS02?: IICMS02;
+
+  @IsOptional()
+  @ValidateNested()
   @Type(() => ICMS10)
   public ICMS10?: IICMS10;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ICMS15)
+  public ICMS15?: IICMS15;
 
   @IsOptional()
   @ValidateNested()
@@ -602,8 +734,18 @@ export class ICMS implements IICMS {
 
   @IsOptional()
   @ValidateNested()
+  @Type(() => ICMS53)
+  public ICMS53?: IICMS53;
+
+  @IsOptional()
+  @ValidateNested()
   @Type(() => ICMS60)
   public ICMS60?: IICMS60;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ICMS61)
+  public ICMS61?: IICMS61;
 
   @IsOptional()
   @ValidateNested()

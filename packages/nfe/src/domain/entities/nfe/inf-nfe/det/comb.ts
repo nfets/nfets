@@ -30,8 +30,8 @@ export interface Comb {
   CODIF?: string;
   qTemp?: DecimalValue;
   UFCons: string;
-  CIDE: CIDE;
-  encerrante: Encerrante;
+  CIDE?: CIDE;
+  encerrante?: Encerrante;
   pBio?: DecimalValue;
   origComb?: OrigComb[];
 }

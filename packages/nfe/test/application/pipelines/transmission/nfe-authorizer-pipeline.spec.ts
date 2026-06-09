@@ -213,10 +213,8 @@ const buildXml = (
 
 describe('nfe authorizer pipeline (contingency) (unit)', () => {
   if (process.env.CI && ensurePlatform('win32'))
-    return it.skip(
-      "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
-      () => void 0,
-    );
+    return it.skip("Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.", () =>
+      void 0);
 
   const certificateRequest = getCnpjCertificateReadRequest();
 
@@ -244,8 +242,8 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
                   tpAmb: Environment.Homolog,
                   cUF: '35',
                   verAplic: '1.0',
-                  cStat: '103',
-                  xMotivo: 'Lote recebido com sucesso',
+                  cStat: '104',
+                  xMotivo: 'Lote processado',
                   dhRecbto: new Date().toISOString(),
                   protNFe: {
                     $: { versao: '4.00' },
@@ -312,10 +310,8 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
 
 describe('nfe authorizer pipeline (unit)', () => {
   if (process.env.CI && ensurePlatform('win32'))
-    return it.skip(
-      "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
-      () => void 0,
-    );
+    return it.skip("Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.", () =>
+      void 0);
 
   const certificateRequest = getCnpjCertificateReadRequest();
 
@@ -342,8 +338,8 @@ describe('nfe authorizer pipeline (unit)', () => {
                   tpAmb: Environment.Homolog,
                   cUF: '35',
                   verAplic: '1.0',
-                  cStat: '103',
-                  xMotivo: 'Lote recebido com sucesso',
+                  cStat: '104',
+                  xMotivo: 'Lote processado',
                   dhRecbto: new Date().toISOString(),
                   protNFe: {
                     $: { versao: '4.00' },
@@ -722,5 +718,63 @@ ${NFe}
         .replace(/(>)\s+(<)/g, '$1$2')
         .trim(),
     );
+  });
+});
+
+describe('nfe authorizer pipeline lot not processed (unit)', () => {
+  if (process.env.CI && ensurePlatform('win32'))
+    return it.skip(
+      "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
+      () => void 0,
+    );
+
+  const certificateRequest = getCnpjCertificateReadRequest();
+
+  it('should return right with rejection protNFe when sync lot is not processed', async () => {
+    const certificates = new NativeCertificateRepository(
+      axios.create(),
+      new MemoryCacheAdapter(),
+    );
+
+    const certificate = await certificates.read(certificateRequest);
+    certificates.read = jest.fn().mockResolvedValue(certificate);
+
+    class MockableNfeAuthorizerPipeline extends NfeAuthorizerPipeline {
+      protected override readonly soap: RemoteTransmissionRepository<NfeRemoteClient> =
+        {
+          setCertificate: jest.fn(),
+          send: jest.fn().mockResolvedValue(
+            right({
+              retEnviNFe: {
+                $: { versao: '4.00' },
+                tpAmb: Environment.Homolog,
+                verAplic: 'PR-v4_5_33',
+                cStat: '866',
+                xMotivo:
+                  'Ausencia de troco quando o valor dos pagamentos informados for maior que o total da nota',
+                cUF: '41',
+                dhRecbto: '2026-06-09T10:31:06-03:00',
+              },
+            }),
+          ),
+        } as unknown as RemoteTransmissionRepository<NfeRemoteClient>;
+
+      protected override transmitter = new NfeRemoteTransmitter(this.soap);
+      protected override readonly certificates = certificates;
+    }
+
+    const pipeline = new MockableNfeAuthorizerPipeline(certificateRequest);
+    const xml = await buildXml(StateCodes.PR, TpEmis.Normal);
+    const result = await pipeline.execute({ xml, idLote: '1', indSinc: '1' });
+
+    expectIsRight(result);
+
+    const protNFe = result.value.response.retEnviNFe.protNFe;
+    expect(protNFe.infProt.cStat).toBe('866');
+    expect(protNFe.infProt.xMotivo).toBe(
+      'Ausencia de troco quando o valor dos pagamentos informados for maior que o total da nota',
+    );
+    expect(result.value.xml).toContain('<NFe');
+    expect(result.value.xml).not.toContain('<nfeProc');
   });
 });

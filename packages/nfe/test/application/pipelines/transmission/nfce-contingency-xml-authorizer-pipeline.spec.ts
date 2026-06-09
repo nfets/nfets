@@ -146,8 +146,8 @@ describe('nfce contingency xml authorizer pipeline (unit)', () => {
                 tpAmb: Environment.Homolog,
                 cUF: StateCodes.SP,
                 verAplic: '1.0',
-                cStat: '103',
-                xMotivo: 'Lote recebido com sucesso',
+                cStat: '104',
+                xMotivo: 'Lote processado',
                 dhRecbto: new Date().toISOString(),
                 protNFe: {
                   $: { versao: '4.00' },

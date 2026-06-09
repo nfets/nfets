@@ -12,6 +12,8 @@ import type {
 } from '@nfets/nfe/domain/entities/services/autorizacao';
 
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
+import { IndSinc } from '@nfets/nfe/domain/entities/constants/ind-sinc';
+import { AutorizacaoBatchCstat } from '@nfets/nfe/domain/entities/constants/autorizacao-batch-cstat';
 import { TransmissionPipeline } from './transmission-pipeline';
 import { CouldNotReceiveResponseError } from '@nfets/nfe/domain/errors/could-not-receive-response';
 import {
@@ -38,7 +40,7 @@ export interface NfeAuthorizerPayload<
   cUF?: StateCode;
   tpAmb?: EnvironmentCode;
   idLote?: string;
-  indSinc?: '0' | '1';
+  indSinc?: IndSinc;
   xml: T;
 }
 
@@ -47,6 +49,8 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
     payload: NfeAuthorizerPayload<string>,
     options?: Pick<NfeTransmitterOptions, 'schema' | 'timeout'>,
   ): Promise<Either<NFeTsError, PipelineAuthorizerResponse<NFe>>> {
+    payload.indSinc ??= IndSinc.Synchronous;
+
     const certificateOrLeft = await this.certificates.read(this.certificate);
     if (certificateOrLeft.isLeft()) return certificateOrLeft;
 
@@ -76,11 +80,23 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
     if (responseOrLeft.isLeft()) return responseOrLeft;
     const response = responseOrLeft.value;
 
-    if (this.isSyncResponse(response)) {
+    if (this.isLotNotProcessed(response, payload))
+      return right(
+        await this.handleLotNotProcessed(nfeBatchOrLeft.value, response),
+      );
+
+    if (
+      payload.indSinc === IndSinc.Synchronous &&
+      this.isSyncResponse(response)
+    ) {
       return right(await this.response(nfeBatchOrLeft.value, response));
     }
 
-    return await this.handleAsyncResponse(nfeBatchOrLeft.value, response);
+    if (payload.indSinc === IndSinc.Asynchronous && this.hasReceipt(response)) {
+      return await this.handleAsyncResponse(nfeBatchOrLeft.value, response);
+    }
+
+    return left(new CouldNotReceiveResponseError());
   }
 
   protected async protocol(NFe: NFe, protNFe: ProtNFe) {
@@ -159,20 +175,89 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
     );
   }
 
+  protected isLotNotProcessed(
+    response: AutorizacaoResponse,
+    payload: NfeAuthorizerPayload<string>,
+  ): boolean {
+    const { cStat } = response.retEnviNFe;
+    const indSinc = payload.indSinc ?? IndSinc.Synchronous;
+
+    if (
+      indSinc === IndSinc.Asynchronous &&
+      cStat !== AutorizacaoBatchCstat.LotReceived.toString()
+    )
+      return true;
+
+    if (
+      indSinc === IndSinc.Synchronous &&
+      cStat !== AutorizacaoBatchCstat.ProcessedBatch.toString()
+    )
+      return true;
+
+    return false;
+  }
+
+  protected async handleLotNotProcessed(
+    NFe: SignedEntity<NFe>[],
+    response: AutorizacaoResponse,
+  ): Promise<PipelineAuthorizerResponse<NFe>> {
+    return this.response(NFe, this.toRejectionSyncResponse(NFe, response));
+  }
+
+  protected toRejectionSyncResponse(
+    NFe: SignedEntity<NFe>[],
+    response: AutorizacaoResponse,
+  ): SynchronousAutorizacaoResponse<NFe> {
+    const { retEnviNFe } = response;
+    const protNFe = NFe.map((nfe) =>
+      this.buildRejectionProtNFe(nfe, retEnviNFe),
+    );
+
+    return {
+      retEnviNFe: {
+        ...retEnviNFe,
+        protNFe: protNFe.length === 1 ? protNFe[0] : protNFe,
+      },
+    } as SynchronousAutorizacaoResponse<NFe>;
+  }
+
+  protected buildRejectionProtNFe(
+    NFe: NFe,
+    retEnviNFe: AutorizacaoResponse['retEnviNFe'],
+  ): ProtNFe {
+    return {
+      $: { versao: retEnviNFe.$.versao },
+      infProt: {
+        tpAmb: retEnviNFe.tpAmb,
+        verAplic: retEnviNFe.verAplic,
+        chNFe: NFe.infNFe.$.Id?.substring(3) ?? '',
+        dhRecbto: retEnviNFe.dhRecbto,
+        nProt: '',
+        digVal: '',
+        cStat: retEnviNFe.cStat,
+        xMotivo: retEnviNFe.xMotivo,
+      },
+    };
+  }
+
   protected isSyncResponse<E extends NFe, T extends E | E[]>(
     response: AutorizacaoResponse<E, T>,
   ): response is SynchronousAutorizacaoResponse<T> {
     return 'protNFe' in response.retEnviNFe && !!response.retEnviNFe.protNFe;
   }
 
+  protected hasReceipt(
+    response: AutorizacaoResponse,
+  ): response is AsynchronousAutorizacaoResponse {
+    return 'infRec' in response.retEnviNFe && !!response.retEnviNFe.infRec.nRec;
+  }
+
   protected async handleAsyncResponse(
     NFe: SignedEntity<NFe>[],
     response: AsynchronousAutorizacaoResponse,
   ): Promise<Either<NFeTsError, PipelineAuthorizerResponse<NFe>>> {
-    const {
-      tpAmb,
-      infRec: { nRec },
-    } = response.retEnviNFe;
+    const { tpAmb, infRec } = response.retEnviNFe;
+    const { nRec } = infRec;
 
     let attempt = 1;
 

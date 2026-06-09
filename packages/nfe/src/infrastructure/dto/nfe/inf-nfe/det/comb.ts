@@ -4,7 +4,6 @@ import {
   IsObject,
   ValidateNested,
   ArrayMaxSize,
-  Max,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { TransformDecimal } from '@nfets/core/application';
@@ -25,7 +24,6 @@ export class OrigComb implements IOrigComb {
   public cUFOrig!: string;
 
   @TransformDecimal({ fixed: 4 })
-  @Max(100)
   public pOrig!: DecimalValue;
 }
 
@@ -65,17 +63,14 @@ export class Comb implements IComb {
   public descANP!: string;
 
   @IsOptional()
-  @Max(100)
   @TransformDecimal({ fixed: 4 })
   public pGLP?: DecimalValue;
 
   @IsOptional()
-  @Max(100)
   @TransformDecimal({ fixed: 4 })
   public pGNn?: DecimalValue;
 
   @IsOptional()
-  @Max(100)
   @TransformDecimal({ fixed: 4 })
   public pGNi?: DecimalValue;
 
@@ -94,15 +89,17 @@ export class Comb implements IComb {
   @IsString()
   public UFCons!: string;
 
+  @IsOptional()
   @IsObject()
   @ValidateNested()
   @Type(() => CIDE)
-  public CIDE!: ICIDE;
+  public CIDE?: ICIDE;
 
+  @IsOptional()
   @IsObject()
   @ValidateNested()
   @Type(() => Encerrante)
-  public encerrante!: IEncerrante;
+  public encerrante?: IEncerrante;
 
   @IsOptional()
   @TransformDecimal({ fixed: 4 })
