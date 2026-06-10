@@ -92,7 +92,7 @@ export default {
   AN: {
     [Environment.Homolog]: {
       RecepcaoEvento: {
-        method: 'nfeRecepcaoEvento',
+        method: 'nfeRecepcaoEventoNF',
         operation: 'NFeRecepcaoEvento4',
         version: '1.00',
         url: 'https://hom1.nfe.fazenda.gov.br/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx',
@@ -124,7 +124,7 @@ export default {
     },
     [Environment.Production]: {
       RecepcaoEvento: {
-        method: 'nfeRecepcaoEvento',
+        method: 'nfeRecepcaoEventoNF',
         operation: 'NFeRecepcaoEvento4',
         version: '1.00',
         url: 'https://www.nfe.fazenda.gov.br/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx',
@@ -164,19 +164,19 @@ export default {
         url: 'https://hnfe.sefaz.ba.gov.br/webservices/NFeStatusServico4/NFeStatusServico4.asmx',
       },
       NfeAutorizacao: {
-        method: 'nfeAutorizacaoLote',
+        method: 'NFeAutorizacaoLote',
         operation: 'NFeAutorizacao4',
         version: '4.00',
         url: 'https://hnfe.sefaz.ba.gov.br/webservices/NFeAutorizacao4/NFeAutorizacao4.asmx',
       },
       NfeConsultaProtocolo: {
-        method: 'nfeConsultaNF',
+        method: 'NFeConsultaNF',
         operation: 'NFeConsultaProtocolo4',
         version: '4.00',
         url: 'https://hnfe.sefaz.ba.gov.br/webservices/NFeConsultaProtocolo4/NFeConsultaProtocolo4.asmx',
       },
       NfeInutilizacao: {
-        method: 'nfeInutilizacaoNF',
+        method: 'NFeInutilizacao',
         operation: 'NFeInutilizacao4',
         version: '4.00',
         url: 'https://hnfe.sefaz.ba.gov.br/webservices/NFeInutilizacao4/NFeInutilizacao4.asmx',
@@ -188,13 +188,13 @@ export default {
         url: 'https://hnfe.sefaz.ba.gov.br/webservices/NFeRetAutorizacao4/NFeRetAutorizacao4.asmx',
       },
       RecepcaoEvento: {
-        method: 'nfeRecepcaoEvento',
+        method: 'NFeRecepcaoEvento',
         operation: 'NFeRecepcaoEvento4',
         version: '1.00',
         url: 'https://hnfe.sefaz.ba.gov.br/webservices/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx',
       },
       NfeConsultaCadastro: {
-        method: 'consultaCadastro',
+        method: 'ConsultaCadastro',
         operation: 'CadConsultaCadastro4',
         version: '2.00',
         url: 'https://hnfe.sefaz.ba.gov.br/webservices/CadConsultaCadastro4/CadConsultaCadastro4.asmx',
@@ -208,19 +208,19 @@ export default {
         url: 'https://nfe.sefaz.ba.gov.br/webservices/NFeStatusServico4/NFeStatusServico4.asmx',
       },
       NfeAutorizacao: {
-        method: 'nfeAutorizacaoLote',
+        method: 'NFeAutorizacaoLote',
         operation: 'NFeAutorizacao4',
         version: '4.00',
         url: 'https://nfe.sefaz.ba.gov.br/webservices/NFeAutorizacao4/NFeAutorizacao4.asmx',
       },
       NfeConsultaProtocolo: {
-        method: 'nfeConsultaNF',
+        method: 'NFeConsultaNF',
         operation: 'NFeConsultaProtocolo4',
         version: '4.00',
         url: 'https://nfe.sefaz.ba.gov.br/webservices/NFeConsultaProtocolo4/NFeConsultaProtocolo4.asmx',
       },
       NfeInutilizacao: {
-        method: 'nfeInutilizacaoNF',
+        method: 'NFeInutilizacao',
         operation: 'NFeInutilizacao4',
         version: '4.00',
         url: 'https://nfe.sefaz.ba.gov.br/webservices/NFeInutilizacao4/NFeInutilizacao4.asmx',
@@ -232,13 +232,13 @@ export default {
         url: 'https://nfe.sefaz.ba.gov.br/webservices/NFeRetAutorizacao4/NFeRetAutorizacao4.asmx',
       },
       RecepcaoEvento: {
-        method: 'nfeRecepcaoEvento',
+        method: 'NFeRecepcaoEvento',
         operation: 'NFeRecepcaoEvento4',
         version: '1.00',
         url: 'https://nfe.sefaz.ba.gov.br/webservices/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx',
       },
       NfeConsultaCadastro: {
-        method: 'consultaCadastro',
+        method: 'ConsultaCadastro',
         operation: 'CadConsultaCadastro4',
         version: '2.00',
         url: 'https://nfe.sefaz.ba.gov.br/webservices/CadConsultaCadastro4/CadConsultaCadastro4.asmx',
@@ -374,7 +374,7 @@ export default {
         url: 'https://hnfe.fazenda.mg.gov.br/nfe2/services/NFeRecepcaoEvento4',
       },
       NfeConsultaCadastro: {
-        method: 'consultaCadastro4',
+        method: 'consultaCadastro',
         operation: 'CadConsultaCadastro4',
         version: '2.00',
         url: 'https://hnfe.fazenda.mg.gov.br/nfe2/services/CadConsultaCadastro4',
@@ -418,7 +418,7 @@ export default {
         url: 'https://nfe.fazenda.mg.gov.br/nfe2/services/NFeRecepcaoEvento4',
       },
       NfeConsultaCadastro: {
-        method: 'consultaCadastro4',
+        method: 'consultaCadastro',
         operation: 'CadConsultaCadastro4',
         version: '2.00',
         url: 'https://nfe.fazenda.mg.gov.br/nfe2/services/CadConsultaCadastro4',
@@ -644,7 +644,7 @@ export default {
         url: 'https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/NFeRecepcaoEvento4',
       },
       NfeConsultaCadastro: {
-        method: 'consultaCadastro4',
+        method: 'consultaCadastro',
         operation: 'CadConsultaCadastro4',
         version: '2.00',
         url: 'https://nfehomolog.sefaz.pe.gov.br/nfe-service/services/CadConsultaCadastro4',
@@ -688,7 +688,7 @@ export default {
         url: 'https://nfe.sefaz.pe.gov.br/nfe-service/services/NFeRecepcaoEvento4',
       },
       NfeConsultaCadastro: {
-        method: 'consultaCadastro4',
+        method: 'consultaCadastro',
         operation: 'CadConsultaCadastro4',
         version: '2.00',
         url: 'https://nfe.sefaz.pe.gov.br/nfe-service/services/CadConsultaCadastro4',
@@ -722,19 +722,19 @@ export default {
         url: 'https://homologacao.nfe.sefa.pr.gov.br/nfe/NFeInutilizacao4',
       },
       NfeRetAutorizacao: {
-        method: 'nfeRetAutorizacao',
+        method: 'nfeRetAutorizacaoLote',
         operation: 'NFeRetAutorizacao4',
         version: '4.00',
         url: 'https://homologacao.nfe.sefa.pr.gov.br/nfe/NFeRetAutorizacao4',
       },
       RecepcaoEvento: {
-        method: 'nfeRecepcaoEvento',
+        method: 'nfeRecepcaoEventoNF',
         operation: 'NFeRecepcaoEvento4',
         version: '1.00',
         url: 'https://homologacao.nfe.sefa.pr.gov.br/nfe/NFeRecepcaoEvento4',
       },
       NfeConsultaCadastro: {
-        method: 'consultaCadastro4',
+        method: 'consultaCadastro',
         operation: 'CadConsultaCadastro4',
         version: '2.00',
         url: 'https://homologacao.nfe.sefa.pr.gov.br/nfe/CadConsultaCadastro4',
@@ -766,19 +766,19 @@ export default {
         url: 'https://nfe.sefa.pr.gov.br/nfe/NFeInutilizacao4',
       },
       NfeRetAutorizacao: {
-        method: 'nfeRetAutorizacao',
+        method: 'nfeRetAutorizacaoLote',
         operation: 'NFeRetAutorizacao4',
         version: '4.00',
         url: 'https://nfe.sefa.pr.gov.br/nfe/NFeRetAutorizacao4',
       },
       RecepcaoEvento: {
-        method: 'nfeRecepcaoEvento',
+        method: 'nfeRecepcaoEventoNF',
         operation: 'NFeRecepcaoEvento4',
         version: '1.00',
         url: 'https://nfe.sefa.pr.gov.br/nfe/NFeRecepcaoEvento4',
       },
       NfeConsultaCadastro: {
-        method: 'consultaCadastro4',
+        method: 'consultaCadastro',
         operation: 'CadConsultaCadastro4',
         version: '2.00',
         url: 'https://nfe.sefa.pr.gov.br/nfe/CadConsultaCadastro4',
@@ -824,7 +824,7 @@ export default {
         url: 'https://nfe-homologacao.sefazrs.rs.gov.br/ws/recepcaoevento/recepcaoevento4.asmx',
       },
       NfeConsultaCadastro: {
-        method: 'consultaCadastro4',
+        method: 'consultaCadastro',
         operation: 'CadConsultaCadastro4',
         version: '2.00',
         url: 'https://cad.svrs.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro4.asmx',
@@ -868,7 +868,7 @@ export default {
         url: 'https://nfe.sefazrs.rs.gov.br/ws/recepcaoevento/recepcaoevento4.asmx',
       },
       NfeConsultaCadastro: {
-        method: 'consultaCadastro4',
+        method: 'consultaCadastro',
         operation: 'CadConsultaCadastro4',
         version: '2.00',
         url: 'https://cad.svrs.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro4.asmx',
@@ -1135,7 +1135,7 @@ export default {
         url: 'https://nfe.svrs.rs.gov.br/ws/recepcaoevento/recepcaoevento4.asmx',
       },
       NfeConsultaCadastro: {
-        method: 'consultaCadastro4',
+        method: 'consultaCadastro',
         operation: 'CadConsultaCadastro4',
         version: '2.00',
         url: 'https://cad.svrs.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro4.asmx',
@@ -1312,7 +1312,7 @@ export default {
         url: 'https://nfe.svrs.rs.gov.br/ws/recepcaoevento/recepcaoevento4.asmx',
       },
       NfeConsultaCadastro: {
-        method: 'consultaCadastro4',
+        method: 'consultaCadastro',
         operation: 'CadConsultaCadastro4',
         version: '2.00',
         url: 'https://cad.svrs.rs.gov.br/ws/cadconsultacadastro/cadconsultacadastro4.asmx',

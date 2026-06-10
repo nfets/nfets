@@ -278,6 +278,12 @@ describe('NfeXmlBuilderPipeline', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -322,10 +328,10 @@ describe('NfeXmlBuilderPipeline', () => {
                 <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
             </Transforms>
             <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-            <DigestValue>qHQdcMnabvOBeCCk+pSqB8evGDU=</DigestValue>
+            <DigestValue>mh6eQs5LA0KA8HMuWKZVFoouyqk=</DigestValue>
         </Reference>
     </SignedInfo>
-    <SignatureValue>w5psJVvXt/9mPRobp2psxreLDJ9/reykrOtPTKBluhPzGaBUYwJj/5tkw8H8C6kRZHyFUuzgl2E3UY+BeZwTWES7WrnOb9umi0yQ7076B+3YSr7zeYYIpSSFEWYRyBLO5bDI1CI+FA8Sfxv2CB8hybaueCdwN9OXVVXQ/QYiZiYnKnjwTSzgthOuQPshNULZfI5mSfzriHYc3loG008P+zgUpVB534Jl3YCxG+/BYmzmMMauAkgHjRx/z8T6LKSbHoqAFaEILlIRiuKRk8qmc2rBQP/ldoNkuOMNNJl6iUeDt7xlhdGJVlfv1BKdgnuuCkHuqwgxz+m7KV6w2MChHw==</SignatureValue>
+    <SignatureValue>Jkb4il/eFbPPQl3L6ksWpQELhHUchC0xKsvBUyKXZ+kQvVMwZegV59Afsbnkkl+o+q9mry8nDc9TEyoOnoe8F0w9yCypEI/J7t7M4jaH710CCp7sn5QbBaakXX0zihz+d9AtuMTr6mZfXKnko7O74QyLx7yt1+vYuPfo4FdE1h8ydODB4I0iS97JtE+QVyh8zlchm/jsb/toyWt8nYmclHyo/sQpxre8UdbM2C0PO9e9ApuNyVr4aFSKw/n2ulNAxXF9BY8V7Gi3j/TqTaUtKKYdmR2MYu2iXHpYopxY3IGI3uSH+SvV/uQEsmyyQMy8IKzjZ3q/EKciYwLxQqpzFQ==</SignatureValue>
     <KeyInfo>
       <X509Data>
         <X509Certificate>MIIEaTCCA1GgAwIBAgIUU5NidIJ8A/5mGmUXr2Z2CmOmkQwwDQYJKoZIhvcNAQELBQAwgbIxCzAJBgNVBAYTAkJSMQswCQYDVQQIDAJTUDEVMBMGA1UEBwwMU8ODwqNvIFBhdWxvMRMwEQYDVQQKDApJQ1AtQnJhc2lsMSgwJgYDVQQDDB9FTVBSRVNBIERFIFRFU1RFOjc5ODM5NjAxMDAwMTQyMR4wHAYDVQQLDBVBQyBTT0xVVEkgTXVsdGlwbGEgdjUxIDAeBgkqhkiG9w0BCQEWEWVtYWlsQGV4YW1wbGUuY29tMB4XDTI1MTIyMDAxMTEyN1oXDTM1MTIxODAxMTEyN1owgbIxCzAJBgNVBAYTAkJSMQswCQYDVQQIDAJTUDEVMBMGA1UEBwwMU8ODwqNvIFBhdWxvMRMwEQYDVQQKDApJQ1AtQnJhc2lsMSgwJgYDVQQDDB9FTVBSRVNBIERFIFRFU1RFOjc5ODM5NjAxMDAwMTQyMR4wHAYDVQQLDBVBQyBTT0xVVEkgTXVsdGlwbGEgdjUxIDAeBgkqhkiG9w0BCQEWEWVtYWlsQGV4YW1wbGUuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyeOdp7F2KUArVwIGu47LY27YgzLw6R9qbgDCCl6dCrYnvaAaDEYEuEDGkH2ViAxKRfmb/bHdkWLQWZwnNg9inlPbTSa1cvmcAE7GRD/+B3YBRwc1sc/i6zgm1nIttILbJB7Cb6PkSud5MeV5voq/Bj7qCS/FVoFtz1vHaaTMfM/5DZz+dUrZs8WahwDjIegL8mWHH5YKEFnc/4e4H0n/tui9duQgehmRWDDxljCOV6xKK2sx+YuG/GW0jJdi5asbjR6I+U8g/C+0VobhYb1rA0aIkfh/qfDWHzeN0EMkcw6O2Cet4Z7PO6zgr0fItUlkYb2FUYfJPmkJJ/fLRX4hTQIDAQABo3UwczA3BgNVHREEMDAugRFlbWFpbEBleGFtcGxlLmNvbaAZBgVgTAEDA6AQDA43OTgzOTYwMTAwMDE0MjAMBgNVHRMEBTADAQH/MAsGA1UdDwQEAwIBBjAdBgNVHQ4EFgQUoAcoXz39JnM6MusQwIktx7SxQwEwDQYJKoZIhvcNAQELBQADggEBACnLoiW5Zz/WtCkUX5p5BTbL1oTycQKeAERaEsmP/n53e81QYEnMtOEfB7z6IXaOx9KDE95qPPPJXVqantKPHDuD6uHjvSEI/RLb8i1v9KC9YCjtP7cDbl6iuTUBpHtXJq3pi/Ef5LQujo5gMphaQq6KhO2jL4zYJHHY6ogrgzzW1Zn7RI5+4m3WOHUDzjrDqsyGhqOQv2fVfjKYzaBk0cT8I24YHRdTyakfc8NxkMF0xLj95EoXhwSNBMOklgjJ+frZnK5RhQKxoFZVG93gfZuospyq3CN3Yq/pC+Vtnqayq6wsx5onAPr8nWES1HIknSkMP24IY7NPXZ1QKvPmVhM=</X509Certificate>

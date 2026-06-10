@@ -724,8 +724,8 @@ export default {
         url: 'https://homologacao.nfce.sefa.pr.gov.br/nfce/NFeStatusServico4',
       },
       RecepcaoEvento: {
-        method: 'nfeRecepcaoEvento',
-        operation: 'NFeRecepcaoEvento',
+        method: 'nfeRecepcaoEventoNF',
+        operation: 'NFeRecepcaoEvento4',
         version: '1.00',
         url: 'https://homologacao.nfce.sefa.pr.gov.br/nfce/NFeRecepcaoEvento4',
       },
@@ -744,7 +744,7 @@ export default {
         url: 'https://nfce.sefa.pr.gov.br/nfce/NFeAutorizacao4',
       },
       NfeRetAutorizacao: {
-        method: 'nfeRetAutorizacao',
+        method: 'nfeRetAutorizacaoLote',
         operation: 'NFeRetAutorizacao4',
         version: '4.00',
         url: 'https://nfce.sefa.pr.gov.br/nfce/NFeRetAutorizacao4',
@@ -768,8 +768,8 @@ export default {
         url: 'https://nfce.sefa.pr.gov.br/nfce/NFeStatusServico4',
       },
       RecepcaoEvento: {
-        method: 'nfeRecepcaoEvento',
-        operation: 'NFeRecepcaoEvento',
+        method: 'nfeRecepcaoEventoNF',
+        operation: 'NFeRecepcaoEvento4',
         version: '1.00',
         url: 'https://nfce.sefa.pr.gov.br/nfce/NFeRecepcaoEvento4',
       },
@@ -1012,7 +1012,7 @@ export default {
         url: 'https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx',
       },
       RecepcaoEvento: {
-        method: 'nfeRecepcaoEvento',
+        method: 'nfeRecepcaoEventoNF',
         operation: 'NFeRecepcaoEvento4',
         version: '1.00',
         url: 'https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeRecepcaoEvento4.asmx',
@@ -1068,7 +1068,7 @@ export default {
         url: 'https://nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx',
       },
       RecepcaoEvento: {
-        method: 'nfeRecepcaoEvento',
+        method: 'nfeRecepcaoEventoNF',
         operation: 'NFeRecepcaoEvento4',
         version: '1.00',
         url: 'https://nfce.fazenda.sp.gov.br/ws/NFeRecepcaoEvento4.asmx',

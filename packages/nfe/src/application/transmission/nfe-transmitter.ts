@@ -17,7 +17,7 @@ import type {
 } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
 import type {
   ServiceOptions,
-  Webservice,
+  WebserviceForService,
 } from '@nfets/nfe/domain/entities/transmission/services';
 import type { ConsultStatusPayload as IConsultStatusPayload } from '@nfets/nfe/domain/entities/services/consult-status';
 import type { InutilizacaoPayload as IInutilizacaoPayload } from '@nfets/nfe/domain/entities/services/inutilizacao';
@@ -72,17 +72,27 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     O extends Record<string, unknown> = typeof WSNFE_4_00_MOD55,
     S extends StateCode = StateCode,
     E extends EnvironmentCode = EnvironmentCode,
-  >(options: ServiceOptions<WS, O, S, E>) {
-    const cUF = options.cUF ?? this.options.cUF;
-    const tpAmb = options.tpAmb ?? this.options.tpAmb;
+    K extends ServiceOptions<WS, O, S, E>['service'] = ServiceOptions<
+      WS,
+      O,
+      S,
+      E
+    >['service'],
+  >(
+    options: ServiceOptions<WS, O, S, E, K>,
+  ): WebserviceForService<WS, O, S, E, K> {
+    const cUF = (options.cUF ?? this.options.cUF) as S;
+    const tpAmb = (options.tpAmb ?? this.options.tpAmb) as E;
 
     const webservice = this.options.contingency
       ? contingency[cUF]
       : webservices[cUF];
 
     const environments = WSNFE_4_00_MOD55[webservice];
-    const services = environments[tpAmb] as Record<string, Webservice>;
-    return services[options.service as string];
+    const services = environments[tpAmb];
+    return services[
+      options.service as keyof typeof services
+    ] as WebserviceForService<WS, O, S, E, K>;
   }
 
   protected errors(): string[] | undefined {
@@ -105,7 +115,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
 
   protected ns<T extends object>(payload: Namespaced<T>, version: string) {
     const $ = (payload.$ ?? {}) as { xmlns: string; versao: string };
-    return (($.xmlns = this.xmlns), ($.versao = version), { ...payload, $ });
+    return ($.xmlns = this.xmlns), ($.versao = version), { ...payload, $ };
   }
 
   protected xsd(name: string) {
@@ -125,7 +135,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       payload: {
         consStatServ: this.ns(data, service.version),
       },
-      method: 'nfeStatusServicoNF',
+      method: service.method,
     });
   }
 
@@ -143,7 +153,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       payload: {
         inutNFe: this.ns(data, service.version),
       },
-      method: 'nfeInutilizacaoNF',
+      method: service.method,
     });
   }
 
@@ -166,7 +176,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       payload: {
         consSitNFe: this.ns(data, service.version),
       },
-      method: 'nfeConsultaNF',
+      method: service.method,
     });
   }
 
@@ -189,7 +199,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       payload: {
         enviNFe: this.ns(data, service.version),
       },
-      method: 'nfeAutorizacaoLote',
+      method: service.method,
     });
   }
 
@@ -208,7 +218,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       payload: {
         consReciNFe: this.ns(data, service.version),
       },
-      method: 'nfeRetAutorizacaoLote',
+      method: service.method,
     });
   }
 
@@ -226,7 +236,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       payload: {
         envEvento: this.ns(data, service.version),
       },
-      method: 'nfeRecepcaoEvento',
+      method: service.method,
     });
   }
 
@@ -248,7 +258,7 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       payload: {
         ConsCad: this.ns(data, service.version),
       },
-      method: 'consultaCadastro',
+      method: service.method,
     });
   }
 }

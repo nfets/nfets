@@ -46,13 +46,8 @@ import type {
 } from '../services/consulta-cadastro';
 
 import type { Schema } from './schemas';
-import type { ServiceOptions } from './services';
+import type { ServiceOptions, WebserviceForService } from './services';
 import type { NFe } from '../nfe/nfe';
-
-interface Service {
-  url: string;
-  version: string;
-}
 
 export interface ContingencyOptions {
   xJust: string;
@@ -73,9 +68,10 @@ export interface NfeTransmitter extends Transmitter<NfeRemoteClient> {
     O extends Record<string, unknown>,
     S extends StateCode,
     E extends EnvironmentCode,
+    K extends ServiceOptions<WS, O, S, E>['service'],
   >(
-    options: ServiceOptions<WS, O, S, E>,
-  ): Service;
+    options: ServiceOptions<WS, O, S, E, K>,
+  ): WebserviceForService<WS, O, S, E, K>;
   configure(options: NfeTransmitterOptions): NfeTransmitter;
   consultStatus(
     payload: ConsultStatusPayload,
@@ -109,7 +105,15 @@ export interface NfeRemoteClient extends Client {
     args: InutilizacaoRequest,
     opt?: RequestConfig,
   ): Promise<InutilizacaoResponse>;
+  NFeInutilizacao(
+    args: InutilizacaoRequest,
+    opt?: RequestConfig,
+  ): Promise<InutilizacaoResponse>;
   nfeConsultaNF(
+    args: ConsultaProtocoloRequest,
+    opt?: RequestConfig,
+  ): Promise<ConsultaProtocoloResponse>;
+  NFeConsultaNF(
     args: ConsultaProtocoloRequest,
     opt?: RequestConfig,
   ): Promise<ConsultaProtocoloResponse>;
@@ -120,7 +124,18 @@ export interface NfeRemoteClient extends Client {
     args: AutorizacaoRequest<E, T>,
     opt?: RequestConfig,
   ): Promise<AutorizacaoResponse>;
+  NFeAutorizacaoLote<
+    E extends NFe,
+    T extends SignedEntity<E> | SignedEntity<E>[],
+  >(
+    args: AutorizacaoRequest<E, T>,
+    opt?: RequestConfig,
+  ): Promise<AutorizacaoResponse>;
   nfeRetAutorizacaoLote(
+    args: RetAutorizacaoRequest,
+    opt?: RequestConfig,
+  ): Promise<RetAutorizacaoResponse>;
+  nfeRetAutorizacao(
     args: RetAutorizacaoRequest,
     opt?: RequestConfig,
   ): Promise<RetAutorizacaoResponse>;
@@ -128,7 +143,23 @@ export interface NfeRemoteClient extends Client {
     args: EventoRequest<T>,
     opt?: RequestConfig,
   ): Promise<EventoResponse>;
+  nfeRecepcaoEventoNF<T>(
+    args: EventoRequest<T>,
+    opt?: RequestConfig,
+  ): Promise<EventoResponse>;
+  NFeRecepcaoEvento<T>(
+    args: EventoRequest<T>,
+    opt?: RequestConfig,
+  ): Promise<EventoResponse>;
   consultaCadastro(
+    args: ConsultaCadastroRequest,
+    opt?: RequestConfig,
+  ): Promise<ConsultaCadastroResponse>;
+  consultaCadastro4(
+    args: ConsultaCadastroRequest,
+    opt?: RequestConfig,
+  ): Promise<ConsultaCadastroResponse>;
+  ConsultaCadastro(
     args: ConsultaCadastroRequest,
     opt?: RequestConfig,
   ): Promise<ConsultaCadastroResponse>;

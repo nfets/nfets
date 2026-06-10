@@ -470,6 +470,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -1508,6 +1514,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -1737,6 +1749,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -1954,6 +1972,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -2171,6 +2195,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -2376,6 +2406,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -2579,6 +2615,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -2787,6 +2829,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -2988,6 +3036,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -3188,6 +3242,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -3406,6 +3466,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -3621,6 +3687,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -3824,6 +3896,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -4054,6 +4132,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -4441,6 +4525,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -4702,6 +4792,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -4915,6 +5011,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -5192,6 +5294,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>200.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -5437,6 +5545,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -5665,6 +5779,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -5881,6 +6001,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -6095,6 +6221,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -6326,6 +6458,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -6554,6 +6692,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -6770,6 +6914,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -7002,6 +7152,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -7228,6 +7384,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -7461,6 +7623,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -7708,6 +7876,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -7938,6 +8112,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -8174,6 +8354,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -8421,6 +8607,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -8655,6 +8847,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -8932,6 +9130,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -10022,6 +10226,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -10306,6 +10516,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -10610,6 +10826,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>
@@ -10848,6 +11070,12 @@ describe('xml builder with xml2js builder', () => {
         <vST>0.00</vST>
         <vFCPST>0.00</vFCPST>
         <vFCPSTRet>0.00</vFCPSTRet>
+        <qBCMono>0.00</qBCMono>
+        <vICMSMono>0.00</vICMSMono>
+        <qBCMonoReten>0.00</qBCMonoReten>
+        <vICMSMonoReten>0.00</vICMSMonoReten>
+        <qBCMonoRet>0.00</qBCMonoRet>
+        <vICMSMonoRet>0.00</vICMSMonoRet>
         <vProd>100.00</vProd>
         <vFrete>0.00</vFrete>
         <vSeg>0.00</vSeg>

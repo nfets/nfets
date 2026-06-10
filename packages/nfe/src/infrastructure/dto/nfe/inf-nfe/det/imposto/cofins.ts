@@ -22,10 +22,12 @@ export class COFINSAliq implements ICOFINSAliq {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 4 })
   public pCOFINS?: string;
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vCOFINS?: string;
 }
 
@@ -43,6 +45,7 @@ export class COFINSQtde implements ICOFINSQtde {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vCOFINS?: string;
 }
 
@@ -62,6 +65,7 @@ export class COFINSOutr implements ICOFINSOutr {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 4 })
   public pCOFINS?: string;
 
   @IsOptional()
@@ -74,6 +78,7 @@ export class COFINSOutr implements ICOFINSOutr {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vCOFINS?: string;
 }
 
@@ -107,6 +112,7 @@ export class COFINSST implements ICOFINSST {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 4 })
   public pCOFINS?: string;
 
   @IsOptional()
@@ -119,5 +125,6 @@ export class COFINSST implements ICOFINSST {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vCOFINS?: string;
 }

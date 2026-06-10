@@ -81,6 +81,7 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   @Validates(Imposto)
   public imposto(payload: IImposto) {
     this.data.imposto = payload;
+    this.listener?.imposto(payload);
     return this;
   }
 
@@ -104,6 +105,7 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   public ii(payload: III) {
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.II = payload;
+    this.listener?.ii(payload);
     return this;
   }
 
@@ -111,6 +113,7 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   public ipi(payload: IIPI) {
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.IPI = payload;
+    this.listener?.ipi(payload);
     return this;
   }
 

@@ -22,10 +22,12 @@ export class PISAliq implements IPISAliq {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 4 })
   public pPIS?: string;
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vPIS?: string;
 }
 
@@ -43,6 +45,7 @@ export class PISQtde implements IPISQtde {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vPIS?: string;
 }
 
@@ -62,6 +65,7 @@ export class PISOutr implements IPISOutr {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 4 })
   public pPIS?: string;
 
   @IsOptional()
@@ -74,6 +78,7 @@ export class PISOutr implements IPISOutr {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vPIS?: string;
 }
 
@@ -107,6 +112,7 @@ export class PISST implements IPISST {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 4 })
   public pPIS?: string;
 
   @IsOptional()
@@ -119,5 +125,6 @@ export class PISST implements IPISST {
 
   @IsOptional()
   @IsString()
+  @TransformDecimal({ fixed: 2 })
   public vPIS?: string;
 }

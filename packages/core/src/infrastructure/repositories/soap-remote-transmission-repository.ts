@@ -118,6 +118,7 @@ export class SoapRemoteTransmissionRepository<C extends Client>
       const request = this.request({ timeout: params.timeout });
       const client = await createClientAsync(`${params.url}?wsdl`, {
         request,
+        endpoint: params.url,
         attributesKey: '$',
         wsdl_options: { request, timeout: params.timeout },
         forceSoap12Headers: true,
@@ -140,8 +141,22 @@ export class SoapRemoteTransmissionRepository<C extends Client>
       const validOrLeft = await this.toolkit.validate(node, xsd);
       if (validOrLeft.isLeft()) return validOrLeft;
 
+      const soapMethod = `${params.method}Async`;
+      if (typeof client[soapMethod] !== 'function') {
+        const available = Object.keys(client).filter((key) =>
+          key.endsWith('Async'),
+        );
+        return left(
+          new NFeTsError(
+            `Método SOAP "${soapMethod}" não encontrado em ${
+              params.url
+            }. Disponíveis: ${available.join(', ') || 'nenhum'}`,
+          ),
+        );
+      }
+
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-      const [result] = await client[`${params.method}Async`](
+      const [result] = await client[soapMethod](
         { _xml },
         { request, timeout: params.timeout },
       );

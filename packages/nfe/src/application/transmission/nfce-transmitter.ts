@@ -23,7 +23,7 @@ import { Validates } from '@nfets/core/application';
 import type { NFCe } from '@nfets/nfe/domain/entities/nfe/nfce';
 import {
   ServiceOptions,
-  Webservice,
+  WebserviceForService,
 } from '@nfets/nfe/domain/entities/transmission/services';
 import { NfceQrcode } from './nfce-qrcode';
 
@@ -53,23 +53,30 @@ export class NfceRemoteTransmitter
     O extends Record<string, unknown> = typeof WSNFE_4_00_MOD65,
     S extends StateCode = StateCode,
     E extends EnvironmentCode = EnvironmentCode,
-  >(options: ServiceOptions<WS, O, S, E>) {
-    const cUF = options.cUF ?? this.options.cUF;
-    const tpAmb = options.tpAmb ?? this.options.tpAmb;
+    K extends ServiceOptions<WS, O, S, E>['service'] = ServiceOptions<
+      WS,
+      O,
+      S,
+      E
+    >['service'],
+  >(
+    options: ServiceOptions<WS, O, S, E, K>,
+  ): WebserviceForService<WS, O, S, E, K> {
+    const cUF = (options.cUF ?? this.options.cUF) as S;
+    const tpAmb = (options.tpAmb ?? this.options.tpAmb) as E;
     const webservice = webservices[cUF as keyof typeof webservices];
     const environments = WSNFE_4_00_MOD65[webservice];
-    const services = environments[tpAmb] as Record<
-      string,
-      Webservice | undefined
-    >;
-    const service = services[options.service as string];
-    if (service) return service;
+    const services = environments[tpAmb];
+    const service = services[options.service as keyof typeof services];
+    if (service) {
+      return service as WebserviceForService<WS, O, S, E, K>;
+    }
     const real = Object.keys(StateCodes).find(
       (acronym) => StateCodes[acronym as StateAcronym] === cUF,
     ) as StateAcronym;
     return WSNFE_4_00_MOD65[real][tpAmb][
       options.service as keyof (typeof WSNFE_4_00_MOD65)[StateAcronym][EnvironmentCode]
-    ];
+    ] as WebserviceForService<WS, O, S, E, K>;
   }
 
   public getUrlConsult(NFe: NFCe) {

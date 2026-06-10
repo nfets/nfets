@@ -212,3 +212,67 @@ describe('DefaultDetBuilderAggregator ISSQNtot via NfeXmlBuilder (unit)', () => 
     issqnSpy.mockRestore();
   });
 });
+
+describe('DefaultDetBuilderAggregator ICMSTot (unit)', () => {
+  it('should aggregate ICMS61 monophasic fields', () => {
+    const { aggregator, state } = createBuilderHarness();
+
+    aggregator.icms({
+      ICMS61: {
+        orig: '0',
+        CST: '61',
+        qBCMonoRet: '1.0000',
+        adRemICMSRet: '0.0000',
+        vICMSMonoRet: '0.00',
+      },
+    });
+
+    expect(state.infNFe.total.ICMSTot).toEqual({
+      vBC: '0.00',
+      vICMS: '0.00',
+      vICMSDeson: '0.00',
+      vBCST: '0.00',
+      vST: '0.00',
+      vFCP: '0.00',
+      vFCPST: '0.00',
+      vFCPSTRet: '0.00',
+      qBCMono: '0.00',
+      vICMSMono: '0.00',
+      qBCMonoReten: '0.00',
+      vICMSMonoReten: '0.00',
+      qBCMonoRet: '1.00',
+      vICMSMonoRet: '0.00',
+    });
+  });
+
+  it('should aggregate prod, imposto, pis and cofins fields', () => {
+    const { aggregator, state } = createBuilderHarness();
+
+    aggregator.prod({
+      cProd: '1',
+      cEAN: 'SEM GTIN',
+      xProd: 'GLP',
+      NCM: '00000000',
+      CFOP: '5656',
+      uCom: 'KG',
+      qCom: '1.0000',
+      vUnCom: '120.0000',
+      vProd: '120.00',
+      cEANTrib: 'SEM GTIN',
+      uTrib: 'KG',
+      qTrib: '1.0000',
+      vUnTrib: '120.0000',
+      indTot: '1',
+    });
+    aggregator.imposto({ vTotTrib: 39.54 });
+    aggregator.pis({ PISNT: { CST: '08' } });
+    aggregator.cofins({ COFINSNT: { CST: '08' } });
+
+    expect(state.infNFe.total.ICMSTot).toMatchObject({
+      vProd: '120.00',
+      vTotTrib: '39.54',
+      vPIS: '0.00',
+      vCOFINS: '0.00',
+    });
+  });
+});
