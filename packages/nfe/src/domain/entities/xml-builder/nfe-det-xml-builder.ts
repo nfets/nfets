@@ -44,12 +44,14 @@ export interface IcmsBuilder {
     CofinsStBuilder &
     AssembleDetXmlBuilder &
     IbscbsBuilder;
+  icms(payload?: undefined): IcmsOrIssQnBuilder;
 }
 
 export interface IssQnBuilder {
   issqn(
     payload: ISSQN,
   ): IssIpiBuilder & PisBuilder & PisStBuilder & AssembleDetXmlBuilder;
+  issqn(payload?: undefined): IcmsOrIssQnBuilder;
 }
 
 export interface IcmsOrIssQnBuilder extends IcmsBuilder, IssQnBuilder {}

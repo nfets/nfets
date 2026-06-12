@@ -86,7 +86,8 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   }
 
   @Validates(ICMS)
-  public icms(payload: IICMS) {
+  public icms(payload?: IICMS) {
+    if (!payload) return this;
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.ICMS = payload;
     this.listener?.icms(payload);
@@ -94,7 +95,8 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   }
 
   @Validates(ISSQN)
-  public issqn(payload: IISSQN) {
+  public issqn(payload?: IISSQN) {
+    if (!payload) return this;
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.ISSQN = payload;
     this.listener?.issqn(payload);

@@ -9,8 +9,10 @@ import type { NFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 import type { INfeXmlBuilder } from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
 import {
   createIssqnPayload,
+  createIssqnServiceProd,
   createValidEmit,
   createValidIde,
+  createValidItems,
   createValidPag,
   createValidTransp,
 } from '../../fixtures/data';
@@ -210,6 +212,72 @@ describe('DefaultDetBuilderAggregator ISSQNtot via NfeXmlBuilder (unit)', () => 
     );
 
     issqnSpy.mockRestore();
+  });
+
+  it('should not call issqn aggregator when issqn payload is undefined', () => {
+    const issqnSpy = jest.spyOn(DefaultDetBuilderAggregator.prototype, 'issqn');
+
+    ExposedNfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide(createValidIde())
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00000000',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .issqn(undefined)
+          .icms({
+            ICMS00: {
+              orig: '0',
+              CST: '00',
+              modBC: '0',
+              vBC: '100.00',
+              pICMS: '18.0000',
+              vICMS: '18.00',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag())
+      .quiet();
+
+    expect(issqnSpy).not.toHaveBeenCalled();
+    issqnSpy.mockRestore();
+  });
+
+  it('should not call icms aggregator when icms payload is undefined', () => {
+    const icmsSpy = jest.spyOn(DefaultDetBuilderAggregator.prototype, 'icms');
+
+    ExposedNfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide(createValidIde())
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod(createIssqnServiceProd(item))
+          .icms(undefined)
+          .issqn(createIssqnPayload()),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag())
+      .quiet();
+
+    expect(icmsSpy).not.toHaveBeenCalled();
+    icmsSpy.mockRestore();
   });
 });
 
