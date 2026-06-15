@@ -34,24 +34,23 @@ export interface ImpostoBuilder {
 }
 
 export interface IcmsBuilder {
-  icms(
-    payload: ICMS,
-  ): IcmsIpiBuilder &
+  icms(payload?: ICMS): IcmsIpiBuilder &
     IIBuilder &
     PisBuilder &
     PisStBuilder &
     CofinsBuilder &
     CofinsStBuilder &
     AssembleDetXmlBuilder &
-    IbscbsBuilder;
-  icms(payload?: undefined): IcmsOrIssQnBuilder;
+    IbscbsBuilder &
+    IssQnBuilder;
 }
 
 export interface IssQnBuilder {
-  issqn(
-    payload: ISSQN,
-  ): IssIpiBuilder & PisBuilder & PisStBuilder & AssembleDetXmlBuilder;
-  issqn(payload?: undefined): IcmsOrIssQnBuilder;
+  issqn(payload?: ISSQN): IssIpiBuilder &
+    PisBuilder &
+    PisStBuilder &
+    AssembleDetXmlBuilder &
+    IcmsBuilder;
 }
 
 export interface IcmsOrIssQnBuilder extends IcmsBuilder, IssQnBuilder {}
