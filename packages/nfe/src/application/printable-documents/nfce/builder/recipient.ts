@@ -121,20 +121,38 @@ export class Recipient implements Builder {
   }
 
   public height(): number {
-    const { dest } = this.context.data.infNFe;
-    if (!dest) return 0;
     this.setup();
-
-    const { xNome, enderDest } = dest;
-    const address = this.addressLine(enderDest);
 
     const { left, right } = this.builder.pageMargins();
     const width = this.builder.pageWidth() - left - right;
+    const heights = [this.builder.currentLineHeight() * 0.5];
 
-    this.builder.fontSize(this.context.options.textFontSize);
-    return this.builder.heightOfString(`${xNome}${address}`, {
-      align: 'center',
-      width,
-    });
+    const { dest } = this.context.data.infNFe;
+    if (!dest) {
+      heights.push(
+        this.builder.heightOfString('CONSUMIDOR NÃO IDENTIFICADO', {
+          width,
+          align: 'center',
+        }),
+      );
+      return heights.reduce((acc, height) => acc + height, 0);
+    }
+
+    const identifier = this.identification(dest);
+    const { xNome, enderDest } = dest;
+    const address = this.addressLine(enderDest);
+
+    heights.push(
+      this.builder.heightOfString(`CONSUMIDOR - ${identifier}`, {
+        width,
+        align: 'center',
+      }),
+      this.builder.heightOfString(`${xNome}${address}`, {
+        width,
+        align: 'center',
+      }),
+    );
+
+    return heights.reduce((acc, height) => acc + height, 0);
   }
 }

@@ -129,14 +129,13 @@ layout quebra a linha corretamente quando a des`,
         .toContain('CONSUMIDOR - CNPJ: 03.916.076/0005-83')
         .toContain('TESTE saiudh uiashd uiahdhasu')
         .toContain(
-          `- Rua Rua Silvino
-Ciarini, S/N, Industriarios, teste, Concordia - SC`,
+          ` - Rua Rua Silvino Ciarini, S/N, Industriarios,
+teste, Concordia - SC`,
         )
 
         // NFC-e metadata
         .toContain(
-          `NFC-e nº 000001130 - série 067 emitida em:
-21/11/2025 10:42:39`,
+          'NFC-e nº 000001130 - série 067 emitida em: 21/11/2025 10:42:39',
         )
 
         // Protocol information
@@ -273,20 +272,18 @@ layout quebra a linha corretamente quando a des`,
         .toContain('CONSUMIDOR - CNPJ: 03.916.076/0005-83')
         .toContain('TESTE saiudh uiashd uiahdhasu')
         .toContain(
-          `- Rua Rua Silvino
-Ciarini, S/N, Industriarios, teste, Concordia - SC`,
+          ` - Rua Rua Silvino Ciarini, S/N, Industriarios,
+teste, Concordia - SC`,
         )
 
         // NFC-e metadata
         .toContain(
-          `NFC-e nº 000001130 - série 067 emitida em:
-21/11/2025 10:42:39`,
+          'NFC-e nº 000001130 - série 067 emitida em: 21/11/2025 10:42:39',
         )
 
         // Pending authorization message (second occurrence - after metadata)
         .toContain(
-          `PENDENTE DE AUTORIZAÇÃO - SEM
-VALOR FISCAL`,
+          'PENDENTE DE AUTORIZAÇÃO - SEM VALOR FISCAL',
         )
 
         // Footer
@@ -395,14 +392,13 @@ layout quebra a linha corretamente quando a des`,
         .toContain('CONSUMIDOR - CNPJ: 03.916.076/0005-83')
         .toContain('TESTE saiudh uiashd uiahdhasu')
         .toContain(
-          `- Rua Rua Silvino
-Ciarini, S/N, Industriarios, teste, Concordia - SC`,
+          ` - Rua Rua Silvino Ciarini, S/N, Industriarios,
+teste, Concordia - SC`,
         )
 
         // NFC-e metadata
         .toContain(
-          `NFC-e nº 000001130 - série 067 emitida em:
-21/11/2025 10:42:39`,
+          'NFC-e nº 000001130 - série 067 emitida em: 21/11/2025 10:42:39',
         )
 
         // Protocol information
@@ -521,14 +517,13 @@ layout quebra a linha corretamente quando a des`,
         .toContain('CONSUMIDOR - CNPJ: 03.916.076/0005-83')
         .toContain('TESTE saiudh uiashd uiahdhasu')
         .toContain(
-          `- Rua Rua Silvino
-Ciarini, S/N, Industriarios, teste, Concordia - SC`,
+          ` - Rua Rua Silvino Ciarini, S/N, Industriarios,
+teste, Concordia - SC`,
         )
 
         // NFC-e metadata
         .toContain(
-          `NFC-e nº 000001130 - série 067 emitida em:
-21/11/2025 10:42:39`,
+          'NFC-e nº 000001130 - série 067 emitida em: 21/11/2025 10:42:39',
         )
 
         // Contingency message (second occurrence - after metadata)

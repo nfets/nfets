@@ -7,7 +7,6 @@ import { Totals } from '../builder/totals';
 import { Payments } from '../builder/payments';
 import { AccessKey } from '../builder/access-key';
 import { AggregateQrCodeToProtocols } from '../builder/aggregate-qr-code-to-protocols';
-import { Footer } from '../builder/footer';
 
 import { DanfcePdfDocument } from '../danfce';
 import { FiscalMessages } from '../builder/fiscal-messages';
@@ -27,7 +26,6 @@ export class DanfceReducedPdfDocument extends DanfcePdfDocument {
       Payments.instance(this),
       AccessKey.instance(this),
       AggregateQrCodeToProtocols.instance(this),
-      Footer.instance(this),
     ];
   }
 }

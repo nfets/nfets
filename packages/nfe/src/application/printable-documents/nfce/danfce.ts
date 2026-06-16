@@ -23,8 +23,8 @@ import {
 import type { Builder } from '@nfets/nfe/domain/entities/printable-documents/builder';
 
 export abstract class DanfcePdfDocument {
-  declare public data: NFCe;
-  declare public protNFe?: ProtNFe;
+  public declare data: NFCe;
+  public declare protNFe?: ProtNFe;
 
   public readonly builder: PdfBuilder;
   public readonly toolkit: XmlToolkit = new Xml2JsToolkit();
@@ -63,26 +63,42 @@ export abstract class DanfcePdfDocument {
   ): Promise<number> {
     const instance = factory(new PassThrough());
     try {
+      instance.options.height = 10_000;
+      instance.apply();
       instance.builder.page();
       await instance.parse(xml);
-      return instance.height();
+
+      for (const builder of instance.builders) await builder.build();
+
+      const { bottom } = instance.pageMargins;
+      return instance.builder.y() + bottom + 8;
     } finally {
       instance.end();
     }
   }
 
+  protected readonly pageMargins = {
+    top: 12,
+    right: 8,
+    bottom: 28,
+    left: 8,
+  } as const;
+
   protected height(): number {
     this.builder.page();
-    return this.builders.reduce(
+    const { top, bottom } = this.pageMargins;
+    const contentHeight = this.builders.reduce(
       (acc, builder) => acc + (builder.height?.() ?? 0),
-      this.options.height,
+      0,
     );
+
+    return contentHeight + top + bottom;
   }
 
   protected apply(): void {
     this.builder.configure({
       size: [DanfceSize[this.options.width], this.options.height],
-      margins: { top: 12, right: 8, bottom: 8, left: 8 },
+      margins: this.pageMargins,
       layout: 'portrait',
     });
   }
@@ -112,9 +128,7 @@ export abstract class DanfcePdfDocument {
 
   public end(): void {
     return (
-      this.builder.end(),
-      this.builders.map((builder) => builder.end()),
-      void 0
+      this.builder.end(), this.builders.map((builder) => builder.end()), void 0
     );
   }
 

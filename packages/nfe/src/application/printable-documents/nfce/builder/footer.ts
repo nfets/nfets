@@ -104,13 +104,24 @@ export class Footer implements Builder {
   }
 
   public height(): number {
-    const credits = this.context.options.credits;
-    if (!this.infCplText && !credits) return 0;
     this.setup();
 
-    const heights = [];
+    const heights = [this.builder.currentLineHeight() * 0.5];
+    const credits = this.context.options.credits;
     const { left, right } = this.builder.pageMargins();
     const width = this.builder.pageWidth() - left - right;
+    const { vTotTrib } = this.context.data.infNFe.total.ICMSTot;
+    const value =
+      !vTotTrib || !Number.parseFloat(vTotTrib.toString())
+        ? '-----'
+        : this.context.currency(vTotTrib);
+
+    heights.push(
+      this.builder.heightOfString(`${this.constants.vTotTrib} ${value}`, {
+        width,
+        align: 'center',
+      }),
+    );
 
     if (this.infCplText)
       heights.push(

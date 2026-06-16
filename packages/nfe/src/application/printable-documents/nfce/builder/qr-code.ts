@@ -9,10 +9,6 @@ import { type QrCodeSvg } from '@nfets/nfe/domain/entities/printable-documents/n
 export class QRCode implements Builder {
   protected static _instance?: QRCode;
 
-  protected readonly defaults = {
-    qrSize: 65,
-  } as const;
-
   private qrCodeSvg?: QrCodeSvg;
 
   public static instance(context: DanfcePdfDocument): QRCode {
@@ -23,6 +19,13 @@ export class QRCode implements Builder {
 
   protected get builder() {
     return this.context.builder;
+  }
+
+  protected get qrSize(): number {
+    const { left, right } = this.builder.pageMargins();
+    const contentWidth = this.builder.pageWidth() - left - right;
+
+    return Math.floor(contentWidth * 0.6);
   }
 
   protected async getQrSvgString(content: string): Promise<string> {
@@ -45,7 +48,7 @@ export class QRCode implements Builder {
     const view = this.qrCodeSvg.$.viewBox;
     const [, , viewBoxWidth, viewBoxHeight] = view.split(' ').map(Number);
 
-    const { qrSize } = this.defaults;
+    const qrSize = this.qrSize;
     const scaleX = qrSize / viewBoxWidth;
     const scaleY = qrSize / viewBoxHeight;
 
@@ -53,8 +56,12 @@ export class QRCode implements Builder {
       ? this.qrCodeSvg.path
       : [this.qrCodeSvg.path];
 
-    const { left } = this.builder.pageMargins();
-    this.builder.save().translate(left, this.builder.y()).scale(scaleX, scaleY);
+    const { left, right } = this.builder.pageMargins();
+    const contentWidth = this.builder.pageWidth() - left - right;
+    const x = left + (contentWidth - qrSize) / 2;
+    const y = this.builder.y();
+
+    this.builder.save().translate(x, y).scale(scaleX, scaleY);
 
     paths.forEach((path) => {
       this.builder.path(path.$.d);
@@ -63,6 +70,7 @@ export class QRCode implements Builder {
     });
 
     this.builder.restore();
+    this.builder.text('', { y: y + qrSize });
   }
 
   protected async make() {
@@ -82,6 +90,8 @@ export class QRCode implements Builder {
 
   public async build(): Promise<PdfBuilder> {
     await this.make();
+    if (!this.qrCodeSvg) return this.builder;
+
     this.setup();
     this.builder.moveDown(0.5);
     this.drawQrCode();
@@ -93,7 +103,10 @@ export class QRCode implements Builder {
   }
 
   public height(): number {
+    const { qrCode } = this.context.data.infNFeSupl ?? {};
+    if (!qrCode) return 0;
+
     this.setup();
-    return this.defaults.qrSize + 0.5;
+    return this.qrSize + 0.5;
   }
 }

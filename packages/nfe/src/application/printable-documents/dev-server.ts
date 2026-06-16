@@ -8,6 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 import { DanfceDefaultPdfDocument } from './nfce/layouts/danfce-default';
+import { DanfceReducedPdfDocument } from './nfce/layouts/danfce-reduced';
 
 dotenv.config({ path: path.resolve('../../', '.env') });
 const app = express();
@@ -16,7 +17,7 @@ const SAMPLE_NFCE_XML = readFileSync(
   path.join(
     __dirname,
     '../../../test/application/printable-documents/nfce/mocks',
-    'complete-xml-homolog-contingency.xml',
+    'complete-xml-homolog-contingency-50-items.xml',
   ),
   'utf-8',
 );
@@ -29,6 +30,18 @@ app.get('/danfce', async (_, res) => {
   });
 
   const doc = new DanfceDefaultPdfDocument(res);
+  await doc.build(SAMPLE_NFCE_XML);
+  doc.end();
+});
+
+app.get('/danfce-reduced', async (_, res) => {
+  res.set({
+    'Content-Type': 'application/pdf',
+    'Content-Disposition': 'inline; filename="example.pdf"',
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+  });
+
+  const doc = new DanfceReducedPdfDocument(res);
   await doc.build(SAMPLE_NFCE_XML);
   doc.end();
 });

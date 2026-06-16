@@ -27,6 +27,8 @@ export class FiscalMessages implements Builder {
   }
 
   protected get contingencyBannerText(): string {
+    if (this.context.protNFe?.infProt) return this.constants.issuedInContingency;
+
     return `${this.constants.issuedInContingency}\n${this.constants.pendingOfAuthorization}`;
   }
 

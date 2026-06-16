@@ -52,9 +52,9 @@ export class AggregateRecipientToProtocols implements Builder {
 
   public height(): number {
     this.setup();
-    return this.builders.reduce((height, builder) => {
-      if (builder instanceof FiscalMessages) return height;
-      return height + (builder.height?.() ?? 0);
-    }, 0);
+    return this.builders.reduce(
+      (height, builder) => height + (builder.height?.() ?? 0),
+      0,
+    );
   }
 }
