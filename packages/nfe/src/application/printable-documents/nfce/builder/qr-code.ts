@@ -4,6 +4,7 @@ import type { PdfBuilder } from '@nfets/core/domain/repositories/pdf-builder';
 import type { DanfcePdfDocument } from '../danfce';
 import type { Builder } from '@nfets/nfe/domain/entities/printable-documents/builder';
 
+import { TpEmis } from '@nfets/nfe/domain';
 import { type QrCodeSvg } from '@nfets/nfe/domain/entities/printable-documents/nfce';
 
 export class QRCode implements Builder {
@@ -21,11 +22,17 @@ export class QRCode implements Builder {
     return this.context.builder;
   }
 
+  protected get hasContingency(): boolean {
+    const { tpEmis } = this.context.data.infNFe.ide;
+    return tpEmis !== TpEmis.Normal;
+  }
+
   protected get qrSize(): number {
     const { left, right } = this.builder.pageMargins();
     const contentWidth = this.builder.pageWidth() - left - right;
+    const widthRatio = this.hasContingency ? 0.6 : 0.4;
 
-    return Math.floor(contentWidth * 0.6);
+    return Math.floor(contentWidth * widthRatio);
   }
 
   protected async getQrSvgString(content: string): Promise<string> {
