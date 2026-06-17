@@ -7,9 +7,10 @@ import type { COFINS, COFINSST } from './imposto/cofins';
 import type { ICMSUFDest } from './imposto/icmsufdest';
 import { type IBSCBS } from './imposto/ibscbs';
 import { type IS } from './imposto/is';
+import type { DecimalValue } from '@nfets/core/domain';
 
 export interface Imposto {
-  vTotTrib?: number;
+  vTotTrib?: DecimalValue;
   ICMS?: ICMS;
   IPI?: IPI;
   II?: II;

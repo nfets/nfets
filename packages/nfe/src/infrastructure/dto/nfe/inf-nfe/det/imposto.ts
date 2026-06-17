@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, ValidateNested } from 'class-validator';
+import { IsOptional, ValidateNested } from 'class-validator';
 
 import { ICMS } from './imposto/icms';
 import { IPI } from './imposto/ipi';
@@ -24,13 +24,14 @@ import { IS } from './imposto/is';
 import { type IBSCBS as IIBSCBS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs';
 import { type IS as IIS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/is';
 
-import { Choice } from '@nfets/core/application';
+import { Choice, TransformDecimal } from '@nfets/core/application';
+import type { DecimalValue } from '@nfets/core/domain';
 
 @Choice<IImposto>({ properties: ['ICMS', 'ISSQN'] })
 export class Imposto implements IImposto {
   @IsOptional()
-  @IsNumber()
-  public vTotTrib?: number;
+  @TransformDecimal({ fixed: 2 })
+  public vTotTrib?: DecimalValue;
 
   @IsOptional()
   @ValidateNested()

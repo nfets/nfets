@@ -34,7 +34,9 @@ export interface ImpostoBuilder {
 }
 
 export interface IcmsBuilder {
-  icms(payload?: ICMS): IcmsIpiBuilder &
+  icms(
+    payload?: ICMS,
+  ): IcmsIpiBuilder &
     IIBuilder &
     PisBuilder &
     PisStBuilder &
@@ -46,7 +48,9 @@ export interface IcmsBuilder {
 }
 
 export interface IssQnBuilder {
-  issqn(payload?: ISSQN): IssIpiBuilder &
+  issqn(
+    payload?: ISSQN,
+  ): IssIpiBuilder &
     PisBuilder &
     PisStBuilder &
     AssembleDetXmlBuilder &

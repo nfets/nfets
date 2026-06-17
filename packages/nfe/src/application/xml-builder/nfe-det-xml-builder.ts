@@ -79,9 +79,13 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   }
 
   @Validates(Imposto)
-  public imposto(payload: IImposto) {
+  private setImposto(payload: IImposto): IImposto {
     this.data.imposto = payload;
-    this.listener?.imposto(payload);
+    return payload;
+  }
+
+  public imposto(payload: IImposto) {
+    this.listener?.imposto(this.setImposto(payload));
     return this;
   }
 
@@ -173,7 +177,7 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   }
 
   public assemble(): IDet {
-    if (this.data.imposto) this.imposto(this.data.imposto);
+    if (this.data.imposto) this.setImposto(this.data.imposto);
     const result = { ...this.data };
     this.data = {} as IDet;
     return result;
