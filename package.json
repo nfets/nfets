@@ -67,7 +67,7 @@
     "dayjs": "^1.11.18",
     "dotenv": "^17.2.2",
     "esbuild": "^0.28.0",
-    "pdfkit": "^0.18.0",
+    "pdfkit": "^0.19.1",
     "reflect-metadata": "^0.2.2",
     "rimraf": "^6.0.1"
   },
