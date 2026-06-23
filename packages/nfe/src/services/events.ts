@@ -6,4 +6,9 @@ export default {
     version: '1.00',
     descEvento: 'Cancelamento',
   },
+  [TpEvent.CancelamentoSubstituicao]: {
+    method: 'envEventoCancSubstNFe',
+    version: '1.00',
+    descEvento: 'Cancelamento por substituicao',
+  },
 };

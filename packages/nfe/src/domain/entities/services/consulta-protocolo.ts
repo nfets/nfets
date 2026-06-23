@@ -49,7 +49,7 @@ export interface RetEventoItem {
 }
 
 export interface ProcEventoNFe {
-  $: { versao: string };
+  $: { versao: string; xmlns?: string };
   evento: EventoItem<unknown>;
   retEvento: RetEventoItem;
 }

@@ -330,7 +330,7 @@ describe('NfceQrcode', () => {
       );
     });
 
-    it('contingência offline com CPF válido: tipo 1 e 11 dígitos', async () => {
+    it('contingência offline com CPF válido: tpIdDest 2 e 11 dígitos', async () => {
       const sign = jest.fn().mockResolvedValue(right('SIG'));
       const repository = { sign } as unknown as CertificateRepository;
       const qrcode = new NfceQrcode(repository);
@@ -347,7 +347,7 @@ describe('NfceQrcode', () => {
         },
       });
 
-      const expectedSequence = `${CHAVE_CONTINGENCIA}|3|2|${dayOfMonthPadded}|5.00|1|31702821072`;
+      const expectedSequence = `${CHAVE_CONTINGENCIA}|3|2|${dayOfMonthPadded}|5.00|2|31702821072`;
 
       const result = await qrcode.execute(entity, {
         version: '300',
@@ -364,7 +364,7 @@ describe('NfceQrcode', () => {
       );
     });
 
-    it('contingência offline com CNPJ válido: tipo 2 e 14 dígitos', async () => {
+    it('contingência offline com CNPJ válido: tpIdDest 1 e 14 dígitos', async () => {
       const sign = jest.fn().mockResolvedValue(right('SIG'));
       const repository = { sign } as unknown as CertificateRepository;
       const qrcode = new NfceQrcode(repository);
@@ -381,7 +381,7 @@ describe('NfceQrcode', () => {
         },
       });
 
-      const expectedSequence = `${CHAVE_CONTINGENCIA}|3|2|${dayOfMonthPadded}|99.99|2|46755763000143`;
+      const expectedSequence = `${CHAVE_CONTINGENCIA}|3|2|${dayOfMonthPadded}|99.99|1|46755763000143`;
 
       const result = await qrcode.execute(entity, {
         version: '300',
@@ -483,7 +483,7 @@ describe('NfceQrcode', () => {
         },
       });
 
-      const expectedSequence = `${CHAVE_CONTINGENCIA}|3|2|${dayOfMonthPadded}|1.00|1|11144477735`;
+      const expectedSequence = `${CHAVE_CONTINGENCIA}|3|2|${dayOfMonthPadded}|1.00|2|11144477735`;
 
       await qrcode.execute(entity, {
         version: '300',

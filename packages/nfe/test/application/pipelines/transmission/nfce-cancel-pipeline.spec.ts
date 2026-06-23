@@ -25,7 +25,13 @@ describe('nfce cancel pipeline (unit)', () => {
       .spyOn(NfeCancelPipeline.prototype, 'execute')
       .mockResolvedValue(
         right({
-          retEnvEvento: { cStat: '128', xMotivo: 'Lote de Evento Processado' },
+          xml: '<procEventoNFe versao="1.00"></procEventoNFe>',
+          response: {
+            retEnvEvento: {
+              cStat: '128',
+              xMotivo: 'Lote de Evento Processado',
+            },
+          },
         }) as never,
       );
 

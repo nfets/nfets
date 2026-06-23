@@ -6,7 +6,12 @@ import type {
   DetEventoCancelamento,
   EventoCancelamento,
 } from '@nfets/nfe/domain/entities/events/cancelamento';
-import type { InfEvento } from '@nfets/nfe/domain/entities/services/evento';
+import type {
+  InfEvento,
+  PipelineEventResponse,
+} from '@nfets/nfe/domain/entities/services/evento';
+import { left, NFeTsError, right } from '@nfets/core';
+import events from '@nfets/nfe/services/events';
 
 export class NfeCancelPipeline extends EventPipeline {
   public async execute(
@@ -27,9 +32,27 @@ export class NfeCancelPipeline extends EventPipeline {
     );
     if (eventOrLeft.isLeft()) return eventOrLeft;
 
-    return await this.transmitter.recepcaoEvento<DetEventoCancelamento>({
-      idLote: payload.idLote ?? new Date().getTime().toString().slice(0, 15),
-      evento: eventOrLeft.value,
-    });
+    const evento = eventOrLeft.value;
+    const version = events[TpEvent.Cancelamento].version;
+
+    const responseOrLeft =
+      await this.transmitter.recepcaoEvento<DetEventoCancelamento>({
+        idLote: payload.idLote ?? new Date().getTime().toString().slice(0, 15),
+        evento,
+      });
+    if (responseOrLeft.isLeft()) return responseOrLeft;
+
+    const response = responseOrLeft.value;
+    const retEvento = response.retEnvEvento.retEvento;
+    if (!retEvento)
+      return left(new NFeTsError('Evento de cancelamento não retornado'));
+
+    const xml = await this.protocol(
+      this.versionedEvent(evento, version),
+      retEvento,
+      version,
+    );
+
+    return right({ xml, response } satisfies PipelineEventResponse);
   }
 }

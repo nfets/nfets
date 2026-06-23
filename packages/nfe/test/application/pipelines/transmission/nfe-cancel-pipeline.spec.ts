@@ -5,6 +5,57 @@ import { left, right } from '@nfets/core/shared';
 import { NFeTsError } from '@nfets/core';
 import { TpEvent } from '@nfets/nfe/domain/entities/constants/tp-event';
 
+const chNFe = '35240100000000000000550010000000011000000010';
+
+const signedEvento = {
+  $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
+  infEvento: {
+    $: { Id: `ID${TpEvent.Cancelamento}${chNFe}01` },
+    cOrgao: '35',
+    tpAmb: Environment.Homolog,
+    CNPJ: '00000000000000',
+    chNFe,
+    dhEvento: '2025-12-22T18:40:33.060Z',
+    tpEvento: TpEvent.Cancelamento,
+    nSeqEvento: 1,
+    verEvento: '1.00',
+    detEvento: {
+      $: { versao: '1.00' },
+      descEvento: 'Cancelamento',
+      nProt: '135240000000001',
+      xJust: 'Cancelamento de teste',
+    },
+  },
+};
+
+const retEventoSuccess = {
+  $: { versao: '1.00' },
+  infEvento: {
+    tpAmb: '2',
+    verAplic: '1.0',
+    cOrgao: '35',
+    cStat: '135',
+    xMotivo: 'Evento registrado e vinculado a NF-e',
+    chNFe,
+    tpEvento: TpEvent.Cancelamento,
+    nSeqEvento: '1',
+    dhRegEvento: '2025-12-22T18:40:33.060Z',
+    nProt: '135240000000002',
+  },
+};
+
+const retEventoRejected = {
+  $: { versao: '1.00' },
+  infEvento: {
+    tpAmb: '2',
+    verAplic: '1.0',
+    cOrgao: '35',
+    cStat: '573',
+    xMotivo: 'Rejeicao: Duplicidade de Evento',
+    dhRegEvento: '2025-12-22T18:40:33.060Z',
+  },
+};
+
 describe('nfe cancel pipeline (unit)', () => {
   it('should use nfe remote transmitter', () => {
     class NfeCancelPipelineExposed extends NfeCancelPipeline {
@@ -21,18 +72,20 @@ describe('nfe cancel pipeline (unit)', () => {
     expect(pipeline.transmitterRef).toBeInstanceOf(NfeRemoteTransmitter);
   });
 
-  it('should execute cancellation and send event batch', async () => {
+  it('should execute cancellation and return procEventoNFe xml', async () => {
     class MockableNfeCancelPipeline extends NfeCancelPipeline {
-      public readonly eventMock = jest.fn().mockResolvedValue(
-        right({
-          infEvento: { tpEvento: TpEvent.Cancelamento },
-        }),
-      );
+      public readonly eventMock = jest
+        .fn()
+        .mockResolvedValue(right(signedEvento));
 
       protected override readonly transmitter = {
         recepcaoEvento: jest.fn().mockResolvedValue(
           right({
-            retEnvEvento: { cStat: '128', xMotivo: 'Lote de Evento Processado' },
+            retEnvEvento: {
+              cStat: '128',
+              xMotivo: 'Lote de Evento Processado',
+              retEvento: retEventoSuccess,
+            },
           }),
         ),
       } as unknown as NfeCancelPipeline['transmitter'];
@@ -47,7 +100,7 @@ describe('nfe cancel pipeline (unit)', () => {
 
     const result = await pipeline.execute(
       {
-        chNFe: '35240100000000000000550010000000011000000010',
+        chNFe,
         nProt: '135240000000001',
         xJust: 'Cancelamento de teste',
       },
@@ -58,7 +111,7 @@ describe('nfe cancel pipeline (unit)', () => {
     expect(pipeline.eventMock).toHaveBeenCalledWith(
       TpEvent.Cancelamento,
       expect.objectContaining({
-        chNFe: '35240100000000000000550010000000011000000010',
+        chNFe,
         nSeqEvento: 1,
       }),
       { tpAmb: Environment.Homolog },
@@ -66,8 +119,95 @@ describe('nfe cancel pipeline (unit)', () => {
     expect(pipeline.transmitter.recepcaoEvento).toHaveBeenCalledWith(
       expect.objectContaining({
         idLote: expect.any(String),
+        evento: signedEvento,
       }),
     );
+
+    const { xml, response } = result.value as {
+      xml: string;
+      response: { retEnvEvento: { cStat: string } };
+    };
+    expect(response.retEnvEvento.cStat).toBe('128');
+    expect(xml).toContain('<procEventoNFe');
+    expect(xml).toContain('<evento');
+    expect(xml).toContain('<retEvento');
+    expect(xml).toContain('<cStat>135</cStat>');
+  });
+
+  it('should return evento xml without procEventoNFe when event is rejected', async () => {
+    class MockableNfeCancelPipeline extends NfeCancelPipeline {
+      protected override readonly transmitter = {
+        recepcaoEvento: jest.fn().mockResolvedValue(
+          right({
+            retEnvEvento: {
+              cStat: '128',
+              xMotivo: 'Lote de Evento Processado',
+              retEvento: retEventoRejected,
+            },
+          }),
+        ),
+      } as unknown as NfeCancelPipeline['transmitter'];
+
+      protected override event = jest
+        .fn()
+        .mockResolvedValue(right(signedEvento)) as never;
+    }
+
+    const pipeline = new MockableNfeCancelPipeline({
+      pfxPathOrBase64: 'mock',
+      password: 'mock',
+    });
+
+    const result = await pipeline.execute(
+      {
+        chNFe,
+        nProt: '135240000000001',
+        xJust: 'Cancelamento de teste',
+      },
+      { tpAmb: Environment.Homolog },
+    );
+
+    expect(result.isRight()).toBe(true);
+    const { xml } = result.value as { xml: string };
+    expect(xml).toContain('<evento');
+    expect(xml).not.toContain('<procEventoNFe');
+    expect(xml).not.toContain('<retEvento');
+  });
+
+  it('should return left when retEvento is missing', async () => {
+    class MockableNfeCancelPipeline extends NfeCancelPipeline {
+      protected override readonly transmitter = {
+        recepcaoEvento: jest.fn().mockResolvedValue(
+          right({
+            retEnvEvento: {
+              cStat: '128',
+              xMotivo: 'Lote de Evento Processado',
+            },
+          }),
+        ),
+      } as unknown as NfeCancelPipeline['transmitter'];
+
+      protected override event = jest
+        .fn()
+        .mockResolvedValue(right(signedEvento)) as never;
+    }
+
+    const pipeline = new MockableNfeCancelPipeline({
+      pfxPathOrBase64: 'mock',
+      password: 'mock',
+    });
+
+    const result = await pipeline.execute(
+      {
+        chNFe,
+        nProt: '135240000000001',
+        xJust: 'Cancelamento de teste',
+      },
+      { tpAmb: Environment.Homolog },
+    );
+
+    expect(result.isLeft()).toBe(true);
+    expect(result.value).toBeInstanceOf(NFeTsError);
   });
 
   it('should return left when event creation fails', async () => {
@@ -88,7 +228,7 @@ describe('nfe cancel pipeline (unit)', () => {
 
     const result = await pipeline.execute(
       {
-        chNFe: '35240100000000000000550010000000011000000010',
+        chNFe,
         nProt: '135240000000001',
         xJust: 'Cancelamento de teste',
       },

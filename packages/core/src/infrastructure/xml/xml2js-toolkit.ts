@@ -40,6 +40,7 @@ type XmlNodeList<T> = {
 
 type XmlElement = XmlNode & {
   firstChild: XmlNode | null;
+  textContent: string | null;
   getAttribute(name: string): string | null;
   getElementsByTagName(tagName: string): XmlNodeList<XmlElement>;
   appendChild<T extends XmlNode>(node: T): T;
@@ -122,6 +123,29 @@ export class Xml2JsToolkit implements XmlToolkit {
     const root = this.getDocumentElement(parsed);
     const element = root.getElementsByTagName(tag).item(0);
     return element ? this.clear(this.serializeXml(element)) : null;
+  }
+
+  public getNodeValue(xml: string, tag: string): string | null {
+    const parsed = this.parseXml(xml);
+    const root = this.getDocumentElement(parsed);
+    const element = root.getElementsByTagName(tag).item(0);
+    const value = element?.textContent?.trim();
+    return value ?? null;
+  }
+
+  public getNodes(xml: string, tag: string): string[] {
+    const parsed = this.parseXml(xml);
+    const root = this.getDocumentElement(parsed);
+    const nodes = root.getElementsByTagName(tag);
+    const result: string[] = [];
+
+    for (let index = 0; ; index++) {
+      const element = nodes.item(index);
+      if (!element) break;
+      result.push(this.clear(this.serializeXml(element)));
+    }
+
+    return result;
   }
 
   public getFirstNode(xml: string): string | null {

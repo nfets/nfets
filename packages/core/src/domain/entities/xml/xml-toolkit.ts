@@ -16,6 +16,8 @@ export interface XmlToolkit {
     options?: CanonicalizeOptions,
   ): string;
   getNode(xml: string, tag: string): string | null;
+  getNodeValue(xml: string, tag: string): string | null;
+  getNodes(xml: string, tag: string): string[];
   getFirstNode(xml: string): string | null;
   getAttribute(xml: string, tag: string): string | null;
   appendNode(xml: string, node: string): string;

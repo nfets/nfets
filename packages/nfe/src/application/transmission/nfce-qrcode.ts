@@ -104,8 +104,8 @@ export class NfceQrcode {
     return Promise.resolve(right(`${url}${sequence}|${hash}`));
   }
 
-  /** QR Code v3 offline: após vNF vêm tipo (1|2|3 ou vazio)
-   * e documento (3–14 dígitos ou vazio), conforme XSD.
+  /** QR Code v3 offline: após vNF vêm tpIdDest (1|2|3 ou vazio)
+   * e idDest (3–14 dígitos ou vazio), conforme NT 2025.001 (1=CNPJ, 2=CPF, 3=estrangeiro).
    */
   private getQrcodeV300OfflineIdentification(dest: Dest | undefined): {
     tipo: '' | '1' | '2' | '3';
@@ -122,8 +122,8 @@ export class NfceQrcode {
 
     if (!digits) return { tipo: '', documento: '' };
 
-    if (digits.length === 11) return { tipo: '1', documento: digits };
-    if (digits.length === 14) return { tipo: '2', documento: digits };
+    if (digits.length === 11) return { tipo: '2', documento: digits };
+    if (digits.length === 14) return { tipo: '1', documento: digits };
     if (idEstrangeiro && digits.length >= 3 && digits.length <= 14)
       return { tipo: '3', documento: digits };
 

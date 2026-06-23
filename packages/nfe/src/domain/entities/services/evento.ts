@@ -31,6 +31,7 @@ export interface InfEvento<T> {
 
 export interface EventoItemAttributes {
   xmlns: string;
+  versao?: string;
 }
 
 export interface EventoItem<T> {
@@ -89,4 +90,9 @@ export interface EventoLoteResponse {
     xMotivo: string;
     retEvento?: RetEvento[];
   };
+}
+
+export interface PipelineEventResponse {
+  xml: string;
+  response: EventoResponse;
 }

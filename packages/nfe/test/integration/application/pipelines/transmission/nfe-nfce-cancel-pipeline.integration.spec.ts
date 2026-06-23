@@ -42,10 +42,10 @@ describe('nfe nfce cancel pipeline (integration) (destructive)', () => {
       expectIsRight(response);
       console.log(
         'response:',
-        JSON.stringify(response.value.retEnvEvento, null, 2),
+        JSON.stringify(response.value.response.retEnvEvento, null, 2),
       );
 
-      const retEnvEvento = response.value.retEnvEvento;
+      const retEnvEvento = response.value.response.retEnvEvento;
       expect(retEnvEvento.cStat).toStrictEqual('128');
       expect(retEnvEvento.xMotivo).toStrictEqual('Lote de Evento Processado');
 
@@ -57,6 +57,11 @@ describe('nfe nfce cancel pipeline (integration) (destructive)', () => {
       expect(infEvento?.xMotivo).toStrictEqual(
         'Evento registrado e vinculado a NF-e',
       );
+
+      expect(response.value.xml).toBeDefined();
+      expect(response.value.xml).toContain('<procEventoNFe');
+      expect(response.value.xml).toContain('<evento');
+      expect(response.value.xml).toContain('<retEvento');
     },
     SEFAZ_TIMEOUT_SC,
   );

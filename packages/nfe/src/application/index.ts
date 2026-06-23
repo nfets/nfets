@@ -1,5 +1,7 @@
 export * from './access-key/access-key-builder';
 
+export * from './complements/nfe-complements';
+
 export * from './aggregator/det-builder-aggregator';
 export * from './aggregator/total-builder-aggregator';
 

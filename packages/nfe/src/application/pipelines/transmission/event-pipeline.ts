@@ -1,5 +1,10 @@
 import type { TpEvent } from '@nfets/nfe/domain/entities/constants/tp-event';
-import type { EventoItem as IEventoItem } from '@nfets/nfe/domain/entities/services/evento';
+import { EventoCstatToProtocol } from '@nfets/nfe/domain/entities/constants/evento-cstat';
+import type {
+  EventoItem as IEventoItem,
+  RetEvento,
+} from '@nfets/nfe/domain/entities/services/evento';
+import type { ProcEventoNFe } from '@nfets/nfe/domain/entities/services/consulta-protocolo';
 import type { NfeTransmitterOptions } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
 
 import {
@@ -9,6 +14,7 @@ import {
   type Either,
   Validates,
   left,
+  type SignedEntity,
 } from '@nfets/core';
 import events from '@nfets/nfe/services/events';
 import { TransmissionPipeline } from './transmission-pipeline';
@@ -22,7 +28,9 @@ export abstract class EventPipeline extends TransmissionPipeline {
       'nSeqEvento' | 'dhEvento' | 'chNFe' | 'detEvento'
     >,
     options: Pick<NfeTransmitterOptions, 'tpAmb'>,
-  ): Promise<Either<NFeTsError, IEventoItem<{ descEvento: string } & T>>> {
+  ): Promise<
+    Either<NFeTsError, SignedEntity<IEventoItem<{ descEvento: string } & T>>>
+  > {
     const certificateOrLeft = await this.certificates.read(this.certificate);
     if (certificateOrLeft.isLeft()) return certificateOrLeft;
 
@@ -77,6 +85,46 @@ export abstract class EventPipeline extends TransmissionPipeline {
       { tag: 'infEvento', mark: 'Id' },
       certificateOrLeft.value,
     );
+  }
+
+  protected versionedEvent<T>(
+    evento: SignedEntity<IEventoItem<T>>,
+    version: string,
+  ): SignedEntity<IEventoItem<T>> {
+    const $ = evento.$;
+    return {
+      ...evento,
+      $: { ...$, xmlns: this.xmlns, versao: version },
+    };
+  }
+
+  protected async protocol<T>(
+    evento: SignedEntity<IEventoItem<T>>,
+    retEvento: RetEvento,
+    version: string,
+  ) {
+    const { cStat } = retEvento.infEvento;
+    if (
+      !Object.values(EventoCstatToProtocol).includes(
+        cStat as EventoCstatToProtocol,
+      )
+    ) {
+      return await this.toolkit.build(evento, {
+        renderOpts: { pretty: false },
+        rootName: 'evento',
+      });
+    }
+
+    const data = {
+      evento,
+      retEvento,
+      $: { xmlns: this.xmlns, versao: version },
+    } satisfies ProcEventoNFe;
+
+    return await this.toolkit.build(data, {
+      renderOpts: { pretty: false },
+      rootName: 'procEventoNFe',
+    });
   }
 
   @Validates<IEventoItem<{ descEvento: string }>>(EventoItem)
