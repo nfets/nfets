@@ -31,6 +31,7 @@ export interface InfInut {
 
 export interface InutNFeAttributes {
   xmlns: string;
+  versao?: string;
 }
 
 export interface InutilizacaoPayload {
@@ -42,24 +43,37 @@ export interface InutilizacaoRequest {
   inutNFe: InutilizacaoPayload;
 }
 
-export interface InutilizacaoResponse {
-  retInutNFe: {
-    $: { versao: string };
-    infInut: {
-      $?: { Id?: string };
-      tpAmb: EnvironmentCode;
-      verAplic: string;
-      cStat: string;
-      xMotivo: string;
-      cUF: string;
-      ano?: string;
-      CNPJ?: string;
-      mod?: string;
-      serie?: string;
-      nNFIni?: string;
-      nNFFin?: string;
-      dhRecbto: string;
-      nProt?: string;
-    };
+export interface RetInutNFe {
+  $: { versao: string };
+  infInut: {
+    $?: { Id?: string };
+    tpAmb: EnvironmentCode;
+    verAplic: string;
+    cStat: string;
+    xMotivo: string;
+    cUF: string;
+    ano?: string;
+    CNPJ?: string;
+    mod?: string;
+    serie?: string;
+    nNFIni?: string;
+    nNFFin?: string;
+    dhRecbto: string;
+    nProt?: string;
   };
+}
+
+export interface InutilizacaoResponse {
+  retInutNFe: RetInutNFe;
+}
+
+export interface ProcInutNFe {
+  $: { versao: string; xmlns?: string };
+  inutNFe: InutilizacaoPayload;
+  retInutNFe: RetInutNFe;
+}
+
+export interface PipelineInutilizacaoResponse {
+  xml: string;
+  response: InutilizacaoResponse;
 }

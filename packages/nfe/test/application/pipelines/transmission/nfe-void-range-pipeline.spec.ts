@@ -3,6 +3,31 @@ import { left, right } from '@nfets/core/shared';
 import { NFeTsError } from '@nfets/core';
 import { NfeVoidRangePipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-void-range-pipeline';
 
+const retInutNFeSuccess = {
+  $: { versao: '4.00' },
+  infInut: {
+    tpAmb: Environment.Homolog,
+    verAplic: '1.0',
+    cStat: '102',
+    xMotivo: 'Inutilizacao homologada',
+    cUF: '35',
+    dhRecbto: '2025-12-22T18:40:33.060Z',
+    nProt: '135240000000001',
+  },
+};
+
+const retInutNFeRejected = {
+  $: { versao: '4.00' },
+  infInut: {
+    tpAmb: Environment.Homolog,
+    verAplic: '1.0',
+    cStat: '563',
+    xMotivo: 'Rejeicao: Ja existe pedido de Inutilizacao',
+    cUF: '35',
+    dhRecbto: '2025-12-22T18:40:33.060Z',
+  },
+};
+
 describe('nfe void range pipeline (unit)', () => {
   class MockableNfeVoidRangePipeline extends NfeVoidRangePipeline {
     public readonly readMock = jest.fn().mockResolvedValue(
@@ -14,7 +39,7 @@ describe('nfe void range pipeline (unit)', () => {
     public readonly configureMock = jest.fn();
     public readonly inutilizacaoMock = jest.fn().mockResolvedValue(
       right({
-        retInutNFe: { infInut: { cStat: '102', xMotivo: 'Inutilizacao homologada' } },
+        retInutNFe: retInutNFeSuccess,
       }),
     );
     public readonly signMock = jest.fn().mockImplementation((payload) =>
@@ -39,7 +64,7 @@ describe('nfe void range pipeline (unit)', () => {
     } as unknown as NfeVoidRangePipeline['transmitter'];
   }
 
-  it('should execute inutilizacao flow successfully', async () => {
+  it('should execute inutilizacao flow and return procInutNFe xml', async () => {
     const pipeline = new MockableNfeVoidRangePipeline({
       pfxPathOrBase64: 'mock',
       password: 'mock',
@@ -85,6 +110,79 @@ describe('nfe void range pipeline (unit)', () => {
         }),
       }),
     );
+
+    const { xml, response } = result.value as {
+      xml: string;
+      response: { retInutNFe: { infInut: { cStat: string } } };
+    };
+    expect(response.retInutNFe.infInut.cStat).toBe('102');
+    expect(xml).toContain('<procInutNFe');
+    expect(xml).toContain('<inutNFe');
+    expect(xml).toContain('<retInutNFe');
+    expect(xml).toContain('<cStat>102</cStat>');
+  });
+
+  it('should return inutNFe xml without procInutNFe when inutilizacao is rejected', async () => {
+    class RejectedNfeVoidRangePipeline extends MockableNfeVoidRangePipeline {
+      protected override readonly transmitter = {
+        configure: this.configureMock,
+        inutilizacao: jest.fn().mockResolvedValue(
+          right({
+            retInutNFe: retInutNFeRejected,
+          }),
+        ),
+      } as unknown as NfeVoidRangePipeline['transmitter'];
+    }
+
+    const pipeline = new RejectedNfeVoidRangePipeline({
+      pfxPathOrBase64: 'mock',
+      password: 'mock',
+    });
+
+    const result = await pipeline.execute(
+      {
+        mod: '55',
+        serie: '1',
+        nNFIni: '1',
+        nNFFin: '9',
+        xJust: 'Teste de inutilizacao',
+      },
+      { tpAmb: Environment.Homolog, cUF: '35' },
+    );
+
+    expect(result.isRight()).toBe(true);
+    const { xml } = result.value as { xml: string };
+    expect(xml).toContain('<inutNFe');
+    expect(xml).not.toContain('<procInutNFe');
+    expect(xml).not.toContain('<retInutNFe');
+  });
+
+  it('should return left when retInutNFe is missing', async () => {
+    class MissingRetNfeVoidRangePipeline extends MockableNfeVoidRangePipeline {
+      protected override readonly transmitter = {
+        configure: this.configureMock,
+        inutilizacao: jest.fn().mockResolvedValue(right({})),
+      } as unknown as NfeVoidRangePipeline['transmitter'];
+    }
+
+    const pipeline = new MissingRetNfeVoidRangePipeline({
+      pfxPathOrBase64: 'mock',
+      password: 'mock',
+    });
+
+    const result = await pipeline.execute(
+      {
+        mod: '55',
+        serie: '1',
+        nNFIni: '1',
+        nNFFin: '9',
+        xJust: 'Teste de inutilizacao',
+      },
+      { tpAmb: Environment.Homolog, cUF: '35' },
+    );
+
+    expect(result.isLeft()).toBe(true);
+    expect(result.value).toBeInstanceOf(NFeTsError);
   });
 
   it('should return left when certificate read fails', async () => {

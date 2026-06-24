@@ -51,16 +51,17 @@ describe('nfe nfce void range (inutilização) pipeline (integration) (destructi
       expectIsRight(response);
       console.log(
         'response:',
-        JSON.stringify(response.value.retInutNFe, null, 2),
+        JSON.stringify(response.value.response.retInutNFe, null, 2),
       );
 
-      const infInut = response.value.retInutNFe.infInut;
+      const infInut = response.value.response.retInutNFe.infInut;
       expect(infInut.cStat).toBe('102');
       expect(infInut.xMotivo).toBe('Inutilizacao de numero homologado');
       expect(infInut.mod).toBe(args.mod);
       expect(infInut.serie).toBe(args.serie);
       expect(infInut.nNFIni).toBe(args.nNFIni);
       expect(infInut.nNFFin).toBe(args.nNFFin);
+      expect(response.value.xml).toContain('<procInutNFe');
     },
     SEFAZ_TIMEOUT_SC,
   );

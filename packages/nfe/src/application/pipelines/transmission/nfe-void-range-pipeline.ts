@@ -2,11 +2,21 @@ import type { NfeTransmitterOptions } from '@nfets/nfe/domain';
 
 import type {
   InutilizacaoPayload as IIInutilizacaoPayload,
+  PipelineInutilizacaoResponse,
+  ProcInutNFe,
+  RetInutNFe,
   VoidRangePayload,
 } from '@nfets/nfe/domain/entities/services/inutilizacao';
 
 import { TransmissionPipeline } from './transmission-pipeline';
-import { left, NFeTsError, right, Validates } from '@nfets/core';
+import { InutCstatToProtocol } from '@nfets/nfe/domain/entities/constants/inut-cstat';
+import {
+  left,
+  NFeTsError,
+  right,
+  Validates,
+  type SignedEntity,
+} from '@nfets/core';
 import { InutilizacaoPayload } from '@nfets/nfe/infrastructure/dto/services/inutilizacao';
 
 export class NfeVoidRangePipeline extends TransmissionPipeline {
@@ -65,7 +75,63 @@ export class NfeVoidRangePipeline extends TransmissionPipeline {
       certificateOrLeft.value,
     );
     if (signedOrLeft.isLeft()) return signedOrLeft;
-    return await this.transmitter.inutilizacao(signedOrLeft.value);
+
+    const responseOrLeft = await this.transmitter.inutilizacao(
+      signedOrLeft.value,
+    );
+    if (responseOrLeft.isLeft()) return responseOrLeft;
+
+    const response = responseOrLeft.value;
+    const retInutNFe = response.retInutNFe;
+    if (!retInutNFe)
+      return left(new NFeTsError('Retorno de inutilização não retornado'));
+
+    const version = retInutNFe.$.versao;
+    const xml = await this.protocol(
+      this.versionedInutNFe(signedOrLeft.value, version),
+      retInutNFe,
+      version,
+    );
+
+    return right({ xml, response } satisfies PipelineInutilizacaoResponse);
+  }
+
+  protected versionedInutNFe(
+    inutNFe: SignedEntity<IIInutilizacaoPayload>,
+    version: string,
+  ): SignedEntity<IIInutilizacaoPayload> {
+    const $ = inutNFe.$;
+    return {
+      ...inutNFe,
+      $: { ...$, xmlns: this.xmlns, versao: version },
+    };
+  }
+
+  protected async protocol(
+    inutNFe: SignedEntity<IIInutilizacaoPayload>,
+    retInutNFe: RetInutNFe,
+    version: string,
+  ) {
+    const { cStat } = retInutNFe.infInut;
+    if (
+      !Object.values(InutCstatToProtocol).includes(cStat as InutCstatToProtocol)
+    ) {
+      return await this.toolkit.build(inutNFe, {
+        renderOpts: { pretty: false },
+        rootName: 'inutNFe',
+      });
+    }
+
+    const data = {
+      inutNFe,
+      retInutNFe,
+      $: { xmlns: this.xmlns, versao: version },
+    } satisfies ProcInutNFe;
+
+    return await this.toolkit.build(data, {
+      renderOpts: { pretty: false },
+      rootName: 'procInutNFe',
+    });
   }
 
   @Validates(InutilizacaoPayload)

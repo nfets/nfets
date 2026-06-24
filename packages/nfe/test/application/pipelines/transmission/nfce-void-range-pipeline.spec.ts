@@ -4,6 +4,18 @@ import { NfceVoidRangePipeline } from '@nfets/nfe/application/pipelines/transmis
 import { NfeVoidRangePipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-void-range-pipeline';
 import { NfceRemoteTransmitter } from '@nfets/nfe/application/transmission/nfce-transmitter';
 
+const retInutNFeSuccess = {
+  $: { versao: '4.00' },
+  infInut: {
+    tpAmb: Environment.Homolog,
+    verAplic: '1.0',
+    cStat: '102',
+    xMotivo: 'Inutilizacao homologada',
+    cUF: '35',
+    dhRecbto: '2025-12-22T18:40:33.060Z',
+  },
+};
+
 describe('nfce void range pipeline (unit)', () => {
   it('should use nfce remote transmitter', () => {
     class NfceVoidRangePipelineExposed extends NfceVoidRangePipeline {
@@ -25,7 +37,10 @@ describe('nfce void range pipeline (unit)', () => {
       .spyOn(NfeVoidRangePipeline.prototype, 'execute')
       .mockResolvedValue(
         right({
-          retInutNFe: { infInut: { cStat: '102', xMotivo: 'Inutilizacao homologada' } },
+          xml: '<procInutNFe/>',
+          response: {
+            retInutNFe: retInutNFeSuccess,
+          },
         }) as never,
       );
 
