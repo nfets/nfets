@@ -15,6 +15,20 @@ const HOST_NOT_FOUND_CODES = new Set([
 
 const TIMEOUT_CODES = new Set(['ETIMEDOUT', 'ESOCKETTIMEDOUT', 'ECONNABORTED']);
 
+const CONNECTION_FAILURE_CODES = new Set([
+  'ECONNREFUSED',
+  'ENETUNREACH',
+  'EHOSTUNREACH',
+  'EPIPE',
+]);
+
+/** WinHTTP error codes surfaced by winhttp_ssl_client on Windows. */
+const WINHTTP_TIMEOUT_CODES = new Set([12002, 12152, 12175]);
+const WINHTTP_HOST_NOT_FOUND_CODES = new Set([12007]);
+const WINHTTP_CONNECTION_FAILURE_CODES = new Set([12029, 12030]);
+
+const WINHTTP_ERROR_PATTERN = /Failed to send request\. Error: (\d+)/i;
+
 const hasMessage = (error: unknown): error is { message: string } =>
   !!error && typeof error === 'object' && 'message' in error;
 
@@ -50,6 +64,13 @@ const isTimeoutMessage = (message: string) => {
 
 const isHostNotFoundMessage = (message: string) =>
   /getaddrinfo\s+ENOTFOUND/i.test(message) || /\bENOTFOUND\b/i.test(message);
+
+const getWinHttpErrorCode = (message: string): number | undefined => {
+  const match = WINHTTP_ERROR_PATTERN.exec(message);
+  if (!match) return void 0;
+  const code = Number(match[1]);
+  return Number.isFinite(code) ? code : void 0;
+};
 
 const collectErrorChain = (error: unknown): unknown[] => {
   const chain: unknown[] = [];
@@ -101,6 +122,15 @@ export const mapTransmissionError = (error: unknown): Left<NFeTsError> => {
       );
     }
 
+    if (code && CONNECTION_FAILURE_CODES.has(code)) {
+      return left(
+        new TransmissionHostNotFoundError(
+          message ?? `Connection failed (${code})`,
+          errorOptions(error),
+        ),
+      );
+    }
+
     const itemMessage = getMessage(item);
     if (itemMessage && isTimeoutMessage(itemMessage)) {
       return left(
@@ -110,6 +140,22 @@ export const mapTransmissionError = (error: unknown): Left<NFeTsError> => {
   }
 
   if (!message) return leftFromError(error);
+
+  const winHttpCode = getWinHttpErrorCode(message);
+  if (winHttpCode !== void 0) {
+    if (WINHTTP_TIMEOUT_CODES.has(winHttpCode))
+      return left(
+        new TransmissionTimeoutError(message, errorOptions(error)),
+      );
+
+    if (
+      WINHTTP_HOST_NOT_FOUND_CODES.has(winHttpCode) ||
+      WINHTTP_CONNECTION_FAILURE_CODES.has(winHttpCode)
+    )
+      return left(
+        new TransmissionHostNotFoundError(message, errorOptions(error)),
+      );
+  }
 
   if (isHostNotFoundMessage(message))
     return left(

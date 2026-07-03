@@ -149,4 +149,38 @@ describe('mapTransmissionError (unit)', () => {
     expectIsLeft(result);
     expect(result.value).toBeInstanceOf(TransmissionTimeoutError);
   });
+
+  it('should map WinHTTP error 12007 to TransmissionHostNotFoundError', () => {
+    const error = new Error('Failed to send request. Error: 12007');
+
+    const mapped = mapTransmissionError(error);
+
+    expectIsLeft(mapped);
+    const result = mapped.value;
+    expect(result).toBeInstanceOf(TransmissionHostNotFoundError);
+    expect(result).toBeInstanceOf(TransmissionError);
+    expect(result.message).toBe('Failed to send request. Error: 12007');
+    expect(result.cause).toBe(error);
+  });
+
+  it('should map WinHTTP error 12002 to TransmissionTimeoutError', () => {
+    const error = new Error('Failed to send request. Error: 12002');
+
+    const mapped = mapTransmissionError(error);
+
+    expectIsLeft(mapped);
+    const result = mapped.value;
+    expect(result).toBeInstanceOf(TransmissionTimeoutError);
+    expect(result).toBeInstanceOf(TransmissionError);
+  });
+
+  it('should map WinHTTP error 12029 to TransmissionHostNotFoundError', () => {
+    const error = new Error('Failed to send request. Error: 12029');
+
+    const mapped = mapTransmissionError(error);
+
+    expectIsLeft(mapped);
+    const result = mapped.value;
+    expect(result).toBeInstanceOf(TransmissionHostNotFoundError);
+  });
 });
