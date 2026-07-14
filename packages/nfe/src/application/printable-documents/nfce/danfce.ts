@@ -44,8 +44,8 @@ export abstract class DanfcePdfDocument {
   public options: DanfceOptions = {
     width: '80mm',
     height: 160,
-    textFontSize: 8 * mmToPx,
-    titleFontSize: 10 * mmToPx,
+    textFontSize: 9 * mmToPx,
+    titleFontSize: 11 * mmToPx,
     credits: defaultCreditsText,
   };
 

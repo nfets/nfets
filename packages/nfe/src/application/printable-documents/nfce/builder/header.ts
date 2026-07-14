@@ -35,39 +35,34 @@ export class Header implements Builder {
     const font = this.context.defaults.font,
       bold = `${font}-Bold`;
 
-    const align = 'left';
+    const align = 'center';
 
     this.builder
       .row({ left, right }, (options) =>
+        this.builder.text(this.identification(emit), {
+          ...options,
+          align,
+        }),
+      )
+      .row({ left, right }, (options) =>
         this.builder
-          .text(this.identification(emit), {
-            ...options,
-            continued: true,
-            align,
-          })
           .font(bold)
-          .text(` ${xNome}`, {
+          .text(xNome, {
             ...options,
             align,
           })
           .font(font),
       )
       .row({ left, right }, (options) =>
-        this.builder
-          .text(this.addressLine1(enderEmit), {
-            ...options,
-            continued: true,
-            align,
-          })
-          .text(this.addressLine2(enderEmit), {
-            ...options,
-            continued: true,
-            align,
-          })
-          .text(this.addressLine3(enderEmit), {
+        this.builder.text(
+          `${this.addressLine1(enderEmit)}${this.addressLine2(
+            enderEmit,
+          )}${this.addressLine3(enderEmit)}`,
+          {
             ...options,
             align,
-          }),
+          },
+        ),
       )
       .row({ left, right }, (options) =>
         this.builder.text(this.addressLine4(enderEmit), {

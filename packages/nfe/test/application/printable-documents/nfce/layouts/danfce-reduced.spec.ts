@@ -75,7 +75,8 @@ describe('DanfceReduced', () => {
         .toContain('Fone: (99) 99999-9999')
 
         // Document title and fiscal messages
-        .toContain('Documento Auxiliar da Nota Fiscal de Consumidor Eletrônica')
+        .toContain('Documento Auxiliar da Nota Fiscal de Consumidor')
+        .toContain('Eletrônica')
         .toContain('Não permite aproveitamento de crédito de ICMS')
         .index();
 
@@ -112,10 +113,9 @@ describe('DanfceReduced', () => {
         // Recipient/Consumer section
         .toContain('CONSUMIDOR - CNPJ: 03.916.076/0005-83')
         .toContain('TESTE saiudh uiashd uiahdhasu')
-        .toContain(
-          ` - Rua Rua Silvino Ciarini, S/N, Industriarios,
-teste, Concordia - SC`,
-        )
+        .toContain(' - Rua Rua Silvino Ciarini, S/N')
+        .toContain('Industriarios')
+        .toContain('teste, Concordia - SC')
 
         // NFC-e metadata
         .toContain(
@@ -183,7 +183,8 @@ IBPT/empresometro.com.br 0D61CD`,
         .toContain('Fone: (99) 99999-9999')
 
         // Document title and fiscal messages
-        .toContain('Documento Auxiliar da Nota Fiscal de Consumidor Eletrônica')
+        .toContain('Documento Auxiliar da Nota Fiscal de Consumidor')
+        .toContain('Eletrônica')
         .toContain('Não permite aproveitamento de crédito de ICMS')
 
         // Pending authorization message (first occurrence)
@@ -223,10 +224,9 @@ IBPT/empresometro.com.br 0D61CD`,
         // Recipient/Consumer section
         .toContain('CONSUMIDOR - CNPJ: 03.916.076/0005-83')
         .toContain('TESTE saiudh uiashd uiahdhasu')
-        .toContain(
-          ` - Rua Rua Silvino Ciarini, S/N, Industriarios,
-teste, Concordia - SC`,
-        )
+        .toContain(' - Rua Rua Silvino Ciarini, S/N')
+        .toContain('Industriarios')
+        .toContain('teste, Concordia - SC')
 
         // NFC-e metadata
         .toContain(
@@ -283,7 +283,8 @@ teste, Concordia - SC`,
         .toContain('Fone: (99) 99999-9999')
 
         // Document title and fiscal messages
-        .toContain('Documento Auxiliar da Nota Fiscal de Consumidor Eletrônica')
+        .toContain('Documento Auxiliar da Nota Fiscal de Consumidor')
+        .toContain('Eletrônica')
         .toContain('Não permite aproveitamento de crédito de ICMS')
 
         // Homolog message
@@ -326,10 +327,9 @@ VALOR FISCAL`,
         // Recipient/Consumer section
         .toContain('CONSUMIDOR - CNPJ: 03.916.076/0005-83')
         .toContain('TESTE saiudh uiashd uiahdhasu')
-        .toContain(
-          ` - Rua Rua Silvino Ciarini, S/N, Industriarios,
-teste, Concordia - SC`,
-        )
+        .toContain(' - Rua Rua Silvino Ciarini, S/N')
+        .toContain('Industriarios')
+        .toContain('teste, Concordia - SC')
 
         // NFC-e metadata
         .toContain(
@@ -385,7 +385,8 @@ teste, Concordia - SC`,
         .toContain('Fone: (99) 99999-9999')
 
         // Document title and fiscal messages
-        .toContain('Documento Auxiliar da Nota Fiscal de Consumidor Eletrônica')
+        .toContain('Documento Auxiliar da Nota Fiscal de Consumidor')
+        .toContain('Eletrônica')
         .toContain('Não permite aproveitamento de crédito de ICMS')
 
         // Contingency message (first occurrence)
@@ -434,10 +435,9 @@ VALOR FISCAL`,
         // Recipient/Consumer section
         .toContain('CONSUMIDOR - CNPJ: 03.916.076/0005-83')
         .toContain('TESTE saiudh uiashd uiahdhasu')
-        .toContain(
-          ` - Rua Rua Silvino Ciarini, S/N, Industriarios,
-teste, Concordia - SC`,
-        )
+        .toContain(' - Rua Rua Silvino Ciarini, S/N')
+        .toContain('Industriarios')
+        .toContain('teste, Concordia - SC')
 
         // NFC-e metadata
         .toContain(
