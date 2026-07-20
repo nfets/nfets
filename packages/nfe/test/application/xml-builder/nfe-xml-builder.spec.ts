@@ -10268,14 +10268,6 @@ describe('xml builder with xml2js builder', () => {
           <vCredPres>0.00</vCredPres>
           <vCredPresCondSus>0.00</vCredPresCondSus>
         </gCBS>
-        <gMono>
-          <vIBSMono>0.00</vIBSMono>
-          <vCBSMono>0.00</vCBSMono>
-          <vIBSMonoReten>0.00</vIBSMonoReten>
-          <vCBSMonoReten>0.00</vCBSMonoReten>
-          <vIBSMonoRet>0.00</vIBSMonoRet>
-          <vCBSMonoRet>0.00</vCBSMonoRet>
-        </gMono>
       </IBSCBSTot>
       <vNFTot>1.00</vNFTot>
     </total>
@@ -10489,16 +10481,16 @@ describe('xml builder with xml2js builder', () => {
           <gIBSCBS>
             <vBC>100.00</vBC>
             <gIBSUF>
-              <pIBSUF>0.10</pIBSUF>
+              <pIBSUF>0.1000</pIBSUF>
               <vIBSUF>0.10</vIBSUF>
             </gIBSUF>
             <gIBSMun>
-              <pIBSMun>0.00</pIBSMun>
+              <pIBSMun>0.0000</pIBSMun>
               <vIBSMun>0.00</vIBSMun>
             </gIBSMun>
             <vIBS>20.00</vIBS>
             <gCBS>
-              <pCBS>0.90</pCBS>
+              <pCBS>0.9000</pCBS>
               <vCBS>0.90</vCBS>
             </gCBS>
           </gIBSCBS>
@@ -10558,14 +10550,6 @@ describe('xml builder with xml2js builder', () => {
           <vCredPres>0.00</vCredPres>
           <vCredPresCondSus>0.00</vCredPresCondSus>
         </gCBS>
-        <gMono>
-          <vIBSMono>0.00</vIBSMono>
-          <vCBSMono>0.00</vCBSMono>
-          <vIBSMonoReten>0.00</vIBSMonoReten>
-          <vCBSMonoReten>0.00</vCBSMonoReten>
-          <vIBSMonoRet>0.00</vIBSMonoRet>
-          <vCBSMonoRet>0.00</vCBSMonoRet>
-        </gMono>
       </IBSCBSTot>
       <vNFTot>2.00</vNFTot>
     </total>
@@ -10789,16 +10773,16 @@ describe('xml builder with xml2js builder', () => {
           <gIBSCBS>
             <vBC>100.00</vBC>
             <gIBSUF>
-              <pIBSUF>0.10</pIBSUF>
+              <pIBSUF>0.1000</pIBSUF>
               <vIBSUF>0.10</vIBSUF>
             </gIBSUF>
             <gIBSMun>
-              <pIBSMun>0.00</pIBSMun>
+              <pIBSMun>0.0000</pIBSMun>
               <vIBSMun>0.00</vIBSMun>
             </gIBSMun>
             <vIBS>20.00</vIBS>
             <gCBS>
-              <pCBS>0.90</pCBS>
+              <pCBS>0.9000</pCBS>
               <vCBS>0.90</vCBS>
             </gCBS>
             <gTribRegular>
@@ -10868,14 +10852,6 @@ describe('xml builder with xml2js builder', () => {
           <vCredPres>0.00</vCredPres>
           <vCredPresCondSus>0.00</vCredPresCondSus>
         </gCBS>
-        <gMono>
-          <vIBSMono>0.00</vIBSMono>
-          <vCBSMono>0.00</vCBSMono>
-          <vIBSMonoReten>0.00</vIBSMonoReten>
-          <vCBSMonoReten>0.00</vCBSMonoReten>
-          <vIBSMonoRet>0.00</vIBSMonoRet>
-          <vCBSMonoRet>0.00</vCBSMonoRet>
-        </gMono>
       </IBSCBSTot>
       <vNFTot>3.00</vNFTot>
     </total>
@@ -11108,5 +11084,200 @@ describe('xml builder with xml2js builder', () => {
     );
     expectIsRight(signed);
     expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
+  });
+
+  it('should build NFe with IS, IBSCBSTot and ISTot values on PL_010', async () => {
+    const builder = NfeXmlBuilder.create(
+      toolkit,
+      undefined,
+      Schemas.PL_010_V1_30,
+    )
+      .infNFe({ versao: '4.00' })
+      .ide(createValidIde())
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          })
+          .is({
+            CSTIS: '000',
+            cClassTribIS: '000001',
+            vBCIS: '100.00',
+            pIS: '1.00',
+            vIS: '1.00',
+          })
+          .ibscbs({
+            CST: '000',
+            cClassTrib: '000001',
+            gIBSCBS: {
+              vBC: '100.00',
+              vIBS: '1.00',
+              gIBSUF: {
+                pIBSUF: '0.10',
+                vIBSUF: '0.10',
+              },
+              gIBSMun: {
+                pIBSMun: '0.00',
+                vIBSMun: '0.00',
+              },
+              gCBS: {
+                pCBS: '0.90',
+                vCBS: '0.90',
+              },
+            },
+          })
+          .vItem({ vItem: '101.00' }),
+      )
+      .IBSCBSTot({
+        vBCIBSCBS: '100.00',
+        gIBS: {
+          vIBS: '1.00',
+          vCredPres: '0.00',
+          vCredPresCondSus: '0.00',
+          gIBSUF: {
+            vDif: '0.00',
+            vDevTrib: '0.00',
+            vIBSUF: '0.10',
+          },
+          gIBSMun: {
+            vDif: '0.00',
+            vDevTrib: '0.00',
+            vIBSMun: '0.00',
+          },
+        },
+        gCBS: {
+          vDif: '0.00',
+          vDevTrib: '0.00',
+          vCBS: '0.90',
+          vCredPres: '0.00',
+          vCredPresCondSus: '0.00',
+        },
+      })
+      .ISTot({ vIS: '1.00' })
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const xml = await builder.assemble();
+    expectIsRight(xml);
+
+    expect(xml.value).toContain('<IS>');
+    expect(xml.value).toContain('<CSTIS>000</CSTIS>');
+    expect(xml.value).toContain('<cClassTribIS>000001</cClassTribIS>');
+    expect(xml.value).toContain('<vIS>1.00</vIS>');
+    expect(xml.value).toContain('<gIBSCBS>');
+    expect(xml.value).toContain('<vBC>100.00</vBC>');
+    expect(xml.value).toContain('<IBSCBSTot>');
+    expect(xml.value).toContain('<vBCIBSCBS>100.00</vBCIBSCBS>');
+    expect(xml.value).toContain('<vIBSUF>0.10</vIBSUF>');
+    expect(xml.value).toContain('<vCBS>0.90</vCBS>');
+    expect(xml.value).toContain('<ISTot>');
+    expect(xml.value).toContain('<vNFTot>101.00</vNFTot>');
+
+    const signed = await signer.sign(
+      xml.value,
+      { tag: 'infNFe', mark: 'Id' },
+      certificate,
+    );
+    expectIsRight(signed);
+    expectIsRight(await toolkit.validate(signed.value, leiauteNFe4_00));
+  });
+
+  it('Should not generate IS tags when using PL_09', async () => {
+    const builder = NfeXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide(createValidIde())
+      .emit(createValidEmit())
+      .det(createValidItems(), (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          })
+          .is({
+            CSTIS: '000',
+            cClassTribIS: '000001',
+            vIS: '1.00',
+          })
+          .ibscbs({ cClassTrib: '000000', CST: '000' })
+          .vItem({ vItem: '1.00' }),
+      )
+      .ISTot({ vIS: '1.00' })
+      .IBSCBSTot({ vBCIBSCBS: '100.00' })
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const xml = await builder.assemble();
+    expectIsRight(xml);
+    expect(xml.value).not.toContain('<IS>');
+    expect(xml.value).not.toContain('<IBSCBS>');
+    expect(xml.value).not.toContain('<ISTot>');
+    expect(xml.value).not.toContain('<IBSCBSTot>');
+    expect(xml.value).not.toContain('<vItem>');
   });
 });

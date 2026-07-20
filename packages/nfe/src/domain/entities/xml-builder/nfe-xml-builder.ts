@@ -10,6 +10,8 @@ import type { AssembleDetXmlBuilder, ProdBuilder } from './nfe-det-xml-builder';
 import type {
   ICMSTot as IICMSTot,
   ISSQNtot as IISSQNTot,
+  IBSCBSTot as IIBSCBSTot,
+  ISTot as IISTot,
   Total as ITotal,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
 import type { Transp as ITransp } from '@nfets/nfe/domain/entities/nfe/inf-nfe/transp';
@@ -93,6 +95,8 @@ export interface TotalBuilder<T extends object> {
   total(payload: ITotal): TranspBuilder<T>;
   ISSQNtot(payload?: Partial<IISSQNTot>): TranspBuilder<T> & TotalBuilder<T>;
   ICMSTot(payload?: Partial<IICMSTot>): TranspBuilder<T> & TotalBuilder<T>;
+  IBSCBSTot(payload?: Partial<IIBSCBSTot>): TranspBuilder<T> & TotalBuilder<T>;
+  ISTot(payload?: Partial<IISTot>): TranspBuilder<T> & TotalBuilder<T>;
   increment(
     callback: (
       context: DeepPartial<ITotal>,

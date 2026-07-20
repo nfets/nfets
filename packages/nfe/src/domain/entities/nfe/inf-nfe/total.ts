@@ -57,10 +57,15 @@ export interface RetTrib {
   vRetPrev?: DecimalValue;
 }
 
+export interface ISTot {
+  vIS?: DecimalValue;
+}
+
 export interface Total {
   ICMSTot: ICMSTot;
   ISSQNtot?: ISSQNtot;
   retTrib?: RetTrib;
+  ISTot?: ISTot;
   IBSCBSTot?: IBSCBSTot;
   vNFTot?: DecimalValue;
 }

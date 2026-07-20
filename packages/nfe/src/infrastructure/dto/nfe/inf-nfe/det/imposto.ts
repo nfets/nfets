@@ -80,11 +80,11 @@ export class Imposto implements IImposto {
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => IBSCBS)
-  public IBSCBS?: IIBSCBS;
+  @Type(() => IS)
+  public IS?: IIS;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => IS)
-  public IS?: IIS;
+  @Type(() => IBSCBS)
+  public IBSCBS?: IIBSCBS;
 }

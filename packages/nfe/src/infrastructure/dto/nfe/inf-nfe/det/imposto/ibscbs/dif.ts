@@ -1,10 +1,11 @@
 import { Dif as IDif } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/dif';
-import { IsString } from 'class-validator';
+import { TransformDecimal } from '@nfets/core/application';
+import type { DecimalValue } from '@nfets/core/domain';
 
 export class Dif implements IDif {
-  @IsString()
-  public pDif!: string;
+  @TransformDecimal({ fixed: 4 })
+  public pDif!: DecimalValue;
 
-  @IsString()
-  public vDif!: string;
+  @TransformDecimal({ fixed: 2 })
+  public vDif!: DecimalValue;
 }

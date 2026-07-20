@@ -1,4 +1,6 @@
+import type { DecimalValue } from '@nfets/core/domain';
+
 export interface Red {
-  pAliqEfet: string;
-  pRedAliq: string;
+  pRedAliq: DecimalValue;
+  pAliqEfet: DecimalValue;
 }

@@ -1,21 +1,15 @@
 import { IBSUF as IIBSUF } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/ibs-uf';
-import { IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsOptional, ValidateNested } from 'class-validator';
+import { TransformDecimal } from '@nfets/core/application';
+import type { DecimalValue } from '@nfets/core/domain';
 import { Type } from 'class-transformer';
 import { DevTrib } from './dev-trib';
 import { Dif } from './dif';
 import { Red } from './red';
 
 export class IBSUF implements IIBSUF {
-  @IsString()
-  public pIBSUF!: string;
-
-  @IsString()
-  public vIBSUF!: string;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => DevTrib)
-  public gDevTrib?: DevTrib;
+  @TransformDecimal({ fixed: 4 })
+  public pIBSUF!: DecimalValue;
 
   @IsOptional()
   @ValidateNested()
@@ -24,6 +18,14 @@ export class IBSUF implements IIBSUF {
 
   @IsOptional()
   @ValidateNested()
+  @Type(() => DevTrib)
+  public gDevTrib?: DevTrib;
+
+  @IsOptional()
+  @ValidateNested()
   @Type(() => Red)
   public gRed?: Red;
+
+  @TransformDecimal({ fixed: 2 })
+  public vIBSUF!: DecimalValue;
 }

@@ -1,10 +1,11 @@
 import { Red as IRed } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/red';
-import { IsString } from 'class-validator';
+import { TransformDecimal } from '@nfets/core/application';
+import type { DecimalValue } from '@nfets/core/domain';
 
 export class Red implements IRed {
-  @IsString()
-  public pAliqEfet!: string;
+  @TransformDecimal({ fixed: 4 })
+  public pRedAliq!: DecimalValue;
 
-  @IsString()
-  public pRedAliq!: string;
+  @TransformDecimal({ fixed: 4 })
+  public pAliqEfet!: DecimalValue;
 }

@@ -18,6 +18,7 @@ import type {
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/pis';
 import type { Prod } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/prod';
 import type { IBSCBS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs';
+import type { IS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/is';
 
 export interface DetBuilder {
   det($: DetAttributes): ProdBuilder;
@@ -30,7 +31,7 @@ export interface ProdBuilder {
 export interface ImpostoBuilder {
   imposto(
     payload: Imposto,
-  ): IcmsOrIssQnBuilder & AssembleDetXmlBuilder & IbscbsBuilder;
+  ): IcmsOrIssQnBuilder & AssembleDetXmlBuilder & IsBuilder & IbscbsBuilder;
 }
 
 export interface IcmsBuilder {
@@ -43,6 +44,7 @@ export interface IcmsBuilder {
     CofinsBuilder &
     CofinsStBuilder &
     AssembleDetXmlBuilder &
+    IsBuilder &
     IbscbsBuilder &
     IssQnBuilder;
 }
@@ -73,6 +75,7 @@ export interface IcmsIpiBuilder {
     PisStBuilder &
     IcmsufdestBuilder &
     AssembleDetXmlBuilder &
+    IsBuilder &
     IbscbsBuilder;
 }
 
@@ -83,6 +86,7 @@ export interface IssIpiBuilder {
     PisStBuilder &
     IcmsufdestBuilder &
     AssembleDetXmlBuilder &
+    IsBuilder &
     IbscbsBuilder;
 }
 
@@ -93,6 +97,7 @@ export interface IIBuilder {
     PisStBuilder &
     IcmsufdestBuilder &
     AssembleDetXmlBuilder &
+    IsBuilder &
     IbscbsBuilder;
 }
 
@@ -104,6 +109,7 @@ export interface PisBuilder {
     CofinsStBuilder &
     PisStBuilder &
     AssembleDetXmlBuilder &
+    IsBuilder &
     IbscbsBuilder;
 }
 
@@ -114,6 +120,7 @@ export interface PisStBuilder {
     CofinsBuilder &
     CofinsStBuilder &
     AssembleDetXmlBuilder &
+    IsBuilder &
     IbscbsBuilder;
 }
 
@@ -123,21 +130,28 @@ export interface CofinsBuilder {
   ): IcmsufdestBuilder &
     CofinsStBuilder &
     AssembleDetXmlBuilder &
+    IsBuilder &
     IbscbsBuilder;
 }
 
 export interface CofinsStBuilder {
   cofinsst(
     payload: COFINSST,
-  ): IcmsufdestBuilder & AssembleDetXmlBuilder & IbscbsBuilder;
+  ): IcmsufdestBuilder & AssembleDetXmlBuilder & IsBuilder & IbscbsBuilder;
 }
 
 export interface IcmsufdestBuilder {
-  icmsufdest(payload: ICMSUFDest): IbscbsBuilder & AssembleDetXmlBuilder;
+  icmsufdest(
+    payload: ICMSUFDest,
+  ): IsBuilder & IbscbsBuilder & AssembleDetXmlBuilder;
+}
+
+export interface IsBuilder {
+  is(payload?: IS): IbscbsBuilder & vItemBuilder & AssembleDetXmlBuilder;
 }
 
 export interface IbscbsBuilder {
-  ibscbs(payload: IBSCBS): vItemBuilder;
+  ibscbs(payload?: IBSCBS): IsBuilder & vItemBuilder & AssembleDetXmlBuilder;
 }
 
 export interface vItemBuilder {

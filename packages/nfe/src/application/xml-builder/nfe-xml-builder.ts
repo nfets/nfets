@@ -10,6 +10,8 @@ import type {
   Total as ITotal,
   ICMSTot as IICMSTot,
   ISSQNtot as IISSQNTot,
+  IBSCBSTot as IIBSCBSTot,
+  ISTot as IISTot,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
 import type { Local as ILocal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/local';
 import type { Avulsa as IAvulsa } from '@nfets/nfe/domain/entities/nfe/inf-nfe/avulsa';
@@ -208,6 +210,53 @@ export class NfeXmlBuilder<
     return this;
   }
 
+  public IBSCBSTot(payload?: Partial<IIBSCBSTot>) {
+    if (payload == null) return this;
+    if (this.schema === Schemas.PL_009_V4) return this;
+
+    const current = this.data.infNFe.total.IBSCBSTot;
+    this.data.infNFe.total.IBSCBSTot = {
+      ...current,
+      ...payload,
+      gIBS: {
+        ...current?.gIBS,
+        ...payload.gIBS,
+        gIBSUF: {
+          ...current?.gIBS?.gIBSUF,
+          ...payload.gIBS?.gIBSUF,
+        },
+        gIBSMun: {
+          ...current?.gIBS?.gIBSMun,
+          ...payload.gIBS?.gIBSMun,
+        },
+      },
+      gCBS: {
+        ...current?.gCBS,
+        ...payload.gCBS,
+      },
+      ...(payload.gMono != null || current?.gMono != null
+        ? {
+            gMono: {
+              ...current?.gMono,
+              ...payload.gMono,
+            },
+          }
+        : {}),
+    };
+    return this;
+  }
+
+  public ISTot(payload?: Partial<IISTot>) {
+    if (payload == null) return this;
+    if (this.schema === Schemas.PL_009_V4) return this;
+
+    this.data.infNFe.total.ISTot = {
+      ...this.data.infNFe.total.ISTot,
+      ...payload,
+    };
+    return this;
+  }
+
   public increment(
     callback: (
       context: DeepPartial<ITotal>,
@@ -233,27 +282,46 @@ export class NfeXmlBuilder<
   }
 
   private buildTotalForPL_010(result: ITotal) {
+    const currentIbs = this.data.infNFe.total.IBSCBSTot;
+    const incomingIbs = result.IBSCBSTot;
+    const currentIs = this.data.infNFe.total.ISTot;
+    const incomingIs = result.ISTot;
+
     this.data.infNFe.total = {
       ...this.data.infNFe.total,
       IBSCBSTot: {
-        ...this.data.infNFe.total.IBSCBSTot,
+        ...currentIbs,
+        ...incomingIbs,
         gCBS: {
-          ...this.data.infNFe.total.IBSCBSTot?.gCBS,
+          ...currentIbs?.gCBS,
+          ...incomingIbs?.gCBS,
         },
         gIBS: {
-          ...this.data.infNFe.total.IBSCBSTot?.gIBS,
+          ...currentIbs?.gIBS,
+          ...incomingIbs?.gIBS,
           gIBSMun: {
-            ...this.data.infNFe.total.IBSCBSTot?.gIBS?.gIBSMun,
+            ...currentIbs?.gIBS?.gIBSMun,
+            ...incomingIbs?.gIBS?.gIBSMun,
           },
           gIBSUF: {
-            ...this.data.infNFe.total.IBSCBSTot?.gIBS?.gIBSUF,
+            ...currentIbs?.gIBS?.gIBSUF,
+            ...incomingIbs?.gIBS?.gIBSUF,
           },
         },
-        gMono: {
-          ...this.data.infNFe.total.IBSCBSTot?.gMono,
-        },
+        ...(incomingIbs?.gMono != null || currentIbs?.gMono != null
+          ? {
+              gMono: {
+                ...currentIbs?.gMono,
+                ...incomingIbs?.gMono,
+              },
+            }
+          : {}),
       },
-      vNFTot: result.vNFTot,
+      ISTot:
+        currentIs || incomingIs
+          ? { ...currentIs, ...incomingIs }
+          : currentIs,
+      vNFTot: result.vNFTot ?? this.data.infNFe.total.vNFTot,
     };
   }
 

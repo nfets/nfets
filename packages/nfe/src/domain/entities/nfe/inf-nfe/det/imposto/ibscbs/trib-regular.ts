@@ -1,10 +1,12 @@
+import type { DecimalValue } from '@nfets/core/domain';
+
 export interface TribRegular {
-  pAliqEfetRegIBSMun: string;
-  pAliqEfetRegIBSUF: string;
-  pAliqEfetRegCBS: string;
-  vTribRegIBSMun: string;
-  vTribRegIBSUF: string;
-  cClassTribReg: string;
-  vTribRegCBS: string;
   CSTReg: string;
+  cClassTribReg: string;
+  pAliqEfetRegIBSUF: DecimalValue;
+  vTribRegIBSUF: DecimalValue;
+  pAliqEfetRegIBSMun: DecimalValue;
+  vTribRegIBSMun: DecimalValue;
+  pAliqEfetRegCBS: DecimalValue;
+  vTribRegCBS: DecimalValue;
 }

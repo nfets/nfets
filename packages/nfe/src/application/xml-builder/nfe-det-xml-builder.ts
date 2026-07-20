@@ -47,6 +47,7 @@ import {
   IBSCBS,
   IBSCBS as IIBSCBS,
 } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/ibscbs';
+import { IS, IS as IIS } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/is';
 import Schemas from '@nfets/nfe/domain/entities/transmission/schemas';
 import { Schema } from '@nfets/nfe/domain';
 
@@ -160,8 +161,19 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
     return this;
   }
 
+  @Validates(IS)
+  public is(payload?: IIS) {
+    if (payload == null) return this;
+    if (this.schema === Schemas.PL_009_V4) return this;
+
+    this.data.imposto ??= {} as IImposto;
+    this.data.imposto.IS = payload;
+    return this;
+  }
+
   @Validates(IBSCBS)
-  public ibscbs(payload: IIBSCBS) {
+  public ibscbs(payload?: IIBSCBS) {
+    if (payload == null) return this;
     if (this.schema === Schemas.PL_009_V4) return this;
 
     this.data.imposto ??= {} as IImposto;

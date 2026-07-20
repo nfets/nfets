@@ -1,21 +1,15 @@
 import { IBSMun as IIBSMun } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/ibs-mun';
-import { IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsOptional, ValidateNested } from 'class-validator';
+import { TransformDecimal } from '@nfets/core/application';
+import type { DecimalValue } from '@nfets/core/domain';
 import { Type } from 'class-transformer';
 import { DevTrib } from './dev-trib';
 import { Dif } from './dif';
 import { Red } from './red';
 
 export class IBSMun implements IIBSMun {
-  @IsString()
-  public pIBSMun!: string;
-
-  @IsString()
-  public vIBSMun!: string;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => DevTrib)
-  public gDevTrib?: DevTrib;
+  @TransformDecimal({ fixed: 4 })
+  public pIBSMun!: DecimalValue;
 
   @IsOptional()
   @ValidateNested()
@@ -24,6 +18,14 @@ export class IBSMun implements IIBSMun {
 
   @IsOptional()
   @ValidateNested()
+  @Type(() => DevTrib)
+  public gDevTrib?: DevTrib;
+
+  @IsOptional()
+  @ValidateNested()
   @Type(() => Red)
   public gRed?: Red;
+
+  @TransformDecimal({ fixed: 2 })
+  public vIBSMun!: DecimalValue;
 }

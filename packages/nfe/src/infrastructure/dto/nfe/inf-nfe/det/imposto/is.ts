@@ -1,28 +1,36 @@
 import { IS as IIS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/is';
-import { IsString } from 'class-validator';
+import { TransformDecimal } from '@nfets/core/application';
+import type { DecimalValue } from '@nfets/core/domain';
+import { IsOptional, IsString } from 'class-validator';
 
 export class IS implements IIS {
-  @IsString()
-  public cClassTrib!: string;
-
   @IsString()
   public CSTIS!: string;
 
   @IsString()
-  public pISEspec!: string;
+  public cClassTribIS!: string;
 
-  @IsString()
-  public vBCIS!: string;
+  @IsOptional()
+  @TransformDecimal({ fixed: 2 })
+  public vBCIS?: DecimalValue;
 
-  @IsString()
-  public uTrib!: string;
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  public pIS?: DecimalValue;
 
-  @IsString()
-  public qTrib!: string;
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  public pISEspec?: DecimalValue;
 
+  @IsOptional()
   @IsString()
-  public pIS!: string;
+  public uTrib?: string;
 
-  @IsString()
-  public vIS!: string;
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  public qTrib?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 2 })
+  public vIS?: DecimalValue;
 }

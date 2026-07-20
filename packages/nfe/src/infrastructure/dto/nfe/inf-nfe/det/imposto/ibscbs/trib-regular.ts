@@ -1,4 +1,6 @@
 import { TribRegular as ITribRegular } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/trib-regular';
+import { TransformDecimal } from '@nfets/core/application';
+import type { DecimalValue } from '@nfets/core/domain';
 import { IsString } from 'class-validator';
 
 export class TribRegular implements ITribRegular {
@@ -8,21 +10,21 @@ export class TribRegular implements ITribRegular {
   @IsString()
   public cClassTribReg!: string;
 
-  @IsString()
-  public pAliqEfetRegIBSUF!: string;
+  @TransformDecimal({ fixed: 4 })
+  public pAliqEfetRegIBSUF!: DecimalValue;
 
-  @IsString()
-  public vTribRegIBSUF!: string;
+  @TransformDecimal({ fixed: 2 })
+  public vTribRegIBSUF!: DecimalValue;
 
-  @IsString()
-  public pAliqEfetRegIBSMun!: string;
+  @TransformDecimal({ fixed: 4 })
+  public pAliqEfetRegIBSMun!: DecimalValue;
 
-  @IsString()
-  public vTribRegIBSMun!: string;
+  @TransformDecimal({ fixed: 2 })
+  public vTribRegIBSMun!: DecimalValue;
 
-  @IsString()
-  public pAliqEfetRegCBS!: string;
+  @TransformDecimal({ fixed: 4 })
+  public pAliqEfetRegCBS!: DecimalValue;
 
-  @IsString()
-  public vTribRegCBS!: string;
+  @TransformDecimal({ fixed: 2 })
+  public vTribRegCBS!: DecimalValue;
 }

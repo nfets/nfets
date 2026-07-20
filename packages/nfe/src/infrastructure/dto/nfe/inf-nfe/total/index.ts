@@ -10,8 +10,10 @@ import type {
   ISSQNtot as IISSQNTot,
   RetTrib as IRetTrib,
   IBSCBSTot as IIBSCBSTot,
+  ISTot as IISTot,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
 import { IBSCBSTot } from './ibscbstot';
+import { ISTot } from './istot';
 import { TransformDecimal } from '@nfets/core';
 import type { DecimalValue } from '@nfets/core/domain';
 
@@ -29,6 +31,11 @@ export class Total implements ITotal {
   @ValidateNested()
   @Type(() => RetTrib)
   public retTrib?: IRetTrib;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ISTot)
+  public ISTot?: IISTot;
 
   @IsOptional()
   @ValidateNested()

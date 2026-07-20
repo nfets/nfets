@@ -1,4 +1,6 @@
+import type { DecimalValue } from '@nfets/core/domain';
+
 export interface Dif {
-  pDif: string;
-  vDif: string;
+  pDif: DecimalValue;
+  vDif: DecimalValue;
 }
