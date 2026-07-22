@@ -2,6 +2,7 @@ import {
   IsString,
   IsOptional,
   IsObject,
+  IsArray,
   ValidateNested,
   ArrayMaxSize,
 } from 'class-validator';
@@ -105,7 +106,7 @@ export class Comb implements IComb {
   @TransformDecimal({ fixed: 4 })
   public pBio?: DecimalValue;
 
-  @IsObject()
+  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => OrigComb)
   @ArrayMaxSize(30)
