@@ -221,8 +221,8 @@ export class NfeXmlBuilder<
     return this;
   }
 
-  @Validates(IBSCBSTot)
   @SchemaValidates(PL_010)
+  @Validates(IBSCBSTot)
   public IBSCBSTot(payload?: IIBSCBSTot) {
     if (payload == null) return this;
     this.data.infNFe.total.IBSCBSTot = {
@@ -232,8 +232,8 @@ export class NfeXmlBuilder<
     return this;
   }
 
-  @Validates(ISTot)
   @SchemaValidates(PL_010)
+  @Validates(ISTot)
   public ISTot(payload?: IISTot) {
     if (payload == null) return this;
     this.data.infNFe.total.ISTot = {
@@ -391,16 +391,16 @@ export class NfeXmlBuilder<
     return this;
   }
 
-  @Validates(Agropecuario)
   @SchemaValidates(PL_010)
+  @Validates(Agropecuario)
   public agropecuario(payload?: IAgropecuario) {
     if (payload == null) return this;
     this.data.infNFe.agropecuario = payload;
     return this;
   }
 
-  @Validates(InfPAA)
   @SchemaValidates(PL_010)
+  @Validates(InfPAA)
   public infPAA(payload?: IInfPAA) {
     if (payload == null) return this;
     this.data.infNFe.infPAA = payload;
