@@ -10,8 +10,8 @@ export const SchemaValidates = (
   return (
     _target: object,
     _property: string | symbol,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     descriptor: TypedPropertyDescriptor<
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (this: WithSchema, ...args: any[]) => any
     >,
   ) => {

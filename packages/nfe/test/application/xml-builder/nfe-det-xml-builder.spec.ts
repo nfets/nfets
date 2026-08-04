@@ -14,7 +14,9 @@ const mergeTotalIncrement = (total: Total, result: Partial<Total>): Total => ({
     : total.ISSQNtot,
 });
 
-const createDetBuilder = (schema: 'PL_009_V4' | 'PL_010_V1.30' = 'PL_009_V4') => {
+const createDetBuilder = (
+  schema: 'PL_009_V4' | 'PL_010_V1.30' = 'PL_009_V4',
+) => {
   const state = {
     infNFe: {
       total: { ICMSTot: {} } as Total,
@@ -95,6 +97,16 @@ describe('NfeDetXmlBuilder (unit)', () => {
       .det({ nItem: '1' })
       .prod(baseProd)
       .imposto({})
+      .icms({
+        ICMS00: {
+          orig: '0',
+          CST: '00',
+          modBC: '3',
+          vBC: '3.49',
+          pICMS: '7.0000',
+          vICMS: '0.24',
+        },
+      })
       .ii({
         vBC: '10.00',
         vDespAdu: '0.00',
@@ -114,17 +126,25 @@ describe('NfeDetXmlBuilder (unit)', () => {
       .det({ nItem: '1' })
       .prod(baseProd)
       .imposto({})
+      .icms({
+        ICMS00: {
+          orig: '0',
+          CST: '00',
+          modBC: '3',
+          vBC: '3.49',
+          pICMS: '7.0000',
+          vICMS: '0.24',
+        },
+      })
       .pisst({
         vBC: '10.00',
         pPIS: '1.0000',
         vPIS: '0.10',
-        indSomaPISST: '1',
       })
       .cofinsst({
         vBC: '10.00',
         pCOFINS: '1.0000',
         vCOFINS: '0.10',
-        indSomaCOFINSST: '1',
       })
       .icmsufdest({
         vBCUFDest: '10.00',
