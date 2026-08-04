@@ -47,7 +47,7 @@ describe('Validates decorator (unit)', () => {
 
     it('should collect validation errors when payload is invalid', () => {
       const service = new TestService();
-      service.process({ name: 'ab' } as ValidPayload);
+      service.process({ name: 'ab' });
 
       const errors = Reflect.getMetadata(ValidateErrorsMetadata, service) as
         | string[]
@@ -60,7 +60,7 @@ describe('Validates decorator (unit)', () => {
     it('should transform plain object to class instance', () => {
       const service = new TestService();
       const plainObject = { name: 'Test Name' };
-      const result = service.process(plainObject as ValidPayload);
+      const result = service.process(plainObject);
 
       expect(result).toBe('Processed: Test Name');
       const errors = Reflect.getMetadata(ValidateErrorsMetadata, service);
@@ -79,7 +79,7 @@ describe('Validates decorator (unit)', () => {
 
     it('should skip validation when method has SkipValidation', () => {
       const service = new TestService();
-      const invalidPayload = { name: 'ab' } as ValidPayload;
+      const invalidPayload = { name: 'ab' };
       const result = service.process(invalidPayload);
 
       expect(result).toBe('Processed: ab');
@@ -99,7 +99,7 @@ describe('Validates decorator (unit)', () => {
 
     it('should skip validation when class has SkipAllValidations', () => {
       const service = new TestService();
-      const invalidPayload = { name: 'ab' } as InvalidPayload;
+      const invalidPayload = { name: 'ab' };
       const result = service.process(invalidPayload);
 
       expect(result).toBe('Processed: ab');
@@ -131,7 +131,7 @@ describe('Validates decorator (unit)', () => {
 
     it('should collect nested validation errors', () => {
       const service = new TestService();
-      service.process({ nested: { nested: 'ab' } } as ParentPayload);
+      service.process({ nested: { nested: 'ab' } });
 
       const errors = Reflect.getMetadata(ValidateErrorsMetadata, service) as
         | string[]
@@ -169,7 +169,7 @@ describe('Validates decorator (unit)', () => {
       const service = new TestService();
       service.process({
         middle: { deepNested: { deepNested: 'ab' } },
-      } as TopPayload);
+      });
 
       const errors = Reflect.getMetadata(ValidateErrorsMetadata, service) as
         | string[]
@@ -191,8 +191,8 @@ describe('Validates decorator (unit)', () => {
 
     it('should accumulate errors across multiple calls', () => {
       const service = new TestService();
-      service.process({ name: 'ab' } as InvalidPayload);
-      service.process({ name: 'cd' } as InvalidPayload);
+      service.process({ name: 'ab' });
+      service.process({ name: 'cd' });
 
       const errors = Reflect.getMetadata(ValidateErrorsMetadata, service) as
         | string[]

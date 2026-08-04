@@ -17,155 +17,210 @@ import type {
   PISST,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/pis';
 import type { Prod } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/prod';
-import type { IBSCBS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs';
-import type { IS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/is';
+import type { Schema } from '@nfets/nfe/domain/entities/transmission/schemas';
+import type { IS } from '../nfe/inf-nfe/det/imposto/is';
+import type { IBSCBS } from '../nfe/inf-nfe/det/imposto/ibscbs';
+import type { DFeReferenciado } from '../nfe/inf-nfe/det/dfe-referenciado';
+import type { VItem } from '../nfe/inf-nfe/det/v-item';
 
-export interface DetBuilder {
-  det($: DetAttributes): ProdBuilder;
+export interface DetBuilder<S extends Schema> {
+  det($: DetAttributes): ProdBuilder<S>;
 }
 
-export interface ProdBuilder {
-  prod(payload: Prod): ImpostoBuilder & IcmsOrIssQnBuilder;
+export interface ProdBuilder<S extends Schema> {
+  prod(payload: Prod): ImpostoBuilder<S> & IcmsOrIssQnBuilder<S>;
 }
 
-export interface ImpostoBuilder {
-  imposto(
-    payload: Imposto,
-  ): IcmsOrIssQnBuilder & AssembleDetXmlBuilder & IsBuilder & IbscbsBuilder;
+export interface ImpostoBuilder<S extends Schema> {
+  imposto(payload: Imposto): IcmsOrIssQnBuilder<S> & AssembleDetXmlBuilder;
 }
 
-export interface IcmsBuilder {
+export interface IcmsBuilder<S extends Schema> {
   icms(
     payload?: ICMS,
-  ): IcmsIpiBuilder &
-    IIBuilder &
-    PisBuilder &
-    PisStBuilder &
-    CofinsBuilder &
-    CofinsStBuilder &
+  ): IcmsIpiBuilder<S> &
+    IIBuilder<S> &
+    PisBuilder<S> &
+    PisStBuilder<S> &
+    CofinsBuilder<S> &
+    CofinsStBuilder<S> &
+    IcmsufdestBuilder<S> &
+    IsBuilder<S> &
+    IbscbsBuilder<S> &
+    VItemBuilder<S> &
+    DFeReferenciadoBuilder<S> &
     AssembleDetXmlBuilder &
-    IsBuilder &
-    IbscbsBuilder &
-    IssQnBuilder;
+    IssQnBuilder<S>;
 }
 
-export interface IssQnBuilder {
+export interface IssQnBuilder<S extends Schema> {
   issqn(
     payload?: ISSQN,
-  ): IssIpiBuilder &
-    PisBuilder &
-    PisStBuilder &
+  ): IssIpiBuilder<S> &
+    PisBuilder<S> &
+    PisStBuilder<S> &
+    CofinsBuilder<S> &
+    CofinsStBuilder<S> &
+    IcmsufdestBuilder<S> &
+    IsBuilder<S> &
+    IbscbsBuilder<S> &
+    VItemBuilder<S> &
+    DFeReferenciadoBuilder<S> &
     AssembleDetXmlBuilder &
-    IcmsBuilder;
+    IcmsBuilder<S>;
 }
 
-export interface IcmsOrIssQnBuilder extends IcmsBuilder, IssQnBuilder {}
+export interface IcmsOrIssQnBuilder<S extends Schema>
+  extends IcmsBuilder<S>, IssQnBuilder<S> {}
 
-export interface OptionalSharedImpostoBuilder
-  extends PisBuilder,
-    CofinsBuilder,
-    IcmsufdestBuilder,
+export interface OptionalSharedImpostoBuilder<S extends Schema>
+  extends
+    PisBuilder<S>,
+    CofinsBuilder<S>,
+    IcmsufdestBuilder<S>,
+    IsBuilder<S>,
+    IbscbsBuilder<S>,
+    VItemBuilder<S>,
+    DFeReferenciadoBuilder<S>,
     AssembleDetXmlBuilder {}
 
-export interface IcmsIpiBuilder {
+export interface IcmsIpiBuilder<S extends Schema> {
   ipi(
     payload: IPI,
-  ): IIBuilder &
-    PisBuilder &
-    PisStBuilder &
-    IcmsufdestBuilder &
-    AssembleDetXmlBuilder &
-    IsBuilder &
-    IbscbsBuilder;
+  ): IIBuilder<S> &
+    PisBuilder<S> &
+    PisStBuilder<S> &
+    IcmsufdestBuilder<S> &
+    IsBuilder<S> &
+    IbscbsBuilder<S> &
+    VItemBuilder<S> &
+    DFeReferenciadoBuilder<S> &
+    AssembleDetXmlBuilder;
 }
 
-export interface IssIpiBuilder {
+export interface IssIpiBuilder<S extends Schema> {
   ipi(
     payload: IPI,
-  ): PisBuilder &
-    PisStBuilder &
-    IcmsufdestBuilder &
-    AssembleDetXmlBuilder &
-    IsBuilder &
-    IbscbsBuilder;
+  ): PisBuilder<S> &
+    PisStBuilder<S> &
+    IcmsufdestBuilder<S> &
+    IsBuilder<S> &
+    IbscbsBuilder<S> &
+    VItemBuilder<S> &
+    DFeReferenciadoBuilder<S> &
+    AssembleDetXmlBuilder;
 }
 
-export interface IIBuilder {
+export interface IIBuilder<S extends Schema> {
   ii(
     payload: II,
-  ): PisBuilder &
-    PisStBuilder &
-    IcmsufdestBuilder &
-    AssembleDetXmlBuilder &
-    IsBuilder &
-    IbscbsBuilder;
+  ): PisBuilder<S> &
+    PisStBuilder<S> &
+    IcmsufdestBuilder<S> &
+    IsBuilder<S> &
+    IbscbsBuilder<S> &
+    VItemBuilder<S> &
+    DFeReferenciadoBuilder<S> &
+    AssembleDetXmlBuilder;
 }
 
-export interface PisBuilder {
+export interface PisBuilder<S extends Schema> {
   pis(
     payload: PIS,
-  ): IcmsufdestBuilder &
-    CofinsBuilder &
-    CofinsStBuilder &
-    PisStBuilder &
-    AssembleDetXmlBuilder &
-    IsBuilder &
-    IbscbsBuilder;
+  ): PisStBuilder<S> &
+    CofinsBuilder<S> &
+    CofinsStBuilder<S> &
+    IcmsufdestBuilder<S> &
+    IsBuilder<S> &
+    IbscbsBuilder<S> &
+    VItemBuilder<S> &
+    DFeReferenciadoBuilder<S> &
+    AssembleDetXmlBuilder;
 }
 
-export interface PisStBuilder {
+export interface PisStBuilder<S extends Schema> {
   pisst(
     payload: PISST,
-  ): IcmsufdestBuilder &
-    CofinsBuilder &
-    CofinsStBuilder &
-    AssembleDetXmlBuilder &
-    IsBuilder &
-    IbscbsBuilder;
+  ): CofinsBuilder<S> &
+    CofinsStBuilder<S> &
+    IcmsufdestBuilder<S> &
+    IsBuilder<S> &
+    IbscbsBuilder<S> &
+    VItemBuilder<S> &
+    DFeReferenciadoBuilder<S> &
+    AssembleDetXmlBuilder;
 }
 
-export interface CofinsBuilder {
+export interface CofinsBuilder<S extends Schema> {
   cofins(
     payload: COFINS,
-  ): IcmsufdestBuilder &
-    CofinsStBuilder &
-    AssembleDetXmlBuilder &
-    IsBuilder &
-    IbscbsBuilder;
+  ): CofinsStBuilder<S> &
+    IcmsufdestBuilder<S> &
+    IsBuilder<S> &
+    IbscbsBuilder<S> &
+    VItemBuilder<S> &
+    DFeReferenciadoBuilder<S> &
+    AssembleDetXmlBuilder;
 }
 
-export interface CofinsStBuilder {
+export interface CofinsStBuilder<S extends Schema> {
   cofinsst(
     payload: COFINSST,
-  ): IcmsufdestBuilder & AssembleDetXmlBuilder & IsBuilder & IbscbsBuilder;
+  ): IcmsufdestBuilder<S> &
+    IsBuilder<S> &
+    IbscbsBuilder<S> &
+    VItemBuilder<S> &
+    DFeReferenciadoBuilder<S> &
+    AssembleDetXmlBuilder;
 }
 
-export interface IcmsufdestBuilder {
+export interface IcmsufdestBuilder<S extends Schema> {
   icmsufdest(
     payload: ICMSUFDest,
-  ): IsBuilder & IbscbsBuilder & AssembleDetXmlBuilder;
+  ): IsBuilder<S> &
+    IbscbsBuilder<S> &
+    VItemBuilder<S> &
+    DFeReferenciadoBuilder<S> &
+    AssembleDetXmlBuilder;
 }
 
-export interface IsBuilder {
-  is(payload?: IS): IbscbsBuilder & vItemBuilder & AssembleDetXmlBuilder;
+/** IS → IBSCBS → vItem → DFeReferenciado */
+export interface IsBuilder<S extends Schema> {
+  is(
+    payload?: IS,
+  ): IbscbsBuilder<S> &
+    VItemBuilder<S> &
+    DFeReferenciadoBuilder<S> &
+    AssembleDetXmlBuilder;
 }
 
-export interface IbscbsBuilder {
-  ibscbs(payload?: IBSCBS): IsBuilder & vItemBuilder & AssembleDetXmlBuilder;
+export interface IbscbsBuilder<S extends Schema> {
+  ibscbs(
+    payload?: IBSCBS,
+  ): VItemBuilder<S> & DFeReferenciadoBuilder<S> & AssembleDetXmlBuilder;
 }
 
-export interface vItemBuilder {
-  vItem(payload: { vItem: string }): AssembleDetXmlBuilder;
+export interface VItemBuilder<S extends Schema> {
+  vItem(payload: VItem): DFeReferenciadoBuilder<S> & AssembleDetXmlBuilder;
+}
+
+export interface DFeReferenciadoBuilder<_S extends Schema> {
+  dfeReferenciado(payload: DFeReferenciado): AssembleDetXmlBuilder;
 }
 
 export interface AssembleDetXmlBuilder {
   assemble(): Det;
 }
 
-export interface INfeDetXmlBuilder
-  extends DetBuilder,
-    ProdBuilder,
-    ImpostoBuilder,
-    IcmsOrIssQnBuilder,
-    OptionalSharedImpostoBuilder,
+export interface INfeDetXmlBuilder<S extends Schema>
+  extends
+    DetBuilder<S>,
+    ProdBuilder<S>,
+    ImpostoBuilder<S>,
+    IcmsOrIssQnBuilder<S>,
+    OptionalSharedImpostoBuilder<S>,
+    IsBuilder<S>,
+    IbscbsBuilder<S>,
+    VItemBuilder<S>,
+    DFeReferenciadoBuilder<S>,
     AssembleDetXmlBuilder {}

@@ -23,4 +23,5 @@ export interface Emit {
   IM?: string;
   CNAE?: string;
   CRT: string;
+  ISUFEmit?: string;
 }

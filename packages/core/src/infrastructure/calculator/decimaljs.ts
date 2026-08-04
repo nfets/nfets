@@ -6,7 +6,7 @@ import type {
 
 export class Decimal extends DecimalJs implements IDecimal {
   static from(value: DecimalValue | Decimal): IDecimal {
-    return new Decimal(value as DecimalJs.Value);
+    return new Decimal(value);
   }
 
   static newOrZero(value?: DecimalValue | Decimal): IDecimal {

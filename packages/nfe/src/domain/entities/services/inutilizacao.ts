@@ -64,7 +64,7 @@ export interface RetInutNFe {
 }
 
 export interface InutilizacaoResponse {
-  retInutNFe: RetInutNFe;
+  retInutNFe?: RetInutNFe;
 }
 
 export interface ProcInutNFe {

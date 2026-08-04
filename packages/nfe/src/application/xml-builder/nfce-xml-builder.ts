@@ -1,8 +1,9 @@
+import { plainToInstance } from '@nfets/core';
 import type {
   IdeBuilder,
-  INfeXmlBuilder,
   InfNFeBuilder,
 } from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
+import { type DefaultSchema, type Schema, TpEmis } from '@nfets/nfe/domain';
 
 import { NfeXmlBuilder } from './nfe-xml-builder';
 import { NFCe } from '@nfets/nfe/infrastructure/dto/nfe/nfce';
@@ -10,29 +11,33 @@ import { NFCe } from '@nfets/nfe/infrastructure/dto/nfe/nfce';
 import type { NFCe as INFCe } from '@nfets/nfe/domain/entities/nfe/nfce';
 import type { XmlToolkit } from '@nfets/core/domain';
 import type { ContingencyOptions } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
-import { type Schema, TpEmis } from '@nfets/nfe/domain';
 
-export class NfceXmlBuilder<T extends object = INFCe>
-  extends NfeXmlBuilder<T>
-  implements INfeXmlBuilder<T>
-{
-  protected override readonly data = {
+export class NfceXmlBuilder<
+  T extends object = INFCe,
+  S extends Schema = typeof DefaultSchema,
+> extends NfeXmlBuilder<T, S> {
+  public override readonly data = {
     $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
     infNFe: {
       total: { ICMSTot: {} },
     },
   } as const as INFCe;
 
-  protected override get entity() {
-    return NFCe as new () => T;
-  }
-
-  public static override create<T extends object = INFCe>(
+  public static override create<
+    T extends object = INFCe,
+    S extends Schema = typeof DefaultSchema,
+  >(
     builder: XmlToolkit,
     contingency?: ContingencyOptions,
-    schema: Schema = 'PL_009_V4',
-  ): InfNFeBuilder<T> & IdeBuilder<T> {
-    return new this(builder, contingency, schema);
+    schema: S = 'PL_009_V4' as S,
+  ): InfNFeBuilder<T, S> & IdeBuilder<T, S> {
+    return new this<T, S>(builder, contingency, schema);
+  }
+
+  protected override toInstance(): T {
+    return plainToInstance<T>(this.data, NFCe as new () => T, {
+      clearEmptyValues: true,
+    });
   }
 
   protected override assertHomologValidations(): boolean {

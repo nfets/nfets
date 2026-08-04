@@ -83,7 +83,7 @@ export class NfceRemoteTransmitter
     const cUF = NFe.infNFe.ide.cUF;
     const tpAmb = NFe.infNFe.ide.tpAmb;
     return QRCODE_MOD65[tpAmb][
-      cUF as keyof (typeof QRCODE_MOD65)[EnvironmentCode]
+      cUF
     ];
   }
 

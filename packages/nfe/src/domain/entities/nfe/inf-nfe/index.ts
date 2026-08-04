@@ -16,6 +16,8 @@ import type { Pag } from './pag';
 import type { InfAdic } from './infadic';
 import type { Cana } from './cana';
 import type { InfSolicNFF } from './inf-solic-nff';
+import type { Agropecuario } from './agropecuario';
+import type { InfPAA } from './inf-paa';
 
 export interface InfNFeAttributes {
   Id?: string;
@@ -43,4 +45,6 @@ export interface InfNFe {
   cana?: Cana;
   infRespTec?: InfRespTec;
   infSolicNFF?: InfSolicNFF;
+  agropecuario?: Agropecuario;
+  infPAA?: InfPAA;
 }

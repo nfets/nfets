@@ -24,15 +24,14 @@ import type { InfSolicNFF as ISolicNFF } from '@nfets/nfe/domain/entities/nfe/in
 import type { InfRespTec as IInfRespTec } from '@nfets/nfe/domain/entities/nfe/inf-nfe/infresptec';
 import type { InfIntermed as IInfIntermed } from '@nfets/nfe/domain/entities/nfe/inf-nfe/infintermed';
 import type { InfNFeAttributes as IInfNFeAttributes } from '@nfets/nfe/domain/entities/nfe/inf-nfe';
+import type { Agropecuario as IAgropecuario } from '@nfets/nfe/domain/entities/nfe/inf-nfe/agropecuario';
+import type { InfPAA as IInfPAA } from '@nfets/nfe/domain/entities/nfe/inf-nfe/inf-paa';
 import type {
   IdeBuilder,
-  TotalBuilder,
-  TranspBuilder,
-  InfNFeBuilder,
   INfeXmlBuilder,
+  InfNFeBuilder,
 } from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
 
-import Schemas from '@nfets/nfe/domain/entities/transmission/schemas';
 import webservices from '@nfets/nfe/services/contingency-webservices-mod55';
 
 import { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
@@ -46,15 +45,19 @@ import { Total } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/total';
 import { Local } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/local';
 import { Transp } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/transp';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
-import { Schema } from '@nfets/nfe/domain';
 import { Avulsa } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/avulsa';
 import { AutXML } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/autxml';
 import { Compra } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/compra';
 import { Exporta } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/exporta';
 import { InfAdic } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/infadic';
 import { InfRespTec } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/infresptec';
+import { ISTot } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/total/istot';
+import { IBSCBSTot } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/total/ibscbstot';
 import { InfSolicNFF } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/inf-solic-nff';
 import { InfIntermed } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/infintermed';
+import { Agropecuario } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/agropecuario';
+import { InfPAA } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/inf-paa';
+
 import { plainToInstance } from '@nfets/core/application/validations/transformers/plain-to-instance';
 import { InfNFeAttributes } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/inf-nfe';
 import { AccessKeyBuilder } from '@nfets/nfe/application/access-key/access-key-builder';
@@ -64,8 +67,8 @@ import { type DeepPartial, left, right } from '@nfets/core/shared';
 import { ValidateErrorsMetadata, Validates } from '@nfets/core/application';
 import { type XmlToolkit, Environment, NFeTsError } from '@nfets/core/domain';
 import {
-  ProdBuilder,
   AssembleDetXmlBuilder,
+  INfeDetXmlBuilder,
 } from '@nfets/nfe/domain/entities/xml-builder/nfe-det-xml-builder';
 import {
   DefaultDetBuilderAggregator,
@@ -75,11 +78,15 @@ import {
   DefaultTotalBuilderAggregator,
   type TotalBuilderAggregator,
 } from '@nfets/nfe/application/aggregator/total-builder-aggregator';
+import type { DefaultSchema, Schema } from '@nfets/nfe/domain';
+import { SchemaValidates } from '../validations/schema';
+import { PL_010 } from '@nfets/nfe/domain/entities/transmission/schemas';
 
 export class NfeXmlBuilder<
   T extends object = INFe,
-> implements INfeXmlBuilder<T> {
-  protected readonly data = {
+  S extends Schema = typeof DefaultSchema,
+> implements INfeXmlBuilder<T, S> {
+  public readonly data = {
     $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
     infNFe: {
       total: { ICMSTot: {} },
@@ -88,32 +95,34 @@ export class NfeXmlBuilder<
 
   private $data: T | undefined = void 0;
 
-  protected get entity(): new () => T {
-    return NFe as new () => T;
-  }
+  private readonly aggregators: TotalBuilderAggregator[] = [
+    new DefaultTotalBuilderAggregator(this),
+  ];
 
   protected readonly root = 'NFe';
 
   protected readonly $det: DetBuilderAggregator | undefined =
-    new DefaultDetBuilderAggregator(this);
-  protected readonly $total: TotalBuilderAggregator | undefined =
-    new DefaultTotalBuilderAggregator(this);
+    new DefaultDetBuilderAggregator<T, S>(this);
+
   protected readonly nfeDetXmlBuilder;
 
-  public static create<T extends object = INFe>(
+  public static create<
+    T extends object = INFe,
+    S extends Schema = typeof DefaultSchema,
+  >(
     builder: XmlToolkit,
     contingency?: ContingencyOptions,
-    schema: Schema = 'PL_009_V4',
-  ): InfNFeBuilder<T> & IdeBuilder<T> {
-    return new this(builder, contingency, schema);
+    schema: S = 'PL_009_V4' as S,
+  ): InfNFeBuilder<T, S> & IdeBuilder<T, S> {
+    return new this<T, S>(builder, contingency, schema);
   }
 
   protected constructor(
     protected readonly builder: XmlToolkit,
     protected contingency?: ContingencyOptions,
-    public readonly schema: Schema = 'PL_009_V4',
+    public readonly schema: S = 'PL_009_V4' as S,
   ) {
-    this.nfeDetXmlBuilder = NfeDetXmlBuilder.create(this.$det, this.schema);
+    this.nfeDetXmlBuilder = NfeDetXmlBuilder.create<S>(this.$det, schema);
   }
 
   @Validates(InfNFeAttributes)
@@ -172,11 +181,13 @@ export class NfeXmlBuilder<
 
   public det<D>(
     items: [D, ...D[]],
-    build: (ctx: ProdBuilder, item: D) => AssembleDetXmlBuilder,
-  ): TotalBuilder<T> & TranspBuilder<T> {
+    build: (ctx: INfeDetXmlBuilder<S>, item: D) => AssembleDetXmlBuilder,
+  ) {
     this.data.infNFe.det = items.map((item, index) => {
       const builder = build(
-        this.nfeDetXmlBuilder.det({ nItem: (index + 1).toString() }),
+        this.nfeDetXmlBuilder.det({
+          nItem: (index + 1).toString(),
+        }) as INfeDetXmlBuilder<S>,
         item,
       );
       return (this.collect(builder), builder.assemble());
@@ -210,46 +221,21 @@ export class NfeXmlBuilder<
     return this;
   }
 
-  public IBSCBSTot(payload?: Partial<IIBSCBSTot>) {
+  @Validates(IBSCBSTot)
+  @SchemaValidates(PL_010)
+  public IBSCBSTot(payload?: IIBSCBSTot) {
     if (payload == null) return this;
-    if (this.schema === Schemas.PL_009_V4) return this;
-
-    const current = this.data.infNFe.total.IBSCBSTot;
     this.data.infNFe.total.IBSCBSTot = {
-      ...current,
+      ...this.data.infNFe.total.IBSCBSTot,
       ...payload,
-      gIBS: {
-        ...current?.gIBS,
-        ...payload.gIBS,
-        gIBSUF: {
-          ...current?.gIBS?.gIBSUF,
-          ...payload.gIBS?.gIBSUF,
-        },
-        gIBSMun: {
-          ...current?.gIBS?.gIBSMun,
-          ...payload.gIBS?.gIBSMun,
-        },
-      },
-      gCBS: {
-        ...current?.gCBS,
-        ...payload.gCBS,
-      },
-      ...(payload.gMono != null || current?.gMono != null
-        ? {
-            gMono: {
-              ...current?.gMono,
-              ...payload.gMono,
-            },
-          }
-        : {}),
     };
     return this;
   }
 
-  public ISTot(payload?: Partial<IISTot>) {
+  @Validates(ISTot)
+  @SchemaValidates(PL_010)
+  public ISTot(payload?: IISTot) {
     if (payload == null) return this;
-    if (this.schema === Schemas.PL_009_V4) return this;
-
     this.data.infNFe.total.ISTot = {
       ...this.data.infNFe.total.ISTot,
       ...payload,
@@ -276,11 +262,14 @@ export class NfeXmlBuilder<
         : this.data.infNFe.total.ISSQNtot,
     };
 
-    if (this.schema !== Schemas.PL_009_V4) this.buildTotalForPL_010(result);
+    if ((PL_010 as readonly string[]).includes(this.schema)) {
+      this.buildTotalForPL_010(result);
+    }
 
     return this;
   }
 
+  @SchemaValidates(PL_010)
   private buildTotalForPL_010(result: ITotal) {
     const currentIbs = this.data.infNFe.total.IBSCBSTot;
     const incomingIbs = result.IBSCBSTot;
@@ -316,11 +305,18 @@ export class NfeXmlBuilder<
               },
             }
           : {}),
+        ...(incomingIbs?.gEstornoCred != null ||
+        currentIbs?.gEstornoCred != null
+          ? {
+              gEstornoCred: {
+                ...currentIbs?.gEstornoCred,
+                ...incomingIbs?.gEstornoCred,
+              },
+            }
+          : {}),
       },
       ISTot:
-        currentIs || incomingIs
-          ? { ...currentIs, ...incomingIs }
-          : currentIs,
+        currentIs || incomingIs ? { ...currentIs, ...incomingIs } : currentIs,
       vNFTot: result.vNFTot ?? this.data.infNFe.total.vNFTot,
     };
   }
@@ -395,6 +391,28 @@ export class NfeXmlBuilder<
     return this;
   }
 
+  @Validates(Agropecuario)
+  @SchemaValidates(PL_010)
+  public agropecuario(payload?: IAgropecuario) {
+    if (payload == null) return this;
+    this.data.infNFe.agropecuario = payload;
+    return this;
+  }
+
+  @Validates(InfPAA)
+  @SchemaValidates(PL_010)
+  public infPAA(payload?: IInfPAA) {
+    if (payload == null) return this;
+    this.data.infNFe.infPAA = payload;
+    return this;
+  }
+
+  protected toInstance(): T {
+    return plainToInstance<T>(this.data, NFe as new () => T, {
+      clearEmptyValues: true,
+    });
+  }
+
   public quiet() {
     Reflect.deleteMetadata(ValidateErrorsMetadata, this);
     return this;
@@ -404,13 +422,11 @@ export class NfeXmlBuilder<
     if (this.$data !== void 0) return right(this.$data);
     const errors = this.errors();
     if (errors) return left(new NFeTsError(errors.join(', ')));
-    this.$total?.aggregate();
+    for (const aggregator of this.aggregators) aggregator.aggregate();
     this.assertHomologValidations();
     this.assertContingencyModes();
     this.fillAccessKeyIfEmpty();
-    this.$data = plainToInstance<T>(this.data, this.entity, {
-      clearEmptyValues: true,
-    });
+    this.$data = this.toInstance();
     return right(this.$data);
   }
 

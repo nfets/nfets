@@ -165,7 +165,7 @@ describe('nfce contingency xml authorizer pipeline (unit)', () => {
               },
             }),
           ),
-        } as unknown as RemoteTransmissionRepository<NfceRemoteClient>;
+        };
 
       protected override transmitter = new NfceRemoteTransmitter(
         this.soap,

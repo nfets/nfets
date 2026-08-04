@@ -27,6 +27,8 @@ import { Cana } from './cana';
 import { Det } from './det';
 import { Avulsa } from './avulsa';
 import { InfSolicNFF } from './inf-solic-nff';
+import { Agropecuario } from './agropecuario';
+import { InfPAA } from './inf-paa';
 
 import type {
   InfNFeAttributes as IInfNFeAttributes,
@@ -50,6 +52,8 @@ import type { Compra as ICompra } from '@nfets/nfe/domain/entities/nfe/inf-nfe/c
 import type { InfRespTec as IInfRespTec } from '@nfets/nfe/domain/entities/nfe/inf-nfe/infresptec';
 import type { Avulsa as IAvulsa } from '@nfets/nfe/domain/entities/nfe/inf-nfe/avulsa';
 import type { InfSolicNFF as ISolicNFF } from '@nfets/nfe/domain/entities/nfe/inf-nfe/inf-solic-nff';
+import type { Agropecuario as IAgropecuario } from '@nfets/nfe/domain/entities/nfe/inf-nfe/agropecuario';
+import type { InfPAA as IInfPAA } from '@nfets/nfe/domain/entities/nfe/inf-nfe/inf-paa';
 
 export class InfNFeAttributes implements IInfNFeAttributes {
   @IsOptional()
@@ -163,4 +167,14 @@ export class InfNFe implements IInfNFe {
   @ValidateNested()
   @Type(() => InfSolicNFF)
   public infSolicNFF?: ISolicNFF;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Agropecuario)
+  public agropecuario?: IAgropecuario;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => InfPAA)
+  public infPAA?: IInfPAA;
 }

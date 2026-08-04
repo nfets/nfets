@@ -27,205 +27,354 @@ import type { Avulsa as IAvulsa } from '@nfets/nfe/domain/entities/nfe/inf-nfe/a
 import type { Local as ILocal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/local';
 import type { AutXML as IAutXML } from '@nfets/nfe/domain/entities/nfe/inf-nfe/autxml';
 import type { Det as IDet } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det';
+import type { Agropecuario as IAgropecuario } from '@nfets/nfe/domain/entities/nfe/inf-nfe/agropecuario';
+import type { InfPAA as IInfPAA } from '@nfets/nfe/domain/entities/nfe/inf-nfe/inf-paa';
 
-import { type Schema } from '../transmission/schemas';
+import type { DefaultSchema, Schema } from '../transmission/schemas';
 
-export interface InfNFeBuilder<T extends object> {
-  infNFe(payload: InfNFeAttributes): IdeBuilder<T>;
+export interface InfNFeBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
+  infNFe(payload: InfNFeAttributes): IdeBuilder<T, S>;
 }
 
-export interface IdeBuilder<T extends object> {
-  ide(payload: Ide): EmitBuilder<T>;
+export interface IdeBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
+  ide(payload: Ide): EmitBuilder<T, S>;
 }
 
-export interface EmitBuilder<T extends object> {
+export interface EmitBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
   emit(
     payload: IEmit,
-  ): AvulsaBuilder<T> &
-    DestBuilder<T> &
-    RetiradaBuilder<T> &
-    EntregaBuilder<T> &
-    AutXMLBuilder<T> &
-    DetGroupBuilder<T>;
+  ): AvulsaBuilder<T, S> &
+    DestBuilder<T, S> &
+    RetiradaBuilder<T, S> &
+    EntregaBuilder<T, S> &
+    AutXMLBuilder<T, S> &
+    DetGroupBuilder<T, S>;
 }
 
-export interface AvulsaBuilder<T extends object> {
+export interface AvulsaBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
   avulsa(
     payload?: IAvulsa,
-  ): DestBuilder<T> &
-    RetiradaBuilder<T> &
-    EntregaBuilder<T> &
-    AutXMLBuilder<T> &
-    DetGroupBuilder<T>;
+  ): DestBuilder<T, S> &
+    RetiradaBuilder<T, S> &
+    EntregaBuilder<T, S> &
+    AutXMLBuilder<T, S> &
+    DetGroupBuilder<T, S>;
 }
 
-export interface DestBuilder<T extends object> {
+export interface DestBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
   dest(
     payload?: IDest,
-  ): RetiradaBuilder<T> &
-    EntregaBuilder<T> &
-    AutXMLBuilder<T> &
-    DetGroupBuilder<T>;
+  ): RetiradaBuilder<T, S> &
+    EntregaBuilder<T, S> &
+    AutXMLBuilder<T, S> &
+    DetGroupBuilder<T, S>;
 }
 
-export interface RetiradaBuilder<T extends object> {
+export interface RetiradaBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
   retirada(
     payload?: ILocal,
-  ): DestBuilder<T> & EntregaBuilder<T> & AutXMLBuilder<T> & DetGroupBuilder<T>;
+  ): DestBuilder<T, S> &
+    EntregaBuilder<T, S> &
+    AutXMLBuilder<T, S> &
+    DetGroupBuilder<T, S>;
 }
 
-export interface EntregaBuilder<T extends object> {
+export interface EntregaBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
   entrega(
     payload?: ILocal,
-  ): DestBuilder<T> & AutXMLBuilder<T> & DetGroupBuilder<T>;
+  ): DestBuilder<T, S> & AutXMLBuilder<T, S> & DetGroupBuilder<T, S>;
 }
 
-export interface AutXMLBuilder<T extends object> {
-  autXML(payload?: IAutXML): AutXMLBuilder<T> & DetGroupBuilder<T>;
+export interface AutXMLBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
+  autXML(payload?: IAutXML): AutXMLBuilder<T, S> & DetGroupBuilder<T, S>;
 }
 
-export interface DetGroupBuilder<T extends object> {
+export interface DetGroupBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
   det<D>(
     items: [D, ...D[]],
-    build: (ctx: ProdBuilder, item: D) => AssembleDetXmlBuilder,
-  ): TotalBuilder<T> & TranspBuilder<T>;
+    build: (ctx: ProdBuilder<S>, item: D) => AssembleDetXmlBuilder,
+  ): TotalBuilder<T, S> & TranspBuilder<T, S>;
 }
 
-export interface TotalBuilder<T extends object> {
-  total(payload: ITotal): TranspBuilder<T>;
-  ISSQNtot(payload?: Partial<IISSQNTot>): TranspBuilder<T> & TotalBuilder<T>;
-  ICMSTot(payload?: Partial<IICMSTot>): TranspBuilder<T> & TotalBuilder<T>;
-  IBSCBSTot(payload?: Partial<IIBSCBSTot>): TranspBuilder<T> & TotalBuilder<T>;
-  ISTot(payload?: Partial<IISTot>): TranspBuilder<T> & TotalBuilder<T>;
+/**
+ * XSD order (total):
+ *   ICMSTot → ISSQNtot? → retTrib? → ISTot? → IBSCBSTot? → vNFTot?
+ */
+export interface TotalBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
+  total(payload: ITotal): TranspBuilder<T, S>;
+  ISSQNtot(
+    payload?: Partial<IISSQNTot>,
+  ): TranspBuilder<T, S> & TotalBuilder<T, S>;
+  ICMSTot(
+    payload?: Partial<IICMSTot>,
+  ): TranspBuilder<T, S> & TotalBuilder<T, S>;
+  ISTot(
+    payload?: IISTot,
+  ): TranspBuilder<T, S> & TotalBuilder<T, S> & IbsCbsTotBuilder<T, S>;
+  IBSCBSTot(
+    payload?: IIBSCBSTot,
+  ): TranspBuilder<T, S> & TotalBuilder<T, S> & IsTotBuilder<T, S>;
   increment(
     callback: (
       context: DeepPartial<ITotal>,
       det: DeepPartial<IDet[]>,
     ) => DeepPartial<ITotal>,
-  ): TranspBuilder<T>;
+  ): TranspBuilder<T, S>;
 }
 
-export interface TranspBuilder<T extends object> {
-  transp(payload: ITransp): CobrBuilder<T> & PagBuilder<T>;
+export interface IsTotBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
+  ISTot(
+    payload?: IISTot,
+  ): TranspBuilder<T, S> & TotalBuilder<T, S> & IbsCbsTotBuilder<T, S>;
 }
 
-export interface CobrBuilder<T extends object> {
-  cobr(payload?: ICobr): PagBuilder<T>;
+export interface IbsCbsTotBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
+  IBSCBSTot(
+    payload?: IIBSCBSTot,
+  ): TranspBuilder<T, S> & TotalBuilder<T, S> & IsTotBuilder<T, S>;
 }
 
-export interface PagBuilder<T extends object> {
+export interface TranspBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
+  transp(payload: ITransp): CobrBuilder<T, S> & PagBuilder<T, S>;
+}
+
+export interface CobrBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
+  cobr(payload?: ICobr): PagBuilder<T, S>;
+}
+
+/**
+ * XSD order (after pag):
+ *   infIntermed? → infAdic? → exporta? → compra? → cana? →
+ *   infRespTec? → infSolicNFF? → agropecuario? → infPAA?
+ */
+export interface PagBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
   pag(
     payload: IPag,
-  ): AssembleNfeBuilder<T> &
-    AvulsaBuilder<T> &
-    InfAdicBuilder<T> &
-    InfSolicNFFBuilder<T> &
-    CanaBuilder<T> &
-    CompraBuilder<T> &
-    ExportaBuilder<T> &
-    InfRespTecBuilder<T> &
-    InfIntermedBuilder<T>;
+  ): AssembleNfeBuilder<T, S> &
+    AvulsaBuilder<T, S> &
+    InfAdicBuilder<T, S> &
+    InfSolicNFFBuilder<T, S> &
+    CanaBuilder<T, S> &
+    CompraBuilder<T, S> &
+    ExportaBuilder<T, S> &
+    InfRespTecBuilder<T, S> &
+    InfIntermedBuilder<T, S> &
+    AgropecuarioBuilder<T, S> &
+    InfPAABuilder<T, S>;
 }
 
-export interface InfIntermedBuilder<T extends object> {
+export interface InfIntermedBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
   infIntermed(
     payload?: IInfIntermed,
-  ): AssembleNfeBuilder<T> &
-    AvulsaBuilder<T> &
-    InfAdicBuilder<T> &
-    InfSolicNFFBuilder<T> &
-    CanaBuilder<T> &
-    CompraBuilder<T> &
-    InfRespTecBuilder<T> &
-    ExportaBuilder<T>;
+  ): AssembleNfeBuilder<T, S> &
+    AvulsaBuilder<T, S> &
+    InfAdicBuilder<T, S> &
+    InfSolicNFFBuilder<T, S> &
+    CanaBuilder<T, S> &
+    CompraBuilder<T, S> &
+    InfRespTecBuilder<T, S> &
+    ExportaBuilder<T, S> &
+    AgropecuarioBuilder<T, S> &
+    InfPAABuilder<T, S>;
 }
 
-export interface InfAdicBuilder<T extends object> {
+export interface InfAdicBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
   infAdic(
     payload?: IInfAdic,
-  ): AssembleNfeBuilder<T> &
-    AvulsaBuilder<T> &
-    InfAdicBuilder<T> &
-    InfSolicNFFBuilder<T> &
-    InfRespTecBuilder<T> &
-    CanaBuilder<T> &
-    CompraBuilder<T> &
-    ExportaBuilder<T>;
+  ): AssembleNfeBuilder<T, S> &
+    AvulsaBuilder<T, S> &
+    InfSolicNFFBuilder<T, S> &
+    InfRespTecBuilder<T, S> &
+    CanaBuilder<T, S> &
+    CompraBuilder<T, S> &
+    ExportaBuilder<T, S> &
+    AgropecuarioBuilder<T, S> &
+    InfPAABuilder<T, S>;
 }
-export interface ExportaBuilder<T extends object> {
+
+export interface ExportaBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
   exporta(
     payload?: IExporta,
-  ): AssembleNfeBuilder<T> &
-    AvulsaBuilder<T> &
-    InfAdicBuilder<T> &
-    InfSolicNFFBuilder<T> &
-    InfRespTecBuilder<T> &
-    CanaBuilder<T> &
-    CompraBuilder<T>;
+  ): AssembleNfeBuilder<T, S> &
+    AvulsaBuilder<T, S> &
+    InfAdicBuilder<T, S> &
+    InfSolicNFFBuilder<T, S> &
+    InfRespTecBuilder<T, S> &
+    CanaBuilder<T, S> &
+    CompraBuilder<T, S> &
+    AgropecuarioBuilder<T, S> &
+    InfPAABuilder<T, S>;
 }
 
-export interface CompraBuilder<T extends object> {
+export interface CompraBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
   compra(
     payload?: ICompra,
-  ): AssembleNfeBuilder<T> &
-    AvulsaBuilder<T> &
-    InfAdicBuilder<T> &
-    InfSolicNFFBuilder<T> &
-    InfRespTecBuilder<T> &
-    CanaBuilder<T>;
+  ): AssembleNfeBuilder<T, S> &
+    AvulsaBuilder<T, S> &
+    InfAdicBuilder<T, S> &
+    InfSolicNFFBuilder<T, S> &
+    InfRespTecBuilder<T, S> &
+    CanaBuilder<T, S> &
+    AgropecuarioBuilder<T, S> &
+    InfPAABuilder<T, S>;
 }
 
-export interface CanaBuilder<T extends object> {
+export interface CanaBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
   cana(
     payload?: ICana,
-  ): AssembleNfeBuilder<T> &
-    AvulsaBuilder<T> &
-    InfAdicBuilder<T> &
-    InfSolicNFFBuilder<T> &
-    InfRespTecBuilder<T>;
+  ): AssembleNfeBuilder<T, S> &
+    AvulsaBuilder<T, S> &
+    InfAdicBuilder<T, S> &
+    InfSolicNFFBuilder<T, S> &
+    InfRespTecBuilder<T, S> &
+    AgropecuarioBuilder<T, S> &
+    InfPAABuilder<T, S>;
 }
 
-export interface InfRespTecBuilder<T extends object> {
+export interface InfRespTecBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
   infRespTec(
     payload?: IInfRespTec,
-  ): AssembleNfeBuilder<T> &
-    AvulsaBuilder<T> &
-    InfAdicBuilder<T> &
-    InfSolicNFFBuilder<T>;
+  ): AssembleNfeBuilder<T, S> &
+    AvulsaBuilder<T, S> &
+    InfAdicBuilder<T, S> &
+    InfSolicNFFBuilder<T, S> &
+    AgropecuarioBuilder<T, S> &
+    InfPAABuilder<T, S>;
 }
 
-export interface InfSolicNFFBuilder<T extends object> {
+export interface InfSolicNFFBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
   infSolicNFF(
     payload?: ISolicNFF,
-  ): AssembleNfeBuilder<T> & InfAdicBuilder<T> & AvulsaBuilder<T>;
+  ): AssembleNfeBuilder<T, S> &
+    InfAdicBuilder<T, S> &
+    AvulsaBuilder<T, S> &
+    AgropecuarioBuilder<T, S> &
+    InfPAABuilder<T, S>;
 }
 
-export interface AssembleNfeBuilder<T extends object> {
-  quiet(): AssembleNfeBuilder<T>;
+export interface AgropecuarioBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
+  agropecuario(
+    payload?: IAgropecuario,
+  ): AssembleNfeBuilder<T, S> &
+    InfAdicBuilder<T, S> &
+    AvulsaBuilder<T, S> &
+    InfPAABuilder<T, S>;
+}
+
+export interface InfPAABuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
+  infPAA(
+    payload?: IInfPAA,
+  ): AssembleNfeBuilder<T, S> & InfAdicBuilder<T, S> & AvulsaBuilder<T, S>;
+}
+
+export interface AssembleNfeBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> {
+  quiet(): AssembleNfeBuilder<T, S>;
   toObject(): Either<NFeTsError, T>;
   assemble(): Promise<Either<NFeTsError, string>>;
 }
 
-export interface INfeXmlBuilder<T extends object>
+export interface INfeXmlBuilder<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+>
   extends
-    InfNFeBuilder<T>,
-    IdeBuilder<T>,
-    DetGroupBuilder<T>,
-    DestBuilder<T>,
-    RetiradaBuilder<T>,
-    EntregaBuilder<T>,
-    AutXMLBuilder<T>,
-    TotalBuilder<T>,
-    TranspBuilder<T>,
-    PagBuilder<T>,
-    InfIntermedBuilder<T>,
-    ExportaBuilder<T>,
-    CompraBuilder<T>,
-    CanaBuilder<T>,
-    InfRespTecBuilder<T>,
-    InfSolicNFFBuilder<T>,
-    InfAdicBuilder<T>,
-    AvulsaBuilder<T>,
-    AssembleNfeBuilder<T> {
-  schema?: Schema;
+    InfNFeBuilder<T, S>,
+    IdeBuilder<T, S>,
+    DetGroupBuilder<T, S>,
+    DestBuilder<T, S>,
+    RetiradaBuilder<T, S>,
+    EntregaBuilder<T, S>,
+    AutXMLBuilder<T, S>,
+    TotalBuilder<T, S>,
+    IsTotBuilder<T, S>,
+    IbsCbsTotBuilder<T, S>,
+    TranspBuilder<T, S>,
+    PagBuilder<T, S>,
+    InfIntermedBuilder<T, S>,
+    ExportaBuilder<T, S>,
+    CompraBuilder<T, S>,
+    CanaBuilder<T, S>,
+    InfRespTecBuilder<T, S>,
+    InfSolicNFFBuilder<T, S>,
+    InfAdicBuilder<T, S>,
+    AgropecuarioBuilder<T, S>,
+    InfPAABuilder<T, S>,
+    AvulsaBuilder<T, S>,
+    AssembleNfeBuilder<T, S> {
+  readonly schema: S;
 }

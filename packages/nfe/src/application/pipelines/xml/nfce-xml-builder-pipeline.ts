@@ -1,4 +1,4 @@
-import type { Schema } from '@nfets/nfe/domain';
+import type { DefaultSchema, Schema } from '@nfets/nfe/domain';
 import type { NFCe, NfceTransmitterOptions } from '@nfets/nfe/domain';
 import type {
   IdeBuilder,
@@ -20,7 +20,8 @@ import { NfceRemoteTransmitter } from '../../transmission/nfce-transmitter';
 
 export class NfceXmlBuilderPipeline<
   T extends object,
-> extends NfeXmlBuilderPipeline<T> {
+  S extends Schema = typeof DefaultSchema,
+> extends NfeXmlBuilderPipeline<T, S> {
   protected readonly nfceQrcode = new NfceQrcode(this.certificates);
   protected readonly transmitter = new NfceRemoteTransmitter(
     this.soap,
@@ -29,15 +30,15 @@ export class NfceXmlBuilderPipeline<
 
   public constructor(
     certificate?: ReadCertificateRequest,
-    schema: Schema = 'PL_009_V4',
+    schema: S = 'PL_009_V4' as S,
     protected readonly options?: Pick<NfceTransmitterOptions, 'qrCode'>,
   ) {
     super(certificate, schema);
   }
 
-  protected readonly builder:
-    | (InfNFeBuilder<T> & IdeBuilder<T>)
-    | AssembleNfeBuilder<T> = NfceXmlBuilder.create<T>(
+  protected override readonly builder:
+    | (InfNFeBuilder<T, S> & IdeBuilder<T, S>)
+    | AssembleNfeBuilder<T, S> = NfceXmlBuilder.create<T, S>(
     this.toolkit,
     undefined,
     this.schema,
@@ -90,7 +91,7 @@ export class NfceXmlBuilderPipeline<
     });
 
     const qrCode = { ...options.qrCode };
-    qrCode.version ??= service.version as '200' | '300';
+    qrCode.version ??= service.version;
 
     switch (qrCode.version) {
       case '200':

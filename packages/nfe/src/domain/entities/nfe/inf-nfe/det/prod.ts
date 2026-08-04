@@ -8,16 +8,21 @@ import type { VeicProd } from './veic-prod';
 import type { Med } from './med';
 import type { Arma } from './arma';
 import type { Comb } from './comb';
+import type { GCred } from './g-cred';
 
 export interface Prod {
   cProd: string;
   cEAN?: string;
+  cBarra?: string;
   xProd: string;
   NCM: string;
+  NVE?: string[];
   CEST?: string;
   indEscala?: string;
   CNPJFab?: string;
   cBenef?: string;
+  gCred?: GCred[];
+  tpCredPresIBSZFM?: string;
   EXTIPI?: string;
   CFOP: string;
   uCom: string;
@@ -25,6 +30,7 @@ export interface Prod {
   vUnCom: DecimalValue;
   vProd: DecimalValue;
   cEANTrib?: string;
+  cBarraTrib?: string;
   uTrib: string;
   qTrib: DecimalValue;
   vUnTrib: DecimalValue;
@@ -33,6 +39,7 @@ export interface Prod {
   vDesc?: DecimalValue;
   vOutro?: DecimalValue;
   indTot?: string;
+  indBemMovelUsado?: string;
   DI?: DI[];
   detExport?: DetExport[];
   xPed?: string;

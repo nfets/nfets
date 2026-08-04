@@ -2,6 +2,7 @@ import type { Prod } from './prod';
 import type { Devol } from './imposto-devol';
 import type { Imposto } from './imposto';
 import type { ObsItem } from './obs-item';
+import type { DFeReferenciado } from './dfe-referenciado';
 import type { DecimalValue } from '@nfets/core/domain';
 
 export interface DetAttributes {
@@ -16,4 +17,5 @@ export interface Det {
   infAdProd?: string;
   obsItem?: ObsItem;
   vItem?: DecimalValue;
+  DFeReferenciado?: DFeReferenciado;
 }

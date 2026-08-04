@@ -10,6 +10,7 @@ import { Prod } from './prod';
 import { Imposto } from './imposto';
 import { Devol } from './imposto-devol';
 import { ObsItem } from './obs-item';
+import { DFeReferenciado } from './dfe-referenciado';
 
 import type {
   Det as IDet,
@@ -19,6 +20,7 @@ import type { Devol as IDevol } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det
 import type { Prod as IProd } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/prod';
 import type { Imposto as IImposto } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto';
 import type { ObsItem as IObsItem } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/obs-item';
+import type { DFeReferenciado as IDFeReferenciado } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/dfe-referenciado';
 import { type DecimalValue, TransformDecimal } from '@nfets/core';
 
 export class DetAttributes implements IDetAttributes {
@@ -58,4 +60,9 @@ export class Det implements IDet {
   @IsOptional()
   @TransformDecimal({ fixed: 2 })
   public vItem?: DecimalValue;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => DFeReferenciado)
+  public DFeReferenciado?: IDFeReferenciado;
 }

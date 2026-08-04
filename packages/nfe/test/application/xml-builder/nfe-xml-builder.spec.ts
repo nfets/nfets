@@ -10924,9 +10924,7 @@ describe('xml builder with xml2js builder', () => {
             COFINSNT: {
               CST: '08',
             },
-          })
-          .ibscbs({ cClassTrib: '000000', CST: '000' })
-          .vItem({ vItem: '1.00' }),
+          }),
       )
       .transp(createValidTransp())
       .pag(createValidPag());
@@ -10944,6 +10942,8 @@ describe('xml builder with xml2js builder', () => {
     expect(xml.value).toContain('<total>');
     expect(xml.value).toContain('<transp>');
     expect(xml.value).toContain('<pag>');
+    expect(xml.value).not.toContain('<IBSCBS>');
+    expect(xml.value).not.toContain('<vItem>');
     expect(xml.value).toStrictEqual(`<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
   <infNFe Id="NFe52240646755763000143550990000080181785272515" versao="4.00">
@@ -11258,17 +11258,8 @@ describe('xml builder with xml2js builder', () => {
             COFINSNT: {
               CST: '08',
             },
-          })
-          .is({
-            CSTIS: '000',
-            cClassTribIS: '000001',
-            vIS: '1.00',
-          })
-          .ibscbs({ cClassTrib: '000000', CST: '000' })
-          .vItem({ vItem: '1.00' }),
+          }),
       )
-      .ISTot({ vIS: '1.00' })
-      .IBSCBSTot({ vBCIBSCBS: '100.00' })
       .transp(createValidTransp())
       .pag(createValidPag());
 
@@ -11279,5 +11270,6 @@ describe('xml builder with xml2js builder', () => {
     expect(xml.value).not.toContain('<ISTot>');
     expect(xml.value).not.toContain('<IBSCBSTot>');
     expect(xml.value).not.toContain('<vItem>');
+    expect(xml.value).not.toContain('<vNFTot>');
   });
 });

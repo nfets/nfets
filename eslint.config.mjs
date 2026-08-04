@@ -42,13 +42,14 @@ export default [
   {
     languageOptions: {
       globals: {
+        ...globals.es2024,
         ...globals.node,
         ...globals.jest,
         NodeJS: true,
       },
 
       parser: tsParser,
-      ecmaVersion: 5,
+      ecmaVersion: 'latest',
       sourceType: 'module',
 
       parserOptions: {
@@ -59,6 +60,7 @@ export default [
 
     rules: {
       ...js.configs.recommended.rules,
+      'no-undef': 'off',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-misused-promises': 'off',
       '@typescript-eslint/no-extraneous-class': 'off',

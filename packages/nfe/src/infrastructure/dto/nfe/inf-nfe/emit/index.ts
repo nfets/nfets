@@ -43,4 +43,8 @@ export class Emit implements IEmit {
 
   @IsString()
   public CRT!: string;
+
+  @IsOptional()
+  @IsString()
+  public ISUFEmit?: string;
 }
