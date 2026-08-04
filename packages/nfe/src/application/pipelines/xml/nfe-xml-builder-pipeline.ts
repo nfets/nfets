@@ -11,29 +11,44 @@ import path from 'node:path';
 import { left, right } from '@nfets/core';
 import { Pipeline } from '../pipeline';
 import { NfeXmlBuilder } from '../../xml-builder/nfe-xml-builder';
-import { schemas, type Schema } from '@nfets/nfe/domain';
+import { schemas, type DefaultSchema, type Schema } from '@nfets/nfe/domain';
 import { XmlValidationError } from '@nfets/nfe/domain/errors/xml-validation-error';
 
-export class NfeXmlBuilderPipeline<T extends object> extends Pipeline {
+export class NfeXmlBuilderPipeline<
+  T extends object,
+  S extends Schema = typeof DefaultSchema,
+> extends Pipeline {
   protected readonly builder:
-    | (InfNFeBuilder<T> & IdeBuilder<T>)
-    | AssembleNfeBuilder<T> = NfeXmlBuilder.create<T>(this.toolkit);
+    | (InfNFeBuilder<T, S> & IdeBuilder<T, S>)
+    | AssembleNfeBuilder<T, S>;
 
   public constructor(
     protected readonly certificate?: ReadCertificateRequest,
-    protected readonly schema: Schema = 'PL_009_V4',
+    protected readonly schema: S = 'PL_009_V4' as S,
   ) {
     super(certificate);
+    this.builder = NfeXmlBuilder.create<T, S>(
+      this.toolkit,
+      undefined,
+      this.schema,
+    );
   }
 
   public build(
-    build: (builder: InfNFeBuilder<T> & IdeBuilder<T>) => AssembleNfeBuilder<T>,
+    build: (
+      builder: InfNFeBuilder<T, S> & IdeBuilder<T, S>,
+    ) => AssembleNfeBuilder<T, S>,
   ) {
-    return (build(this.builder as InfNFeBuilder<T> & IdeBuilder<T>), this);
+    return (
+      build(this.builder as InfNFeBuilder<T, S> & IdeBuilder<T, S>),
+      this
+    );
   }
 
   public async assemble(): Promise<Either<NFeTsError, string>> {
-    const xmlOrLeft = await (this.builder as AssembleNfeBuilder<T>).assemble();
+    const xmlOrLeft = await (
+      this.builder as AssembleNfeBuilder<T, S>
+    ).assemble();
     if (xmlOrLeft.isLeft()) return xmlOrLeft;
     return this.assertXmlSignedAndValidated(xmlOrLeft.value);
   }

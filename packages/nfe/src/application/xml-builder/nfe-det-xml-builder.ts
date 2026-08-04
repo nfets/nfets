@@ -19,11 +19,15 @@ import type { ISSQN as IISSQN } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det
 import type { IPI as IIPI } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ipi';
 import type { ICMSUFDest as IICMSUFDest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/icmsufdest';
 import type { II as III } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ii';
+import type { IBSCBS as IIBSCBS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs';
+import type { IS as IIS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/is';
+import type { DFeReferenciado as IDFeReferenciado } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/dfe-referenciado';
+import type { VItem as IVItem } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/v-item';
 
-import {
+import type {
   DetBuilder,
-  ProdBuilder,
   INfeDetXmlBuilder,
+  ProdBuilder,
 } from '@nfets/nfe/domain/entities/xml-builder/nfe-det-xml-builder';
 
 import { Prod } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/prod';
@@ -42,28 +46,28 @@ import {
 } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/cofins';
 import { ICMSUFDest } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/icmsufdest';
 import { II } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/ii';
+import { IBSCBS } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/ibscbs';
+import { IS } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/is';
+import { DFeReferenciado } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/dfe-referenciado';
 import { DetBuilderAggregator } from '@nfets/nfe/application/aggregator/det-builder-aggregator';
-import {
-  IBSCBS,
-  IBSCBS as IIBSCBS,
-} from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/ibscbs';
-import { IS, IS as IIS } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/det/imposto/is';
-import Schemas from '@nfets/nfe/domain/entities/transmission/schemas';
-import { Schema } from '@nfets/nfe/domain';
+import { PL_010, Schema } from '@nfets/nfe/domain';
+import { SchemaValidates } from '../validations/schema';
 
-export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
-  protected data = {} as IDet;
+export class NfeDetXmlBuilder<
+  S extends Schema,
+> implements INfeDetXmlBuilder<S> {
+  public data = {} as IDet;
 
-  public static create(
+  public static create<S extends Schema>(
     listener?: DetBuilderAggregator,
     schema: Schema = 'PL_009_V4',
-  ): DetBuilder & ProdBuilder {
-    return new this(listener, schema);
+  ): DetBuilder<S> & ProdBuilder<S> {
+    return new this<S>(listener, schema);
   }
 
   protected constructor(
     private readonly listener?: DetBuilderAggregator,
-    private readonly schema: Schema = 'PL_009_V4',
+    public readonly schema: Schema = 'PL_009_V4',
   ) {}
 
   @Validates(DetAttributes)
@@ -80,13 +84,9 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   }
 
   @Validates(Imposto)
-  private setImposto(payload: IImposto): IImposto {
-    this.data.imposto = payload;
-    return payload;
-  }
-
   public imposto(payload: IImposto) {
-    this.listener?.imposto(this.setImposto(payload));
+    this.data.imposto = payload;
+    this.listener?.imposto(payload);
     return this;
   }
 
@@ -162,34 +162,37 @@ export class NfeDetXmlBuilder implements INfeDetXmlBuilder {
   }
 
   @Validates(IS)
+  @SchemaValidates(PL_010)
   public is(payload?: IIS) {
     if (payload == null) return this;
-    if (this.schema === Schemas.PL_009_V4) return this;
-
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.IS = payload;
     return this;
   }
 
   @Validates(IBSCBS)
+  @SchemaValidates(PL_010)
   public ibscbs(payload?: IIBSCBS) {
     if (payload == null) return this;
-    if (this.schema === Schemas.PL_009_V4) return this;
-
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.IBSCBS = payload;
     return this;
   }
 
-  public vItem(payload: { vItem: string }) {
-    if (this.schema === Schemas.PL_009_V4) return this;
-
+  @SchemaValidates(PL_010)
+  public vItem(payload: IVItem) {
     this.data.vItem = payload.vItem;
     return this;
   }
 
+  @Validates(DFeReferenciado)
+  @SchemaValidates(PL_010)
+  public dfeReferenciado(payload: IDFeReferenciado) {
+    this.data.DFeReferenciado = payload;
+    return this;
+  }
+
   public assemble(): IDet {
-    if (this.data.imposto) this.setImposto(this.data.imposto);
     const result = { ...this.data };
     this.data = {} as IDet;
     return result;

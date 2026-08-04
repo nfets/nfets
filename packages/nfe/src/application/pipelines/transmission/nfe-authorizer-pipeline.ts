@@ -259,33 +259,27 @@ export class NfeAuthorizerPipeline extends TransmissionPipeline {
     const { tpAmb, infRec } = response.retEnviNFe;
     const { nRec } = infRec;
 
-    let attempt = 1;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const responseOrLeft = await this.transmitter.retAutorizacao({
+        nRec,
+        tpAmb,
+      });
+      if (responseOrLeft.isLeft()) continue;
 
-    while (attempt <= 3) {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        const responseOrLeft = await this.transmitter.retAutorizacao({
-          nRec,
-          tpAmb,
-        });
-        if (responseOrLeft.isLeft()) continue;
-
-        const protNFe = responseOrLeft.value.retConsReciNFe.protNFe;
-        if (!protNFe || (Array.isArray(protNFe) && protNFe.length === 0)) {
-          continue;
-        }
-
-        return right(
-          await this.response(NFe, {
-            retEnviNFe: {
-              ...responseOrLeft.value.retConsReciNFe,
-              protNFe: protNFe,
-            },
-          } as SynchronousAutorizacaoResponse<NFe>),
-        );
-      } finally {
-        attempt++;
+      const protNFe = responseOrLeft.value.retConsReciNFe.protNFe;
+      if (!protNFe || (Array.isArray(protNFe) && protNFe.length === 0)) {
+        continue;
       }
+
+      return right(
+        await this.response(NFe, {
+          retEnviNFe: {
+            ...responseOrLeft.value.retConsReciNFe,
+            protNFe: protNFe,
+          },
+        } as SynchronousAutorizacaoResponse<NFe>),
+      );
     }
 
     return left(new CouldNotReceiveResponseError());

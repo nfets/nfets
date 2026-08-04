@@ -5,7 +5,7 @@ export interface IS {
   cClassTribIS: string;
   vBCIS?: DecimalValue;
   pIS?: DecimalValue;
-  pISEspec?: DecimalValue;
+  adRemIS?: DecimalValue;
   uTrib?: string;
   qTrib?: DecimalValue;
   vIS?: DecimalValue;

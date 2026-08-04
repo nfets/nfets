@@ -25,7 +25,7 @@ import type { NfeRemoteClient } from '@nfets/nfe/domain/entities/transmission/nf
 export abstract class Pipeline {
   protected readonly xmlns = 'http://www.portalfiscal.inf.br/nfe';
 
-  protected readonly http: HttpClient = axios.create();
+  protected readonly http: HttpClient = axios.create() as HttpClient;
 
   protected readonly toolkit: XmlToolkit = new Xml2JsToolkit();
 

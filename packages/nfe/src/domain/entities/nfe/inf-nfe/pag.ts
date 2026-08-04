@@ -13,9 +13,12 @@ export interface Card {
 export interface DetPag {
   indPag?: string;
   tPag: TPag;
-  vPag: DecimalValue;
-  card?: Card;
   xPag?: string;
+  vPag: DecimalValue;
+  dPag?: string;
+  CNPJPag?: string;
+  UFPag?: string;
+  card?: Card;
 }
 
 export interface Pag {

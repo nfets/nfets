@@ -39,6 +39,7 @@ export const Validates = <T extends object>(klass: new () => T) => {
     descriptor: TypedPropertyDescriptor<(payload: T, ...args: any[]) => any>,
   ) => {
     const original = descriptor.value;
+    if (original == null) return;
 
     descriptor.value = function (...args: [T | undefined, ...object[]]) {
       const skipAllValidations = Reflect.getMetadata(
@@ -55,13 +56,13 @@ export const Validates = <T extends object>(klass: new () => T) => {
 
       if (skipValidation === true || skipAllValidations === true) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return original?.apply(this, args as [T, ...object[]]);
+        return original.apply(this, args as [T, ...object[]]);
       }
 
       const [payload, ...rest] = args;
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      if (!payload) return original?.apply(this, args as [T, ...object[]]);
+      if (!payload) return original.apply(this, args as [T, ...object[]]);
 
       const instance = plainToInstance<T>(payload, klass);
       const errors = validateSync(instance, { whitelist: true });
@@ -73,13 +74,13 @@ export const Validates = <T extends object>(klass: new () => T) => {
 
         Reflect.defineMetadata(
           ValidateErrorsMetadata,
-          current.concat(mapConstraintsToErrors(errors, original?.name)),
+          current.concat(mapConstraintsToErrors(errors, original.name)),
           this,
         );
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return original?.apply(this, [instance, ...rest]);
+      return original.apply(this, [instance, ...rest]);
     };
   };
 };

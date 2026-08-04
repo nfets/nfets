@@ -57,7 +57,7 @@ export class AggregateQrCodeToProtocols implements Builder {
     this.setup();
 
     return this.builders.reduce(
-      (height, builder) => height + (builder.height?.() ?? 0),
+      (height, builder) => height + builder.height(),
       0,
     );
   }

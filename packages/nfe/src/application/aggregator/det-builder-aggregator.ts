@@ -1,6 +1,5 @@
 import { Decimal } from '@nfets/core/infrastructure';
 
-import type { DecimalValue } from '@nfets/core/domain';
 import type { PIS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/pis';
 import type { Prod } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/prod';
 import type { ICMS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/icms';
@@ -12,6 +11,8 @@ import type { Imposto } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto
 import type { II } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ii';
 import type { IPI } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ipi';
 import type { Devol } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto-devol';
+import type { Schema } from '@nfets/nfe/domain/entities/transmission/schemas';
+import type { DecimalValue } from '@nfets/core/domain';
 
 type ICMSIntersection = UnionToIntersection<NonNullable<ICMS[keyof ICMS]>>;
 
@@ -33,12 +34,13 @@ export interface DetBuilderAggregator {
   impostoDevol(payload: Devol): void;
 }
 
-export class DefaultDetBuilderAggregator<T extends object>
-  implements DetBuilderAggregator
-{
+export class DefaultDetBuilderAggregator<
+  T extends object,
+  S extends Schema,
+> implements DetBuilderAggregator {
   private readonly zero = Decimal.from(0);
 
-  public constructor(private readonly builder: INfeXmlBuilder<T>) {}
+  public constructor(private readonly builder: INfeXmlBuilder<T, S>) {}
 
   public prod(payload: Prod): void {
     this.builder.increment(({ ICMSTot }) => ({

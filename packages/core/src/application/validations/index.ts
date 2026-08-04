@@ -2,6 +2,7 @@ export * from './decorators/validate';
 export * from './decorators/skip-validations';
 export * from './decorators/decimal';
 export * from './decorators/choice';
+export * from './decorators/once';
 
 export * from './transformers/plain-to-instance';
 export * from './transformers/decimal';

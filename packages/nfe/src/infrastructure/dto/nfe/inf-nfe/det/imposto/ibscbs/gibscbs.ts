@@ -3,6 +3,7 @@ import { IsOptional, ValidateNested } from 'class-validator';
 import { TransformDecimal } from '@nfets/core/application';
 import type { DecimalValue } from '@nfets/core/domain';
 import { TribRegular } from './trib-regular';
+import { TribCompraGov } from './trib-compra-gov';
 import { Type } from 'class-transformer';
 import { IBSMun } from './ibs-mun';
 import { IBSUF } from './ibs-uf';
@@ -34,4 +35,9 @@ export class GIBSCBS implements IGIBSCBS {
   @ValidateNested()
   @Type(() => TribRegular)
   public gTribRegular?: TribRegular;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => TribCompraGov)
+  public gTribCompraGov?: TribCompraGov;
 }

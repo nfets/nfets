@@ -263,7 +263,7 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
               } as SynchronousAutorizacaoResponse),
             );
           }),
-        } as unknown as RemoteTransmissionRepository<NfeRemoteClient>;
+        };
 
       protected override transmitter = new NfeRemoteTransmitter(this.soap);
       protected override readonly certificates = certificates;
@@ -293,7 +293,7 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
     });
 
     it(`should use contingency webservice (${
-      contingency[cUF as keyof typeof contingency]
+      contingency[cUF]
     }) for ${acronym} (${cUF})`, async () => {
       const xml = await buildXml(cUF, TpEmis.SVCAN, {
         xJust: 'Contingência',
@@ -357,10 +357,10 @@ describe('nfe authorizer pipeline (unit)', () => {
                     },
                   },
                 },
-              } as SynchronousAutorizacaoResponse),
+              }),
             );
           }),
-        } as unknown as RemoteTransmissionRepository<NfeRemoteClient>;
+        };
 
       protected override transmitter = new NfeRemoteTransmitter(this.soap);
       protected override readonly certificates = certificates;
@@ -763,7 +763,7 @@ describe('nfe authorizer pipeline lot not processed (unit)', () => {
               },
             }),
           ),
-        } as unknown as RemoteTransmissionRepository<NfeRemoteClient>;
+        };
 
       protected override transmitter = new NfeRemoteTransmitter(this.soap);
       protected override readonly certificates = certificates;

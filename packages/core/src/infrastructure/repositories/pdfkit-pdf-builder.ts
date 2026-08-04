@@ -174,10 +174,10 @@ export class PdfkitPdfBuilder implements PdfBuilder {
     let items: RowBuilderFunction[];
 
     if (typeof optionsOrFirstItem === 'function') {
-      options = {} as RowOptions<C>;
+      options = {};
       items = [optionsOrFirstItem, ..._items];
     } else {
-      options = optionsOrFirstItem ?? ({} as RowOptions<C>);
+      options = optionsOrFirstItem ?? ({});
       items = _items;
     }
 

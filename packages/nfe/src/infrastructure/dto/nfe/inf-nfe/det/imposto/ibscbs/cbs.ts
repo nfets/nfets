@@ -6,6 +6,7 @@ import { Type } from 'class-transformer';
 import { DevTrib } from './dev-trib';
 import { Dif } from './dif';
 import { Red } from './red';
+import { ALCZFMCBS } from './alc-zfm-cbs';
 
 export class CBS implements ICBS {
   @TransformDecimal({ fixed: 4 })
@@ -25,6 +26,11 @@ export class CBS implements ICBS {
   @ValidateNested()
   @Type(() => Red)
   public gRed?: Red;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ALCZFMCBS)
+  public gALCZFMCBS?: ALCZFMCBS;
 
   @TransformDecimal({ fixed: 2 })
   public vCBS!: DecimalValue;

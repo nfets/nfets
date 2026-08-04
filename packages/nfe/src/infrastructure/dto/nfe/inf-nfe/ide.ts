@@ -13,10 +13,13 @@ import type {
   Ide as IIde,
   RefECF as IRefECF,
   NFref as INFref,
+  CompraGov as ICompraGov,
+  PagAntecipado as IPagAntecipado,
 } from '@nfets/nfe/domain/entities/nfe/inf-nfe/ide';
-import { Choice, TransformDateString } from '@nfets/core/application';
+import { Choice, TransformDateString, TransformDecimal } from '@nfets/core/application';
 import type { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 import { type StateCode, type EnvironmentCode, StateCodes } from '@nfets/core';
+import type { DecimalValue } from '@nfets/core/domain';
 
 export class RefNF implements IRefNF {
   @IsString()
@@ -107,6 +110,28 @@ export class NFref implements INFref {
   public refECF?: IRefECF;
 }
 
+export class CompraGov implements ICompraGov {
+  @IsString()
+  public tpEnteGov!: string;
+
+  @TransformDecimal({ fixed: 4 })
+  public pRedutor!: DecimalValue;
+
+  @IsString()
+  public tpOperGov!: string;
+
+  @IsOptional()
+  @IsString()
+  public refDFeAnt?: string;
+}
+
+export class PagAntecipado implements IPagAntecipado {
+  @IsArray()
+  @ArrayMaxSize(99)
+  @IsString({ each: true })
+  public refNFe!: string[];
+}
+
 export class Ide implements IIde {
   @IsEnum(StateCodes)
   public cUF!: StateCode;
@@ -133,6 +158,10 @@ export class Ide implements IIde {
   @TransformDateString({ format: 'YYYY-MM-DD[T]HH:mm:ssZ' })
   public dhSaiEnt?: string;
 
+  @IsOptional()
+  @TransformDateString({ format: 'YYYY-MM-DD' })
+  public dPrevEntrega?: string;
+
   @IsString()
   public tpNF!: string;
 
@@ -141,6 +170,10 @@ export class Ide implements IIde {
 
   @IsString()
   public cMunFG!: string;
+
+  @IsOptional()
+  @IsString()
+  public cMunFGIBS?: string;
 
   @IsString()
   public tpImp!: string;
@@ -158,6 +191,14 @@ export class Ide implements IIde {
   @IsString()
   public finNFe!: string;
 
+  @IsOptional()
+  @IsString()
+  public tpNFDebito?: string;
+
+  @IsOptional()
+  @IsString()
+  public tpNFCredito?: string;
+
   @IsString()
   public indFinal!: string;
 
@@ -167,6 +208,10 @@ export class Ide implements IIde {
   @IsOptional()
   @IsString()
   public indIntermed?: string;
+
+  @IsOptional()
+  @IsString()
+  public cIndOp?: string;
 
   @IsString()
   public procEmi!: string;
@@ -189,4 +234,14 @@ export class Ide implements IIde {
   @ValidateNested({ each: true })
   @Type(() => NFref)
   public NFref?: INFref[];
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CompraGov)
+  public gCompraGov?: ICompraGov;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => PagAntecipado)
+  public gPagAntecipado?: IPagAntecipado;
 }

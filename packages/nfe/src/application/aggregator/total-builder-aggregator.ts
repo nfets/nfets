@@ -1,10 +1,11 @@
 import { Decimal } from '@nfets/core/infrastructure';
-import Schemas from '@nfets/nfe/domain/entities/transmission/schemas';
 
 import type { Det } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det';
 import type { ICMS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/icms';
+import type { Total as ITotal } from '@nfets/nfe/domain/entities/nfe/inf-nfe/total';
 import type { DeepPartial, UnionToIntersection } from '@nfets/core/shared';
-import type { INfeXmlBuilder } from '@nfets/nfe/domain/entities/xml-builder/nfe-xml-builder';
+import type { Schema } from '@nfets/nfe/domain/entities/transmission/schemas';
+import { PL_010 } from '@nfets/nfe/domain/entities/transmission/schemas';
 
 type ICMSItem = UnionToIntersection<NonNullable<ICMS[keyof ICMS]>>;
 
@@ -12,24 +13,36 @@ export interface TotalBuilderAggregator {
   aggregate(): void;
 }
 
-export class DefaultTotalBuilderAggregator<T extends object>
-  implements TotalBuilderAggregator
-{
-  public constructor(private readonly builder: INfeXmlBuilder<T>) {}
+export interface TotalIncrementHost {
+  readonly schema?: Schema;
+  increment(
+    callback: (
+      context: DeepPartial<ITotal>,
+      det: DeepPartial<Det[]>,
+    ) => DeepPartial<ITotal>,
+  ): unknown;
+}
+
+export class DefaultTotalBuilderAggregator implements TotalBuilderAggregator {
+  public constructor(private readonly builder: TotalIncrementHost) {}
 
   public aggregate(): void {
     const zero = Decimal.from(0);
-    const isUsingPL_010 = this.builder.schema === Schemas.PL_010_V1_30;
+    const isPl010 = (PL_010 as readonly string[]).includes(
+      this.builder.schema ?? '',
+    );
 
     this.builder.increment(({ ICMSTot, ISSQNtot }, det) => {
       const vICMSDesonDeduz = this.resolveDeductibleVICMSDeson(det);
 
       return {
-        vNFTot: isUsingPL_010
-          ? det
-              .reduce((acc, item) => acc.add(item?.vItem ?? '0.00'), zero)
-              .toFixed(2)
-          : void 0,
+        ...(isPl010
+          ? {
+              vNFTot: det
+                .reduce((acc, item) => acc.add(item?.vItem ?? zero), zero)
+                .toFixed(2),
+            }
+          : {}),
         ICMSTot: {
           vNF: Decimal.newOrZero(ICMSTot?.vProd)
             .sub(ICMSTot?.vDesc ?? zero)

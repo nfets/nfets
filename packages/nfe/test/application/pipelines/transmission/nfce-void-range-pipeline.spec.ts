@@ -41,7 +41,7 @@ describe('nfce void range pipeline (unit)', () => {
           response: {
             retInutNFe: retInutNFeSuccess,
           },
-        }) as never,
+        }),
       );
 
     const pipeline = new NfceVoidRangePipeline({

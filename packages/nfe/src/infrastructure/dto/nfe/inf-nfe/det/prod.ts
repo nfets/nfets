@@ -19,6 +19,7 @@ import type { VeicProd as IVeicProd } from '@nfets/nfe/domain/entities/nfe/inf-n
 import type { Med as IMed } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/med';
 import type { Arma as IArma } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/arma';
 import type { Comb as IComb } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/comb';
+import type { GCred as IGCred } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/g-cred';
 
 import { Rastro } from './rastro';
 import { Choice } from '@nfets/core/application';
@@ -30,6 +31,7 @@ import { VeicProd } from './veic-prod';
 import { Med } from './med';
 import { Arma } from './arma';
 import { Comb } from './comb';
+import { GCred } from './g-cred';
 
 @Choice<IProd>({ properties: ['veicProd', 'med', 'arma', 'comb'] })
 export class Prod implements IProd {
@@ -72,8 +74,15 @@ export class Prod implements IProd {
   public cBenef?: string;
 
   @IsOptional()
-  @IsObject()
-  public gCred?: unknown;
+  @IsArray()
+  @ArrayMaxSize(4)
+  @ValidateNested({ each: true })
+  @Type(() => GCred)
+  public gCred?: IGCred[];
+
+  @IsOptional()
+  @IsString()
+  public tpCredPresIBSZFM?: string;
 
   @IsOptional()
   @IsString()
@@ -96,6 +105,10 @@ export class Prod implements IProd {
 
   @IsString()
   public cEANTrib!: string;
+
+  @IsOptional()
+  @IsString()
+  public cBarraTrib?: string;
 
   @IsString()
   public uTrib!: string;
@@ -124,6 +137,10 @@ export class Prod implements IProd {
 
   @IsString()
   public indTot!: string;
+
+  @IsOptional()
+  @IsString()
+  public indBemMovelUsado?: string;
 
   @IsOptional()
   @IsArray()

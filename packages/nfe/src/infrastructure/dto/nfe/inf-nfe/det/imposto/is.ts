@@ -20,7 +20,7 @@ export class IS implements IIS {
 
   @IsOptional()
   @TransformDecimal({ fixed: 4 })
-  public pISEspec?: DecimalValue;
+  public adRemIS?: DecimalValue;
 
   @IsOptional()
   @IsString()

@@ -343,4 +343,71 @@ describe('DefaultDetBuilderAggregator ICMSTot (unit)', () => {
       vCOFINS: '0.00',
     });
   });
+
+  it('should ignore imposto when vTotTrib is missing', () => {
+    const { aggregator, state } = createBuilderHarness();
+
+    aggregator.imposto({});
+
+    expect(state.infNFe.total.ICMSTot.vTotTrib).toBeUndefined();
+  });
+
+  it('should aggregate vII from ii payload', () => {
+    const { aggregator, state } = createBuilderHarness();
+
+    aggregator.ii({
+      vBC: '10.00',
+      vDespAdu: '0.00',
+      vII: '2.25',
+      vIOF: '0.00',
+    });
+
+    expect(state.infNFe.total.ICMSTot.vII).toBe('2.25');
+  });
+
+  it('should ignore ipi without IPITrib.vIPI', () => {
+    const { aggregator, state } = createBuilderHarness();
+
+    aggregator.ipi({
+      cEnq: '999',
+      IPINT: { CST: '53' },
+    });
+
+    expect(state.infNFe.total.ICMSTot.vIPI).toBeUndefined();
+  });
+
+  it('should aggregate vIPI from IPITrib', () => {
+    const { aggregator, state } = createBuilderHarness();
+
+    aggregator.ipi({
+      cEnq: '999',
+      IPITrib: {
+        CST: '50',
+        vBC: '100.00',
+        pIPI: '5.0000',
+        vIPI: '5.00',
+      },
+    });
+
+    expect(state.infNFe.total.ICMSTot.vIPI).toBe('5.00');
+  });
+
+  it('should ignore impostoDevol without IPI.vIPIDevol', () => {
+    const { aggregator, state } = createBuilderHarness();
+
+    aggregator.impostoDevol({ pDevol: '100.00' });
+
+    expect(state.infNFe.total.ICMSTot.vIPIDevol).toBeUndefined();
+  });
+
+  it('should aggregate vIPIDevol from impostoDevol', () => {
+    const { aggregator, state } = createBuilderHarness();
+
+    aggregator.impostoDevol({
+      pDevol: '100.00',
+      IPI: { vIPIDevol: '3.30' },
+    });
+
+    expect(state.infNFe.total.ICMSTot.vIPIDevol).toBe('3.30');
+  });
 });

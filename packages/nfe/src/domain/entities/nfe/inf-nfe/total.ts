@@ -75,7 +75,13 @@ export interface IBSCBSTot {
   gIBS?: IBSTot;
   gCBS?: CBSTot;
   gMono?: IBSMonoTot;
+  gEstornoCred?: EstornoCredTot;
 }
+
+export type EstornoCredTot = {
+  vIBSEstCred?: DecimalValue;
+  vCBSEstCred?: DecimalValue;
+};
 
 export type IBSTot = {
   gIBSUF?: IBSUFTot;
