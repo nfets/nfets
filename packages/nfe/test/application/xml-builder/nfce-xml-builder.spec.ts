@@ -9,6 +9,7 @@ import {
   createValidItems,
   createValidPag,
   createValidTransp,
+  type ValidItem,
 } from '../../../test/fixtures/data';
 
 describe('xml builder with xml2js builder', () => {
@@ -637,5 +638,82 @@ describe('xml builder with xml2js builder', () => {
     const entityOrLeft = builder.toObject();
     expectIsRight(entityOrLeft);
     expect(entityOrLeft.value.infNFe.det[0].prod.xProd).toBe('Product 1');
+  });
+
+  it('should rewrite only the first product name in homolog', () => {
+    const items: [ValidItem, ...ValidItem[]] = [
+      {
+        description: 'Product 1',
+        code: '1',
+        price: 100,
+        quantity: 1,
+        unit: 'UN',
+        total: 100,
+      },
+      {
+        description: 'Product 2',
+        code: '2',
+        price: 50,
+        quantity: 2,
+        unit: 'UN',
+        total: 100,
+      },
+    ];
+
+    const builder = NfceXmlBuilder.create(toolkit)
+      .infNFe({ versao: '4.00' })
+      .ide(createValidIde())
+      .emit(createValidEmit())
+      .det(items, (ctx, item) =>
+        ctx
+          .prod({
+            cProd: item.code,
+            cEAN: 'SEM GTIN',
+            xProd: item.description,
+            NCM: '00',
+            CFOP: '5102',
+            uCom: item.unit,
+            qCom: item.quantity,
+            vUnCom: item.price,
+            vProd: item.total,
+            cEANTrib: 'SEM GTIN',
+            uTrib: item.unit,
+            qTrib: item.quantity,
+            vUnTrib: item.price,
+            indTot: '1',
+          })
+          .icms({
+            ICMS00: {
+              orig: '1',
+              CST: '00',
+              modBC: '0',
+              vBC: '100',
+              pICMS: 18.0,
+              vICMS: Decimal.from('18').toString(),
+            },
+          })
+          .pis({
+            PISNT: {
+              CST: '08',
+            },
+          })
+          .cofins({
+            COFINSNT: {
+              CST: '08',
+            },
+          }),
+      )
+      .transp(createValidTransp())
+      .pag(createValidPag());
+
+    const entityOrLeft = builder.toObject();
+    expectIsRight(entityOrLeft);
+
+    const dets = entityOrLeft.value.infNFe.det;
+    expect(dets).toHaveLength(2);
+    expect(dets[0].prod.xProd).toBe(
+      'NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL',
+    );
+    expect(dets[1].prod.xProd).toBe('Product 2');
   });
 });

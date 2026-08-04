@@ -161,8 +161,8 @@ export class NfeDetXmlBuilder<
     return this;
   }
 
-  @Validates(IS)
   @SchemaValidates(PL_010)
+  @Validates(IS)
   public is(payload?: IIS) {
     if (payload == null) return this;
     this.data.imposto ??= {} as IImposto;
@@ -170,8 +170,8 @@ export class NfeDetXmlBuilder<
     return this;
   }
 
-  @Validates(IBSCBS)
   @SchemaValidates(PL_010)
+  @Validates(IBSCBS)
   public ibscbs(payload?: IIBSCBS) {
     if (payload == null) return this;
     this.data.imposto ??= {} as IImposto;
@@ -185,8 +185,8 @@ export class NfeDetXmlBuilder<
     return this;
   }
 
-  @Validates(DFeReferenciado)
   @SchemaValidates(PL_010)
+  @Validates(DFeReferenciado)
   public dfeReferenciado(payload: IDFeReferenciado) {
     this.data.DFeReferenciado = payload;
     return this;
