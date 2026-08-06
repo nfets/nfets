@@ -1,0 +1,30 @@
+{
+  "extends": "../../tsconfig.json",
+  "composite": true,
+  "compilerOptions": {
+    "outDir": "dist",
+    "baseUrl": ".",
+    "rootDir": "../..",
+    "lib": ["ESNext", "DOM"],
+    "types": ["jest"],
+    "paths": {
+      "@nfets/client": ["./src/index"],
+      "@nfets/client/*": ["./src/*"],
+      "@nfets/core/domain": ["./src/shims/core-domain.ts"],
+      "@nfets/core": ["./src/shims/core.ts"],
+      "@nfets/nfe": ["../nfe/src/index"],
+      "@nfets/nfe/*": ["../nfe/src/*"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "../nfe/src/application/access-key/**/*.ts",
+    "../nfe/src/domain/entities/access-keys/**/*.ts",
+    "../nfe/src/domain/entities/nfe/**/*.ts",
+    "../core/src/domain/entities/brazil/**/*.ts",
+    "../core/src/domain/entities/calculator/decimal.ts",
+    "../core/src/domain/entities/signer/**/*.ts"
+  ],
+  "exclude": ["dist"]
+}

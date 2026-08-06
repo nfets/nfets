@@ -21,5 +21,9 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["node", "jest"]
   },
-  "references": [{ "path": "./packages/core" }, { "path": "./packages/nfe" }]
+  "references": [
+    { "path": "./packages/core" },
+    { "path": "./packages/nfe" },
+    { "path": "./packages/client" }
+  ]
 }

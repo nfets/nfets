@@ -1,5 +1,5 @@
 import type { DefaultSchema, Schema } from '@nfets/nfe/domain';
-import type { NFCe, NfceTransmitterOptions } from '@nfets/nfe/domain';
+import type { NFe, NfceTransmitterOptions } from '@nfets/nfe/domain';
 import type {
   IdeBuilder,
   InfNFeBuilder,
@@ -57,8 +57,7 @@ export class NfceXmlBuilderPipeline<
       );
 
     const signedXml = assertionOrLeft.value;
-    const signedEntity =
-      await this.toolkit.parse<SignedEntity<NFCe>>(signedXml);
+    const signedEntity = await this.toolkit.parse<SignedEntity<NFe>>(signedXml);
     const infNFeSuplOrLeft = await this.generateQrCode(
       signedEntity,
       this.options,
@@ -80,7 +79,7 @@ export class NfceXmlBuilderPipeline<
   }
 
   private async generateQrCode(
-    NFe: SignedEntity<NFCe>,
+    NFe: SignedEntity<NFe>,
     options: Pick<NfceTransmitterOptions, 'qrCode'>,
     certificateRequest: ReadCertificateRequest,
   ) {

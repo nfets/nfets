@@ -1,4 +1,4 @@
-import type { NFCe } from '@nfets/nfe/domain/entities/nfe/nfce';
+import type { NFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 import type { Signature } from '@nfets/core/domain/entities/signer/signature';
 import type { SignedEntity } from '@nfets/core/domain/repositories/signer-repository';
 import type { CertificateRepository } from '@nfets/core/domain';
@@ -82,11 +82,11 @@ const createSignedNfce = (opts: {
   tpEmis: TpEmis;
   dhEmi: string;
   vNF: string;
-  dest?: NFCe['infNFe']['dest'];
+  dest?: NFe['infNFe']['dest'];
   digestValue?: string;
   /** Chave de 44 dígitos (sem prefixo NFe). Em offline use {@link CHAVE_CONTINGENCIA} para XSD. */
   chave?: string;
-}): SignedEntity<NFCe> => {
+}): SignedEntity<NFe> => {
   const {
     tpEmis,
     dhEmi,
@@ -527,10 +527,8 @@ describe('NfceQrcode', () => {
   /** Monta NFe com `NfeXmlBuilder` (PL_009_V4) e valida o XML assinado com `nfe_v4.00.xsd` do PL_010_V1.30 — inclusive os `xs:pattern` de `infNFeSupl/qrCode`. */
   describe('validação XSD (PL_010_V1.30 / nfe_v4.00.xsd)', () => {
     if (process.env.CI && ensurePlatform('win32'))
-      return it.skip(
-        "Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.",
-        () => void 0,
-      );
+      return it.skip("Skipping in CI due to Github actions hosted runners doesn't support the current user certificate store.", () =>
+        void 0);
 
     let toolkit: XmlToolkit;
     let signer: XmlSigner;

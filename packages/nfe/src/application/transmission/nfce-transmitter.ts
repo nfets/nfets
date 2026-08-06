@@ -20,7 +20,7 @@ import webservices from '../../services/webservices-mod65';
 import { NfeRemoteTransmitter } from './nfe-transmitter';
 import { NfceAutorizacaoPayload } from '@nfets/nfe/infrastructure/dto/services/nfce-autorizacao';
 import { Validates } from '@nfets/core/application';
-import type { NFCe } from '@nfets/nfe/domain/entities/nfe/nfce';
+import type { NFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 import {
   ServiceOptions,
   WebserviceForService,
@@ -79,17 +79,15 @@ export class NfceRemoteTransmitter
     ] as WebserviceForService<WS, O, S, E, K>;
   }
 
-  public getUrlConsult(NFe: NFCe) {
+  public getUrlConsult(NFe: NFe) {
     const cUF = NFe.infNFe.ide.cUF;
     const tpAmb = NFe.infNFe.ide.tpAmb;
-    return QRCODE_MOD65[tpAmb][
-      cUF
-    ];
+    return QRCODE_MOD65[tpAmb][cUF];
   }
 
-  @Validates(NfceAutorizacaoPayload<NFCe, never>)
+  @Validates(NfceAutorizacaoPayload<NFe, never>)
   public async autorizacao<
-    E extends NFCe,
+    E extends NFe,
     T extends SignedEntity<E> | SignedEntity<E>[],
   >(payload: IAutorizacaoPayload<E, T>) {
     return super.autorizacao<E, T>(payload);

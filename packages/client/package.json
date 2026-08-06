@@ -1,0 +1,34 @@
+{
+  "name": "@nfets/client",
+  "version": "0.0.0",
+  "description": "Browser-safe NF-e types and helpers for client-side apps",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nfets/nfets.git",
+    "directory": "packages/client"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup --config tsup.config.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --localstorage-file=/tmp/jest-localstorage.json\" jest --config jest.config.ts --passWithNoTests",
+    "test:coverage": "pnpm test --coverage"
+  }
+}

@@ -8,12 +8,12 @@ import { type DefaultSchema, type Schema, TpEmis } from '@nfets/nfe/domain';
 import { NfeXmlBuilder } from './nfe-xml-builder';
 import { NFCe } from '@nfets/nfe/infrastructure/dto/nfe/nfce';
 
-import type { NFCe as INFCe } from '@nfets/nfe/domain/entities/nfe/nfce';
+import type { NFe as INFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 import type { XmlToolkit } from '@nfets/core/domain';
 import type { ContingencyOptions } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
 
 export class NfceXmlBuilder<
-  T extends object = INFCe,
+  T extends object = INFe,
   S extends Schema = typeof DefaultSchema,
 > extends NfeXmlBuilder<T, S> {
   public override readonly data = {
@@ -21,10 +21,10 @@ export class NfceXmlBuilder<
     infNFe: {
       total: { ICMSTot: {} },
     },
-  } as const as INFCe;
+  } as const as INFe;
 
   public static override create<
-    T extends object = INFCe,
+    T extends object = INFe,
     S extends Schema = typeof DefaultSchema,
   >(
     builder: XmlToolkit,

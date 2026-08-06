@@ -2,3 +2,4 @@ packages:
   - packages/test
   - packages/core
   - packages/nfe
+  - packages/client

@@ -393,6 +393,7 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           jq --arg version "$VERSION" '.version = $version' package.json > .package.json && mv .package.json package.json
+          jq --arg version "$VERSION" '.version = $version' packages/client/package.json > .client.package.json && mv .client.package.json packages/client/package.json
 
       - name: Publish to npm using Trusted Publishing
         if: steps.should-skip-cd.outputs.skip != 'true'
@@ -400,3 +401,4 @@ jobs:
           npm --version
           # setup-node wrote .npmrc for OIDC; do not set NODE_AUTH_TOKEN here (breaks OIDC / may cause E404).
           pnpm publish --no-git-checks
+          pnpm publish --filter @nfets/client --no-git-checks

@@ -17,7 +17,7 @@ import type {
   AutorizacaoRequest,
   AutorizacaoResponse,
 } from '../services/autorizacao';
-import type { NFCe } from '../nfe/nfce';
+import type { NFe } from '../nfe/nfe';
 
 export interface NfceQrcodeOptionsBase {
   version: '200' | '300';
@@ -45,14 +45,14 @@ export interface NfceTransmitterOptions extends NfeTransmitterOptions {
 export interface NfceTransmitter
   extends NfeTransmitter, Transmitter<NfceRemoteClient> {
   configure(options: NfceTransmitterOptions): this;
-  autorizacao<E extends NFCe, T extends SignedEntity<E> | SignedEntity<E>[]>(
+  autorizacao<E extends NFe, T extends SignedEntity<E> | SignedEntity<E>[]>(
     payload: AutorizacaoPayload<E, T>,
   ): Promise<Either<NFeTsError, AutorizacaoResponse>>;
 }
 
 export interface NfceRemoteClient extends NfeRemoteClient {
   nfeAutorizacaoLote<
-    E extends NFCe,
+    E extends NFe,
     T extends SignedEntity<E> | SignedEntity<E>[],
   >(
     args: AutorizacaoRequest<E, T>,

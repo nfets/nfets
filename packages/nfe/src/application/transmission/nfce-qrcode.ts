@@ -13,7 +13,7 @@ import type {
   NfceQrcodeOptions300,
   NfceQrcodeOptionsBase,
 } from '@nfets/nfe/domain/entities/transmission/nfce-remote-client';
-import type { NFCe as INFCe } from '@nfets/nfe/domain/entities/nfe/nfce';
+import type { NFe as INFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 import type { Dest } from '@nfets/nfe/domain/entities/nfe/inf-nfe/dest';
 import { TpEmis } from '@nfets/nfe/domain';
 
@@ -23,7 +23,7 @@ export class NfceQrcode {
   ) {}
 
   public async execute(
-    entity: SignedEntity<INFCe>,
+    entity: SignedEntity<INFe>,
     options: NfceQrcodeOptions & NfceQrcodeOptionsBase,
   ) {
     const contentOrLeft = await this.content(entity, options);
@@ -32,7 +32,7 @@ export class NfceQrcode {
   }
 
   private async content(
-    entity: SignedEntity<INFCe>,
+    entity: SignedEntity<INFe>,
     options: NfceQrcodeOptions & NfceQrcodeOptionsBase,
   ) {
     if (this.isVersion200(options))
@@ -61,7 +61,7 @@ export class NfceQrcode {
   }
 
   private getSequence(
-    entity: SignedEntity<INFCe>,
+    entity: SignedEntity<INFe>,
     options: NfceQrcodeOptions200,
   ) {
     const { version: v, CSCId: _CSCId } = options;
@@ -88,7 +88,7 @@ export class NfceQrcode {
   }
 
   private async execute200(
-    entity: SignedEntity<INFCe>,
+    entity: SignedEntity<INFe>,
     options: NfceQrcodeOptions200 & NfceQrcodeOptionsBase,
   ) {
     const { urlService, CSC } = options;
@@ -135,7 +135,7 @@ export class NfceQrcode {
   }
 
   private async execute300(
-    entity: INFCe,
+    entity: INFe,
     options: NfceQrcodeOptions300 & NfceQrcodeOptionsBase,
   ) {
     const { urlService } = options;

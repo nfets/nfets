@@ -14,9 +14,9 @@ import { InfNFe } from './inf-nfe/inf-nfe';
 import type { NFeAttributes as INFeAttributes } from '@nfets/nfe/domain/entities/nfe/nfe';
 import type { InfNFe as IInfNFe } from '@nfets/nfe/domain/entities/nfe/inf-nfe';
 import type { InfNFeSupl as IInfNFeSupl } from '@nfets/nfe/domain/entities/nfe/inf-nfe-supl';
-import type { NFCe as INFCe } from '@nfets/nfe/domain/entities/nfe/nfce';
+import type { NFe as INFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 
-export class NFCe implements INFCe {
+export class NFCe implements INFe {
   @IsObject()
   @IsNotEmptyObject()
   @Type(() => NFeAttributes)

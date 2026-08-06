@@ -3,7 +3,7 @@ import type {
   PdfBuilder,
   DocumentOptions,
 } from '@nfets/core/domain/repositories/pdf-builder';
-import type { NFCe, NFeProc } from '@nfets/nfe/domain';
+import type { NFe, NFeProc } from '@nfets/nfe/domain';
 import type { ProtNFe } from '@nfets/nfe/domain/entities/nfe/prot-nfe';
 
 import { PdfkitPdfBuilder } from '@nfets/core/infrastructure/repositories/pdfkit-pdf-builder';
@@ -23,8 +23,8 @@ import {
 import type { Builder } from '@nfets/nfe/domain/entities/printable-documents/builder';
 
 export abstract class DanfcePdfDocument {
-  public declare data: NFCe;
-  public declare protNFe?: ProtNFe;
+  declare public data: NFe;
+  declare public protNFe?: ProtNFe;
 
   public readonly builder: PdfBuilder;
   public readonly toolkit: XmlToolkit = new Xml2JsToolkit();
@@ -104,7 +104,7 @@ export abstract class DanfcePdfDocument {
   }
 
   protected async parse(xml: string) {
-    const parsed = await this.toolkit.parse<NFeProc | NFCe>(xml);
+    const parsed = await this.toolkit.parse<NFeProc | NFe>(xml);
 
     if ('protNFe' in parsed) this.protNFe = parsed.protNFe;
     if ('NFe' in parsed) this.data = parsed.NFe;
@@ -128,7 +128,9 @@ export abstract class DanfcePdfDocument {
 
   public end(): void {
     return (
-      this.builder.end(), this.builders.map((builder) => builder.end()), void 0
+      this.builder.end(),
+      this.builders.map((builder) => builder.end()),
+      void 0
     );
   }
 

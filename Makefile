@@ -4,7 +4,7 @@ lint:
 	@pnpm eslint -c eslint.config.mjs
 
 clean:
-	@pnpm rimraf packages/{core,nfe}/{tsconfig.build.tsbuildinfo,dist} tsconfig.build.tsbuildinfo dist
+	@pnpm rimraf packages/{core,nfe,client}/{tsconfig.build.tsbuildinfo,dist} tsconfig.build.tsbuildinfo dist
 
 test:
 	@pnpm test
