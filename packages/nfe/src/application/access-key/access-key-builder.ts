@@ -20,6 +20,7 @@ export class AccessKeyBuilder {
   }
 
   public decompile(accessKey: string): VerifiedAccessKey | undefined {
+    accessKey = accessKey.trim().replace(/^NFe/, '');
     if (accessKey.length !== 44) return;
     const regex =
       /^([0-9]{2})([0-9]{2})([0-9]{2})([A-Z0-9]{14})([0-9]{2})([0-9]{3})([0-9]{9})([0-9]{1})([0-9]{8})([0-9]{1})$/;

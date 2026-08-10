@@ -11,6 +11,7 @@ export * from './entities/constants/inut-cstat';
 
 export type * from './entities/nfe/nfe';
 export type * from './entities/nfe/nfce';
+export type * from './entities/nfe/prot-nfe';
 export type * from './entities/nfe/inf-nfe/det/imposto/icms';
 
 export type * from './entities/transmission/nfe-remote-client';
