@@ -812,6 +812,34 @@ export class ICMSSN500 implements IICMSSN500 {
   @IsOptional()
   @TransformDecimal({ fixed: 2 })
   public vICMSSTRet?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 2 })
+  public vBCFCPSTRet?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  public pFCPSTRet?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 2 })
+  public vFCPSTRet?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  public pRedBCEfet?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 2 })
+  public vBCEfet?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 4 })
+  public pICMSEfet?: DecimalValue;
+
+  @IsOptional()
+  @TransformDecimal({ fixed: 2 })
+  public vICMSEfet?: DecimalValue;
 }
 
 export class ICMSSN900 implements IICMSSN900 {

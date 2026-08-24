@@ -284,6 +284,13 @@ export interface ICMSSN500 {
   pST?: DecimalValue;
   vICMSSubstituto?: DecimalValue;
   vICMSSTRet?: DecimalValue;
+  vBCFCPSTRet?: DecimalValue;
+  pFCPSTRet?: DecimalValue;
+  vFCPSTRet?: DecimalValue;
+  pRedBCEfet?: DecimalValue;
+  vBCEfet?: DecimalValue;
+  pICMSEfet?: DecimalValue;
+  vICMSEfet?: DecimalValue;
 }
 
 export interface ICMSSN900 {

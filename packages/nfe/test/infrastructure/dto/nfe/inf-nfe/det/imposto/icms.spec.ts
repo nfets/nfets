@@ -194,3 +194,20 @@ describe('ICMS Choice validation', () => {
     }
   }
 });
+
+describe('ICMSSN500', () => {
+  it('accepts FCP ST retido fields without ST retido group', () => {
+    const icms = new ICMSSN500();
+    icms.orig = '0';
+    icms.CSOSN = '500';
+    icms.vBCFCPSTRet = '0.00';
+    icms.pFCPSTRet = '7.0000';
+    icms.vFCPSTRet = '0.00';
+
+    const errors = validateSync(icms);
+    expect(errors.length).toBe(0);
+    expect(icms.vBCSTRet).toBeUndefined();
+    expect(icms.pST).toBeUndefined();
+    expect(icms.vICMSSTRet).toBeUndefined();
+  });
+});
