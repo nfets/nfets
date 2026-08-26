@@ -99,7 +99,7 @@ describe('xml builder with xml2js builder', () => {
         tpEmis: '1',
         cNF: '45941728',
       } as never)
-      .emit({} as never)
+      .emit({ enderEmit: createValidEmit().enderEmit } as never)
       .det([] as never, () => void 0 as never)
       .transp({} as never)
       .pag({} as never);
@@ -120,7 +120,20 @@ describe('xml builder with xml2js builder', () => {
       <tpEmis>1</tpEmis>
       <cDV>8</cDV>
     </ide>
-    <emit/>
+    <emit>
+      <enderEmit>
+        <xLgr>14 897</xLgr>
+        <nro>13897</nro>
+        <xCpl>teste teste</xCpl>
+        <xBairro>Residencial Copaibas</xBairro>
+        <cMun>5212501</cMun>
+        <xMun>Luziania</xMun>
+        <UF>GO</UF>
+        <CEP>72831770</CEP>
+        <cPais>1058</cPais>
+        <fone>4934420122</fone>
+      </enderEmit>
+    </emit>
     <total>
       <ICMSTot>
         <vBC>0.00</vBC>
@@ -177,7 +190,13 @@ describe('xml builder with xml2js builder', () => {
         tpEmis: '1',
         cNF: '12345678',
       } as never)
-      .emit({ xNome: 'xD', IE: 'xD', CRT: 'xD', CPF: '00000000000' } as never)
+      .emit({
+        xNome: 'xD',
+        IE: 'xD',
+        CRT: 'xD',
+        CPF: '00000000000',
+        enderEmit: createValidEmit().enderEmit,
+      } as never)
       .det([] as never, () => void 0 as never)
       .transp({ modFrete: '9' })
       .pag({
@@ -206,6 +225,18 @@ describe('xml builder with xml2js builder', () => {
     <emit>
       <CPF>00000000000</CPF>
       <xNome>xD</xNome>
+      <enderEmit>
+        <xLgr>14 897</xLgr>
+        <nro>13897</nro>
+        <xCpl>teste teste</xCpl>
+        <xBairro>Residencial Copaibas</xBairro>
+        <cMun>5212501</cMun>
+        <xMun>Luziania</xMun>
+        <UF>GO</UF>
+        <CEP>72831770</CEP>
+        <cPais>1058</cPais>
+        <fone>4934420122</fone>
+      </enderEmit>
       <IE>xD</IE>
       <CRT>xD</CRT>
     </emit>
