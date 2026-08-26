@@ -19,6 +19,7 @@ import {
 import events from '@nfets/nfe/services/events';
 import { TransmissionPipeline } from './transmission-pipeline';
 import { EventoItem } from '@nfets/nfe/infrastructure/dto/services/evento';
+import { sanitizeSefazText } from '@nfets/nfe/application/xml-builder/sanitize-sefaz-text';
 
 export abstract class EventPipeline extends TransmissionPipeline {
   protected async event<T>(
@@ -56,26 +57,29 @@ export abstract class EventPipeline extends TransmissionPipeline {
       nSeqEvento.toString().padStart(2, '0'),
     ].join('');
 
-    const event = {
-      $: { xmlns: this.xmlns },
-      infEvento: {
-        $: { Id },
-        cOrgao: cUF,
-        tpAmb: options.tpAmb,
-        CNPJ: info.CNPJ,
-        CPF: info.CPF,
-        chNFe,
-        dhEvento,
-        tpEvento,
-        nSeqEvento,
-        verEvento: metadata.version,
-        detEvento: {
-          $: { versao: metadata.version },
-          descEvento: metadata.descEvento,
-          ...payload.detEvento,
+    const event = sanitizeSefazText(
+      {
+        $: { xmlns: this.xmlns },
+        infEvento: {
+          $: { Id },
+          cOrgao: cUF,
+          tpAmb: options.tpAmb,
+          CNPJ: info.CNPJ,
+          CPF: info.CPF,
+          chNFe,
+          dhEvento,
+          tpEvento,
+          nSeqEvento,
+          verEvento: metadata.version,
+          detEvento: {
+            $: { versao: metadata.version },
+            descEvento: metadata.descEvento,
+            ...payload.detEvento,
+          },
         },
       },
-    };
+      cUF,
+    );
 
     const validatedOrLeft = this.validated(event);
     if (validatedOrLeft.isLeft()) return validatedOrLeft;

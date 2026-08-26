@@ -81,6 +81,7 @@ import {
 import type { DefaultSchema, Schema } from '@nfets/nfe/domain';
 import { SchemaValidates } from '../validations/schema';
 import { PL_010 } from '@nfets/nfe/domain/entities/transmission/schemas';
+import { sanitizeSefazText } from './sanitize-sefaz-text';
 
 export class NfeXmlBuilder<
   T extends object = INFe,
@@ -426,7 +427,10 @@ export class NfeXmlBuilder<
     this.assertHomologValidations();
     this.assertContingencyModes();
     this.fillAccessKeyIfEmpty();
-    this.$data = this.toInstance();
+    this.$data = sanitizeSefazText(
+      this.toInstance(),
+      this.data.infNFe.emit.enderEmit.UF,
+    );
     return right(this.$data);
   }
 

@@ -18,6 +18,7 @@ import {
   type SignedEntity,
 } from '@nfets/core';
 import { InutilizacaoPayload } from '@nfets/nfe/infrastructure/dto/services/inutilizacao';
+import { sanitizeSefazText } from '@nfets/nfe/application/xml-builder/sanitize-sefaz-text';
 
 export class NfeVoidRangePipeline extends TransmissionPipeline {
   public async execute(
@@ -49,22 +50,25 @@ export class NfeVoidRangePipeline extends TransmissionPipeline {
       payload.nNFFin.padStart(9, '0'),
     ].join('');
 
-    const inutNFe = {
-      $: { xmlns: this.xmlns },
-      infInut: {
-        $: { Id },
-        tpAmb: payload.tpAmb ?? options.tpAmb,
-        cUF: options.cUF,
-        ano: year,
-        CNPJ: info.CNPJ,
-        CPF: info.CPF,
-        mod: payload.mod,
-        serie: payload.serie,
-        nNFIni: payload.nNFIni,
-        nNFFin: payload.nNFFin,
-        xJust: payload.xJust,
-      },
-    } satisfies IIInutilizacaoPayload;
+    const inutNFe = sanitizeSefazText(
+      {
+        $: { xmlns: this.xmlns },
+        infInut: {
+          $: { Id },
+          tpAmb: payload.tpAmb ?? options.tpAmb,
+          cUF: options.cUF,
+          ano: year,
+          CNPJ: info.CNPJ,
+          CPF: info.CPF,
+          mod: payload.mod,
+          serie: payload.serie,
+          nNFIni: payload.nNFIni,
+          nNFFin: payload.nNFFin,
+          xJust: payload.xJust,
+        },
+      } satisfies IIInutilizacaoPayload,
+      options.cUF,
+    );
 
     const validatedOrLeft = this.validated(inutNFe);
     if (validatedOrLeft.isLeft()) return validatedOrLeft;
