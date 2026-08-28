@@ -28,6 +28,18 @@ const retInutNFeRejected = {
   },
 };
 
+const matrizCnpj = '12345678000190';
+const filialCnpj = '03916076000664';
+
+const voidRangePayload = {
+  identification: matrizCnpj,
+  mod: '55',
+  serie: '1',
+  nNFIni: '1',
+  nNFFin: '9',
+  xJust: 'Teste de inutilizacao',
+};
+
 describe('nfe void range pipeline (unit)', () => {
   class MockableNfeVoidRangePipeline extends NfeVoidRangePipeline {
     public readonly readMock = jest.fn().mockResolvedValue(
@@ -48,10 +60,6 @@ describe('nfe void range pipeline (unit)', () => {
 
     protected override readonly certificates = {
       read: this.readMock,
-      getCertificateInfo: jest.fn().mockReturnValue({
-        CNPJ: '12345678000190',
-        CPF: undefined,
-      }),
     } as unknown as NfeVoidRangePipeline['certificates'];
 
     protected override readonly signer = {
@@ -72,16 +80,10 @@ describe('nfe void range pipeline (unit)', () => {
 
     const currentYear = new Date().getFullYear().toString().slice(2);
 
-    const result = await pipeline.execute(
-      {
-        mod: '55',
-        serie: '1',
-        nNFIni: '1',
-        nNFFin: '9',
-        xJust: 'Teste de inutilizacao',
-      },
-      { tpAmb: Environment.Homolog, cUF: '35' },
-    );
+    const result = await pipeline.execute(voidRangePayload, {
+      tpAmb: Environment.Homolog,
+      cUF: '35',
+    });
 
     expect(result.isRight()).toBe(true);
     expect(pipeline.configureMock).toHaveBeenCalledWith(
@@ -104,6 +106,7 @@ describe('nfe void range pipeline (unit)', () => {
           nNFIni: '1',
           nNFFin: '9',
           xJust: 'Teste de inutilizacao',
+          CNPJ: matrizCnpj,
           $: expect.objectContaining({
             Id: `ID35${currentYear}1234567800019055001000000001000000009`,
           }),
@@ -139,16 +142,10 @@ describe('nfe void range pipeline (unit)', () => {
       password: 'mock',
     });
 
-    const result = await pipeline.execute(
-      {
-        mod: '55',
-        serie: '1',
-        nNFIni: '1',
-        nNFFin: '9',
-        xJust: 'Teste de inutilizacao',
-      },
-      { tpAmb: Environment.Homolog, cUF: '35' },
-    );
+    const result = await pipeline.execute(voidRangePayload, {
+      tpAmb: Environment.Homolog,
+      cUF: '35',
+    });
 
     expect(result.isRight()).toBe(true);
     const { xml } = result.value as { xml: string };
@@ -170,16 +167,10 @@ describe('nfe void range pipeline (unit)', () => {
       password: 'mock',
     });
 
-    const result = await pipeline.execute(
-      {
-        mod: '55',
-        serie: '1',
-        nNFIni: '1',
-        nNFFin: '9',
-        xJust: 'Teste de inutilizacao',
-      },
-      { tpAmb: Environment.Homolog, cUF: '35' },
-    );
+    const result = await pipeline.execute(voidRangePayload, {
+      tpAmb: Environment.Homolog,
+      cUF: '35',
+    });
 
     expect(result.isLeft()).toBe(true);
     expect(result.value).toBeInstanceOf(NFeTsError);
@@ -198,16 +189,10 @@ describe('nfe void range pipeline (unit)', () => {
       password: 'mock',
     });
 
-    const result = await pipeline.execute(
-      {
-        mod: '55',
-        serie: '1',
-        nNFIni: '1',
-        nNFFin: '9',
-        xJust: 'Teste de inutilizacao',
-      },
-      { tpAmb: Environment.Homolog, cUF: '35' },
-    );
+    const result = await pipeline.execute(voidRangePayload, {
+      tpAmb: Environment.Homolog,
+      cUF: '35',
+    });
 
     expect(result.isLeft()).toBe(true);
     expect(pipeline.configureMock).not.toHaveBeenCalled();
@@ -227,18 +212,78 @@ describe('nfe void range pipeline (unit)', () => {
       password: 'mock',
     });
 
+    const result = await pipeline.execute(voidRangePayload, {
+      tpAmb: Environment.Homolog,
+      cUF: '35',
+    });
+
+    expect(result.isLeft()).toBe(true);
+    expect(pipeline.inutilizacaoMock).not.toHaveBeenCalled();
+  });
+
+  it('should use branch identification instead of certificate CNPJ', async () => {
+    const pipeline = new MockableNfeVoidRangePipeline({
+      pfxPathOrBase64: 'mock',
+      password: 'mock',
+    });
+
+    const currentYear = new Date().getFullYear().toString().slice(2);
     const result = await pipeline.execute(
-      {
-        mod: '55',
-        serie: '1',
-        nNFIni: '1',
-        nNFFin: '9',
-        xJust: 'Teste de inutilizacao',
-      },
+      { ...voidRangePayload, identification: filialCnpj },
+      { tpAmb: Environment.Homolog, cUF: '35' },
+    );
+
+    expect(result.isRight()).toBe(true);
+    expect(pipeline.inutilizacaoMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        infInut: expect.objectContaining({
+          CNPJ: filialCnpj,
+          $: expect.objectContaining({
+            Id: `ID35${currentYear}${filialCnpj}55001000000001000000009`,
+          }),
+        }),
+      }),
+    );
+  });
+
+  it('should map CPF identification to infInut.CPF', async () => {
+    const pipeline = new MockableNfeVoidRangePipeline({
+      pfxPathOrBase64: 'mock',
+      password: 'mock',
+    });
+
+    const cpf = '31702821072';
+    const result = await pipeline.execute(
+      { ...voidRangePayload, identification: cpf },
+      { tpAmb: Environment.Homolog, cUF: '35' },
+    );
+
+    expect(result.isRight()).toBe(true);
+    expect(pipeline.inutilizacaoMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        infInut: expect.objectContaining({
+          CPF: cpf,
+          $: expect.objectContaining({
+            Id: expect.stringContaining(cpf.padStart(14, '0')),
+          }),
+        }),
+      }),
+    );
+  });
+
+  it('should return left when identification is missing', async () => {
+    const pipeline = new MockableNfeVoidRangePipeline({
+      pfxPathOrBase64: 'mock',
+      password: 'mock',
+    });
+
+    const result = await pipeline.execute(
+      { ...voidRangePayload, identification: '' },
       { tpAmb: Environment.Homolog, cUF: '35' },
     );
 
     expect(result.isLeft()).toBe(true);
+    expect(result.value).toBeInstanceOf(NFeTsError);
     expect(pipeline.inutilizacaoMock).not.toHaveBeenCalled();
   });
 });

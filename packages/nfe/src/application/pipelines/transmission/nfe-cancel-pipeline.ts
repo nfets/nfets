@@ -6,10 +6,7 @@ import type {
   DetEventoCancelamento,
   EventoCancelamento,
 } from '@nfets/nfe/domain/entities/events/cancelamento';
-import type {
-  InfEvento,
-  PipelineEventResponse,
-} from '@nfets/nfe/domain/entities/services/evento';
+import type { PipelineEventResponse } from '@nfets/nfe/domain/entities/services/evento';
 import { left, NFeTsError, right } from '@nfets/core';
 import events from '@nfets/nfe/services/events';
 
@@ -23,7 +20,8 @@ export class NfeCancelPipeline extends EventPipeline {
       dhEvento: payload.dhEvento ?? new Date().toISOString(),
       detEvento: { nProt: payload.nProt, xJust: payload.xJust },
       nSeqEvento: 1,
-    } satisfies Partial<InfEvento<DetEventoCancelamento>>;
+      identification: payload.identification,
+    };
 
     const eventOrLeft = await this.event<DetEventoCancelamento>(
       TpEvent.Cancelamento,

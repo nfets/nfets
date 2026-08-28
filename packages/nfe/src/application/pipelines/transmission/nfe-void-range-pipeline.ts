@@ -28,9 +28,8 @@ export class NfeVoidRangePipeline extends TransmissionPipeline {
     const certificateOrLeft = await this.certificates.read(this.certificate);
     if (certificateOrLeft.isLeft()) return certificateOrLeft;
 
-    const info = this.certificates.getCertificateInfo(
-      certificateOrLeft.value.certificate,
-    );
+    const issuerOrLeft = this.issuerFromIdentification(payload.identification);
+    if (issuerOrLeft.isLeft()) return issuerOrLeft;
 
     this.transmitter.configure({
       ...options,
@@ -43,7 +42,7 @@ export class NfeVoidRangePipeline extends TransmissionPipeline {
       'ID',
       options.cUF,
       year,
-      info.CNPJ?.padStart(14, '0') ?? '',
+      issuerOrLeft.value.idDigits,
       payload.mod,
       payload.serie.padStart(3, '0'),
       payload.nNFIni.padStart(9, '0'),
@@ -58,8 +57,8 @@ export class NfeVoidRangePipeline extends TransmissionPipeline {
           tpAmb: payload.tpAmb ?? options.tpAmb,
           cUF: options.cUF,
           ano: year,
-          CNPJ: info.CNPJ,
-          CPF: info.CPF,
+          CNPJ: issuerOrLeft.value.CNPJ,
+          CPF: issuerOrLeft.value.CPF,
           mod: payload.mod,
           serie: payload.serie,
           nNFIni: payload.nNFIni,

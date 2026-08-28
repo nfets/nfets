@@ -31,12 +31,18 @@ describe('nfe nfce cancel pipeline (integration) (destructive)', () => {
     async () => {
       const args = JSON.parse(process.env.TEST_PAYLOAD ?? '{}') as {
         chNFe: string;
+        CNPJ?: string;
         xJust: string;
         nProt: string;
       };
 
       const response = await pipeline.execute(
-        { chNFe: args.chNFe, xJust: args.xJust, nProt: args.nProt },
+        {
+          identification: args.CNPJ ?? '',
+          chNFe: args.chNFe,
+          xJust: args.xJust,
+          nProt: args.nProt,
+        },
         { tpAmb: Environment.Homolog },
       );
       expectIsRight(response);

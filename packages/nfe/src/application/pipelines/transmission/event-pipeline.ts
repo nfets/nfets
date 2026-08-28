@@ -27,7 +27,7 @@ export abstract class EventPipeline extends TransmissionPipeline {
     payload: Pick<
       IEventoItem<T>['infEvento'],
       'nSeqEvento' | 'dhEvento' | 'chNFe' | 'detEvento'
-    >,
+    > & { identification: string },
     options: Pick<NfeTransmitterOptions, 'tpAmb'>,
   ): Promise<
     Either<NFeTsError, SignedEntity<IEventoItem<{ descEvento: string } & T>>>
@@ -45,9 +45,8 @@ export abstract class EventPipeline extends TransmissionPipeline {
 
     const metadata = events[tpEvento];
 
-    const info = this.certificates.getCertificateInfo(
-      certificateOrLeft.value.certificate,
-    );
+    const issuerOrLeft = this.issuerFromIdentification(payload.identification);
+    if (issuerOrLeft.isLeft()) return issuerOrLeft;
 
     const { nSeqEvento, dhEvento, chNFe } = payload;
     const Id = [
@@ -64,8 +63,8 @@ export abstract class EventPipeline extends TransmissionPipeline {
           $: { Id },
           cOrgao: cUF,
           tpAmb: options.tpAmb,
-          CNPJ: info.CNPJ,
-          CPF: info.CPF,
+          CNPJ: issuerOrLeft.value.CNPJ,
+          CPF: issuerOrLeft.value.CPF,
           chNFe,
           dhEvento,
           tpEvento,

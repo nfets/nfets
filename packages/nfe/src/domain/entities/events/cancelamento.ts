@@ -5,6 +5,7 @@ export interface DetEventoCancelamento {
 
 export interface EventoCancelamento extends DetEventoCancelamento {
   chNFe: string;
+  identification: string;
   idLote?: string;
   dhEvento?: string;
 }
