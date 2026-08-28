@@ -7,6 +7,7 @@ import {
   CertificateRepository,
   SignatureAlgorithm,
   NFeTsError,
+  HttpClient,
 } from '@nfets/core/domain';
 
 import {
@@ -67,7 +68,7 @@ describe('xml builder with xml2js builder', () => {
 
   beforeAll(async () => {
     certificateRepository = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       new MemoryCacheAdapter(),
     );
 
@@ -196,7 +197,7 @@ describe('xml builder with xml2js builder', () => {
         CRT: 'xD',
         CPF: '00000000000',
         enderEmit: createValidEmit().enderEmit,
-      } as never)
+      })
       .det([] as never, () => void 0 as never)
       .transp({ modFrete: '9' })
       .pag({
