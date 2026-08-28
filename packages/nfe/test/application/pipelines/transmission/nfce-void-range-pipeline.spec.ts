@@ -50,6 +50,7 @@ describe('nfce void range pipeline (unit)', () => {
     });
 
     const payload = {
+      identification: '12345678000190',
       mod: '65',
       serie: '1',
       nNFIni: '1',

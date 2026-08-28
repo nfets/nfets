@@ -31,6 +31,7 @@ describe('nfe nfce void range (inutilização) pipeline (integration) (destructi
     async () => {
       const args = JSON.parse(process.env.TEST_PAYLOAD ?? '{}') as {
         UF: StateAcronym;
+        CNPJ?: string;
         mod: string;
         serie: string;
         nNFIni: string;
@@ -40,6 +41,7 @@ describe('nfe nfce void range (inutilização) pipeline (integration) (destructi
 
       const response = await pipeline.execute(
         {
+          identification: args.CNPJ ?? '',
           mod: args.mod,
           serie: args.serie,
           nNFIni: args.nNFIni,

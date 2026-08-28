@@ -3,6 +3,7 @@ import type { EnvironmentCode, StateCode } from '@nfets/core/domain';
 export interface VoidRangePayload {
   tpAmb?: EnvironmentCode;
   ano?: string;
+  identification: string;
   mod: string;
   serie: string;
   nNFIni: string;

@@ -6,6 +6,7 @@ import { NFeTsError } from '@nfets/core';
 import { TpEvent } from '@nfets/nfe/domain/entities/constants/tp-event';
 
 const chNFe = '35240100000000000000550010000000011000000010';
+const identification = '03916076000664';
 
 const signedEvento = {
   $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
@@ -13,7 +14,7 @@ const signedEvento = {
     $: { Id: `ID${TpEvent.Cancelamento}${chNFe}01` },
     cOrgao: '35',
     tpAmb: Environment.Homolog,
-    CNPJ: '00000000000000',
+    CNPJ: identification,
     chNFe,
     dhEvento: '2025-12-22T18:40:33.060Z',
     tpEvento: TpEvent.Cancelamento,
@@ -101,6 +102,7 @@ describe('nfe cancel pipeline (unit)', () => {
     const result = await pipeline.execute(
       {
         chNFe,
+        identification,
         nProt: '135240000000001',
         xJust: 'Cancelamento de teste',
       },
@@ -113,6 +115,7 @@ describe('nfe cancel pipeline (unit)', () => {
       expect.objectContaining({
         chNFe,
         nSeqEvento: 1,
+        identification,
       }),
       { tpAmb: Environment.Homolog },
     );
@@ -161,6 +164,7 @@ describe('nfe cancel pipeline (unit)', () => {
     const result = await pipeline.execute(
       {
         chNFe,
+        identification,
         nProt: '135240000000001',
         xJust: 'Cancelamento de teste',
       },
@@ -200,6 +204,7 @@ describe('nfe cancel pipeline (unit)', () => {
     const result = await pipeline.execute(
       {
         chNFe,
+        identification,
         nProt: '135240000000001',
         xJust: 'Cancelamento de teste',
       },
@@ -229,6 +234,7 @@ describe('nfe cancel pipeline (unit)', () => {
     const result = await pipeline.execute(
       {
         chNFe,
+        identification,
         nProt: '135240000000001',
         xJust: 'Cancelamento de teste',
       },
@@ -237,5 +243,68 @@ describe('nfe cancel pipeline (unit)', () => {
 
     expect(result.isLeft()).toBe(true);
     expect(pipeline.transmitter.recepcaoEvento).not.toHaveBeenCalled();
+  });
+
+  it('should use branch identification instead of certificate CNPJ', async () => {
+    class MockableNfeCancelPipeline extends NfeCancelPipeline {
+      public readonly signMock = jest
+        .fn()
+        .mockImplementation((payload) => Promise.resolve(right(payload)));
+
+      protected override readonly certificates = {
+        read: jest.fn().mockResolvedValue(
+          right({
+            certificate: 'mock-certificate',
+          }),
+        ),
+        getCertificateInfo: jest.fn().mockReturnValue({
+          CNPJ: '12345678000190',
+        }),
+      } as unknown as NfeCancelPipeline['certificates'];
+
+      protected override readonly signer = {
+        sign: this.signMock,
+      } as unknown as NfeCancelPipeline['signer'];
+
+      protected override readonly transmitter = {
+        configure: jest.fn(),
+        recepcaoEvento: jest.fn().mockResolvedValue(
+          right({
+            retEnvEvento: {
+              cStat: '128',
+              xMotivo: 'Lote de Evento Processado',
+              retEvento: retEventoSuccess,
+            },
+          }),
+        ),
+      } as unknown as NfeCancelPipeline['transmitter'];
+    }
+
+    const pipeline = new MockableNfeCancelPipeline({
+      pfxPathOrBase64: 'mock',
+      password: 'mock',
+    });
+
+    const result = await pipeline.execute(
+      {
+        chNFe,
+        identification,
+        nProt: '135240000000001',
+        xJust: 'Cancelamento de teste',
+      },
+      { tpAmb: Environment.Homolog },
+    );
+
+    expect(result.isRight()).toBe(true);
+    expect(pipeline.signMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        infEvento: expect.objectContaining({
+          CNPJ: identification,
+        }),
+      }),
+      expect.anything(),
+      expect.anything(),
+    );
+    expect(pipeline.certificates.getCertificateInfo).not.toHaveBeenCalled();
   });
 });
