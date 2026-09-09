@@ -81,7 +81,7 @@ export class NfceQrcode {
       .map((char) => char.charCodeAt(0).toString(16).padStart(2, '0'))
       .join('');
 
-    const day = new Date(entity.infNFe.ide.dhEmi).getDate(),
+    const day = this.emissionDayOfMonthFormatted(entity.infNFe.ide.dhEmi),
       value = Number(entity.infNFe.total.ICMSTot.vNF).toFixed(2);
 
     return `${Id}|${version}|${tpAmb}|${day}|${value}|${hex}|${CSCId}`;

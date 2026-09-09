@@ -45,6 +45,11 @@ const CHAVE_CONTINGENCIA = '42260303916076000583650660000003699177489281';
 
 const certStub = {} as ReadCertificateResponse;
 const nfeV400XsdPath = path.resolve(schemas(), 'PL_010_V1.30', 'nfe_v4.00.xsd');
+const nfeV400Pl009XsdPath = path.resolve(
+  schemas(),
+  'PL_009_V4',
+  'nfe_v4.00.xsd',
+);
 
 const escapeXmlText = (s: string): string =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -197,8 +202,7 @@ const createSignedNfce = (opts: {
 
 describe('NfceQrcode', () => {
   const dhEmi = '2024-06-15T15:00:00-03:00';
-  const dayOfMonth = String(new Date(dhEmi).getDate());
-  const dayOfMonthPadded = dayOfMonth.padStart(2, '0');
+  const dayOfMonthPadded = String(new Date(dhEmi).getDate()).padStart(2, '0');
 
   describe('QR Code versão 2.00 (200)', () => {
     it('emissão normal: monta p com chave, versão, ambiente, CSCId e hash SHA1(CSC)', async () => {
@@ -250,7 +254,7 @@ describe('NfceQrcode', () => {
       });
 
       const hex = digestToOfflineHex(digest);
-      const sequence = `${CHAVE_CONTINGENCIA}|2|2|${dayOfMonth}|10.50|${hex}|1`;
+      const sequence = `${CHAVE_CONTINGENCIA}|2|2|${dayOfMonthPadded}|10.50|${hex}|1`;
       const expectedHash = crypto
         .createHash('sha1')
         .update(`${sequence}ABC123`)
@@ -270,6 +274,45 @@ describe('NfceQrcode', () => {
         `${URL_SERVICE}?p=${sequence}|${expectedHash}`,
       );
       expect(sign).not.toHaveBeenCalled();
+    });
+
+    it('contingência offline: dia 1–9 no QR é zero-padded (xs:pattern 01–31)', async () => {
+      const sign = jest.fn();
+      const repository = { sign } as unknown as CertificateRepository;
+      const qrcode = new NfceQrcode(repository);
+
+      const dhEmiDay9 = '2026-09-09T10:58:46-03:00';
+      const digest = 'x9';
+      const entity = createSignedNfce({
+        tpEmis: TpEmis.OFFLINE,
+        dhEmi: dhEmiDay9,
+        vNF: '3.90',
+        digestValue: digest,
+        chave: CHAVE_CONTINGENCIA,
+      });
+
+      const hex = digestToOfflineHex(digest);
+      const sequence = `${CHAVE_CONTINGENCIA}|2|2|09|3.90|${hex}|1`;
+      const expectedHash = crypto
+        .createHash('sha1')
+        .update(`${sequence}ABC123`)
+        .digest('hex')
+        .toUpperCase();
+
+      const result = await qrcode.execute(entity, {
+        version: '200',
+        urlService: URL_SERVICE,
+        urlConsult: URL_CONSULT,
+        CSC: 'ABC123',
+        CSCId: '000001',
+      });
+
+      expectIsRight(result);
+      expect(result.value.qrCode).toBe(
+        `${URL_SERVICE}?p=${sequence}|${expectedHash}`,
+      );
+      expect(result.value.qrCode).toContain('|09|');
+      expect(result.value.qrCode).not.toContain('|9|');
     });
   });
 
@@ -684,6 +727,39 @@ describe('NfceQrcode', () => {
         result.value.urlChave,
       );
       expectIsRight(await toolkit.validate(xml, nfeV400XsdPath));
+    });
+
+    it('QR v2 offline (200) no dia 9: PL_009_V4 aceita dia zero-padded 09', async () => {
+      const sign = jest.fn();
+      const repository = { sign } as unknown as CertificateRepository;
+      const qrcode = new NfceQrcode(repository);
+
+      const digest28 = 'Z'.repeat(28);
+      const result = await qrcode.execute(
+        createSignedNfce({
+          tpEmis: TpEmis.OFFLINE,
+          dhEmi: '2026-09-09T10:58:46-03:00',
+          vNF: '3.90',
+          digestValue: digest28,
+          chave: CHAVE_CONTINGENCIA,
+        }),
+        {
+          version: '200',
+          urlService: URL_SERVICE,
+          urlConsult: URL_CONSULT,
+          CSC: 'ABC123',
+          CSCId: '000001',
+        },
+      );
+      expectIsRight(result);
+      expect(result.value.qrCode).toContain('|09|3.90|');
+
+      const xml = await assembleNfeComQr(
+        CHAVE_CONTINGENCIA,
+        result.value.qrCode,
+        result.value.urlChave,
+      );
+      expectIsRight(await toolkit.validate(xml, nfeV400Pl009XsdPath));
     });
 
     it('QR v3 online (300): infNFeSupl atende ao schema', async () => {
