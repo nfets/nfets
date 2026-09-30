@@ -1,5 +1,7 @@
 #include <node_api.h>
 
+#include "find-certificate-in-store.h"
+
 #include <windows.h>
 #include <wincrypt.h>
 #include <ncrypt.h>
@@ -24,14 +26,14 @@ std::wstring utf8_to_wstring(const std::string &str)
 
 napi_value SignDataWithCertificate(napi_env env, napi_callback_info info)
 {
-  size_t argc = 3;
-  napi_value args[3];
+  size_t argc = 4;
+  napi_value args[4] = {};
   napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
 
   if (argc < 3)
   {
     napi_value error_msg;
-    napi_create_string_utf8(env, "Expected: subject (string), data (Buffer), algorithm (string)", NAPI_AUTO_LENGTH, &error_msg);
+    napi_create_string_utf8(env, "Expected: subject (string), data (Buffer), algorithm (string), certificateDer (Buffer, optional)", NAPI_AUTO_LENGTH, &error_msg);
     napi_value error;
     napi_create_type_error(env, nullptr, error_msg, &error);
     napi_throw(env, error);
@@ -46,7 +48,7 @@ napi_value SignDataWithCertificate(napi_env env, napi_callback_info info)
   if (arg0_type != napi_string || arg1_type != napi_object || arg2_type != napi_string)
   {
     napi_value error_msg;
-    napi_create_string_utf8(env, "Expected: subject (string), data (Buffer), algorithm (string)", NAPI_AUTO_LENGTH, &error_msg);
+    napi_create_string_utf8(env, "Expected: subject (string), data (Buffer), algorithm (string), certificateDer (Buffer, optional)", NAPI_AUTO_LENGTH, &error_msg);
     napi_value error;
     napi_create_type_error(env, nullptr, error_msg, &error);
     napi_throw(env, error);
@@ -102,18 +104,10 @@ napi_value SignDataWithCertificate(napi_env env, napi_callback_info info)
       throw std::runtime_error("Failed to open certificate store");
     }
 
-    pCertContext = CertFindCertificateInStore(
-        hStore,
-        X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-        0,
-        CERT_FIND_SUBJECT_STR_W,
-        (LPVOID)subject.c_str(),
-        NULL);
+    const std::vector<BYTE> certificateDer =
+        argc >= 4 ? ReadCertificateDer(env, args[3]) : std::vector<BYTE>();
 
-    if (!pCertContext)
-    {
-      throw std::runtime_error("Certificate not found in store");
-    }
+    pCertContext = FindCertificateInStore(hStore, subject, certificateDer);
 
     ALG_ID hashAlg = 0;
     if (algorithm_str == "sha1")

@@ -12,6 +12,7 @@ interface WincryptSigner {
     subject: string,
     data: Buffer,
     algorithm: SignatureAlgorithm,
+    certificateDer?: Buffer,
   ): Promise<string>;
 }
 
@@ -30,6 +31,7 @@ export class WincryptSignerRepository implements SignerRepository {
         CN ?? '',
         Buffer.from(content),
         algorithm,
+        Buffer.from(cert.certificate.raw),
       );
 
       const base64 = Buffer.from(signature).toString('base64');
