@@ -1,5 +1,7 @@
 #include <node_api.h>
 
+#include "find-certificate-in-store.h"
+
 #include <windows.h>
 #include <winhttp.h>
 #include <wincrypt.h>
@@ -85,6 +87,7 @@ napi_value MakeRequest(napi_env env, napi_callback_info info)
   std::wstring headers;
   std::string body;
   int timeout = 30000;
+  napi_value certificate_der_val = nullptr;
 
   napi_value headers_key;
   napi_create_string_utf8(env, "headers", NAPI_AUTO_LENGTH, &headers_key);
@@ -137,6 +140,10 @@ napi_value MakeRequest(napi_env env, napi_callback_info info)
     }
   }
 
+  napi_value certificate_der_key;
+  napi_create_string_utf8(env, "certificateDer", NAPI_AUTO_LENGTH, &certificate_der_key);
+  napi_get_property(env, optionsObj, certificate_der_key, &certificate_der_val);
+
   HCERTSTORE hStore = NULL;
   PCCERT_CONTEXT pCertContext = NULL;
   HINTERNET hSession = NULL;
@@ -152,18 +159,10 @@ napi_value MakeRequest(napi_env env, napi_callback_info info)
       throw std::runtime_error("Failed to open certificate store");
     }
 
-    pCertContext = CertFindCertificateInStore(
-        hStore,
-        X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-        0,
-        CERT_FIND_SUBJECT_STR_W,
-        (LPVOID)subject.c_str(),
-        NULL);
+    const std::vector<BYTE> certificateDer =
+        ReadCertificateDer(env, certificate_der_val);
 
-    if (!pCertContext)
-    {
-      throw std::runtime_error("Certificate not found in store");
-    }
+    pCertContext = FindCertificateInStore(hStore, subject, certificateDer);
 
     URL_COMPONENTS urlComp;
     ZeroMemory(&urlComp, sizeof(urlComp));

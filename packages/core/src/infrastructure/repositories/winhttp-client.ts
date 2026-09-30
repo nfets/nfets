@@ -19,6 +19,7 @@ interface WinHttpClientAdapter {
       headers?: string;
       body?: Buffer;
       timeout?: number;
+      certificateDer?: Buffer;
     },
   ): Promise<{
     statusCode: number;
@@ -95,6 +96,7 @@ export class WinHttpClient {
       headers: this.parseRequestHeaders(config.headers),
       body: this.parseRequestBody(config.data),
       timeout: config.timeout,
+      certificateDer: Buffer.from(this.certificate.certificate.raw),
     });
 
     const axiosResponse: AxiosResponse = {
