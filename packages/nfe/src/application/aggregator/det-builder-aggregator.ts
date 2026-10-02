@@ -123,6 +123,8 @@ export class DefaultDetBuilderAggregator<
   }
 
   public ii(payload: II): void {
+    if (!payload.vII) return;
+
     this.builder.increment(({ ICMSTot }) => ({
       ICMSTot: {
         vII: this.sum(ICMSTot?.vII, payload.vII),

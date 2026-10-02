@@ -109,7 +109,8 @@ export class NfeDetXmlBuilder<
   }
 
   @Validates(II)
-  public ii(payload: III) {
+  public ii(payload?: III) {
+    if (!payload) return this;
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.II = payload;
     this.listener?.ii(payload);
@@ -117,7 +118,8 @@ export class NfeDetXmlBuilder<
   }
 
   @Validates(IPI)
-  public ipi(payload: IIPI) {
+  public ipi(payload?: IIPI) {
+    if (!payload) return this;
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.IPI = payload;
     this.listener?.ipi(payload);
@@ -125,7 +127,8 @@ export class NfeDetXmlBuilder<
   }
 
   @Validates(PIS)
-  public pis(payload: IPIS) {
+  public pis(payload?: IPIS) {
+    if (!payload) return this;
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.PIS = payload;
     this.listener?.pis(payload);
@@ -133,14 +136,16 @@ export class NfeDetXmlBuilder<
   }
 
   @Validates(PISST)
-  public pisst(payload: IPISST) {
+  public pisst(payload?: IPISST) {
+    if (!payload) return this;
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.PISST = payload;
     return this;
   }
 
   @Validates(COFINS)
-  public cofins(payload: ICOFINS) {
+  public cofins(payload?: ICOFINS) {
+    if (!payload) return this;
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.COFINS = payload;
     this.listener?.cofins(payload);
@@ -148,14 +153,16 @@ export class NfeDetXmlBuilder<
   }
 
   @Validates(COFINSST)
-  public cofinsst(payload: ICOFINSST) {
+  public cofinsst(payload?: ICOFINSST) {
+    if (!payload) return this;
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.COFINSST = payload;
     return this;
   }
 
   @Validates(ICMSUFDest)
-  public icmsufdest(payload: IICMSUFDest) {
+  public icmsufdest(payload?: IICMSUFDest) {
+    if (!payload) return this;
     this.data.imposto ??= {} as IImposto;
     this.data.imposto.ICMSUFDest = payload;
     return this;
@@ -180,14 +187,16 @@ export class NfeDetXmlBuilder<
   }
 
   @SchemaValidates(PL_010)
-  public vItem(payload: IVItem) {
+  public vItem(payload?: IVItem) {
+    if (!payload) return this;
     this.data.vItem = payload.vItem;
     return this;
   }
 
   @SchemaValidates(PL_010)
   @Validates(DFeReferenciado)
-  public dfeReferenciado(payload: IDFeReferenciado) {
+  public dfeReferenciado(payload?: IDFeReferenciado) {
+    if (!payload) return this;
     this.data.DFeReferenciado = payload;
     return this;
   }
