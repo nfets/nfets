@@ -31,17 +31,54 @@ export const mapConstraintsToErrors = (
     return constraints.concat(messages);
   }, []);
 
-export const Validates = <T extends object>(klass: new () => T) => {
+export interface ValidatesOptions {
+  each?: boolean;
+}
+
+type ValidatesPayload<T, O extends ValidatesOptions> = O extends { each: true }
+  ? T[]
+  : T;
+
+export const Validates = <
+  T extends object,
+  const O extends ValidatesOptions = { each: false },
+>(
+  klass: new () => T,
+  options?: O,
+) => {
   return (
     _target: object,
     property: string | symbol,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    descriptor: TypedPropertyDescriptor<(payload: T, ...args: any[]) => any>,
+    descriptor: TypedPropertyDescriptor<
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (payload: ValidatesPayload<T, O>, ...args: any[]) => any
+    >,
   ) => {
     const original = descriptor.value;
     if (original == null) return;
 
-    descriptor.value = function (...args: [T | undefined, ...object[]]) {
+    const validate = (target: object, payload: object, path: string): T => {
+      const instance = plainToInstance<T>(payload, klass);
+      const errors = validateSync(instance, { whitelist: true });
+      clearEmptyValues(instance);
+
+      if (errors.length) {
+        const current = (Reflect.getMetadata(ValidateErrorsMetadata, target) ??
+          []) as string[];
+
+        Reflect.defineMetadata(
+          ValidateErrorsMetadata,
+          current.concat(mapConstraintsToErrors(errors, path)),
+          target,
+        );
+      }
+
+      return instance;
+    };
+
+    descriptor.value = function (
+      ...args: [ValidatesPayload<T, O> | undefined, ...object[]]
+    ) {
       const skipAllValidations = Reflect.getMetadata(
         SkipValidationMetadata,
         this.constructor,
@@ -56,31 +93,27 @@ export const Validates = <T extends object>(klass: new () => T) => {
 
       if (skipValidation === true || skipAllValidations === true) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return original.apply(this, args as [T, ...object[]]);
+        return original.apply(this, args as [ValidatesPayload<T, O>]);
       }
 
       const [payload, ...rest] = args;
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      if (!payload) return original.apply(this, args as [T, ...object[]]);
+      if (!payload)
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return original.apply(this, args as [ValidatesPayload<T, O>]);
 
-      const instance = plainToInstance<T>(payload, klass);
-      const errors = validateSync(instance, { whitelist: true });
-      clearEmptyValues(instance);
-
-      if (errors.length) {
-        const current = (Reflect.getMetadata(ValidateErrorsMetadata, this) ??
-          []) as string[];
-
-        Reflect.defineMetadata(
-          ValidateErrorsMetadata,
-          current.concat(mapConstraintsToErrors(errors, original.name)),
-          this,
-        );
-      }
+      const instance =
+        options?.each && Array.isArray(payload)
+          ? (payload as T[]).map((item, index) =>
+              validate(this, item, `${original.name}.${index}`),
+            )
+          : validate(this, payload, original.name);
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return original.apply(this, [instance, ...rest]);
+      return original.apply(this, [
+        instance as ValidatesPayload<T, O>,
+        ...rest,
+      ]);
     };
   };
 };

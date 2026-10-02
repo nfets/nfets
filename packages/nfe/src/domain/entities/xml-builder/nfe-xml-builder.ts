@@ -110,7 +110,7 @@ export interface AutXMLBuilder<
   T extends object,
   S extends Schema = typeof DefaultSchema,
 > {
-  autXML(payload?: IAutXML): AutXMLBuilder<T, S> & DetGroupBuilder<T, S>;
+  autXML(payload?: IAutXML[]): DetGroupBuilder<T, S>;
 }
 
 export interface DetGroupBuilder<
