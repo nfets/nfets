@@ -172,11 +172,10 @@ export class NfeXmlBuilder<
     return this;
   }
 
-  @Validates(AutXML)
-  public autXML(payload?: IAutXML) {
-    if (payload == null) return this;
-    this.data.infNFe.autXML ??= [] as IAutXML[];
-    this.data.infNFe.autXML.push(payload);
+  @Validates(AutXML, { each: true })
+  public autXML(payload?: IAutXML[]) {
+    if (!payload?.length) return this;
+    this.data.infNFe.autXML = payload;
     return this;
   }
 

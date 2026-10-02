@@ -2272,12 +2272,7 @@ describe('xml builder with xml2js builder', () => {
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
       .emit(createValidEmit())
-      .autXML({
-        CNPJ: '12345678000195',
-      })
-      .autXML({
-        CPF: '12345678001',
-      })
+      .autXML([{ CNPJ: '12345678000195' }, { CPF: '12345678001' }])
       .det(createValidItems(), (ctx, item) =>
         ctx
           .prod({
@@ -4277,9 +4272,7 @@ describe('xml builder with xml2js builder', () => {
         cPais: '1058',
         xPais: 'Brasil',
       })
-      .autXML({
-        CNPJ: '12345678000195',
-      })
+      .autXML([{ CNPJ: '12345678000195' }])
       .det(createValidItems(), (ctx, item) =>
         ctx
           .prod({

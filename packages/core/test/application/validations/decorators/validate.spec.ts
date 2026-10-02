@@ -260,6 +260,44 @@ describe('Validates decorator (unit)', () => {
     });
   });
 
+  describe('with each option (array payload)', () => {
+    class TestService {
+      @Validates(ValidPayload, { each: true })
+      public process(payload?: ValidPayload[]): string[] {
+        return (payload ?? []).map((it) =>
+          it instanceof ValidPayload ? it.name : 'plain',
+        );
+      }
+    }
+
+    it('should transform every item into a class instance', () => {
+      const service = new TestService();
+      const result = service.process([{ name: 'First' }, { name: 'Second' }]);
+
+      expect(result).toEqual(['First', 'Second']);
+      const errors = Reflect.getMetadata(ValidateErrorsMetadata, service);
+      expect(errors).toBeUndefined();
+    });
+
+    it('should collect errors prefixed with the item index', () => {
+      const service = new TestService();
+      service.process([{ name: 'Valid' }, { name: 'ab' }]);
+
+      const errors = Reflect.getMetadata(ValidateErrorsMetadata, service) as
+        | string[]
+        | undefined;
+      expect(errors).toHaveLength(1);
+      expect(errors?.[0]).toMatch(/^process\.1\./);
+    });
+
+    it('should forward undefined without validating', () => {
+      const service = new TestService();
+      expect(service.process(undefined)).toEqual([]);
+      const errors = Reflect.getMetadata(ValidateErrorsMetadata, service);
+      expect(errors).toBeUndefined();
+    });
+  });
+
   describe('mapConstraintsToErrors', () => {
     it('should map errors with parent path', () => {
       const errors: ValidationError[] = [
