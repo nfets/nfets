@@ -19,5 +19,6 @@ export type * from './entities/transmission/nfce-remote-client';
 export * from './entities/transmission/schemas';
 
 export type * from './entities/printable-documents/builder';
+export * from './entities/printable-documents/nfe';
 export type * from './entities/xml-builder/nfe-xml-builder';
 export type * from './entities/xml-builder/nfe-det-xml-builder';
