@@ -9,6 +9,8 @@ const __dirname = path.dirname(__filename);
 
 import { DanfceDefaultPdfDocument } from './nfce/layouts/danfce-default';
 import { DanfceReducedPdfDocument } from './nfce/layouts/danfce-reduced';
+import { DanfeDefaultPdfDocument } from './nfe/layouts/danfe-default';
+import { DanfeRtcPdfDocument } from './nfe/layouts/danfe-rtc';
 
 dotenv.config({ path: path.resolve('../../', '.env') });
 const app = express();
@@ -43,6 +45,44 @@ app.get('/danfce-reduced', async (_, res) => {
 
   const doc = new DanfceReducedPdfDocument(res);
   await doc.build(SAMPLE_NFCE_XML);
+  doc.end();
+});
+
+const SAMPLE_NFE_XML = (file: string) =>
+  readFileSync(
+    path.join(
+      __dirname,
+      '../../../test/application/printable-documents/nfe/mocks',
+      path.basename(file),
+    ),
+    'utf-8',
+  );
+
+app.get('/danfe', async (req, res) => {
+  res.set({
+    'Content-Type': 'application/pdf',
+    'Content-Disposition': 'inline; filename="example.pdf"',
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+  });
+
+  const { file = 'homolog-protocoled.xml' } = req.query;
+  if (typeof file !== 'string') return res.status(400).end();
+  const doc = new DanfeDefaultPdfDocument(res);
+  await doc.build(SAMPLE_NFE_XML(file));
+  doc.end();
+});
+
+app.get('/danfe-rtc', async (req, res) => {
+  res.set({
+    'Content-Type': 'application/pdf',
+    'Content-Disposition': 'inline; filename="example.pdf"',
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+  });
+
+  const { file = 'homolog-cancelled.xml' } = req.query;
+  if (typeof file !== 'string') return res.status(400).end();
+  const doc = new DanfeRtcPdfDocument(res);
+  await doc.build(SAMPLE_NFE_XML(file));
   doc.end();
 });
 

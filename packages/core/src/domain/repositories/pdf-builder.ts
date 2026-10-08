@@ -48,6 +48,15 @@ export interface RowOptions<C extends number> {
 
 export type RowBuilderFunction = (options: RowBuilderOptions) => PdfBuilder;
 
+export interface DashOptions {
+  space?: number;
+  phase?: number;
+}
+
+export interface RotateOptions {
+  origin?: [number, number];
+}
+
 export interface PdfBuilder {
   table(options: TableOptionsWithData): this;
   restore(): this;
@@ -56,6 +65,14 @@ export interface PdfBuilder {
   path(path: string): this;
   translate(x: number, y: number): this;
   scale(x: number, y?: number): this;
+  rotate(angle: number, options?: RotateOptions): this;
+  moveTo(x: number, y: number): this;
+  lineTo(x: number, y: number): this;
+  lineWidth(width: number): this;
+  dash(length: number, options?: DashOptions): this;
+  undash(): this;
+  fillColor(color: ColorValue, opacity?: number): this;
+  strokeColor(color: ColorValue, opacity?: number): this;
   page(options?: DocumentOptions): this;
   pipe(stream: Writable): this;
   configure(options: DocumentOptions): this;
@@ -66,6 +83,7 @@ export interface PdfBuilder {
   heightOfString(text: string, options?: PDFKit.Mixins.TextOptions): number;
   currentLineHeight(includeGap?: boolean): number;
   rect(x: number, y: number, w: number, h: number): this;
+  roundedRect(x: number, y: number, w: number, h: number, r?: number): this;
   fill(rule: RuleValue): this;
   fill(color?: ColorValue, rule?: RuleValue): this;
   stroke(color?: ColorValue): this;

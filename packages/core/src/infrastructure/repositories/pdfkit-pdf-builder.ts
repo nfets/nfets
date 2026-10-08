@@ -13,6 +13,8 @@ import type {
   RuleValue,
   TableOptionsWithData,
   RowBuilderFunction,
+  DashOptions,
+  RotateOptions,
 } from '@nfets/core/domain/repositories/pdf-builder';
 
 export class PdfkitPdfBuilder implements PdfBuilder {
@@ -107,6 +109,10 @@ export class PdfkitPdfBuilder implements PdfBuilder {
     return (this.doc.rect(x, y, w, h), this);
   }
 
+  public roundedRect(x: number, y: number, w: number, h: number, r?: number) {
+    return (this.doc.roundedRect(x, y, w, h, r), this);
+  }
+
   public path(path: string): this {
     return (this.doc.path(path), this);
   }
@@ -117,6 +123,38 @@ export class PdfkitPdfBuilder implements PdfBuilder {
 
   public scale(x: number, y?: number): this {
     return (this.doc.scale(x, y), this);
+  }
+
+  public rotate(angle: number, options?: RotateOptions): this {
+    return (this.doc.rotate(angle, options), this);
+  }
+
+  public moveTo(x: number, y: number): this {
+    return (this.doc.moveTo(x, y), this);
+  }
+
+  public lineTo(x: number, y: number): this {
+    return (this.doc.lineTo(x, y), this);
+  }
+
+  public lineWidth(width: number): this {
+    return (this.doc.lineWidth(width), this);
+  }
+
+  public dash(length: number, options?: DashOptions): this {
+    return (this.doc.dash(length, options), this);
+  }
+
+  public undash(): this {
+    return (this.doc.undash(), this);
+  }
+
+  public fillColor(color: ColorValue, opacity?: number): this {
+    return (this.doc.fillColor(color, opacity), this);
+  }
+
+  public strokeColor(color: ColorValue, opacity?: number): this {
+    return (this.doc.strokeColor(color, opacity), this);
   }
 
   public fill(rule: RuleValue): this;
