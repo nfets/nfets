@@ -26,6 +26,7 @@ import type { AutorizacaoPayload as IAutorizacaoPayload } from '@nfets/nfe/domai
 import type { RetAutorizacaoPayload as IRetAutorizacaoPayload } from '@nfets/nfe/domain/entities/services/ret-autorizacao';
 import type { EventoRequest } from '@nfets/nfe/domain/entities/services/evento';
 import type { ConsultaCadastroPayload as IConsultaCadastroPayload } from '@nfets/nfe/domain/entities/services/consulta-cadastro';
+import type { DistribuicaoDFePayload as IDistribuicaoDFePayload } from '@nfets/nfe/domain/entities/services/distribuicao-dfe';
 import type { NFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 
 import { ConsultStatusPayload } from '@nfets/nfe/infrastructure/dto/services/consult-status';
@@ -35,6 +36,7 @@ import { NfeAutorizacaoPayload } from '../../infrastructure/dto/services/nfe-aut
 import { RetAutorizacaoPayload } from '@nfets/nfe/infrastructure/dto/services/ret-autorizacao';
 import { EventoPayload } from '@nfets/nfe/infrastructure/dto/services/evento';
 import { ConsultaCadastroPayload } from '@nfets/nfe/infrastructure/dto/services/consulta-cadastro';
+import { DistribuicaoDFePayload } from '@nfets/nfe/infrastructure/dto/services/distribuicao-dfe';
 
 import WSNFE_4_00_MOD55 from '../../services/wsnfe_4.00-mod55';
 import webservices from '../../services/webservices-mod55';
@@ -257,6 +259,26 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
       xsd: this.xsd('ConsCad_v4.00.xsd'),
       payload: {
         ConsCad: this.ns(data, service.version),
+      },
+      method: service.method,
+    });
+  }
+
+  @Validates(DistribuicaoDFePayload)
+  public async distribuicaoDFe(payload: IDistribuicaoDFePayload) {
+    const payloadOrError = this.validate(payload);
+    if (payloadOrError.isLeft()) return payloadOrError;
+    const data = payloadOrError.value;
+
+    const service = WSNFE_4_00_MOD55.AN[data.tpAmb].NfeDistribuicaoDFe;
+
+    return this.remoteTransmissionRepository.send({
+      root: 'nfeDadosMsg',
+      wrapper: service.method,
+      url: service.url,
+      xsd: this.xsd('distDFeInt_v1.01.xsd'),
+      payload: {
+        distDFeInt: this.ns(data, service.version),
       },
       method: service.method,
     });
