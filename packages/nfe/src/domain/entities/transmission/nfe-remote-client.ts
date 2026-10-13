@@ -44,6 +44,11 @@ import type {
   ConsultaCadastroRequest,
   ConsultaCadastroResponse,
 } from '../services/consulta-cadastro';
+import type {
+  DistribuicaoDFePayload,
+  DistribuicaoDFeRequest,
+  DistribuicaoDFeResponse,
+} from '../services/distribuicao-dfe';
 
 import type { Schema } from './schemas';
 import type { ServiceOptions, WebserviceForService } from './services';
@@ -94,6 +99,9 @@ export interface NfeTransmitter extends Transmitter<NfeRemoteClient> {
   consultaCadastro(
     payload: ConsultaCadastroPayload,
   ): Promise<Either<NFeTsError, ConsultaCadastroResponse>>;
+  distribuicaoDFe(
+    payload: DistribuicaoDFePayload,
+  ): Promise<Either<NFeTsError, DistribuicaoDFeResponse>>;
 }
 
 export interface NfeRemoteClient extends Client {
@@ -163,4 +171,8 @@ export interface NfeRemoteClient extends Client {
     args: ConsultaCadastroRequest,
     opt?: RequestConfig,
   ): Promise<ConsultaCadastroResponse>;
+  nfeDistDFeInteresse(
+    args: DistribuicaoDFeRequest,
+    opt?: RequestConfig,
+  ): Promise<DistribuicaoDFeResponse>;
 }
