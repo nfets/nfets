@@ -141,6 +141,13 @@ export class SoapRemoteTransmissionRepository<C extends Client>
       const validOrLeft = await this.toolkit.validate(node, xsd);
       if (validOrLeft.isLeft()) return validOrLeft;
 
+      const body = params.wrapper
+        ? this.toolkit.appendNode(
+            `<${params.wrapper} xmlns="${client.wsdl.definitions.$targetNamespace as string}"/>`,
+            _xml,
+          )
+        : _xml;
+
       const soapMethod = `${params.method}Async`;
       if (typeof client[soapMethod] !== 'function') {
         const available = Object.keys(client).filter((key) =>
@@ -157,7 +164,7 @@ export class SoapRemoteTransmissionRepository<C extends Client>
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
       const [result] = await client[soapMethod](
-        { _xml },
+        { _xml: body },
         { request, timeout: params.timeout },
       );
 
