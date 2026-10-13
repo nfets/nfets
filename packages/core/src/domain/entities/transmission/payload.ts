@@ -16,6 +16,7 @@ export type SendTransmissionPayload<C extends Client> = {
     url: string;
     method: M;
     root: string;
+    wrapper?: string;
     xsd: string;
     payload: Parameters<C[M]>[0];
     timeout?: number;
