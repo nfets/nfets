@@ -11,6 +11,7 @@ export * from './pipelines/transmission/nfe-void-range-pipeline';
 export * from './pipelines/transmission/nfe-consult-status-pipeline';
 export * from './pipelines/transmission/nfe-consult-protocolo-pipeline';
 export * from './pipelines/transmission/nfe-authorization-response-pipeline';
+export * from './pipelines/transmission/nfe-distribuicao-dfe-pipeline';
 
 export * from './pipelines/transmission/nfce-cancel-pipeline';
 export * from './pipelines/transmission/nfce-authorizer-pipeline';
