@@ -95,6 +95,7 @@ export interface NfeTransmitter extends Transmitter<NfeRemoteClient> {
   ): Promise<Either<NFeTsError, RetAutorizacaoResponse>>;
   recepcaoEvento<T>(
     payload: EventoPayload<T>,
+    national?: boolean,
   ): Promise<Either<NFeTsError, EventoResponse>>;
   consultaCadastro(
     payload: ConsultaCadastroPayload,

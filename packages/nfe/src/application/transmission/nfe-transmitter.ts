@@ -225,11 +225,16 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
   }
 
   @Validates<EventoRequest<unknown>['envEvento']>(EventoPayload)
-  public async recepcaoEvento<T>(payload: EventoRequest<T>['envEvento']) {
+  public async recepcaoEvento<T>(
+    payload: EventoRequest<T>['envEvento'],
+    national = false,
+  ) {
     const payloadOrError = this.validate(payload);
     if (payloadOrError.isLeft()) return payloadOrError;
     const data = payloadOrError.value;
-    const service = this.service({ service: 'RecepcaoEvento' });
+    const service = national
+      ? WSNFE_4_00_MOD55.AN[this.options.tpAmb].RecepcaoEvento
+      : this.service({ service: 'RecepcaoEvento' });
     data.evento = this.ns(data.evento, service.version);
     return this.remoteTransmissionRepository.send({
       root: 'nfeDadosMsg',
