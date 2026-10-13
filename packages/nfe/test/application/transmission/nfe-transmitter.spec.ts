@@ -493,6 +493,86 @@ describe('NfeRemoteTransmitter (unit)', () => {
         method: 'nfeRecepcaoEvento',
       });
     });
+
+    it('should send to ambiente nacional when national is true', async () => {
+      mockRepository.send.mockResolvedValue(right({} as never));
+
+      const evento = {
+        $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
+        infEvento: {
+          $: { Id: 'ID2102104324011234567890123455001000000001100000001101' },
+          cOrgao: '91',
+          tpAmb: '2',
+          CNPJ: '12345678901234',
+          chNFe: '43240112345678901234550010000000011000000011',
+          dhEvento: '2024-01-01T10:00:00-03:00',
+          tpEvento: '210210',
+          nSeqEvento: 1,
+          verEvento: '1.00',
+          detEvento: {
+            $: { versao: '1.00' },
+            descEvento: 'Ciencia da Operacao',
+          },
+        },
+      };
+
+      const response = await transmission.recepcaoEvento(
+        { idLote: '123', evento: evento as never },
+        true,
+      );
+
+      expectIsRight(response);
+      expect(mockRepository.send).toHaveBeenCalledWith(
+        expect.objectContaining({
+          url: 'https://hom1.nfe.fazenda.gov.br/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx',
+          method: 'nfeRecepcaoEventoNF',
+        }),
+      );
+    });
+  });
+
+  describe('distribuicaoDFe', () => {
+    const chNFe = '43240112345678901234550010000000011000000011';
+
+    it('should return left when no identification is provided', async () => {
+      const response = await transmission.distribuicaoDFe({
+        tpAmb: Environment.Homolog,
+        cUFAutor: StateCodes.RS,
+        consChNFe: { chNFe },
+      });
+
+      expectIsLeft(response);
+      expect(response.value).toBeInstanceOf(NFeTsError);
+    });
+
+    it('should call repository wrapping nfeDadosMsg in nfeDistDFeInteresse', async () => {
+      mockRepository.send.mockResolvedValue(right({} as never));
+
+      const response = await transmission.distribuicaoDFe({
+        tpAmb: Environment.Homolog,
+        cUFAutor: StateCodes.RS,
+        CNPJ: '12345678901234',
+        consChNFe: { chNFe },
+      });
+
+      expectIsRight(response);
+      expect(mockRepository.send).toHaveBeenCalledWith({
+        root: 'nfeDadosMsg',
+        wrapper: 'nfeDistDFeInteresse',
+        url: 'https://hom1.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx',
+        xsd: expect.stringContaining('distDFeInt_v1.01.xsd'),
+        payload: {
+          distDFeInt: expect.objectContaining({
+            $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '1.01' },
+            tpAmb: Environment.Homolog,
+            cUFAutor: StateCodes.RS,
+            CNPJ: '12345678901234',
+            consChNFe: { chNFe },
+          }),
+        },
+        method: 'nfeDistDFeInteresse',
+      });
+    });
   });
 
   describe('consultaCadastro', () => {
