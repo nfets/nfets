@@ -11,4 +11,9 @@ export default {
     version: '1.00',
     descEvento: 'Cancelamento por substituicao',
   },
+  [TpEvent.CienciaOperacao]: {
+    method: 'envConfRecebto',
+    version: '1.00',
+    descEvento: 'Ciencia da Operacao',
+  },
 };
