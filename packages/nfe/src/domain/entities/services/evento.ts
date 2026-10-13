@@ -17,7 +17,7 @@ export interface InfEventoAttributes {
 
 export interface InfEvento<T> {
   $: InfEventoAttributes;
-  cOrgao: StateCode;
+  cOrgao: StateCode | '91';
   tpAmb: EnvironmentCode;
   CNPJ?: string;
   CPF?: string;
