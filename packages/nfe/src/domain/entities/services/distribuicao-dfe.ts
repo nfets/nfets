@@ -13,7 +13,7 @@ export interface DistribuicaoDFePayload {
 }
 
 export interface DistribuicaoDFeRequest {
-  distDFeInt: DistribuicaoDFePayload;
+  nfeDadosMsg: { distDFeInt: DistribuicaoDFePayload };
 }
 
 export interface RetDistDFeInt {

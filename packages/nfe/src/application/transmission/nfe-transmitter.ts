@@ -273,12 +273,11 @@ export class NfeRemoteTransmitter implements NfeTransmitter {
     const service = WSNFE_4_00_MOD55.AN[data.tpAmb].NfeDistribuicaoDFe;
 
     return this.remoteTransmissionRepository.send({
-      root: 'nfeDadosMsg',
-      wrapper: service.method,
+      root: 'nfeDistDFeInteresse',
       url: service.url,
       xsd: this.xsd('distDFeInt_v1.01.xsd'),
       payload: {
-        distDFeInt: this.ns(data, service.version),
+        nfeDadosMsg: { distDFeInt: this.ns(data, service.version) },
       },
       method: service.method,
     });

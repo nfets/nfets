@@ -20,6 +20,9 @@ type TestSoapClient = Client & {
       xMotivo: string;
     };
   }>;
+  nfeDistDFeInteresse(args: {
+    nfeDadosMsg: { distDFeInt: unknown };
+  }): Promise<unknown>;
 };
 
 class TestSoapRemoteTransmissionRepository extends SoapRemoteTransmissionRepository<TestSoapClient> {}
@@ -85,6 +88,35 @@ describe('soap remote transmission nfe (integration) (not destructive) (linux)',
       },
       method: 'nfeStatusServicoNF',
       url: 'https://homologacao.nfe.fazenda.sp.gov.br/ws/nfestatusservico4.asmx',
+    });
+
+    expectIsLeft(response);
+    expect(response.value).toStrictEqual(
+      new NFeTsError(
+        `Invalid xml schema: Element '{http://www.portalfiscal.inf.br/nfe}someInvalidTag': This element is not expected. Expected is ( {http://www.portalfiscal.inf.br/nfe}tpAmb ).
+`,
+      ),
+    );
+  });
+
+  it('should validate the nfe document inside the wsdl elements', async () => {
+    const response = await transmission.send({
+      root: 'nfeDistDFeInteresse',
+      xsd: path.resolve(
+        __dirname,
+        '../../../../nfe/schemas/PL_009_V4',
+        'distDFeInt_v1.01.xsd',
+      ),
+      payload: {
+        nfeDadosMsg: {
+          distDFeInt: {
+            $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '1.01' },
+            someInvalidTag: 'xD',
+          },
+        },
+      },
+      method: 'nfeDistDFeInteresse',
+      url: 'https://hom1.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx',
     });
 
     expectIsLeft(response);

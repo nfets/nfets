@@ -546,7 +546,7 @@ describe('NfeRemoteTransmitter (unit)', () => {
       expect(response.value).toBeInstanceOf(NFeTsError);
     });
 
-    it('should call repository wrapping nfeDadosMsg in nfeDistDFeInteresse', async () => {
+    it('should call repository with nfeDistDFeInteresse as root', async () => {
       mockRepository.send.mockResolvedValue(right({} as never));
 
       const response = await transmission.distribuicaoDFe({
@@ -558,18 +558,22 @@ describe('NfeRemoteTransmitter (unit)', () => {
 
       expectIsRight(response);
       expect(mockRepository.send).toHaveBeenCalledWith({
-        root: 'nfeDadosMsg',
-        wrapper: 'nfeDistDFeInteresse',
+        root: 'nfeDistDFeInteresse',
         url: 'https://hom1.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx',
         xsd: expect.stringContaining('distDFeInt_v1.01.xsd'),
         payload: {
-          distDFeInt: expect.objectContaining({
-            $: { xmlns: 'http://www.portalfiscal.inf.br/nfe', versao: '1.01' },
-            tpAmb: Environment.Homolog,
-            cUFAutor: StateCodes.RS,
-            CNPJ: '12345678901234',
-            consChNFe: { chNFe },
-          }),
+          nfeDadosMsg: {
+            distDFeInt: expect.objectContaining({
+              $: {
+                xmlns: 'http://www.portalfiscal.inf.br/nfe',
+                versao: '1.01',
+              },
+              tpAmb: Environment.Homolog,
+              cUFAutor: StateCodes.RS,
+              CNPJ: '12345678901234',
+              consChNFe: { chNFe },
+            }),
+          },
         },
         method: 'nfeDistDFeInteresse',
       });
