@@ -110,6 +110,13 @@ export class SoapRemoteTransmissionRepository<C extends Client>
     return this.getDefaultRequest({ timeout: params.timeout });
   }
 
+  private documentNode(xml: string, namespace: string) {
+    let node = this.toolkit.getFirstNode(xml) ?? '';
+    while (node && this.toolkit.getAttribute(node, 'xmlns') === namespace)
+      node = this.toolkit.getFirstNode(node) ?? '';
+    return node;
+  }
+
   public async send<P extends SendTransmissionPayload<C>>(params: P) {
     const periodOrLeft = this.validateCertificatePeriod();
     if (periodOrLeft.isLeft()) return periodOrLeft;
@@ -135,18 +142,14 @@ export class SoapRemoteTransmissionRepository<C extends Client>
         rootName: params.root,
       });
 
-      const node = this.toolkit.getFirstNode(_xml) ?? '',
+      const node = this.documentNode(
+          _xml,
+          client.wsdl.definitions.$targetNamespace as string,
+        ),
         xsd = params.xsd;
 
       const validOrLeft = await this.toolkit.validate(node, xsd);
       if (validOrLeft.isLeft()) return validOrLeft;
-
-      const body = params.wrapper
-        ? this.toolkit.appendNode(
-            `<${params.wrapper} xmlns="${client.wsdl.definitions.$targetNamespace as string}"/>`,
-            _xml,
-          )
-        : _xml;
 
       const soapMethod = `${params.method}Async`;
       if (typeof client[soapMethod] !== 'function') {
@@ -164,7 +167,7 @@ export class SoapRemoteTransmissionRepository<C extends Client>
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
       const [result] = await client[soapMethod](
-        { _xml: body },
+        { _xml },
         { request, timeout: params.timeout },
       );
 
