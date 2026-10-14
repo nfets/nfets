@@ -80,7 +80,7 @@ describe('nfe distribuicao dfe pipeline (unit)', () => {
 
     expect(result.isRight()).toBe(true);
     expect(pipeline.configureMock).toHaveBeenCalledWith({
-      cUF: StateCodes.SC,
+      cUF: '91',
       tpAmb: Environment.Homolog,
       certificate: { certificate: 'mock' },
     });

@@ -31,13 +31,10 @@ export class NfeCienciaOperacaoPipeline extends EventPipeline {
     const evento = eventOrLeft.value;
     const version = events[TpEvent.CienciaOperacao].version;
 
-    const responseOrLeft = await this.transmitter.recepcaoEvento(
-      {
-        idLote: payload.idLote ?? new Date().getTime().toString().slice(0, 15),
-        evento,
-      },
-      true,
-    );
+    const responseOrLeft = await this.transmitter.recepcaoEvento({
+      idLote: payload.idLote ?? new Date().getTime().toString().slice(0, 15),
+      evento,
+    });
     if (responseOrLeft.isLeft()) return responseOrLeft;
 
     const response = responseOrLeft.value;

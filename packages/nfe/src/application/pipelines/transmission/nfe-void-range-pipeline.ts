@@ -16,6 +16,7 @@ import {
   right,
   Validates,
   type SignedEntity,
+  type StateCode,
 } from '@nfets/core';
 import { InutilizacaoPayload } from '@nfets/nfe/infrastructure/dto/services/inutilizacao';
 import { sanitizeSefazText } from '@nfets/nfe/application/xml-builder/sanitize-sefaz-text';
@@ -23,7 +24,7 @@ import { sanitizeSefazText } from '@nfets/nfe/application/xml-builder/sanitize-s
 export class NfeVoidRangePipeline extends TransmissionPipeline {
   public async execute(
     payload: VoidRangePayload,
-    options: Pick<NfeTransmitterOptions, 'tpAmb' | 'cUF'>,
+    options: Pick<NfeTransmitterOptions, 'tpAmb'> & { cUF: StateCode },
   ) {
     const certificateOrLeft = await this.certificates.read(this.certificate);
     if (certificateOrLeft.isLeft()) return certificateOrLeft;

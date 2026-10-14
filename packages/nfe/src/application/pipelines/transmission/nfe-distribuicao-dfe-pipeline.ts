@@ -20,7 +20,7 @@ export class NfeDistribuicaoDFePipeline extends TransmissionPipeline {
     if (issuerOrLeft.isLeft()) return issuerOrLeft;
 
     this.transmitter.configure({
-      cUF: payload.cUFAutor,
+      cUF: '91',
       ...options,
       certificate: certificateOrLeft.value,
     });
