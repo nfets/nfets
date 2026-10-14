@@ -60,7 +60,7 @@ export interface ContingencyOptions {
 }
 
 export interface NfeTransmitterOptions extends TransmitterOptions {
-  cUF: StateCode;
+  cUF: StateCode | '91';
   schema?: Schema;
   tpAmb: EnvironmentCode;
   contingency?: ContingencyOptions;
@@ -95,7 +95,6 @@ export interface NfeTransmitter extends Transmitter<NfeRemoteClient> {
   ): Promise<Either<NFeTsError, RetAutorizacaoResponse>>;
   recepcaoEvento<T>(
     payload: EventoPayload<T>,
-    national?: boolean,
   ): Promise<Either<NFeTsError, EventoResponse>>;
   consultaCadastro(
     payload: ConsultaCadastroPayload,

@@ -121,7 +121,6 @@ describe('nfe ciencia operacao pipeline (unit)', () => {
         idLote: expect.any(String),
         evento: signedEvento,
       }),
-      true,
     );
 
     const { xml, response } = result.value as {

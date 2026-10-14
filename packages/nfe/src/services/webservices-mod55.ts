@@ -29,6 +29,7 @@ const webservices = {
   [StateCodes.SP]: 'SP',
   [StateCodes.TO]: 'SVRS',
 
+  91: 'AN',
   AN: 'AN',
   SVAN: 'SVAN',
   SVRS: 'SVRS',

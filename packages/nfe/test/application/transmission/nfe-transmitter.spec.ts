@@ -494,8 +494,9 @@ describe('NfeRemoteTransmitter (unit)', () => {
       });
     });
 
-    it('should send to ambiente nacional when national is true', async () => {
+    it('should send to ambiente nacional when cUF is 91', async () => {
       mockRepository.send.mockResolvedValue(right({} as never));
+      transmission.configure({ cUF: '91', tpAmb: Environment.Homolog });
 
       const evento = {
         $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },
@@ -516,10 +517,10 @@ describe('NfeRemoteTransmitter (unit)', () => {
         },
       };
 
-      const response = await transmission.recepcaoEvento(
-        { idLote: '123', evento: evento as never },
-        true,
-      );
+      const response = await transmission.recepcaoEvento({
+        idLote: '123',
+        evento: evento as never,
+      });
 
       expectIsRight(response);
       expect(mockRepository.send).toHaveBeenCalledWith(

@@ -38,7 +38,7 @@ export abstract class EventPipeline extends TransmissionPipeline {
     const cUF = payload.chNFe.slice(0, 2) as StateCode;
 
     this.transmitter.configure({
-      cUF,
+      cUF: payload.cOrgao ?? cUF,
       ...options,
       certificate: certificateOrLeft.value,
     });
