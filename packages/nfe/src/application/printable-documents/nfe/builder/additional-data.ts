@@ -31,9 +31,11 @@ export class AdditionalData extends DanfeBlock {
 
   protected widths(): [number, number, number] {
     const width = this.context.contentWidth;
-    const qr = this.hasQrCode ? this.qrWidth : 0;
-    const complementary = width * 0.66 - qr;
-    return [complementary, qr, width - complementary - qr];
+    const slot = this.withQrCode ? this.qrWidth : 0;
+    const qr = this.hasQrCode ? slot : 0;
+    const complementary = width * 0.66 - slot;
+    const fisco = width - complementary - qr;
+    return [complementary, fisco, qr];
   }
 
   protected lines(): string[] {
@@ -85,7 +87,7 @@ export class AdditionalData extends DanfeBlock {
     const p = this.fields.padding;
     const top = y + this.fields.title(x, y, width, this.title);
     const height = this.boxHeight();
-    const [complementary, qr, fisco] = this.widths();
+    const [complementary, fisco, qr] = this.widths();
 
     this.fields.box(x, top, complementary, height, {
       label: 'INFORMAÇÕES COMPLEMENTARES',
@@ -100,8 +102,12 @@ export class AdditionalData extends DanfeBlock {
       { size: this.textSize },
     );
 
+    this.fields.box(x + complementary, top, fisco, height, {
+      label: 'RESERVADO AO FISCO',
+    });
+
     if (this.hasQrCode) {
-      const qx = x + complementary;
+      const qx = x + complementary + fisco;
       this.fields.box(qx, top, qr, height, { label: 'QR CODE' });
       const size = Math.min(
         qr - 4 * p,
@@ -113,9 +119,5 @@ export class AdditionalData extends DanfeBlock {
         size,
       );
     }
-
-    this.fields.box(x + complementary + qr, top, fisco, height, {
-      label: 'RESERVADO AO FISCO',
-    });
   }
 }

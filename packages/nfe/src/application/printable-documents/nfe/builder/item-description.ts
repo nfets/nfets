@@ -162,10 +162,12 @@ export class ItemDescription {
     ].join('');
   }
 
+  public infAdProd(det: Det): string {
+    return (det.infAdProd ?? '').substring(0, this.maxAdditionalInfo).trim();
+  }
+
   protected additionalInfo(det: Det): string {
-    const infAdProd = det.infAdProd
-      ?.substring(0, this.maxAdditionalInfo)
-      .trim();
+    const infAdProd = this.infAdProd(det);
     return infAdProd ? `${infAdProd} ` : '';
   }
 
@@ -249,24 +251,50 @@ export class ItemDescription {
       .join('\n');
   }
 
-  public build(det: Det): string {
-    const { prod } = det;
+  public productName(det: Det): string {
+    let text = det.prod.xProd;
+    if (this.options.breakItemDescription) text = text.replaceAll(';', '\n');
+    if (this.options.showItemOrderNumber && det.prod.nItemPed)
+      text += ` (ITEM ${det.prod.nItemPed})`;
+    return text;
+  }
+
+  protected narrative(det: Det): string {
     const complement = this.options.showItemComplement
       ? this.batch(det) + this.taxes(det) + this.fci(det)
       : '';
-    const additional = (
-      this.additionalInfo(det) +
-      this.anvisa(det) +
-      complement
-    ).trimEnd();
+    return [this.anvisa(det), complement].filter(Boolean).join('');
+  }
 
-    let text = additional ? `${prod.xProd}\n    ${additional}` : prod.xProd;
-    if (this.options.breakItemDescription) text = text.replaceAll(';', '\n');
-    if (this.options.showItemOrderNumber && prod.nItemPed)
-      text += ` (ITEM ${prod.nItemPed})`;
-
-    return [text, this.vehicle(det), this.weapons(det)]
+  public extras(det: Det): string {
+    let text = [
+      this.narrative(det).trim(),
+      this.vehicle(det),
+      this.weapons(det),
+    ]
       .filter(Boolean)
       .join('\n');
+    if (this.options.breakItemDescription) text = text.replaceAll(';', '\n');
+    return text.trim();
+  }
+
+  public details(det: Det): string {
+    const additional = (
+      this.additionalInfo(det) + this.narrative(det)
+    ).trimEnd();
+    const line = additional ? `    ${additional}` : '';
+    let text = [line, this.vehicle(det), this.weapons(det)]
+      .filter(Boolean)
+      .join('\n');
+    if (this.options.breakItemDescription) text = text.replaceAll(';', '\n');
+    return text;
+  }
+
+  public build(det: Det): string {
+    let text = [this.productName(det), this.details(det)]
+      .filter(Boolean)
+      .join('\n');
+    if (this.options.breakItemDescription) text = text.replaceAll(';', '\n');
+    return text;
   }
 }

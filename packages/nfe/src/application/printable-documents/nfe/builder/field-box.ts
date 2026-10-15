@@ -7,7 +7,9 @@ import type { DanfePdfDocument } from '../danfe';
 export interface FieldTextOptions {
   size: number;
   bold?: boolean;
+  color?: string;
   align?: 'left' | 'center' | 'right' | 'justify';
+  lineBreak?: boolean;
 }
 
 export type FieldBoxCell = Omit<DanfeFieldCell, 'weight'>;
@@ -16,7 +18,8 @@ export class FieldBox {
   public readonly labelSize = 5;
   public readonly valueSize = 8;
   public readonly titleSize = 6.5;
-  public readonly padding = 1.5;
+  public readonly muted = '#595959';
+  public readonly padding = 2.5;
   public readonly rowHeight = mm(7);
   public readonly radius = mm(0.8);
 
@@ -45,6 +48,7 @@ export class FieldBox {
     if (!text) return;
 
     this.builder
+      .fillColor(options.color ?? 'black')
       .font(options.bold ? this.context.bold : this.context.defaults.font)
       .fontSize(options.size);
 
@@ -55,7 +59,8 @@ export class FieldBox {
       width: Math.max(width, 1),
       height: Math.max(height, line + 0.5),
       align: options.align ?? 'left',
-      ellipsis: true,
+      ellipsis: options.lineBreak !== false,
+      lineBreak: options.lineBreak,
       lineGap: 0,
     });
   }
@@ -83,6 +88,7 @@ export class FieldBox {
     this.rect(x, y, width, height);
     this.text(cell.label, x + p, y + p, width - 2 * p, this.labelHeight, {
       size: this.labelSize,
+      color: this.muted,
     });
 
     if (!cell.value) return;
@@ -90,7 +96,7 @@ export class FieldBox {
     const top = y + p + this.labelHeight + 0.5;
     this.text(cell.value, x + p, top, width - 2 * p, y + height - top - 0.5, {
       size: cell.valueSize ?? this.valueSize,
-      bold: cell.bold ?? true,
+      bold: cell.bold,
       align: cell.align ?? 'left',
     });
   }
@@ -149,10 +155,19 @@ export class FieldBox {
     return Math.ceil(count / perRow);
   }
 
+  public widthOf(text: string, options: FieldTextOptions): number {
+    if (!text) return 0;
+    this.builder
+      .font(options.bold ? this.context.bold : this.context.defaults.font)
+      .fontSize(options.size);
+    return this.builder.widthOfString(text);
+  }
+
   public title(x: number, y: number, width: number, text: string): number {
     this.text(text, x, y + 1, width, this.titleHeight - 1, {
       size: this.titleSize,
       bold: true,
+      color: 'black',
     });
     return this.titleHeight;
   }

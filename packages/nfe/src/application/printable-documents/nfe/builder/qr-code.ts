@@ -9,7 +9,7 @@ export class DanfeQrCode {
   public constructor(private readonly context: DanfePdfDocument) {}
 
   public get content(): string | undefined {
-    const qrCode = this.context.data.infNFeSupl?.qrCode;
+    const qrCode = this.context.data.infNFeSupl?.qrCode.trim();
     if (!qrCode) return void 0;
     return qrCode;
   }
@@ -37,7 +37,8 @@ export class DanfeQrCode {
     builder
       .save()
       .translate(x, y)
-      .scale(size / width, size / height);
+      .scale(size / width, size / height)
+      .lineWidth(1);
     paths.forEach((path) => {
       builder.path(path.$.d);
       if (path.$.fill) builder.fill(path.$.fill);
