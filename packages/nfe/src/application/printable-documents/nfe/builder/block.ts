@@ -1,7 +1,4 @@
-import type {
-  PdfBuilder,
-  RowBuilderOptions,
-} from '@nfets/core/domain/repositories/pdf-builder';
+import type { PdfBuilder } from '@nfets/core/domain/repositories/pdf-builder';
 import type { Builder } from '@nfets/nfe/domain/entities/printable-documents/builder';
 import type { DanfeArea } from '@nfets/nfe/domain/entities/printable-documents/nfe';
 import type { InfNFe } from '@nfets/nfe/domain/entities/nfe/inf-nfe';
@@ -47,7 +44,7 @@ export abstract class DanfeBlock implements Builder {
       .undash();
   }
 
-  public build(options?: RowBuilderOptions): PdfBuilder {
+  public build(options?: DanfeArea): PdfBuilder {
     this.setup();
     this.draw(
       options ?? {
