@@ -1,5 +1,3 @@
-import { mm } from '@nfets/nfe/domain/entities/printable-documents/nfe';
-
 import type { DanfeBlocks } from '../danfe';
 
 import { DanfePdfDocument } from '../danfe';
@@ -15,10 +13,6 @@ import { RtcAdditionalData } from '../builder/rtc-additional-data';
 import { Footer } from '../builder/footer';
 
 export class DanfeRtcPdfDocument extends DanfePdfDocument {
-  protected get sideCanhotoWidth(): number {
-    return this.options.layout === 'landscape' ? mm(22) : 0;
-  }
-
   protected createBlocks(): DanfeBlocks {
     return {
       canhoto: new Canhoto(this),

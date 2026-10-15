@@ -99,9 +99,7 @@ export abstract class DanfePdfDocument {
     return `${this.defaults.font}-Bold`;
   }
 
-  protected get sideCanhotoWidth(): number {
-    return 0;
-  }
+  protected readonly sideCanhotoWidth: number = 0;
 
   public get contentWidth(): number {
     const { left, right } = this.margins;
