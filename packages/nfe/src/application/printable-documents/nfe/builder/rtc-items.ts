@@ -4,6 +4,7 @@ import type { Red } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibs
 import type {
   DanfeItemsCell,
   DanfeItemsColumn,
+  DanfeTextRun,
 } from '@nfets/nfe/domain/entities/printable-documents/nfe';
 
 import { DanfeItemsBlock } from './items-block';
@@ -16,16 +17,18 @@ interface RtcRateGroup {
 export class RtcItems extends DanfeItemsBlock {
   protected readonly fontSize: number = 5.5;
 
+  protected readonly columnLabelColor = this.fields.muted;
+
   protected get columns(): DanfeItemsColumn[] {
     return [
-      { label: 'DESCRIÇÃO DO PRODUTO / SERVIÇO', weight: 48 },
-      { label: 'CST / CFOP', weight: 12 },
-      { label: 'QTD / UN', weight: 14, align: 'right' },
-      { label: 'VLR UNIT', weight: 15, align: 'right' },
-      { label: 'VLR TOTAL', weight: 15, align: 'right' },
-      { label: 'BASES DE CÁLCULO', weight: 26 },
+      { label: 'DESCRIÇÃO DO PRODUTO / SERVIÇO', weight: 44 },
+      { label: 'CST / CFOP', weight: 18 },
+      { label: 'QTD / UN', weight: 13, align: 'center' },
+      { label: 'VLR UNIT', weight: 14, align: 'right' },
+      { label: 'VLR TOTAL', weight: 14, align: 'right' },
+      { label: 'BASES DE CÁLCULO', weight: 28 },
       { label: 'ALÍQUOTAS', weight: 34 },
-      { label: 'VALOR DOS TRIBUTOS', weight: 36 },
+      { label: 'VALOR DOS TRIBUTOS', weight: 35 },
     ];
   }
 
@@ -36,18 +39,30 @@ export class RtcItems extends DanfeItemsBlock {
     return group?.gRed?.pAliqEfet ?? nominal;
   }
 
-  protected descriptionCell(reader: DetReader): string {
+  protected descriptionCell(reader: DetReader): DanfeTextRun[] {
     const { cProd, NCM } = reader.det.prod;
-    const codes = [`[Cód. ${cProd}]`, `[NCM ${NCM}]`];
+    const muted = this.fields.muted;
+    const infAdProd = this.description.infAdProd(reader.det);
+    const extras = this.description.extras(reader.det);
+    const classification = [`[NCM ${NCM}]`];
     const cClassTrib = reader.cClassTrib;
-    if (cClassTrib) codes.push(`[cClassTrib ${cClassTrib}]`);
-    return `${this.description.build(reader.det)}\n${codes.join(' ')}`;
+    if (cClassTrib) classification.push(`[cClassTrib ${cClassTrib}]`);
+
+    return [
+      { text: this.description.productName(reader.det) },
+      ...(infAdProd ? [{ text: infAdProd, color: muted }] : []),
+      ...(extras ? [{ text: extras, color: muted }] : []),
+      { text: '', blankBefore: true },
+      {
+        text: `[Cód. ${cProd}] ${classification.join(' ')}`,
+        color: muted,
+      },
+    ];
   }
 
   protected cells(det: Det): DanfeItemsCell[] {
     const reader = new DetReader(det);
     const { prod } = det;
-    const { qComDecimals, vUnComDecimals } = this.context.options;
     const icms = reader.icms;
     const ipi = reader.ipi;
     const ibscbs = reader.ibscbs;
@@ -58,9 +73,24 @@ export class RtcItems extends DanfeItemsBlock {
 
     return [
       this.descriptionCell(reader),
-      `CST ${reader.cst()}\nCFOP ${prod.CFOP}`,
-      `${this.format.decimal(prod.qCom, 2, qComDecimals)}\n${prod.uCom}`,
-      this.format.decimal(prod.vUnCom, 2, vUnComDecimals),
+      {
+        muted: false,
+        pairs: [
+          ['CST', reader.cst()],
+          ['CFOP', prod.CFOP],
+        ],
+      },
+      [
+        { text: this.format.emitted(prod.qCom, 4), align: 'center', fit: true },
+        { text: `[${prod.uCom}]`, color: this.fields.muted, align: 'center' },
+      ],
+      [
+        {
+          text: this.format.emitted(prod.vUnCom, 10),
+          align: 'right',
+          fit: true,
+        },
+      ],
       currency(prod.vProd),
       {
         pairs: [

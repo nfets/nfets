@@ -67,6 +67,7 @@ export abstract class DanfePdfDocument {
 
   public options: DanfeOptions = {
     size: 'A4',
+    layout: 'portrait',
     qComDecimals: 4,
     vUnComDecimals: 4,
     showCanhoto: true,
@@ -98,9 +99,15 @@ export abstract class DanfePdfDocument {
     return `${this.defaults.font}-Bold`;
   }
 
+  protected get sideCanhotoWidth(): number {
+    return 0;
+  }
+
   public get contentWidth(): number {
     const { left, right } = this.margins;
-    return this.builder.pageWidth() - left - right;
+    const side = this.sideCanhotoWidth;
+    const gap = side > 0 ? this.gap : 0;
+    return this.builder.pageWidth() - left - right - side - gap;
   }
 
   public get det(): Det[] {
@@ -116,7 +123,7 @@ export abstract class DanfePdfDocument {
     this.builder.configure({
       size: this.options.size,
       margins: this.margins,
-      layout: 'portrait',
+      layout: this.options.layout,
     });
   }
 
@@ -159,7 +166,8 @@ export abstract class DanfePdfDocument {
 
     const available = this.pageBottom - this.pageTop;
     const headerHeight = header.height() + this.gap + items.headerHeight();
-    const canhotoHeight = this.canhoto?.height() ?? 0;
+    const canhotoHeight =
+      this.sideCanhotoWidth > 0 ? 0 : (this.canhoto?.height() ?? 0);
     const firstHeight = this.stackHeight(this.visible(firstPage));
     const lastHeight = this.stackHeight(this.visible(lastPage));
 
@@ -200,7 +208,7 @@ export abstract class DanfePdfDocument {
     let y = this.pageTop;
 
     const canhoto = this.canhoto;
-    if (slice.isFirst && canhoto) {
+    if (slice.isFirst && canhoto && this.sideCanhotoWidth === 0) {
       canhoto.build({ x, y, width });
       y += canhoto.height();
     }
@@ -236,6 +244,16 @@ export abstract class DanfePdfDocument {
     }
 
     footer.build({ x, y: this.pageBottom, width });
+
+    if (slice.isFirst && canhoto && this.sideCanhotoWidth > 0) {
+      canhoto.build({
+        x: x + width + this.gap,
+        y: this.pageTop,
+        width: this.sideCanhotoWidth,
+        height:
+          this.builder.pageHeight() - this.margins.top - this.margins.bottom,
+      });
+    }
   }
 
   public async build(xml: string): Promise<this> {

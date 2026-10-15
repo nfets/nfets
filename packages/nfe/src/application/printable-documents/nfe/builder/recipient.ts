@@ -22,62 +22,65 @@ export class Recipient extends DanfeBlock {
     const street = [ender?.xLgr, ender?.nro].filter(Boolean).join(', ');
     const address = ender?.xCpl ? `${street} - ${ender.xCpl}` : street;
 
+    const document =
+      dest?.idEstrangeiro ?? this.format.document(dest?.CNPJ, dest?.CPF);
+
     this.fields.row(x, cy, width, h, [
-      { label: 'NOME / RAZÃO SOCIAL', value: dest?.xNome, weight: 120 },
+      {
+        label: 'NOME / RAZÃO SOCIAL',
+        value: this.format.blank(dest?.xNome),
+        weight: 120,
+      },
       {
         label: 'CNPJ / CPF',
-        value:
-          dest?.idEstrangeiro ?? this.format.document(dest?.CNPJ, dest?.CPF),
+        value: this.format.blank(document),
         weight: 45,
-        align: 'center',
       },
       {
         label: 'DATA DA EMISSÃO',
-        value: this.format.date(ide.dhEmi),
+        value: this.format.blank(this.format.date(ide.dhEmi)),
         weight: 35,
-        align: 'center',
       },
     ]);
 
     cy += h;
     this.fields.row(x, cy, width, h, [
-      { label: 'ENDEREÇO', value: address, weight: 90 },
-      { label: 'BAIRRO / DISTRITO', value: ender?.xBairro, weight: 45 },
+      { label: 'ENDEREÇO', value: this.format.blank(address), weight: 105 },
+      {
+        label: 'BAIRRO / DISTRITO',
+        value: this.format.blank(ender?.xBairro),
+        weight: 38,
+      },
       {
         label: 'CEP',
-        value: this.format.cep(ender?.CEP),
-        weight: 30,
-        align: 'center',
+        value: this.format.blank(this.format.cep(ender?.CEP)),
+        weight: 22,
       },
       {
         label: 'DATA DA SAÍDA/ENTRADA',
-        value: this.format.date(dhSaiEnt),
+        value: this.format.blank(this.format.date(dhSaiEnt)),
         weight: 35,
-        align: 'center',
       },
     ]);
 
     cy += h;
     this.fields.row(x, cy, width, h, [
-      { label: 'MUNICÍPIO', value: ender?.xMun, weight: 70 },
+      { label: 'MUNICÍPIO', value: this.format.blank(ender?.xMun), weight: 70 },
       {
         label: 'FONE / FAX',
-        value: this.format.phone(ender?.fone),
+        value: this.format.blank(this.format.phone(ender?.fone)),
         weight: 35,
-        align: 'center',
       },
-      { label: 'UF', value: ender?.UF, weight: 10, align: 'center' },
+      { label: 'UF', value: this.format.blank(ender?.UF), weight: 10 },
       {
         label: 'INSCRIÇÃO ESTADUAL',
-        value: dest?.IE,
+        value: this.format.blank(dest?.IE),
         weight: 50,
-        align: 'center',
       },
       {
         label: 'HORA DA SAÍDA/ENTRADA',
-        value: this.format.time(dhSaiEnt),
+        value: this.format.blank(this.format.time(dhSaiEnt)),
         weight: 35,
-        align: 'center',
       },
     ]);
   }
@@ -118,18 +121,20 @@ export class Location extends DanfeBlock {
 
     const complement = local.xCpl ? ` - ${local.xCpl}` : '';
     this.fields.row(x, cy, width, h, [
-      { label: 'NOME / RAZÃO SOCIAL', value: local.xNome, weight: 120 },
+      {
+        label: 'NOME / RAZÃO SOCIAL',
+        value: this.format.blank(local.xNome),
+        weight: 120,
+      },
       {
         label: 'CNPJ / CPF',
-        value: this.format.document(local.CNPJ, local.CPF),
+        value: this.format.blank(this.format.document(local.CNPJ, local.CPF)),
         weight: 45,
-        align: 'center',
       },
       {
         label: 'INSCRIÇÃO ESTADUAL',
-        value: local.IE,
+        value: this.format.blank(local.IE),
         weight: 35,
-        align: 'center',
       },
     ]);
 
@@ -137,17 +142,20 @@ export class Location extends DanfeBlock {
     this.fields.row(x, cy, width, h, [
       {
         label: 'ENDEREÇO',
-        value: `${local.xLgr}, ${local.nro}${complement}`,
+        value: this.format.blank(`${local.xLgr}, ${local.nro}${complement}`),
         weight: 80,
       },
-      { label: 'BAIRRO / DISTRITO', value: local.xBairro, weight: 40 },
-      { label: 'MUNICÍPIO', value: local.xMun, weight: 40 },
-      { label: 'UF', value: local.UF, weight: 10, align: 'center' },
+      {
+        label: 'BAIRRO / DISTRITO',
+        value: this.format.blank(local.xBairro),
+        weight: 40,
+      },
+      { label: 'MUNICÍPIO', value: this.format.blank(local.xMun), weight: 40 },
+      { label: 'UF', value: this.format.blank(local.UF), weight: 10 },
       {
         label: 'CEP',
-        value: this.format.cep(local.CEP),
+        value: this.format.blank(this.format.cep(local.CEP)),
         weight: 30,
-        align: 'center',
       },
     ]);
   }

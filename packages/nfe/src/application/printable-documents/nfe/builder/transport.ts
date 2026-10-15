@@ -50,34 +50,42 @@ export class Transport extends DanfeBlock {
 
     let cy = y + this.fields.title(x, y, width, this.title);
 
+    const blank = (value?: string) => this.format.blank(value);
+
     this.fields.row(x, cy, width, h, [
-      { label: 'NOME / RAZÃO SOCIAL', value: transporta?.xNome, weight: 62 },
+      {
+        label: 'NOME / RAZÃO SOCIAL',
+        value: blank(transporta?.xNome),
+        weight: 62,
+      },
       {
         label: 'FRETE',
-        value: this.modFrete[modFrete] ?? modFrete,
+        value: blank(this.modFrete[modFrete] ?? modFrete),
         weight: 30,
       },
-      { label: 'CÓDIGO ANTT', value: veicTransp?.RNTC, weight: 22 },
-      { label: 'PLACA DO VEÍCULO', value: veicTransp?.placa, weight: 22 },
-      { label: 'UF', value: veicTransp?.UF, weight: 10, align: 'center' },
+      { label: 'CÓDIGO ANTT', value: blank(veicTransp?.RNTC), weight: 22 },
+      {
+        label: 'PLACA DO VEÍCULO',
+        value: blank(veicTransp?.placa),
+        weight: 22,
+      },
+      { label: 'UF', value: blank(veicTransp?.UF), weight: 10 },
       {
         label: 'CNPJ / CPF',
-        value: this.format.document(transporta?.CNPJ, transporta?.CPF),
+        value: blank(this.format.document(transporta?.CNPJ, transporta?.CPF)),
         weight: 34,
-        align: 'center',
       },
     ]);
 
     cy += h;
     this.fields.row(x, cy, width, h, [
-      { label: 'ENDEREÇO', value: transporta?.xEnder, weight: 92 },
-      { label: 'MUNICÍPIO', value: transporta?.xMun, weight: 54 },
-      { label: 'UF', value: transporta?.UF, weight: 10, align: 'center' },
+      { label: 'ENDEREÇO', value: blank(transporta?.xEnder), weight: 92 },
+      { label: 'MUNICÍPIO', value: blank(transporta?.xMun), weight: 44 },
+      { label: 'UF', value: blank(transporta?.UF), weight: 10 },
       {
         label: 'INSCRIÇÃO ESTADUAL',
-        value: transporta?.IE,
-        weight: 44,
-        align: 'center',
+        value: blank(transporta?.IE),
+        weight: 34,
       },
     ]);
 
@@ -85,22 +93,22 @@ export class Transport extends DanfeBlock {
     this.fields.row(x, cy, width, h, [
       {
         label: 'QUANTIDADE',
-        value: this.sum('qVol', 0),
+        value: blank(this.sum('qVol', 0)),
         weight: 20,
         align: 'right',
       },
-      { label: 'ESPÉCIE', value: vol?.esp, weight: 35 },
-      { label: 'MARCA', value: vol?.marca, weight: 35 },
-      { label: 'NUMERAÇÃO', value: vol?.nVol, weight: 35 },
+      { label: 'ESPÉCIE', value: blank(vol?.esp), weight: 35 },
+      { label: 'MARCA', value: blank(vol?.marca), weight: 35 },
+      { label: 'NUMERAÇÃO', value: blank(vol?.nVol), weight: 35 },
       {
         label: 'PESO BRUTO',
-        value: this.sum('pesoB', 3),
+        value: blank(this.sum('pesoB', 3)),
         weight: 37.5,
         align: 'right',
       },
       {
         label: 'PESO LÍQUIDO',
-        value: this.sum('pesoL', 3),
+        value: blank(this.sum('pesoL', 3)),
         weight: 37.5,
         align: 'right',
       },

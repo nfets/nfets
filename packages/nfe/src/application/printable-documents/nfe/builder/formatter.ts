@@ -13,6 +13,19 @@ export class DanfeFormatter {
     return !!value && Number.parseFloat(value.toString()) > 0;
   }
 
+  public emitted(value: DecimalValue | undefined, max: number): string {
+    const raw = String(value ?? '0').trim();
+    const negative = raw.startsWith('-');
+    const unsigned = negative ? raw.slice(1) : raw;
+    const [intRaw, fracRaw = ''] = unsigned.split('.');
+    const places = Math.min(Math.max(fracRaw.length, 2), max);
+    const digits = intRaw.replace(/\D/g, '') || '0';
+    const grouped = digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    const frac = fracRaw.padEnd(places, '0').slice(0, places);
+    const body = `${grouped},${frac}`;
+    return negative ? `-${body}` : body;
+  }
+
   public decimal(
     value?: DecimalValue,
     minimumFractionDigits = 2,
@@ -59,6 +72,10 @@ export class DanfeFormatter {
 
   public serie(serie: string): string {
     return serie.padStart(3, '0');
+  }
+
+  public blank(value?: string): string {
+    return this.sanitize(value) || '—';
   }
 
   public accessKey(): string {

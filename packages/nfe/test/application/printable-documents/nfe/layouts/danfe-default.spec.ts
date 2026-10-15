@@ -58,7 +58,6 @@ describe('DanfeDefault', () => {
 
       // Items
       .toContain('DADOS DOS PRODUTOS / SERVIÇOS')
-      .toContain('CSOSN')
       .toContain('NFe EMITIDA EM HOMOLOGAÇÃO')
       .toContain('SEM VALOR FISCAL')
       .toContain('CAMISETA LINHO 00000000 0/300 5102 UN 1,00 0,10 0,10')
@@ -161,20 +160,20 @@ describe('DanfeDefault', () => {
 
     expectInOrder(text)
       .toContain('RECEBEMOS DE EMPRESA EXEMPLO LTDA')
-      .toContain('Folha 1/3')
+      .toContain('Folha 1/4')
       .toContain('FATURA / DUPLICATAS')
       .toContain('CÁLCULO DO IMPOSTO')
-      .toContain('-- 1 of 3 --')
-      .toContain('Folha 2/3')
-      .toContain('-- 2 of 3 --')
-      .toContain('Folha 3/3')
+      .toContain('-- 1 of 4 --')
+      .toContain('Folha 2/4')
+      .toContain('-- 2 of 4 --')
+      .toContain('Folha 4/4')
       .toContain('DADOS ADICIONAIS')
-      .toContain('-- 3 of 3 --');
+      .toContain('-- 4 of 4 --');
 
     expect(occurrences(text, 'RECEBEMOS DE')).toBe(1);
     expect(occurrences(text, 'DADOS ADICIONAIS')).toBe(1);
     expect(occurrences(text, 'CÁLCULO DO IMPOSTO')).toBe(1);
-    expect(occurrences(text, 'DADOS DOS PRODUTOS / SERVIÇOS')).toBe(3);
+    expect(occurrences(text, 'DADOS DOS PRODUTOS / SERVIÇOS')).toBe(4);
     expect(occurrences(text, '1001 PRODUTO EXEMPLO TRIBUTADO')).toBe(27);
   });
 });

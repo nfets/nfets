@@ -98,7 +98,6 @@ export class Invoices extends DanfeBlock {
         this.cellHeight - 2 * p,
         {
           ...options,
-          bold: true,
           align: 'right',
         },
       );

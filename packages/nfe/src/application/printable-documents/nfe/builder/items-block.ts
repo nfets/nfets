@@ -3,7 +3,9 @@ import type {
   DanfeArea,
   DanfeItemsCell,
   DanfeItemsColumn,
+  DanfeItemsPairsCell,
   DanfePageSlice,
+  DanfeTextRun,
 } from '@nfets/nfe/domain/entities/printable-documents/nfe';
 
 import { DanfeBlock } from './block';
@@ -23,7 +25,11 @@ export abstract class DanfeItemsBlock extends DanfeBlock {
   protected readonly title = 'DADOS DOS PRODUTOS / SERVIÇOS';
   protected readonly fontSize: number = 6;
   protected readonly headerFontSize: number = 5;
-  protected readonly cellPadding: number = 1.2;
+  protected get cellPadding(): number {
+    return this.fields.padding;
+  }
+
+  protected readonly columnLabelColor: string = 'black';
 
   protected abstract get columns(): DanfeItemsColumn[];
 
@@ -42,6 +48,7 @@ export abstract class DanfeItemsBlock extends DanfeBlock {
     const heights = this.columns.map((column, index) =>
       this.fields.measure(column.label, widths[index] - 2 * p, {
         size: this.headerFontSize,
+        bold: true,
       }),
     );
     return Math.max(...heights) + 2 * p;
@@ -51,10 +58,14 @@ export abstract class DanfeItemsBlock extends DanfeBlock {
     return this.fields.titleHeight + this.labelsHeight();
   }
 
+  protected isRuns(cell: DanfeItemsCell): cell is DanfeTextRun[] {
+    return Array.isArray(cell);
+  }
+
   protected isPairs(
     cell: DanfeItemsCell,
-  ): cell is Exclude<DanfeItemsCell, string> {
-    return typeof cell !== 'string';
+  ): cell is Exclude<DanfeItemsCell, string | DanfeTextRun[]> {
+    return typeof cell !== 'string' && !Array.isArray(cell);
   }
 
   protected lineHeight(): number {
@@ -62,11 +73,27 @@ export abstract class DanfeItemsBlock extends DanfeBlock {
     return this.builder.currentLineHeight(true);
   }
 
+  protected fitSize(text: string, width: number, size: number): number {
+    const room = Math.max(width - 0.5, 1);
+    const natural = this.fields.widthOf(text, { size });
+    if (natural <= room) return size;
+    return (size * room) / natural;
+  }
+
   protected cellHeight(cell: DanfeItemsCell, width: number): number {
     if (this.isPairs(cell)) {
       const rows = Math.ceil(cell.pairs.length / (cell.columns ?? 1));
       return rows * this.lineHeight();
     }
+    if (this.isRuns(cell))
+      return cell.reduce((sum, run) => {
+        const blank = run.blankBefore ? this.lineHeight() : 0;
+        if (!run.text) return sum + blank;
+        const size = run.fit
+          ? this.fitSize(run.text, width, this.fontSize)
+          : this.fontSize;
+        return sum + blank + this.fields.measure(run.text, width, { size });
+      }, 0);
     return this.fields.measure(cell, width, { size: this.fontSize });
   }
 
@@ -97,7 +124,9 @@ export abstract class DanfeItemsBlock extends DanfeBlock {
         height - 2 * p,
         {
           size: this.headerFontSize,
+          bold: true,
           align: 'center',
+          color: this.columnLabelColor,
         },
       );
       cx += widths[index];
@@ -114,26 +143,71 @@ export abstract class DanfeItemsBlock extends DanfeBlock {
   }
 
   protected drawPairs(
-    cell: Exclude<DanfeItemsCell, string>,
+    cell: DanfeItemsPairsCell,
     x: number,
     y: number,
     width: number,
   ): void {
     const line = this.lineHeight();
     const columns = cell.columns ?? 1;
-    const gap = this.cellPadding * 4;
+    const gap = 5;
     const columnWidth = (width - gap * (columns - 1)) / columns;
+
+    const labelColor = cell.muted === false ? 'black' : this.fields.muted;
 
     cell.pairs.forEach(([label, value], index) => {
       const top = y + Math.floor(index / columns) * line;
       const left = x + (index % columns) * (columnWidth + gap);
-      this.fields.text(label, left, top, columnWidth, line, {
-        size: this.fontSize,
+      const text = { size: this.fontSize };
+      const valueWidth = this.fields.widthOf(value, text);
+      const room = Math.max(columnWidth - valueWidth, 0);
+      const labelWidth = Math.min(this.fields.widthOf(label, text), room);
+      const dotWidth = this.fields.widthOf('.', text);
+      const dotsWidth = room - labelWidth;
+      const dots =
+        dotWidth > 0 && dotsWidth > dotWidth
+          ? '.'.repeat(Math.floor(dotsWidth / dotWidth))
+          : '';
+
+      this.fields.text(label, left, top, labelWidth + 0.5, line, {
+        ...text,
+        color: labelColor,
       });
+      if (dots)
+        this.fields.text(dots, left + labelWidth, top, dotsWidth, line, {
+          ...text,
+          color: labelColor,
+        });
       this.fields.text(value, left, top, columnWidth, line, {
-        size: this.fontSize,
+        ...text,
         align: 'right',
       });
+    });
+  }
+
+  protected drawRuns(
+    runs: DanfeTextRun[],
+    x: number,
+    y: number,
+    width: number,
+    align: 'left' | 'center' | 'right',
+  ): void {
+    let top = y;
+    runs.forEach((run) => {
+      if (run.blankBefore) top += this.lineHeight();
+      if (!run.text) return;
+
+      const size = run.fit
+        ? this.fitSize(run.text, width, this.fontSize)
+        : this.fontSize;
+      const height = this.fields.measure(run.text, width, { size });
+      this.fields.text(run.text, x, top, width, height, {
+        size,
+        align: run.align ?? align,
+        color: run.color,
+        lineBreak: run.fit ? false : undefined,
+      });
+      top += height;
     });
   }
 
@@ -145,11 +219,14 @@ export abstract class DanfeItemsBlock extends DanfeBlock {
 
     this.cells(det).forEach((cell, index) => {
       const width = widths[index] - 2 * p;
+      const align = columns[index].align ?? 'left';
       if (this.isPairs(cell)) this.drawPairs(cell, cx + p, y + p, width);
+      else if (this.isRuns(cell))
+        this.drawRuns(cell, cx + p, y + p, width, align);
       else
         this.fields.text(cell, cx + p, y + p, width, height - 2 * p, {
           size: this.fontSize,
-          align: columns[index].align ?? 'left',
+          align,
         });
       cx += widths[index];
     });
