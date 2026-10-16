@@ -1,6 +1,8 @@
 import type { DecimalValue } from '@nfets/core/domain';
 import type { Det } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det';
+import type { GIBSCBS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/gibscbs';
 import type { Red } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/red';
+import type { IS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/is';
 import type {
   DanfeItemsCell,
   DanfeItemsColumn,
@@ -12,6 +14,24 @@ import { DetReader } from './det-reader';
 
 interface RtcRateGroup {
   gRed?: Red;
+}
+
+class RtcDetReader extends DetReader {
+  public get ibsCbs(): GIBSCBS | undefined {
+    return this.det.imposto?.IBSCBS?.gIBSCBS;
+  }
+
+  public get cClassTrib(): string | undefined {
+    return this.det.imposto?.IBSCBS?.cClassTrib;
+  }
+
+  public get ibsCbsCst(): string {
+    return this.det.imposto?.IBSCBS?.CST ?? '';
+  }
+
+  public get is(): IS | undefined {
+    return this.det.imposto?.IS;
+  }
 }
 
 export class RtcItems extends DanfeItemsBlock {
@@ -95,7 +115,7 @@ export class RtcItems extends DanfeItemsBlock {
     return group?.gRed?.pAliqEfet ?? nominal;
   }
 
-  protected descriptionCell(reader: DetReader): DanfeTextRun[] {
+  protected descriptionCell(reader: RtcDetReader): DanfeTextRun[] {
     const { cProd, NCM } = reader.det.prod;
     const muted = this.fields.muted;
     const infAdProd = this.description.infAdProd(reader.det);
@@ -117,11 +137,11 @@ export class RtcItems extends DanfeItemsBlock {
   }
 
   protected cells(det: Det): DanfeItemsCell[] {
-    const reader = new DetReader(det);
+    const reader = new RtcDetReader(det);
     const { prod } = det;
     const icms = reader.icms;
     const ipi = reader.ipi;
-    const ibscbs = reader.ibscbs;
+    const ibscbs = reader.ibsCbs;
     const is = reader.is;
 
     const currency = (value?: DecimalValue) => this.format.currency(value);
@@ -132,7 +152,7 @@ export class RtcItems extends DanfeItemsBlock {
       {
         muted: false,
         pairs: [
-          ['CST', reader.cst()],
+          ['CST', reader.ibsCbsCst],
           ['CFOP', prod.CFOP],
         ],
       },

@@ -94,6 +94,7 @@ describe('DanfeRtc', () => {
       // gRed informed: effective rates (pAliqEfet)
       .toContain('Lote 123 - Validade 12/2027')
       .toContain('200032')
+      .toContain('200')
       .toContain('0,54%')
       .toContain('0,06%')
       .toContain('0,03')
@@ -132,7 +133,6 @@ describe('DanfeRtc', () => {
       .toContain('[Cód. 1]')
       .toContain('[NCM 00000000]')
       .toContain('CST')
-      .toContain('0300')
       .toContain('-- 1 of 1 --');
 
     expect(text).not.toContain('TOTAL DO IBS / CBS / IS');
@@ -141,6 +141,7 @@ describe('DanfeRtc', () => {
     expect(text).not.toContain('FATURA / DUPLICATAS');
     expect(text).not.toContain('QR CODE');
     expect(text).not.toContain('cClassTrib');
+    expect(text).not.toContain('0300');
   });
 
   it('should paginate many items repeating the header and keeping additional data on the last page', async () => {

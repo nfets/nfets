@@ -2,8 +2,6 @@ import { Decimal } from '@nfets/core';
 import type { DecimalValue } from '@nfets/core/domain';
 import type { Det } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det';
 import type { IPITrib } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ipi';
-import type { GIBSCBS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ibscbs/gibscbs';
-import type { IS } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/is';
 
 export interface DetIcmsValues {
   orig?: string;
@@ -53,18 +51,6 @@ export class DetReader {
 
   public get ipi(): IPITrib | undefined {
     return this.det.imposto?.IPI?.IPITrib;
-  }
-
-  public get ibscbs(): GIBSCBS | undefined {
-    return this.det.imposto?.IBSCBS?.gIBSCBS;
-  }
-
-  public get cClassTrib(): string | undefined {
-    return this.det.imposto?.IBSCBS?.cClassTrib;
-  }
-
-  public get is(): IS | undefined {
-    return this.det.imposto?.IS;
   }
 
   public get hasTaxUnit(): boolean {
