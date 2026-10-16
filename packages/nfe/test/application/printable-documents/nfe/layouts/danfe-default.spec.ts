@@ -54,7 +54,7 @@ describe('DanfeDefault', () => {
 
       // Transport
       .toContain('TRANSPORTADOR / VOLUMES TRANSPORTADOS')
-      .toContain('9-Sem Transporte')
+      .toContain('9-Sem transporte')
 
       // Items
       .toContain('DADOS DOS PRODUTOS / SERVIÇOS')

@@ -10,6 +10,7 @@ export interface FieldTextOptions {
   color?: string;
   align?: 'left' | 'center' | 'right' | 'justify';
   lineBreak?: boolean;
+  ellipsis?: boolean;
 }
 
 export type FieldBoxCell = Omit<DanfeFieldCell, 'weight'>;
@@ -59,7 +60,7 @@ export class FieldBox {
       width: Math.max(width, 1),
       height: Math.max(height, line + 0.5),
       align: options.align ?? 'left',
-      ellipsis: options.lineBreak !== false,
+      ellipsis: options.ellipsis ?? options.lineBreak !== false,
       lineBreak: options.lineBreak,
       lineGap: 0,
     });

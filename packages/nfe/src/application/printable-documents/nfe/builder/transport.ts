@@ -9,12 +9,12 @@ export class Transport extends DanfeBlock {
   protected readonly conditional: boolean = false;
 
   protected readonly modFrete: Record<string, string> = {
-    '0': '0-Por conta do Rem',
-    '1': '1-Por conta do Dest',
-    '2': '2-Por conta de Terceiros',
-    '3': '3-Próprio por conta do Rem',
-    '4': '4-Próprio por conta do Dest',
-    '9': '9-Sem Transporte',
+    '0': '0-Por conta do remetente',
+    '1': '1-Por conta do destinatário',
+    '2': '2-Por conta de terceiros',
+    '3': '3-Próprio por conta do remetente',
+    '4': '4-Próprio por conta do destinatário',
+    '9': '9-Sem transporte',
   };
 
   protected get volumes(): Vol[] {
@@ -61,7 +61,7 @@ export class Transport extends DanfeBlock {
       {
         label: 'FRETE',
         value: blank(this.modFrete[modFrete] ?? modFrete),
-        weight: 30,
+        weight: 40,
       },
       { label: 'CÓDIGO ANTT', value: blank(veicTransp?.RNTC), weight: 22 },
       {
@@ -79,7 +79,7 @@ export class Transport extends DanfeBlock {
 
     cy += h;
     this.fields.row(x, cy, width, h, [
-      { label: 'ENDEREÇO', value: blank(transporta?.xEnder), weight: 92 },
+      { label: 'ENDEREÇO', value: blank(transporta?.xEnder), weight: 102 },
       { label: 'MUNICÍPIO', value: blank(transporta?.xMun), weight: 44 },
       { label: 'UF', value: blank(transporta?.UF), weight: 10 },
       {
@@ -94,11 +94,11 @@ export class Transport extends DanfeBlock {
       {
         label: 'QUANTIDADE',
         value: blank(this.sum('qVol', 0)),
-        weight: 20,
+        weight: 15,
         align: 'right',
       },
-      { label: 'ESPÉCIE', value: blank(vol?.esp), weight: 35 },
-      { label: 'MARCA', value: blank(vol?.marca), weight: 35 },
+      { label: 'ESPÉCIE', value: blank(vol?.esp), weight: 42.5 },
+      { label: 'MARCA', value: blank(vol?.marca), weight: 42.5 },
       { label: 'NUMERAÇÃO', value: blank(vol?.nVol), weight: 35 },
       {
         label: 'PESO BRUTO',

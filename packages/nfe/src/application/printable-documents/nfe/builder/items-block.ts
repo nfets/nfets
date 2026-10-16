@@ -30,6 +30,8 @@ export abstract class DanfeItemsBlock extends DanfeBlock {
   }
 
   protected readonly columnLabelColor: string = 'black';
+  protected readonly minFontSize = 6;
+  protected readonly pairGap = 5;
 
   protected abstract get columns(): DanfeItemsColumn[];
 
@@ -74,25 +76,51 @@ export abstract class DanfeItemsBlock extends DanfeBlock {
   }
 
   protected fitSize(text: string, width: number, size: number): number {
+    const start = Math.max(size, this.minFontSize);
     const room = Math.max(width - 0.5, 1);
-    const natural = this.fields.widthOf(text, { size });
-    if (natural <= room) return size;
-    return (size * room) / natural;
+    const natural = this.fields.widthOf(text, { size: start });
+    if (natural <= room) return start;
+    return this.minFontSize;
+  }
+
+  protected pairColumns(cell: DanfeItemsPairsCell, width: number): number {
+    const requested = cell.columns ?? 1;
+    if (requested <= 1) return 1;
+
+    const columnWidth =
+      (width - this.pairGap * (requested - 1)) / requested;
+    const text = { size: this.fontSize };
+    const fits = cell.pairs.every(([label, value]) => {
+      return (
+        this.fields.widthOf(label, text) + this.fields.widthOf(value, text) <=
+        columnWidth
+      );
+    });
+
+    return fits ? requested : 1;
   }
 
   protected cellHeight(cell: DanfeItemsCell, width: number): number {
     if (this.isPairs(cell)) {
-      const rows = Math.ceil(cell.pairs.length / (cell.columns ?? 1));
+      const columns = this.pairColumns(cell, width);
+      const rows = Math.ceil(cell.pairs.length / columns);
       return rows * this.lineHeight();
     }
     if (this.isRuns(cell))
       return cell.reduce((sum, run) => {
         const blank = run.blankBefore ? this.lineHeight() : 0;
         if (!run.text) return sum + blank;
-        const size = run.fit
-          ? this.fitSize(run.text, width, this.fontSize)
-          : this.fontSize;
-        return sum + blank + this.fields.measure(run.text, width, { size });
+        if (!run.fit) {
+          return (
+            sum +
+            blank +
+            this.fields.measure(run.text, width, { size: this.fontSize })
+          );
+        }
+
+        const size = this.fitSize(run.text, width, this.fontSize);
+        this.builder.font(this.context.defaults.font).fontSize(size);
+        return sum + blank + this.builder.currentLineHeight(true);
       }, 0);
     return this.fields.measure(cell, width, { size: this.fontSize });
   }
@@ -149,8 +177,8 @@ export abstract class DanfeItemsBlock extends DanfeBlock {
     width: number,
   ): void {
     const line = this.lineHeight();
-    const columns = cell.columns ?? 1;
-    const gap = 5;
+    const columns = this.pairColumns(cell, width);
+    const gap = this.pairGap;
     const columnWidth = (width - gap * (columns - 1)) / columns;
 
     const labelColor = cell.muted === false ? 'black' : this.fields.muted;
@@ -200,12 +228,16 @@ export abstract class DanfeItemsBlock extends DanfeBlock {
       const size = run.fit
         ? this.fitSize(run.text, width, this.fontSize)
         : this.fontSize;
-      const height = this.fields.measure(run.text, width, { size });
+      this.builder.font(this.context.defaults.font).fontSize(size);
+      const height = run.fit
+        ? this.builder.currentLineHeight(true)
+        : this.fields.measure(run.text, width, { size });
       this.fields.text(run.text, x, top, width, height, {
         size,
         align: run.align ?? align,
         color: run.color,
         lineBreak: run.fit ? false : undefined,
+        ellipsis: run.fit ? false : undefined,
       });
       top += height;
     });

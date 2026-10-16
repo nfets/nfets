@@ -129,12 +129,12 @@ export class Location extends DanfeBlock {
       {
         label: 'CNPJ / CPF',
         value: this.format.blank(this.format.document(local.CNPJ, local.CPF)),
-        weight: 45,
+        weight: 40,
       },
       {
         label: 'INSCRIÇÃO ESTADUAL',
         value: this.format.blank(local.IE),
-        weight: 35,
+        weight: 40,
       },
     ]);
 

@@ -89,6 +89,22 @@ app.get('/danfe-rtc', async (req, res) => {
   doc.end();
 });
 
+app.get('/danfe-rtc-maxlength', async (req, res) => {
+  res.set({
+    'Content-Type': 'application/pdf',
+    'Content-Disposition': 'inline; filename="example.pdf"',
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+  });
+
+  const { file = 'rtc-homolog-protocoled-maxlength.xml', layout } = req.query;
+  if (typeof file !== 'string') return res.status(400).end();
+  const Layout =
+    layout === 'landscape' ? DanfeRtcLandscapePdfDocument : DanfeRtcPdfDocument;
+  const doc = new Layout(res);
+  await doc.build(SAMPLE_NFE_XML(file));
+  doc.end();
+});
+
 const PORT = process.env.PORT ? Number.parseInt(process.env.PORT, 10) : 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Dev server running at http://localhost:${PORT}`);

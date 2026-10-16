@@ -28,6 +28,7 @@ export * from './printable-documents/nfce/layouts/danfce-default';
 export * from './printable-documents/nfce/layouts/danfce-reduced';
 export * from './printable-documents/nfe/layouts/danfe-default';
 export * from './printable-documents/nfe/layouts/danfe-rtc';
+export * from './printable-documents/nfe/layouts/danfe-rtc-landscape';
 
 export * from './transmission/nfe-transmitter';
 export * from './transmission/nfce-transmitter';

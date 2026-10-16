@@ -69,7 +69,7 @@ describe('DanfeRtc', () => {
 
       // Transport
       .toContain('TRANSPORTADORA EXEMPLO LTDA')
-      .toContain('0-Por conta do Rem')
+      .toContain('0-Por conta do rem')
       .toContain('AAA0A00')
       .toContain('13,250')
       .toContain('12,500')
@@ -166,7 +166,20 @@ describe('DanfeRtc', () => {
     expect(occurrences(text, '200032')).toBe(27);
   });
 
-  it('should build the landscape rtc danfe with the receipt on the right', async () => {
+  it('should print quantity, unit and total in full at 6pt', async () => {
+    const text = await renderDanfeText(
+      DanfeRtcPdfDocument,
+      'rtc-homolog-protocoled-maxlength.xml',
+    );
+
+    expect(text).toContain('99.999.999.999,9999');
+    expect(text).toContain('99.999.999.999,9999999999');
+    expect(text).toContain('9.999.999.999.999,99');
+    expect(text).not.toContain('99.999.999.999,…');
+    expect(text).not.toContain('9.999.999.999…');
+  });
+
+  it('should build the landscape rtc danfe with the receipt on the left', async () => {
     const text = await renderDanfeText(
       DanfeRtcLandscapePdfDocument,
       'rtc-homolog-protocoled.xml',

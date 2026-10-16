@@ -117,17 +117,19 @@ export class RtcTotals extends DanfeBlock {
 
   public height(): number {
     return this.sections().reduce(
-      (acc, section) => acc + this.sectionHeight(section),
+      (acc, section, index) =>
+        acc + (index > 0 ? this.context.gap : 0) + this.sectionHeight(section),
       0,
     );
   }
 
   protected draw({ x, y, width }: DanfeArea): void {
     let cy = y;
-    for (const section of this.sections()) {
+    this.sections().forEach((section, index) => {
+      if (index > 0) cy += this.context.gap;
       const top = cy + this.fields.title(x, cy, width, section.title);
       this.fields.grid(x, top, width, section.cells, this.perRow);
       cy += this.sectionHeight(section);
-    }
+    });
   }
 }

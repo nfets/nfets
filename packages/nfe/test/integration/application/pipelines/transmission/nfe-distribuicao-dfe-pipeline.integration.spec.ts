@@ -11,6 +11,17 @@ describe('nfe distribuicao dfe pipeline (integration) (not destructive)', () => 
     ensureIntegrationTestsHasValidCertificate();
   if (certificateFromEnvironment === undefined) return;
 
+  const payload = JSON.parse(process.env.TEST_PAYLOAD ?? '{}') as {
+    chNFe?: string;
+    CNPJ?: string;
+    cUFAutor?: StateCode;
+  };
+  if (!payload.chNFe || !payload.CNPJ) {
+    it.skip('set TEST_PAYLOAD with chNFe and CNPJ to consult distribuicao DF-e', () =>
+      void 0);
+    return;
+  }
+
   let pipeline: NfeDistribuicaoDFePipeline;
 
   beforeAll(() => {
@@ -25,17 +36,11 @@ describe('nfe distribuicao dfe pipeline (integration) (not destructive)', () => 
   it(
     'should consult an access key in ambiente nacional',
     async () => {
-      const args = JSON.parse(process.env.TEST_PAYLOAD ?? '{}') as {
-        chNFe: string;
-        CNPJ?: string;
-        cUFAutor?: StateCode;
-      };
-
       const response = await pipeline.execute(
         {
-          identification: args.CNPJ ?? '',
-          chNFe: args.chNFe,
-          cUFAutor: args.cUFAutor ?? StateCodes.SC,
+          identification: payload.CNPJ ?? '',
+          chNFe: payload.chNFe ?? '',
+          cUFAutor: payload.cUFAutor ?? StateCodes.SC,
         },
         { tpAmb: Environment.Homolog },
       );

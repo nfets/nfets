@@ -19,6 +19,7 @@ import {
 import { defaultCreditsText } from '@nfets/nfe/domain/entities/printable-documents/nfce';
 
 import type { DanfeBlock } from './builder/block';
+import { canhotoCutGap } from './builder/canhoto';
 import type { DanfeItemsBlock } from './builder/items-block';
 import { DanfeFormatter } from './builder/formatter';
 import { FieldBox } from './builder/field-box';
@@ -101,11 +102,18 @@ export abstract class DanfePdfDocument {
 
   protected readonly sideCanhotoWidth: number = 0;
 
+  protected contentInset(): number {
+    if (this.page.number > 1 || this.sideCanhotoWidth <= 0) return 0;
+    return this.sideCanhotoWidth + canhotoCutGap;
+  }
+
   public get contentWidth(): number {
     const { left, right } = this.margins;
-    const side = this.sideCanhotoWidth;
-    const gap = side > 0 ? this.gap : 0;
-    return this.builder.pageWidth() - left - right - side - gap;
+    return this.builder.pageWidth() - left - right - this.contentInset();
+  }
+
+  protected get contentX(): number {
+    return this.margins.left + this.contentInset();
   }
 
   public get det(): Det[] {
@@ -159,41 +167,50 @@ export abstract class DanfePdfDocument {
     return this.builder.pageHeight() - this.margins.bottom - footer.height();
   }
 
-  protected paginate(): DanfePageSlice<Det>[] {
-    const { header, firstPage, items, lastPage } = this.blocks;
-
+  protected itemSpace(first: boolean): number {
+    const { header, firstPage, items } = this.blocks;
     const available = this.pageBottom - this.pageTop;
     const headerHeight = header.height() + this.gap + items.headerHeight();
     const canhotoHeight =
-      this.sideCanhotoWidth > 0 ? 0 : (this.canhoto?.height() ?? 0);
-    const firstHeight = this.stackHeight(this.visible(firstPage));
-    const lastHeight = this.stackHeight(this.visible(lastPage));
+      first && this.sideCanhotoWidth <= 0 ? (this.canhoto?.height() ?? 0) : 0;
+    const firstHeight = first ? this.stackHeight(this.visible(firstPage)) : 0;
+    return available - canhotoHeight - headerHeight - firstHeight;
+  }
 
+  protected paginate(): DanfePageSlice<Det>[] {
+    const { items, lastPage } = this.blocks;
     const pages: Det[][] = [];
     let current: Det[] = [];
     let used = 0;
-    let space = available - canhotoHeight - headerHeight - firstHeight;
+
+    this.page = { number: 1, total: 1 };
+    let space = this.itemSpace(true);
 
     for (const det of this.det) {
-      const height = items.itemHeight(det);
-      if (current.length && used + height > space) {
+      let height = items.itemHeight(det);
+      const fits = used + height <= space;
+      const canMove = current.length > 0 || this.page.number === 1;
+      if (!fits && canMove) {
         pages.push(current);
         current = [];
         used = 0;
-        space = available - headerHeight;
+        this.page = { number: 2, total: 1 };
+        space = this.itemSpace(false);
+        height = items.itemHeight(det);
       }
       current.push(det);
       used += height;
     }
 
-    if (used + lastHeight > space) {
+    const lastHeight = this.stackHeight(this.visible(lastPage));
+    if (current.length > 0 && used + lastHeight > space) {
       pages.push(current);
       current = [];
     }
     pages.push(current);
 
-    return pages.map((items, index) => ({
-      items,
+    return pages.map((pageItems, index) => ({
+      items: pageItems,
       isFirst: index === 0,
       isLast: index === pages.length - 1,
     }));
@@ -201,7 +218,7 @@ export abstract class DanfePdfDocument {
 
   protected draw(slice: DanfePageSlice<Det>): void {
     const { header, firstPage, items, lastPage, footer } = this.blocks;
-    const x = this.margins.left;
+    const x = this.contentX;
     const width = this.contentWidth;
     let y = this.pageTop;
 
@@ -227,17 +244,20 @@ export abstract class DanfePdfDocument {
       ? this.pageBottom - this.stackHeight(last)
       : this.pageBottom;
 
-    y += this.gap;
-    items.slice = slice;
-    items.boxHeight = itemsBottom - y;
-    items.build({ x, y, width });
-    y = itemsBottom;
+    const showItems = slice.items.length > 0 || slice.isLast;
+    if (showItems) {
+      y += this.gap;
+      items.slice = slice;
+      items.boxHeight = itemsBottom - y;
+      items.build({ x, y, width });
+    }
 
     if (slice.isLast) {
+      let blockY = showItems ? itemsBottom : y;
       for (const block of last) {
-        y += this.gap;
-        block.build({ x, y, width });
-        y += block.height();
+        blockY += this.gap;
+        block.build({ x, y: blockY, width });
+        blockY += block.height();
       }
     }
 
@@ -245,7 +265,7 @@ export abstract class DanfePdfDocument {
 
     if (slice.isFirst && canhoto && this.sideCanhotoWidth > 0) {
       canhoto.build({
-        x: x + width + this.gap,
+        x: this.margins.left,
         y: this.pageTop,
         width: this.sideCanhotoWidth,
         height:

@@ -17,19 +17,75 @@ interface RtcRateGroup {
 export class RtcItems extends DanfeItemsBlock {
   protected readonly fontSize: number = 5.5;
 
-  protected readonly columnLabelColor = this.fields.muted;
+  private readonly compactWeights = [47, 15, 13, 14, 14, 28, 34, 35];
+
+  private fittedWeights?: number[];
 
   protected get columns(): DanfeItemsColumn[] {
+    const [description, cst, quantity, unit, total, bases, rates, taxes] =
+      this.columnWeights();
+
     return [
-      { label: 'DESCRIÇÃO DO PRODUTO / SERVIÇO', weight: 44 },
-      { label: 'CST / CFOP', weight: 18 },
-      { label: 'QTD / UN', weight: 13, align: 'center' },
-      { label: 'VLR UNIT', weight: 14, align: 'right' },
-      { label: 'VLR TOTAL', weight: 14, align: 'right' },
-      { label: 'BASES DE CÁLCULO', weight: 28 },
-      { label: 'ALÍQUOTAS', weight: 34 },
-      { label: 'VALOR DOS TRIBUTOS', weight: 35 },
+      { label: 'DESCRIÇÃO DO PRODUTO / SERVIÇO', weight: description },
+      { label: 'CST / CFOP', weight: cst },
+      { label: 'QTD / UN', weight: quantity, align: 'center' },
+      { label: 'VLR UNIT', weight: unit, align: 'right' },
+      { label: 'VLR TOTAL', weight: total, align: 'right' },
+      { label: 'BASES DE CÁLCULO', weight: bases },
+      { label: 'ALÍQUOTAS', weight: rates },
+      { label: 'VALOR DOS TRIBUTOS', weight: taxes },
     ];
+  }
+
+  protected columnWeights(): number[] {
+    if (this.fittedWeights) return this.fittedWeights;
+
+    const [description, cst, quantity, unit, total, bases, rates, taxes] =
+      this.compactWeights;
+    let quantityWeight = quantity;
+    let unitWeight = unit;
+    let totalWeight = total;
+
+    for (const det of this.context.det) {
+      const { prod } = det;
+      quantityWeight = Math.max(
+        quantityWeight,
+        this.weightFor(this.format.emitted(prod.qCom, 4), this.minFontSize),
+        this.weightFor(`[${prod.uCom}]`, this.fontSize),
+      );
+      unitWeight = Math.max(
+        unitWeight,
+        this.weightFor(this.format.emitted(prod.vUnCom, 10), this.minFontSize),
+      );
+      totalWeight = Math.max(
+        totalWeight,
+        this.weightFor(this.format.currency(prod.vProd), this.minFontSize),
+      );
+    }
+
+    const descriptionWeight =
+      description -
+      (quantityWeight - quantity) -
+      (unitWeight - unit) -
+      (totalWeight - total);
+
+    this.fittedWeights = [
+      descriptionWeight,
+      cst,
+      quantityWeight,
+      unitWeight,
+      totalWeight,
+      bases,
+      rates,
+      taxes,
+    ];
+    return this.fittedWeights;
+  }
+
+  protected weightFor(text: string, size: number): number {
+    const width = this.fields.widthOf(text, { size });
+    const outer = width + 0.5 + this.cellPadding * 2;
+    return Math.ceil((outer * 200) / this.context.contentWidth);
   }
 
   public rate(
@@ -91,7 +147,13 @@ export class RtcItems extends DanfeItemsBlock {
           fit: true,
         },
       ],
-      currency(prod.vProd),
+      [
+        {
+          text: currency(prod.vProd),
+          align: 'right',
+          fit: true,
+        },
+      ],
       {
         pairs: [
           ['ICMS', currency(icms.vBC)],
