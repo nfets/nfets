@@ -27,7 +27,8 @@ export class FiscalMessages implements Builder {
   }
 
   protected get contingencyBannerText(): string {
-    if (this.context.protNFe?.infProt) return this.constants.issuedInContingency;
+    if (this.context.protNFe?.infProt)
+      return this.constants.issuedInContingency;
 
     return `${this.constants.issuedInContingency}\n${this.constants.pendingOfAuthorization}`;
   }
@@ -45,8 +46,8 @@ export class FiscalMessages implements Builder {
   protected contingency(options?: RowBuilderOptions) {
     if (!this.hasContingency) return;
 
-    const left = options?.x ?? 0;
-    this.builder.row({ left }, (options) =>
+    const { left, right } = this.builder.pageMargins();
+    this.builder.row({ left: options?.x ?? left, right }, (options) =>
       this.builder.text(this.contingencyBannerText, {
         ...options,
         align: 'center',
@@ -57,8 +58,8 @@ export class FiscalMessages implements Builder {
   protected notProtocoledInNormalEmission(options?: RowBuilderOptions) {
     if (!this.hasNotProtocoledInNormalEmission) return;
 
-    const left = options?.x ?? 0;
-    this.builder.row({ left }, (options) =>
+    const { left, right } = this.builder.pageMargins();
+    this.builder.row({ left: options?.x ?? left, right }, (options) =>
       this.builder.text(this.constants.notProtocoledInNormalEmission, {
         ...options,
         align: 'center',
