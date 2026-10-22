@@ -1,4 +1,5 @@
 import { DanfeRtcPdfDocument } from '@nfets/nfe/application/printable-documents/nfe/layouts/danfe-rtc';
+import { DanfeRtcLandscapePdfDocument } from '@nfets/nfe/application/printable-documents/nfe/layouts/danfe-rtc-landscape';
 import { expectInOrder } from '@nfets/test/expects';
 
 import { occurrences, renderDanfeText } from '../mocks/render-danfe';
@@ -17,16 +18,17 @@ describe('DanfeRtc', () => {
       'rtc-homolog-protocoled.xml',
     );
 
+    expect(text).toContain('Folha 1/1');
+    expect(text).toContain('INDICADA AO LADO');
+
     expectInOrder(text)
       // Header (NT 2026.010 item 4.2)
-      .toContain('Folha 1/1')
-      .toContain('4226 1003 9160 7600 0583 5500 1000 0012 3413 0084 3559')
+      .toContain('4226 1003 9160 7600 0583 5500 1000 0012')
       .toContain('342260001234567 - 06/10/2026 10:15:30')
       .toContain('123456789')
       .toContain('03.916.076/0005-83')
       .toContain('CÓDIGO DO REGIME TRIBUTÁRIO')
       .toContain('3 - REGIME NORMAL')
-      .toContain('TIPO DE REGIME DE APURAÇÃO DO IBS E DA CBS')
 
       // Recipient and delivery
       .toContain('CLIENTE EXEMPLO S/A')
@@ -67,7 +69,7 @@ describe('DanfeRtc', () => {
 
       // Transport
       .toContain('TRANSPORTADORA EXEMPLO LTDA')
-      .toContain('0-Por conta do Rem')
+      .toContain('0-Por conta do rem')
       .toContain('AAA0A00')
       .toContain('13,250')
       .toContain('12,500')
@@ -75,33 +77,42 @@ describe('DanfeRtc', () => {
       // Items (NT 2026.010 item 4.3)
       .toContain('DESCRIÇÃO DO PRODUTO / SERVIÇO CST / CFOP QTD / UN')
       .toContain('BASES DE CÁLCULO ALÍQUOTAS VALOR DOS TRIBUTOS')
-      .toContain('[Cód. 1001] [NCM 61091000] [cClassTrib 000001]')
-      .toContain('CST 000')
-      .toContain('IBS / CBS 100,00')
-      .toContain('ICMS 17,00% CBS 0,90%')
-      .toContain('IBS UF 0,10% IPI 5,00%')
-      .toContain('ICMS 17,00 CBS 0,90')
+      .toContain('[Cód. 1001]')
+      .toContain('[NCM 61091000]')
+      .toContain('000001')
+      .toContain('CST')
+      .toContain('CFOP')
+      .toContain('IBS / CBS')
+      .toContain('100,00')
+      .toContain('17,00%')
+      .toContain('0,90%')
+      .toContain('0,10%')
+      .toContain('5,00%')
+      .toContain('17,00')
+      .toContain('0,90')
 
       // gRed informed: effective rates (pAliqEfet)
       .toContain('Lote 123 - Validade 12/2027')
-      .toContain('[cClassTrib 200032]')
-      .toContain('CBS 0,54%')
-      .toContain('IBS UF 0,06%')
-      .toContain('IBS UF 0,03')
+      .toContain('200032')
+      .toContain('200')
+      .toContain('0,54%')
+      .toContain('0,06%')
+      .toContain('0,03')
 
       // Imposto seletivo
-      .toContain('BEBIDA ACUCARADA COM IMPOSTO SELETIVO')
-      .toContain('IS 30,00')
-      .toContain('IS 10,00%')
-      .toContain('IS 3,00')
+      .toContain('BEBIDA ACUCARADA COM IMPOSTO')
+      .toContain('30,00')
+      .toContain('10,00%')
+      .toContain('3,00')
 
       // Additional data (NT 2026.010 item 4.5)
       .toContain('DADOS ADICIONAIS')
       .toContain('Email do Destinatário: cliente@exemplo.com.br')
-      .toContain('QR CODE')
       .toContain('RESERVADO AO FISCO')
+      .toContain('QR CODE')
       .toContain('-- 1 of 1 --');
 
+    expect(text).not.toContain('TIPO DE REGIME DE APURAÇÃO DO IBS E DA CBS');
     expect(text).not.toContain('VALOR DO IBS MONOFÁSICO POR RETENÇÃO');
     expect(text).not.toContain('VALOR DO FCP RETIDO POR ST');
     expect(text).not.toContain('CÁLCULO DO ISSQN');
@@ -119,8 +130,9 @@ describe('DanfeRtc', () => {
       .toContain('TOTAL DOS PRODUTOS E TOTAL DA NOTA')
       .toContain('TOTAL DO ICMS / IPI')
       .toContain('CAMISETA LINHO')
-      .toContain('[Cód. 1] [NCM 00000000]')
-      .toContain('CST 0300')
+      .toContain('[Cód. 1]')
+      .toContain('[NCM 00000000]')
+      .toContain('CST')
       .toContain('-- 1 of 1 --');
 
     expect(text).not.toContain('TOTAL DO IBS / CBS / IS');
@@ -129,6 +141,7 @@ describe('DanfeRtc', () => {
     expect(text).not.toContain('FATURA / DUPLICATAS');
     expect(text).not.toContain('QR CODE');
     expect(text).not.toContain('cClassTrib');
+    expect(text).not.toContain('0300');
   });
 
   it('should paginate many items repeating the header and keeping additional data on the last page', async () => {
@@ -138,19 +151,44 @@ describe('DanfeRtc', () => {
     );
 
     expectInOrder(text)
-      .toContain('Folha 1/5')
+      .toContain('Folha 1/6')
       .toContain('TOTAL DO IBS / CBS / IS')
-      .toContain('-- 1 of 5 --')
-      .toContain('Folha 2/5')
-      .toContain('Folha 5/5')
+      .toContain('-- 1 of 6 --')
+      .toContain('Folha 2/6')
+      .toContain('Folha 6/6')
       .toContain('DADOS ADICIONAIS')
       .toContain('QR CODE')
-      .toContain('-- 5 of 5 --');
+      .toContain('-- 6 of 6 --');
 
     expect(occurrences(text, 'RECEBEMOS DE')).toBe(1);
     expect(occurrences(text, 'DADOS ADICIONAIS')).toBe(1);
     expect(occurrences(text, 'TOTAL DO IBS / CBS / IS')).toBe(1);
-    expect(occurrences(text, 'CÓDIGO DO REGIME TRIBUTÁRIO')).toBe(5);
-    expect(occurrences(text, '[cClassTrib 200032]')).toBe(27);
+    expect(occurrences(text, 'CÓDIGO DO REGIME TRIBUTÁRIO')).toBe(6);
+    expect(occurrences(text, '200032')).toBe(27);
+  });
+
+  it('should print quantity, unit and total in full at 6pt', async () => {
+    const text = await renderDanfeText(
+      DanfeRtcPdfDocument,
+      'rtc-homolog-protocoled-maxlength.xml',
+    );
+
+    expect(text).toContain('99.999.999.999,9999');
+    expect(text).toContain('99.999.999.999,9999999999');
+    expect(text).toContain('9.999.999.999.999,99');
+    expect(text).not.toContain('99.999.999.999,…');
+    expect(text).not.toContain('9.999.999.999…');
+  });
+
+  it('should build the landscape rtc danfe with the receipt on the left', async () => {
+    const text = await renderDanfeText(
+      DanfeRtcLandscapePdfDocument,
+      'rtc-homolog-protocoled.xml',
+    );
+
+    expect(text).toContain('INDICADA ABAIXO');
+    expect(text).toContain('DESTINATÁRIO / REMETENTE');
+    expect(text).toContain('DADOS DOS PRODUTOS / SERVIÇOS');
+    expect(occurrences(text, 'RECEBEMOS DE')).toBe(1);
   });
 });

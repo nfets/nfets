@@ -8,7 +8,8 @@ import { DanfeBlock } from './block';
 
 export class Invoices extends DanfeBlock {
   protected readonly title = 'FATURA / DUPLICATAS';
-  protected readonly perRow = 7;
+  protected readonly perRow = 5;
+  protected readonly valueSize = 6;
   protected readonly limit = 21;
   protected readonly cellHeight = mm(10);
 
@@ -74,34 +75,35 @@ export class Invoices extends DanfeBlock {
       const cy = top + row * this.cellHeight;
 
       this.fields.rect(cx, cy, cellWidth, this.cellHeight);
-      const labels = 'Num.\nVenc.\nValor';
-      const values = [
-        dup.nDup ?? '',
-        this.format.plainDate(dup.dVenc),
-        `R$ ${this.format.currency(dup.vDup)}`,
-      ].join('\n');
+      const lines: [string, string][] = [
+        ['Num.', dup.nDup ?? ''],
+        ['Venc.', this.format.plainDate(dup.dVenc)],
+        ['Valor', `R$ ${this.format.currency(dup.vDup)}`],
+      ];
+      const size = this.valueSize;
+      this.builder.font(this.context.defaults.font).fontSize(size);
+      const line = this.builder.currentLineHeight(true);
+      const innerRight = cx + cellWidth - p;
 
-      const options = { size: 6 };
-      this.fields.text(
-        labels,
-        cx + p,
-        cy + p,
-        cellWidth - 2 * p,
-        this.cellHeight - 2 * p,
-        options,
-      );
-      this.fields.text(
-        values,
-        cx + p,
-        cy + p,
-        cellWidth - 2 * p,
-        this.cellHeight - 2 * p,
-        {
-          ...options,
-          bold: true,
-          align: 'right',
-        },
-      );
+      lines.forEach(([label, value], lineIndex) => {
+        const top = cy + p + lineIndex * line;
+        const labelWidth = this.fields.widthOf(label, { size });
+        this.fields.text(label, cx + p, top, labelWidth, line, { size });
+        const valueX = cx + p + labelWidth + 2;
+        this.fields.text(
+          value,
+          valueX,
+          top,
+          Math.max(innerRight - valueX, 1),
+          line,
+          {
+            size,
+            align: 'right',
+            lineBreak: false,
+            ellipsis: true,
+          },
+        );
+      });
     });
   }
 }

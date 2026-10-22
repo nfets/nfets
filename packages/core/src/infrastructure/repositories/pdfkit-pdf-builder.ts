@@ -100,9 +100,24 @@ export class PdfkitPdfBuilder implements PdfBuilder {
     y?: number,
     options?: ImageOptions,
   ): this {
+    const src = this.imageSource(image);
     if (typeof xOrOptions === 'number' && typeof y === 'number')
-      return (this.doc.image(image, xOrOptions, y, options), this);
-    return (this.doc.image(image, xOrOptions as ImageOptions), this);
+      return (this.doc.image(src, xOrOptions, y, options), this);
+    return (this.doc.image(src, xOrOptions as ImageOptions), this);
+  }
+
+  private imageSource(image: string): string | Buffer {
+    if (image.startsWith('data:') || !/^[A-Za-z0-9+/]+={0,2}$/.test(image))
+      return image;
+    const bytes = Buffer.from(image, 'base64');
+    const png =
+      bytes[0] === 0x89 &&
+      bytes[1] === 0x50 &&
+      bytes[2] === 0x4e &&
+      bytes[3] === 0x47;
+    const jpeg = bytes[0] === 0xff && bytes[1] === 0xd8;
+    if (png || jpeg) return bytes;
+    return image;
   }
 
   public rect(x: number, y: number, w: number, h: number) {
@@ -215,7 +230,7 @@ export class PdfkitPdfBuilder implements PdfBuilder {
       options = {};
       items = [optionsOrFirstItem, ..._items];
     } else {
-      options = optionsOrFirstItem ?? ({});
+      options = optionsOrFirstItem ?? {};
       items = _items;
     }
 

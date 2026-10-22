@@ -13,8 +13,11 @@ export const DanfeMargins = {
   left: mm(5),
 } as const;
 
+export type DanfeLayout = 'portrait' | 'landscape';
+
 export interface DanfeOptions {
   size: keyof typeof DanfeSize;
+  layout: DanfeLayout;
   qComDecimals: number;
   vUnComDecimals: number;
   showCanhoto: boolean;
@@ -31,6 +34,7 @@ export interface DanfeArea {
   x: number;
   y: number;
   width: number;
+  height?: number;
 }
 
 export interface DanfeFieldCell {
@@ -51,9 +55,18 @@ export interface DanfeItemsColumn {
 export interface DanfeItemsPairsCell {
   pairs: [string, string][];
   columns?: number;
+  muted?: boolean;
 }
 
-export type DanfeItemsCell = string | DanfeItemsPairsCell;
+export interface DanfeTextRun {
+  text: string;
+  color?: string;
+  align?: 'left' | 'center' | 'right';
+  blankBefore?: boolean;
+  fit?: boolean;
+}
+
+export type DanfeItemsCell = string | DanfeTextRun[] | DanfeItemsPairsCell;
 
 export interface DanfePageSlice<T> {
   items: T[];

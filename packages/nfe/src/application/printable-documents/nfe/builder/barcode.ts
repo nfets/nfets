@@ -21,21 +21,83 @@ export class Code128C {
     '211232', '2331112',
   ];
 
+  protected static readonly startB = 104;
   protected static readonly startC = 105;
+  protected static readonly latchB = 100;
+  protected static readonly latchC = 99;
   protected static readonly stop = 106;
 
-  public static codes(digits: string): number[] {
-    if (!/^\d*$/.test(digits) || digits.length % 2 !== 0)
-      throw new Error('Code128C requires an even number of digits');
+  public static codes(value: string): number[] {
+    if (/^\d*$/.test(value)) {
+      if (value.length % 2 !== 0)
+        throw new Error('Code128C requires an even number of digits');
 
-    const values = digits.match(/\d{2}/g)?.map(Number) ?? [];
+      const values = value.match(/\d{2}/g)?.map(Number) ?? [];
+      return Code128C.finish([Code128C.startC, ...values]);
+    }
+
+    if (!/^[0-9A-Z]+$/.test(value))
+      throw new Error('Code128 requires digits or uppercase letters');
+
+    return Code128C.finish(Code128C.symbols(value));
+  }
+
+  protected static symbols(value: string): number[] {
+    const symbols: number[] = [];
+    let index = 0;
+    let set: 'B' | 'C' = Code128C.digitRun(value, 0) >= 4 ? 'C' : 'B';
+    symbols.push(set === 'C' ? Code128C.startC : Code128C.startB);
+
+    while (index < value.length) {
+      if (set === 'C') {
+        const pair = value.slice(index, index + 2);
+        if (/^\d{2}$/.test(pair)) {
+          symbols.push(Number(pair));
+          index += 2;
+          continue;
+        }
+        symbols.push(Code128C.latchB);
+        set = 'B';
+        continue;
+      }
+
+      const run = Code128C.digitRun(value, index);
+      const skip = run % 2;
+      const pairs = (run - skip) / 2;
+      const used = pairs * 2;
+      const returns = index + skip + used < value.length;
+      const latchBack = returns ? 1 : 0;
+      if (pairs >= 2 && skip + 1 + pairs + latchBack < skip + used) {
+        for (let step = 0; step < skip; step += 1) {
+          symbols.push(value.charCodeAt(index) - 32);
+          index += 1;
+        }
+        symbols.push(Code128C.latchC);
+        set = 'C';
+        continue;
+      }
+
+      symbols.push(value.charCodeAt(index) - 32);
+      index += 1;
+    }
+
+    return symbols;
+  }
+
+  protected static digitRun(value: string, index: number): number {
+    let size = 0;
+    while (value[index + size] >= '0' && value[index + size] <= '9') size += 1;
+    return size;
+  }
+
+  protected static finish(symbols: number[]): number[] {
     const checksum =
-      values.reduce(
-        (acc, value, index) => acc + value * (index + 1),
-        Code128C.startC,
+      symbols.reduce(
+        (acc, symbol, index) => (index === 0 ? symbol : acc + symbol * index),
+        0,
       ) % 103;
 
-    return [Code128C.startC, ...values, checksum, Code128C.stop];
+    return [...symbols, checksum, Code128C.stop];
   }
 
   public static modules(digits: string): number[] {

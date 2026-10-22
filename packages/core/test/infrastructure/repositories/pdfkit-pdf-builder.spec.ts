@@ -37,6 +37,24 @@ describe('PdfkitPdfBuilder', () => {
     await new Promise((resolve) => setImmediate(resolve));
   });
 
+  it('embeds a raw base64 image without reading it as a file path', async () => {
+    const jpeg =
+      '/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=';
+    const builder = PdfkitPdfBuilder.new();
+    const stream = createWriteStream(file);
+    builder.pipe(stream);
+    builder.page();
+    builder.image(jpeg, 0, 0, { fit: [10, 10] });
+
+    await new Promise<void>((resolve, reject) => {
+      stream.on('finish', () => resolve());
+      stream.on('error', reject);
+      builder.end();
+    });
+
+    expect(statSync(file).size).toBeGreaterThan(0);
+  });
+
   it('should build a pdf with a static text "Hello, world!"', async () => {
     const builder = PdfkitPdfBuilder.new();
     const stream = createWriteStream(file);

@@ -11,6 +11,7 @@ import { DanfceDefaultPdfDocument } from './nfce/layouts/danfce-default';
 import { DanfceReducedPdfDocument } from './nfce/layouts/danfce-reduced';
 import { DanfeDefaultPdfDocument } from './nfe/layouts/danfe-default';
 import { DanfeRtcPdfDocument } from './nfe/layouts/danfe-rtc';
+import { DanfeRtcLandscapePdfDocument } from './nfe/layouts/danfe-rtc-landscape';
 
 dotenv.config({ path: path.resolve('../../', '.env') });
 const app = express();
@@ -79,9 +80,27 @@ app.get('/danfe-rtc', async (req, res) => {
     'Cache-Control': 'no-cache, no-store, must-revalidate',
   });
 
-  const { file = 'homolog-cancelled.xml' } = req.query;
+  const { file = 'rtc-homolog-protocoled.xml', layout } = req.query;
   if (typeof file !== 'string') return res.status(400).end();
-  const doc = new DanfeRtcPdfDocument(res);
+  const Layout =
+    layout === 'landscape' ? DanfeRtcLandscapePdfDocument : DanfeRtcPdfDocument;
+  const doc = new Layout(res);
+  await doc.build(SAMPLE_NFE_XML(file));
+  doc.end();
+});
+
+app.get('/danfe-rtc-maxlength', async (req, res) => {
+  res.set({
+    'Content-Type': 'application/pdf',
+    'Content-Disposition': 'inline; filename="example.pdf"',
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+  });
+
+  const { file = 'rtc-homolog-protocoled-maxlength.xml', layout } = req.query;
+  if (typeof file !== 'string') return res.status(400).end();
+  const Layout =
+    layout === 'landscape' ? DanfeRtcLandscapePdfDocument : DanfeRtcPdfDocument;
+  const doc = new Layout(res);
   await doc.build(SAMPLE_NFE_XML(file));
   doc.end();
 });

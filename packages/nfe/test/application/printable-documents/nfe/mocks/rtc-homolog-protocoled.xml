@@ -4,7 +4,7 @@
       <ide>
         <cUF>42</cUF>
         <cNF>30084355</cNF>
-        <natOp>Venda de mercadoria adquirida de terceiros</natOp>
+        <natOp>VENDA DE MERCADORIA ADQUIRIDA DE TERCEIROS AISJD IASOJDIA SA</natOp>
         <mod>55</mod>
         <serie>1</serie>
         <nNF>1234</nNF>
@@ -144,12 +144,12 @@
           <CFOP>5102</CFOP>
           <uCom>CX</uCom>
           <qCom>1.0000</qCom>
-          <vUnCom>50.0000000000</vUnCom>
+          <vUnCom>50.00</vUnCom>
           <vProd>50.00</vProd>
           <cEANTrib>SEM GTIN</cEANTrib>
           <uTrib>UN</uTrib>
           <qTrib>10.0000</qTrib>
-          <vUnTrib>5.0000000000</vUnTrib>
+          <vUnTrib>50.00</vUnTrib>
           <indTot>1</indTot>
         </prod>
         <imposto>
@@ -361,7 +361,8 @@
       </infAdic>
     </infNFe>
     <infNFeSupl>
-      <qrCode>https://www.nfe.fazenda.gov.br/portal/consultaRecaptcha.aspx?p=42261003916076000583550010000012341300843559|2|2</qrCode>
+      <qrCode>
+        https://www.nfe.fazenda.gov.br/portal/consultaRecaptcha.aspx?p=42261003916076000583550010000012341300843559|2|2</qrCode>
       <urlChave>www.nfe.fazenda.gov.br/portal</urlChave>
     </infNFeSupl>
   </NFe>

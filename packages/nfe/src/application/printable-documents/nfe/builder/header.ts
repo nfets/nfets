@@ -12,7 +12,6 @@ export class Header extends DanfeBlock {
   protected readonly emitWidth = mm(80);
   protected readonly danfeWidth = mm(34);
   protected readonly barcodeHeight = mm(12);
-  protected readonly logoHeight = this.topHeight / 3;
 
   public height(): number {
     const rows = 1 + this.registrationRows().length;
@@ -27,16 +26,24 @@ export class Header extends DanfeBlock {
     const { emit } = this.infNFe;
     return [
       [
-        { label: 'INSCRIÇÃO ESTADUAL', value: emit.IE, weight: 1 },
-        { label: 'INSCRIÇÃO MUNICIPAL', value: emit.IM, weight: 1 },
+        {
+          label: 'INSCRIÇÃO ESTADUAL',
+          value: this.format.blank(emit.IE),
+          weight: 1,
+        },
+        {
+          label: 'INSCRIÇÃO MUNICIPAL',
+          value: this.format.blank(emit.IM),
+          weight: 1,
+        },
         {
           label: 'INSCRIÇÃO ESTADUAL DO SUBST. TRIBUT.',
-          value: emit.IEST,
+          value: this.format.blank(emit.IEST),
           weight: 1,
         },
         {
           label: 'CNPJ / CPF',
-          value: this.format.document(emit.CNPJ, emit.CPF),
+          value: this.format.blank(this.format.document(emit.CNPJ, emit.CPF)),
           weight: 1,
         },
       ],
@@ -67,12 +74,11 @@ export class Header extends DanfeBlock {
     const top = y + p + this.fields.labelHeight;
     const contentHeight = y + height - p - top;
 
-    const textX = x + p;
-    const textWidth = width - 2 * p;
     const gap = mm(1);
-
     const logo = this.logo;
-    const logoSpace = logo ? this.logoHeight + gap : 0;
+    const logoSize = logo ? contentHeight : 0;
+    const textX = x + p + logoSize + (logo ? gap : 0);
+    const textWidth = width - 2 * p - logoSize - (logo ? gap : 0);
 
     const { xNome } = this.infNFe.emit;
     const address = this.emitAddress();
@@ -82,21 +88,19 @@ export class Header extends DanfeBlock {
     );
     const addressHeight = Math.min(
       this.fields.measure(address, textWidth, { size: 7 }),
-      contentHeight - logoSpace - nameHeight - gap,
+      contentHeight - nameHeight - gap,
     );
 
-    const blockHeight = logoSpace + nameHeight + gap + addressHeight;
-    const logoY = top + Math.max((contentHeight - blockHeight) / 2, 0);
-    const nameY = logoY + logoSpace;
+    const blockHeight = nameHeight + gap + addressHeight;
+    const nameY = top + Math.max((contentHeight - blockHeight) / 2, 0);
     const addressY = nameY + nameHeight + gap;
 
-    if (logo) {
-      this.builder.image(logo, textX, logoY, {
-        fit: [textWidth, this.logoHeight],
+    if (logo)
+      this.builder.image(logo, x + p, top, {
+        fit: [logoSize, contentHeight],
         align: 'center',
         valign: 'center',
       });
-    }
 
     this.fields.text(xNome, textX, nameY, textWidth, nameHeight, {
       size: 9,
@@ -200,7 +204,6 @@ export class Header extends DanfeBlock {
       return {
         label: 'PROTOCOLO DE AUTORIZAÇÃO DE USO',
         value: `${infProt.nProt} - ${this.format.dateTime(infProt.dhRecbto)}`,
-        align: 'center',
         weight: 86,
       };
 
@@ -210,7 +213,6 @@ export class Header extends DanfeBlock {
       value: this.context.status.isContingency
         ? `EMITIDA EM CONTINGÊNCIA ${this.format.dateTime(dhCont)}`.trim()
         : '',
-      align: 'center',
       weight: 86,
     };
   }
