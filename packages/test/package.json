@@ -18,6 +18,6 @@
     "./ensure-platform": "./src/ensure-platform.ts"
   },
   "scripts": {
-    "test": "cross-env NODE_OPTIONS=\"--localstorage-file=/tmp/jest-localstorage.json\" jest --config jest.config.integration.ts"
+    "test": "cross-env NODE_OPTIONS=\"--localstorage-file=jest-localstorage.json\" jest --config jest.config.integration.ts"
   }
 }
