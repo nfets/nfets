@@ -28,7 +28,7 @@
   "scripts": {
     "build": "tsup --config tsup.config.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --localstorage-file=/tmp/jest-localstorage.json\" jest --config jest.config.ts --passWithNoTests",
+    "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --localstorage-file=jest-localstorage.json\" jest --config jest.config.ts --passWithNoTests",
     "test:coverage": "pnpm test --coverage"
   }
 }
