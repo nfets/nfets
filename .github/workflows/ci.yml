@@ -11,17 +11,10 @@ concurrency:
 jobs:
   ci:
     strategy:
+      fail-fast: false
       matrix:
-        include:
-          - os: ubuntu-latest
-            arch: x64
-            node-version: 22.x
-          - os: windows-latest
-            arch: x64
-            node-version: 22.x
-          - os: macos-latest
-            arch: arm64
-            node-version: 22.x
+        node-version: [22.x, 24.x, 26.x]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     runs-on: ${{ matrix.os }}
 
@@ -41,7 +34,7 @@ jobs:
         uses: ./.github/actions/setup-nodejs
         with:
           os: ${{ matrix.os }}
-          architecture: ${{ matrix.arch }}
+          architecture: ${{ matrix.os == 'macos-latest' && 'arm64' || 'x64' }}
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies, Rebuild addons and Build package
