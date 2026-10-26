@@ -179,8 +179,8 @@ describe('nfe void range pipeline (unit)', () => {
   it('should return left when certificate read fails', async () => {
     class ReadFailNfeVoidRangePipeline extends MockableNfeVoidRangePipeline {
       protected override readonly certificates = {
-        ...this.certificates,
         read: jest.fn().mockResolvedValue(left(new NFeTsError('certificate error'))),
+        getCertificateInfo: jest.fn(),
       } as unknown as NfeVoidRangePipeline['certificates'];
     }
 

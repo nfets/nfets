@@ -1,6 +1,6 @@
 import type { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
 import type { NfeRemoteClient } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
-import type { ReadCertificateRequest } from '@nfets/core/domain';
+import type { HttpClient, ReadCertificateRequest } from '@nfets/core/domain';
 import type { RemoteTransmissionRepository } from '@nfets/core/domain';
 import type { SynchronousAutorizacaoResponse } from '@nfets/nfe/domain/entities/services/autorizacao';
 
@@ -225,7 +225,7 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
 
   beforeAll(async () => {
     const certificates = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       new MemoryCacheAdapter(),
     );
 
@@ -323,7 +323,7 @@ describe('nfe success authorizer pipeline (unit)', () => {
 
   beforeAll(async () => {
     const certificates = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       new MemoryCacheAdapter(),
     );
 
@@ -747,7 +747,7 @@ describe('nfe with failures authorizer pipeline (unit)', () => {
 
   beforeAll(async () => {
     const certificates = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       new MemoryCacheAdapter(),
     );
 

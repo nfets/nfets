@@ -1,7 +1,11 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "rootDir": ".",
+    "noEmit": true,
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "rootDir": "..",
     "paths": {
       "@nfets/nfe": ["./src/index"],
       "@nfets/nfe/*": ["./src/*"],
@@ -10,5 +14,13 @@
       "@nfets/test/*": ["../test/src/*"]
     }
   },
-  "include": ["src/**/*.ts", "test/**/*.ts"]
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "../core/src/**/*.ts",
+    "../test/src/expects.ts",
+    "../test/src/certificates.ts",
+    "../test/src/ensure-platform.ts",
+    "../test/src/ensure-integration-tests.ts"
+  ]
 }

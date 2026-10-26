@@ -1,3 +1,4 @@
+import type { HttpClient } from '@nfets/core/domain';
 import axios from 'axios';
 import { MemoryCacheAdapter } from '@nfets/core/infrastructure/repositories/memory-cache-adapter';
 import { NativeCertificateRepository } from '@nfets/core/infrastructure/repositories/native-certificate-repository';
@@ -27,7 +28,7 @@ describe('node certificate repository (unit)', () => {
   const cnpjCertificateRequest = getCnpjCertificateReadRequest();
 
   const repository = new NativeCertificateRepository(
-    axios.create(),
+    axios.create() as HttpClient,
     new MemoryCacheAdapter(),
   );
 
@@ -146,7 +147,7 @@ emailAddress=email@example.com`);
   it('should use cache when reading same certificate twice', async () => {
     const cache = new MemoryCacheAdapter();
     const cachedRepository = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       cache,
     );
 
@@ -289,7 +290,7 @@ emailAddress=email@example.com`);
         pfxRead.value.certificate.raw.toString('base64');
 
       const wincryptRepository = new NativeCertificateRepository(
-        axios.create(),
+        axios.create() as HttpClient,
         new MemoryCacheAdapter(),
       );
 

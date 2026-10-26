@@ -1,3 +1,4 @@
+import type { HttpClient } from '@nfets/core/domain';
 import axios from 'axios';
 
 import { XmlSigner } from '../../../src/application/signer/xml-signer';
@@ -26,7 +27,7 @@ describe('wincrypt xml signer (integration)', () => {
 
   beforeAll(async () => {
     certificateRepository = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       new MemoryCacheAdapter(),
     );
 
@@ -77,7 +78,7 @@ describe('wincrypt xml signer (unit)', () => {
   let certificateRepository: CertificateRepository;
   beforeAll(async () => {
     certificateRepository = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       new MemoryCacheAdapter(),
     );
 

@@ -1,3 +1,4 @@
+import type { HttpClient } from '@nfets/core/domain';
 import {
   StateCodes,
   Environment,
@@ -50,7 +51,7 @@ describe('soap nfce remote transmission (integration) (destructive)', () => {
 
   beforeAll(async () => {
     repository = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       new MemoryCacheAdapter(),
     );
 

@@ -1,3 +1,4 @@
+import type { HttpClient } from '@nfets/core/domain';
 import axios from 'axios';
 
 import { EntitySigner, NFeTsError, Xml2JsToolkit } from '@nfets/core';
@@ -25,7 +26,7 @@ describe('entity signer (integration)', () => {
 
   beforeAll(async () => {
     certificateRepository = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       new MemoryCacheAdapter(),
     );
 
@@ -72,7 +73,7 @@ describe('entity signer (unit)', () => {
 
   beforeAll(async () => {
     certificateRepository = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       new MemoryCacheAdapter(),
     );
 

@@ -119,7 +119,10 @@ describe('nfe cancel pipeline (unit)', () => {
       }),
       { tpAmb: Environment.Homolog },
     );
-    expect(pipeline.transmitter.recepcaoEvento).toHaveBeenCalledWith(
+    expect(
+      (pipeline as unknown as { transmitter: { recepcaoEvento: jest.Mock } })
+        .transmitter.recepcaoEvento,
+    ).toHaveBeenCalledWith(
       expect.objectContaining({
         idLote: expect.any(String),
         evento: signedEvento,
@@ -242,7 +245,10 @@ describe('nfe cancel pipeline (unit)', () => {
     );
 
     expect(result.isLeft()).toBe(true);
-    expect(pipeline.transmitter.recepcaoEvento).not.toHaveBeenCalled();
+    expect(
+      (pipeline as unknown as { transmitter: { recepcaoEvento: jest.Mock } })
+        .transmitter.recepcaoEvento,
+    ).not.toHaveBeenCalled();
   });
 
   it('should use branch identification instead of certificate CNPJ', async () => {
@@ -305,6 +311,12 @@ describe('nfe cancel pipeline (unit)', () => {
       expect.anything(),
       expect.anything(),
     );
-    expect(pipeline.certificates.getCertificateInfo).not.toHaveBeenCalled();
+    expect(
+      (
+        pipeline as unknown as {
+          certificates: { getCertificateInfo: jest.Mock };
+        }
+      ).certificates.getCertificateInfo,
+    ).not.toHaveBeenCalled();
   });
 });

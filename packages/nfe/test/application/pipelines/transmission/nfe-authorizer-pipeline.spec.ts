@@ -1,7 +1,10 @@
 import type { NFe } from '@nfets/nfe/infrastructure/dto/nfe/nfe';
 import type { NfeRemoteClient } from '@nfets/nfe/domain/entities/transmission/nfe-remote-client';
-import type { ReadCertificateRequest } from '@nfets/core/domain';
-import type { RemoteTransmissionRepository } from '@nfets/core/domain';
+import type {
+  HttpClient,
+  ReadCertificateRequest,
+  RemoteTransmissionRepository,
+} from '@nfets/core/domain';
 import type { SynchronousAutorizacaoResponse } from '@nfets/nfe/domain/entities/services/autorizacao';
 
 import axios from 'axios';
@@ -9,6 +12,8 @@ import contingency from '@nfets/nfe/services/contingency-webservices-mod55';
 
 import { right } from '@nfets/core/shared';
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
+import { IndSinc } from '@nfets/nfe/domain/entities/constants/ind-sinc';
+import type { ProtNFe } from '@nfets/nfe/domain/entities/nfe/prot-nfe';
 import { expectIsRight } from '@nfets/test/expects';
 import { NfeRemoteTransmitter } from '@nfets/nfe/application/transmission/nfe-transmitter';
 import { NfeAuthorizerPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-authorizer-pipeline';
@@ -223,7 +228,7 @@ describe('nfe authorizer pipeline (contingency) (unit)', () => {
 
   beforeAll(async () => {
     const certificates = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       new MemoryCacheAdapter(),
     );
 
@@ -319,7 +324,7 @@ describe('nfe authorizer pipeline (unit)', () => {
 
   beforeAll(async () => {
     const certificates = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       new MemoryCacheAdapter(),
     );
 
@@ -738,7 +743,7 @@ describe('nfe authorizer pipeline lot not processed (unit)', () => {
 
   it('should return right with rejection protNFe when sync lot is not processed', async () => {
     const certificates = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       new MemoryCacheAdapter(),
     );
 
@@ -771,11 +776,15 @@ describe('nfe authorizer pipeline lot not processed (unit)', () => {
 
     const pipeline = new MockableNfeAuthorizerPipeline(certificateRequest);
     const xml = await buildXml(StateCodes.PR, TpEmis.Normal);
-    const result = await pipeline.execute({ xml, idLote: '1', indSinc: '1' });
+    const result = await pipeline.execute({
+      xml,
+      idLote: '1',
+      indSinc: IndSinc.Synchronous,
+    });
 
     expectIsRight(result);
 
-    const protNFe = result.value.response.retEnviNFe.protNFe;
+    const protNFe = result.value.response.retEnviNFe.protNFe as ProtNFe;
     expect(protNFe.infProt.cStat).toBe('866');
     expect(protNFe.infProt.xMotivo).toBe(
       'Ausencia de troco quando o valor dos pagamentos informados for maior que o total da nota',

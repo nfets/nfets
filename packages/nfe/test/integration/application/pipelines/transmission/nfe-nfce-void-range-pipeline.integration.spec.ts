@@ -1,7 +1,7 @@
 import { Environment, StateCodes, type StateAcronym } from '@nfets/core/domain';
 import { readCertificateRequestForPipelineTests } from '@nfets/test/certificates';
 import { ensureIntegrationTestsHasValidCertificate } from '@nfets/test/ensure-integration-tests';
-import { expectIsRight } from '@nfets/test/expects';
+import { expectIsRight, expectNotNull } from '@nfets/test/expects';
 import { NfceVoidRangePipeline } from '@nfets/nfe/application/pipelines/transmission/nfce-void-range-pipeline';
 
 const SEFAZ_TIMEOUT_SC = 60 * 1000;
@@ -56,7 +56,8 @@ describe('nfe nfce void range (inutilização) pipeline (integration) (destructi
         JSON.stringify(response.value.response.retInutNFe, null, 2),
       );
 
-      const infInut = response.value.response.retInutNFe.infInut;
+      const infInut = response.value.response.retInutNFe?.infInut;
+      expectNotNull(infInut);
       expect(infInut.cStat).toBe('102');
       expect(infInut.xMotivo).toBe('Inutilizacao de numero homologado');
       expect(infInut.mod).toBe(args.mod);

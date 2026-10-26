@@ -1,6 +1,6 @@
 import type { NFCe } from '@nfets/nfe/infrastructure/dto/nfe/nfce';
 import type { NfceRemoteClient } from '@nfets/nfe/domain/entities/transmission/nfce-remote-client';
-import type { ReadCertificateRequest } from '@nfets/core/domain';
+import type { HttpClient, ReadCertificateRequest } from '@nfets/core/domain';
 import type { RemoteTransmissionRepository } from '@nfets/core/domain';
 
 import axios from 'axios';
@@ -128,7 +128,7 @@ describe('nfce contingency xml authorizer pipeline (unit)', () => {
 
   beforeAll(async () => {
     const certificates = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       new MemoryCacheAdapter(),
     );
 

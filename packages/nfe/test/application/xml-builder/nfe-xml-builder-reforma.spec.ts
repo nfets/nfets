@@ -57,7 +57,7 @@ describe('NfeXmlBuilder PL_010 and edge cases (unit)', () => {
           .vItem({ vItem: '100.00' }),
       )
       .transp(createValidTransp())
-      .pag(createValidPag());
+      .pag(createValidPag()) as NfeXmlBuilder;
 
   it('should replace total when a payload is provided', () => {
     const builder = buildMinimal().total({
@@ -242,10 +242,10 @@ describe('NfeXmlBuilder PL_010 and edge cases (unit)', () => {
   });
 
   it('should append det validation errors onto existing builder errors', async () => {
-    const builder = NfeXmlBuilder.create(toolkit);
-    Reflect.defineMetadata(ValidateErrorsMetadata, ['seed.error'], builder);
+    const seed = NfeXmlBuilder.create(toolkit);
+    Reflect.defineMetadata(ValidateErrorsMetadata, ['seed.error'], seed);
 
-    builder
+    const builder = seed
       .infNFe({ versao: '4.00' })
       .ide(createValidIde())
       .emit(createValidEmit())
