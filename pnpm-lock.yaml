@@ -55,8 +55,8 @@ importers:
         specifier: ^8.66.0
         version: 8.68.0(eslint@10.8.0)(typescript@6.0.3)
       axios:
-        specifier: ^1.19.0
-        version: 1.19.0
+        specifier: ^1.20.0
+        version: 1.20.0(debug@4.4.3)
       cross-env:
         specifier: ^10.1.0
         version: 10.1.0
@@ -1602,9 +1602,6 @@ packages:
 
   axios-ntlm@1.4.6:
     resolution: {integrity: sha512-4nR5cbVEBfPMTFkd77FEDpDuaR205JKibmrkaQyNwGcCx0szWNpRZaL0jZyMx4+mVY2PXHjRHuJafv9Oipl0Kg==}
-
-  axios@1.19.0:
-    resolution: {integrity: sha512-ht/iuYZXEjFxLH/Hkezgd7m6JKlHHXEUSneaDz8uZe1Gj5QZtCnpyDsckvAiEnT89OEbCLmnte4R4sn7P0EKFw==}
 
   axios@1.20.0:
     resolution: {integrity: sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==}
@@ -4823,16 +4820,6 @@ snapshots:
       des.js: 1.1.0
       dev-null: 0.1.1
       js-md4: 0.3.2
-    transitivePeerDependencies:
-      - debug
-      - supports-color
-
-  axios@1.19.0:
-    dependencies:
-      follow-redirects: 1.16.0(debug@4.4.3)
-      form-data: 4.0.6
-      https-proxy-agent: 5.0.1
-      proxy-from-env: 2.1.0
     transitivePeerDependencies:
       - debug
       - supports-color
