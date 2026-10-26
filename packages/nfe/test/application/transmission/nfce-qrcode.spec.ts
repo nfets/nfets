@@ -1,9 +1,13 @@
 import type { NFe } from '@nfets/nfe/domain/entities/nfe/nfe';
 import type { Signature } from '@nfets/core/domain/entities/signer/signature';
 import type { SignedEntity } from '@nfets/core/domain/repositories/signer-repository';
-import type { CertificateRepository } from '@nfets/core/domain';
+import type {
+  CertificateRepository,
+  HttpClient,
+  StateCode,
+  XmlToolkit,
+} from '@nfets/core/domain';
 import type { ReadCertificateResponse } from '@nfets/core/domain/entities/certificate/certificate';
-import type { StateCode, XmlToolkit } from '@nfets/core/domain';
 
 import path from 'node:path';
 import axios from 'axios';
@@ -581,7 +585,7 @@ describe('NfceQrcode', () => {
     beforeAll(async () => {
       toolkit = new Xml2JsToolkit();
       certificateRepository = new NativeCertificateRepository(
-        axios.create(),
+        axios.create() as HttpClient,
         new MemoryCacheAdapter(),
       );
       signer = new XmlSigner(
