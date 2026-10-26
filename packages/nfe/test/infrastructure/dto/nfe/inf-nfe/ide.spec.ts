@@ -1,5 +1,6 @@
 import { validateSync } from 'class-validator';
 import { Ide, RefNFP } from '@nfets/nfe/infrastructure/dto/nfe/inf-nfe/ide';
+import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
 
 describe('RefNFP Choice validation (within Ide)', () => {
   const createValidIde = (): Ide => {
@@ -15,7 +16,7 @@ describe('RefNFP Choice validation (within Ide)', () => {
     ide.idDest = '2';
     ide.cMunFG = '5212501';
     ide.tpImp = '1';
-    ide.tpEmis = '1';
+    ide.tpEmis = TpEmis.Normal;
     ide.cDV = '5';
     ide.tpAmb = '2';
     ide.finNFe = '1';

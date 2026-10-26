@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit && tsc -p tsconfig.test.json --noEmit",
     "test": "cross-env NODE_OPTIONS=\"--openssl-legacy-provider --experimental-vm-modules --localstorage-file=jest-localstorage.json\" jest --config jest.config.ts",
     "test:coverage": "pnpm test --coverage"
   },

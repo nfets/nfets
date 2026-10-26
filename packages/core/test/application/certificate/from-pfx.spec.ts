@@ -1,3 +1,4 @@
+import type { HttpClient } from '@nfets/core/domain';
 import axios from 'axios';
 import { ReadCertificateFromPfx } from '@nfets/core/application/certificate/from-pfx';
 import { NativeCertificateRepository } from '@nfets/core/infrastructure/repositories/native-certificate-repository';
@@ -13,7 +14,7 @@ describe('read certificate from pfx (unit)', () => {
   const validCnpjPfxCertificate = getCnpjCertificate();
 
   const certificateRepository = new NativeCertificateRepository(
-    axios.create(),
+    axios.create() as HttpClient,
     new MemoryCacheAdapter(),
   );
 

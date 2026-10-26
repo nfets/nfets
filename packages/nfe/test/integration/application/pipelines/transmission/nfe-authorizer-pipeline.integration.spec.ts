@@ -3,6 +3,7 @@ import type { Emit } from '@nfets/nfe/domain/entities/nfe/inf-nfe/emit';
 import type { ProtNFe } from '@nfets/nfe/domain/entities/nfe/prot-nfe';
 
 import { TpEmis } from '@nfets/nfe/domain/entities/constants/tp-emis';
+import { IndSinc } from '@nfets/nfe/domain/entities/constants/ind-sinc';
 import { NfeXmlBuilder } from '@nfets/nfe';
 import { expectIsRight } from '@nfets/test/expects';
 import { NfeAuthorizerPipeline } from '@nfets/nfe/application/pipelines/transmission/nfe-authorizer-pipeline';
@@ -454,7 +455,7 @@ describe('nfe authorizer pipeline (integration) (destructive)', () => {
       expectIsRight(secondNfeOrLeft);
 
       const response = await pipeline.execute({
-        indSinc: '0' as const,
+        indSinc: IndSinc.Asynchronous,
         xml: [firstNfeOrLeft.value, secondNfeOrLeft.value],
       });
       expectIsRight(response);

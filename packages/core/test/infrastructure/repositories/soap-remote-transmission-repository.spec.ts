@@ -1,3 +1,4 @@
+import type { HttpClient } from '@nfets/core/domain';
 import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
 import path from 'node:path';
 import axios from 'axios';
@@ -41,7 +42,7 @@ describe('soap remote transmission nfe (integration) (not destructive) (linux)',
 
   beforeAll(async () => {
     repository = new NativeCertificateRepository(
-      axios.create(),
+      axios.create() as HttpClient,
       new MemoryCacheAdapter(),
     );
     transmission = new TestSoapRemoteTransmissionRepository(

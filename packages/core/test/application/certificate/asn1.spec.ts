@@ -1,3 +1,4 @@
+import type { HttpClient } from '@nfets/core/domain';
 import axios from 'axios';
 import { ASN1 } from '@nfets/core/application/certificate/asn1';
 import { NativeCertificateRepository } from '@nfets/core/infrastructure/repositories/native-certificate-repository';
@@ -13,7 +14,7 @@ describe('ASN1 (unit)', () => {
   const cpfCertificateRequest = getCpfCertificateReadRequest();
 
   const certificateRepository = new NativeCertificateRepository(
-    axios.create(),
+    axios.create() as HttpClient,
     new MemoryCacheAdapter(),
   );
 
