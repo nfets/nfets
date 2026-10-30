@@ -6,7 +6,7 @@ import { NFeTsError } from '@nfets/core';
 import { TpEvent } from '@nfets/nfe/domain/entities/constants/tp-event';
 
 const chNFe = '35240100000000000000550010000000011000000010';
-const identification = '03916076000664';
+const identification = 'N4BW1CV0000100';
 
 const signedEvento = {
   $: { xmlns: 'http://www.portalfiscal.inf.br/nfe' },

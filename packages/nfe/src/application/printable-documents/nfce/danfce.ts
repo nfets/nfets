@@ -63,7 +63,7 @@ export abstract class DanfcePdfDocument {
   ): Promise<number> {
     const instance = factory(new PassThrough());
     try {
-      instance.options.height = 10_000;
+      instance.options = { ...this.options, height: 10_000 };
       instance.apply();
       instance.builder.page();
       await instance.parse(xml);
@@ -71,7 +71,8 @@ export abstract class DanfcePdfDocument {
       for (const builder of instance.builders) await builder.build();
 
       const { bottom } = instance.pageMargins;
-      return instance.builder.y() + bottom + 8;
+      const line = instance.builder.currentLineHeight(true);
+      return instance.builder.y() + line + bottom;
     } finally {
       instance.end();
     }
@@ -80,7 +81,7 @@ export abstract class DanfcePdfDocument {
   protected readonly pageMargins = {
     top: 12,
     right: 8,
-    bottom: 28,
+    bottom: 8,
     left: 8,
   } as const;
 
@@ -143,5 +144,15 @@ export abstract class DanfcePdfDocument {
 
   public isValueNotEmpty(value?: DecimalValue): value is DecimalValue {
     return !!value && Number.parseFloat(value.toString()) > 0;
+  }
+
+  public setCredits(credits: string | false = defaultCreditsText): this {
+    this.options.credits = credits === false ? undefined : credits;
+    return this;
+  }
+
+  public setLogo(logo?: string): this {
+    this.options.logo = logo;
+    return this;
   }
 }

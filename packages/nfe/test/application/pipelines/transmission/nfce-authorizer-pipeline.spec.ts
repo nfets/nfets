@@ -434,7 +434,7 @@ describe('nfe success authorizer pipeline (unit)', () => {
           enderEmit: {
             xLgr: '14 897',
             nro: '13897',
-            fone: '4934420122',
+            fone: '4999999999',
             xCpl: 'teste teste',
             CEP: '72831770',
             xMun: 'Luziania',
@@ -549,7 +549,7 @@ describe('nfe success authorizer pipeline (unit)', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -662,10 +662,10 @@ describe('nfe success authorizer pipeline (unit)', () => {
                 <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
             </Transforms>
             <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-            <DigestValue>mh6eQs5LA0KA8HMuWKZVFoouyqk=</DigestValue>
+            <DigestValue>vKHWr/ghD/+aq/e2pqlgRZk7Fzw=</DigestValue>
         </Reference>
     </SignedInfo>
-    <SignatureValue>Jkb4il/eFbPPQl3L6ksWpQELhHUchC0xKsvBUyKXZ+kQvVMwZegV59Afsbnkkl+o+q9mry8nDc9TEyoOnoe8F0w9yCypEI/J7t7M4jaH710CCp7sn5QbBaakXX0zihz+d9AtuMTr6mZfXKnko7O74QyLx7yt1+vYuPfo4FdE1h8ydODB4I0iS97JtE+QVyh8zlchm/jsb/toyWt8nYmclHyo/sQpxre8UdbM2C0PO9e9ApuNyVr4aFSKw/n2ulNAxXF9BY8V7Gi3j/TqTaUtKKYdmR2MYu2iXHpYopxY3IGI3uSH+SvV/uQEsmyyQMy8IKzjZ3q/EKciYwLxQqpzFQ==</SignatureValue>
+    <SignatureValue>Z6B4llaTFw0HBcAtBwf7r4KK5IPBFX2GhblzsiICDM2Ga9YByJQ5gHqu60JInl0GkRszvpP9WURcI/mYUrNOoTcSazbODRBL3W0YQzf2VDJRZ8sSLn2XaZMqg6omFPV7nycXKZcsQmavLwudmALnKw8df6CI96YkIfXzwqR2sxIzYX92wVSv8pIpmcncybjPwZpKNE2Xs9nIWeIACAdyaBvgLJHYlrjyYskth4IiCk9KXsZc4F8rmtAMECE/V3mTLWY02/A+86CGX45fXxGBTJX4j3g7JSazolVfU3AMHhMcvvuUy7QCBcqKgIvvqRkU0H++g5LSWt+/wNVAbC2rdw==</SignatureValue>
     <KeyInfo>
       <X509Data>
         <X509Certificate>MIIEaTCCA1GgAwIBAgIUU5NidIJ8A/5mGmUXr2Z2CmOmkQwwDQYJKoZIhvcNAQELBQAwgbIxCzAJBgNVBAYTAkJSMQswCQYDVQQIDAJTUDEVMBMGA1UEBwwMU8ODwqNvIFBhdWxvMRMwEQYDVQQKDApJQ1AtQnJhc2lsMSgwJgYDVQQDDB9FTVBSRVNBIERFIFRFU1RFOjc5ODM5NjAxMDAwMTQyMR4wHAYDVQQLDBVBQyBTT0xVVEkgTXVsdGlwbGEgdjUxIDAeBgkqhkiG9w0BCQEWEWVtYWlsQGV4YW1wbGUuY29tMB4XDTI1MTIyMDAxMTEyN1oXDTM1MTIxODAxMTEyN1owgbIxCzAJBgNVBAYTAkJSMQswCQYDVQQIDAJTUDEVMBMGA1UEBwwMU8ODwqNvIFBhdWxvMRMwEQYDVQQKDApJQ1AtQnJhc2lsMSgwJgYDVQQDDB9FTVBSRVNBIERFIFRFU1RFOjc5ODM5NjAxMDAwMTQyMR4wHAYDVQQLDBVBQyBTT0xVVEkgTXVsdGlwbGEgdjUxIDAeBgkqhkiG9w0BCQEWEWVtYWlsQGV4YW1wbGUuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyeOdp7F2KUArVwIGu47LY27YgzLw6R9qbgDCCl6dCrYnvaAaDEYEuEDGkH2ViAxKRfmb/bHdkWLQWZwnNg9inlPbTSa1cvmcAE7GRD/+B3YBRwc1sc/i6zgm1nIttILbJB7Cb6PkSud5MeV5voq/Bj7qCS/FVoFtz1vHaaTMfM/5DZz+dUrZs8WahwDjIegL8mWHH5YKEFnc/4e4H0n/tui9duQgehmRWDDxljCOV6xKK2sx+YuG/GW0jJdi5asbjR6I+U8g/C+0VobhYb1rA0aIkfh/qfDWHzeN0EMkcw6O2Cet4Z7PO6zgr0fItUlkYb2FUYfJPmkJJ/fLRX4hTQIDAQABo3UwczA3BgNVHREEMDAugRFlbWFpbEBleGFtcGxlLmNvbaAZBgVgTAEDA6AQDA43OTgzOTYwMTAwMDE0MjAMBgNVHRMEBTADAQH/MAsGA1UdDwQEAwIBBjAdBgNVHQ4EFgQUoAcoXz39JnM6MusQwIktx7SxQwEwDQYJKoZIhvcNAQELBQADggEBACnLoiW5Zz/WtCkUX5p5BTbL1oTycQKeAERaEsmP/n53e81QYEnMtOEfB7z6IXaOx9KDE95qPPPJXVqantKPHDuD6uHjvSEI/RLb8i1v9KC9YCjtP7cDbl6iuTUBpHtXJq3pi/Ef5LQujo5gMphaQq6KhO2jL4zYJHHY6ogrgzzW1Zn7RI5+4m3WOHUDzjrDqsyGhqOQv2fVfjKYzaBk0cT8I24YHRdTyakfc8NxkMF0xLj95EoXhwSNBMOklgjJ+frZnK5RhQKxoFZVG93gfZuospyq3CN3Yq/pC+Vtnqayq6wsx5onAPr8nWES1HIknSkMP24IY7NPXZ1QKvPmVhM=</X509Certificate>
@@ -875,7 +875,7 @@ describe('nfe with failures authorizer pipeline (unit)', () => {
           enderEmit: {
             xLgr: '14 897',
             nro: '13897',
-            fone: '4934420122',
+            fone: '4999999999',
             xCpl: 'teste teste',
             CEP: '72831770',
             xMun: 'Luziania',
@@ -990,7 +990,7 @@ describe('nfe with failures authorizer pipeline (unit)', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -1103,10 +1103,10 @@ describe('nfe with failures authorizer pipeline (unit)', () => {
                 <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
             </Transforms>
             <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-            <DigestValue>mh6eQs5LA0KA8HMuWKZVFoouyqk=</DigestValue>
+            <DigestValue>vKHWr/ghD/+aq/e2pqlgRZk7Fzw=</DigestValue>
         </Reference>
     </SignedInfo>
-    <SignatureValue>Jkb4il/eFbPPQl3L6ksWpQELhHUchC0xKsvBUyKXZ+kQvVMwZegV59Afsbnkkl+o+q9mry8nDc9TEyoOnoe8F0w9yCypEI/J7t7M4jaH710CCp7sn5QbBaakXX0zihz+d9AtuMTr6mZfXKnko7O74QyLx7yt1+vYuPfo4FdE1h8ydODB4I0iS97JtE+QVyh8zlchm/jsb/toyWt8nYmclHyo/sQpxre8UdbM2C0PO9e9ApuNyVr4aFSKw/n2ulNAxXF9BY8V7Gi3j/TqTaUtKKYdmR2MYu2iXHpYopxY3IGI3uSH+SvV/uQEsmyyQMy8IKzjZ3q/EKciYwLxQqpzFQ==</SignatureValue>
+    <SignatureValue>Z6B4llaTFw0HBcAtBwf7r4KK5IPBFX2GhblzsiICDM2Ga9YByJQ5gHqu60JInl0GkRszvpP9WURcI/mYUrNOoTcSazbODRBL3W0YQzf2VDJRZ8sSLn2XaZMqg6omFPV7nycXKZcsQmavLwudmALnKw8df6CI96YkIfXzwqR2sxIzYX92wVSv8pIpmcncybjPwZpKNE2Xs9nIWeIACAdyaBvgLJHYlrjyYskth4IiCk9KXsZc4F8rmtAMECE/V3mTLWY02/A+86CGX45fXxGBTJX4j3g7JSazolVfU3AMHhMcvvuUy7QCBcqKgIvvqRkU0H++g5LSWt+/wNVAbC2rdw==</SignatureValue>
     <KeyInfo>
       <X509Data>
         <X509Certificate>MIIEaTCCA1GgAwIBAgIUU5NidIJ8A/5mGmUXr2Z2CmOmkQwwDQYJKoZIhvcNAQELBQAwgbIxCzAJBgNVBAYTAkJSMQswCQYDVQQIDAJTUDEVMBMGA1UEBwwMU8ODwqNvIFBhdWxvMRMwEQYDVQQKDApJQ1AtQnJhc2lsMSgwJgYDVQQDDB9FTVBSRVNBIERFIFRFU1RFOjc5ODM5NjAxMDAwMTQyMR4wHAYDVQQLDBVBQyBTT0xVVEkgTXVsdGlwbGEgdjUxIDAeBgkqhkiG9w0BCQEWEWVtYWlsQGV4YW1wbGUuY29tMB4XDTI1MTIyMDAxMTEyN1oXDTM1MTIxODAxMTEyN1owgbIxCzAJBgNVBAYTAkJSMQswCQYDVQQIDAJTUDEVMBMGA1UEBwwMU8ODwqNvIFBhdWxvMRMwEQYDVQQKDApJQ1AtQnJhc2lsMSgwJgYDVQQDDB9FTVBSRVNBIERFIFRFU1RFOjc5ODM5NjAxMDAwMTQyMR4wHAYDVQQLDBVBQyBTT0xVVEkgTXVsdGlwbGEgdjUxIDAeBgkqhkiG9w0BCQEWEWVtYWlsQGV4YW1wbGUuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyeOdp7F2KUArVwIGu47LY27YgzLw6R9qbgDCCl6dCrYnvaAaDEYEuEDGkH2ViAxKRfmb/bHdkWLQWZwnNg9inlPbTSa1cvmcAE7GRD/+B3YBRwc1sc/i6zgm1nIttILbJB7Cb6PkSud5MeV5voq/Bj7qCS/FVoFtz1vHaaTMfM/5DZz+dUrZs8WahwDjIegL8mWHH5YKEFnc/4e4H0n/tui9duQgehmRWDDxljCOV6xKK2sx+YuG/GW0jJdi5asbjR6I+U8g/C+0VobhYb1rA0aIkfh/qfDWHzeN0EMkcw6O2Cet4Z7PO6zgr0fItUlkYb2FUYfJPmkJJ/fLRX4hTQIDAQABo3UwczA3BgNVHREEMDAugRFlbWFpbEBleGFtcGxlLmNvbaAZBgVgTAEDA6AQDA43OTgzOTYwMTAwMDE0MjAMBgNVHRMEBTADAQH/MAsGA1UdDwQEAwIBBjAdBgNVHQ4EFgQUoAcoXz39JnM6MusQwIktx7SxQwEwDQYJKoZIhvcNAQELBQADggEBACnLoiW5Zz/WtCkUX5p5BTbL1oTycQKeAERaEsmP/n53e81QYEnMtOEfB7z6IXaOx9KDE95qPPPJXVqantKPHDuD6uHjvSEI/RLb8i1v9KC9YCjtP7cDbl6iuTUBpHtXJq3pi/Ef5LQujo5gMphaQq6KhO2jL4zYJHHY6ogrgzzW1Zn7RI5+4m3WOHUDzjrDqsyGhqOQv2fVfjKYzaBk0cT8I24YHRdTyakfc8NxkMF0xLj95EoXhwSNBMOklgjJ+frZnK5RhQKxoFZVG93gfZuospyq3CN3Yq/pC+Vtnqayq6wsx5onAPr8nWES1HIknSkMP24IY7NPXZ1QKvPmVhM=</X509Certificate>
@@ -1163,7 +1163,7 @@ ${firstNFe}`
           enderEmit: {
             xLgr: '14 897',
             nro: '13897',
-            fone: '4934420122',
+            fone: '4999999999',
             xCpl: 'teste teste',
             CEP: '72831770',
             xMun: 'Luziania',
@@ -1278,7 +1278,7 @@ ${firstNFe}`
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -1391,10 +1391,10 @@ ${firstNFe}`
                 <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
             </Transforms>
             <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-            <DigestValue>mh6eQs5LA0KA8HMuWKZVFoouyqk=</DigestValue>
+            <DigestValue>vKHWr/ghD/+aq/e2pqlgRZk7Fzw=</DigestValue>
         </Reference>
     </SignedInfo>
-    <SignatureValue>Jkb4il/eFbPPQl3L6ksWpQELhHUchC0xKsvBUyKXZ+kQvVMwZegV59Afsbnkkl+o+q9mry8nDc9TEyoOnoe8F0w9yCypEI/J7t7M4jaH710CCp7sn5QbBaakXX0zihz+d9AtuMTr6mZfXKnko7O74QyLx7yt1+vYuPfo4FdE1h8ydODB4I0iS97JtE+QVyh8zlchm/jsb/toyWt8nYmclHyo/sQpxre8UdbM2C0PO9e9ApuNyVr4aFSKw/n2ulNAxXF9BY8V7Gi3j/TqTaUtKKYdmR2MYu2iXHpYopxY3IGI3uSH+SvV/uQEsmyyQMy8IKzjZ3q/EKciYwLxQqpzFQ==</SignatureValue>
+    <SignatureValue>Z6B4llaTFw0HBcAtBwf7r4KK5IPBFX2GhblzsiICDM2Ga9YByJQ5gHqu60JInl0GkRszvpP9WURcI/mYUrNOoTcSazbODRBL3W0YQzf2VDJRZ8sSLn2XaZMqg6omFPV7nycXKZcsQmavLwudmALnKw8df6CI96YkIfXzwqR2sxIzYX92wVSv8pIpmcncybjPwZpKNE2Xs9nIWeIACAdyaBvgLJHYlrjyYskth4IiCk9KXsZc4F8rmtAMECE/V3mTLWY02/A+86CGX45fXxGBTJX4j3g7JSazolVfU3AMHhMcvvuUy7QCBcqKgIvvqRkU0H++g5LSWt+/wNVAbC2rdw==</SignatureValue>
     <KeyInfo>
       <X509Data>
         <X509Certificate>MIIEaTCCA1GgAwIBAgIUU5NidIJ8A/5mGmUXr2Z2CmOmkQwwDQYJKoZIhvcNAQELBQAwgbIxCzAJBgNVBAYTAkJSMQswCQYDVQQIDAJTUDEVMBMGA1UEBwwMU8ODwqNvIFBhdWxvMRMwEQYDVQQKDApJQ1AtQnJhc2lsMSgwJgYDVQQDDB9FTVBSRVNBIERFIFRFU1RFOjc5ODM5NjAxMDAwMTQyMR4wHAYDVQQLDBVBQyBTT0xVVEkgTXVsdGlwbGEgdjUxIDAeBgkqhkiG9w0BCQEWEWVtYWlsQGV4YW1wbGUuY29tMB4XDTI1MTIyMDAxMTEyN1oXDTM1MTIxODAxMTEyN1owgbIxCzAJBgNVBAYTAkJSMQswCQYDVQQIDAJTUDEVMBMGA1UEBwwMU8ODwqNvIFBhdWxvMRMwEQYDVQQKDApJQ1AtQnJhc2lsMSgwJgYDVQQDDB9FTVBSRVNBIERFIFRFU1RFOjc5ODM5NjAxMDAwMTQyMR4wHAYDVQQLDBVBQyBTT0xVVEkgTXVsdGlwbGEgdjUxIDAeBgkqhkiG9w0BCQEWEWVtYWlsQGV4YW1wbGUuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyeOdp7F2KUArVwIGu47LY27YgzLw6R9qbgDCCl6dCrYnvaAaDEYEuEDGkH2ViAxKRfmb/bHdkWLQWZwnNg9inlPbTSa1cvmcAE7GRD/+B3YBRwc1sc/i6zgm1nIttILbJB7Cb6PkSud5MeV5voq/Bj7qCS/FVoFtz1vHaaTMfM/5DZz+dUrZs8WahwDjIegL8mWHH5YKEFnc/4e4H0n/tui9duQgehmRWDDxljCOV6xKK2sx+YuG/GW0jJdi5asbjR6I+U8g/C+0VobhYb1rA0aIkfh/qfDWHzeN0EMkcw6O2Cet4Z7PO6zgr0fItUlkYb2FUYfJPmkJJ/fLRX4hTQIDAQABo3UwczA3BgNVHREEMDAugRFlbWFpbEBleGFtcGxlLmNvbaAZBgVgTAEDA6AQDA43OTgzOTYwMTAwMDE0MjAMBgNVHRMEBTADAQH/MAsGA1UdDwQEAwIBBjAdBgNVHQ4EFgQUoAcoXz39JnM6MusQwIktx7SxQwEwDQYJKoZIhvcNAQELBQADggEBACnLoiW5Zz/WtCkUX5p5BTbL1oTycQKeAERaEsmP/n53e81QYEnMtOEfB7z6IXaOx9KDE95qPPPJXVqantKPHDuD6uHjvSEI/RLb8i1v9KC9YCjtP7cDbl6iuTUBpHtXJq3pi/Ef5LQujo5gMphaQq6KhO2jL4zYJHHY6ogrgzzW1Zn7RI5+4m3WOHUDzjrDqsyGhqOQv2fVfjKYzaBk0cT8I24YHRdTyakfc8NxkMF0xLj95EoXhwSNBMOklgjJ+frZnK5RhQKxoFZVG93gfZuospyq3CN3Yq/pC+Vtnqayq6wsx5onAPr8nWES1HIknSkMP24IY7NPXZ1QKvPmVhM=</X509Certificate>

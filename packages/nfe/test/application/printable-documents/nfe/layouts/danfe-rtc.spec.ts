@@ -23,10 +23,10 @@ describe('DanfeRtc', () => {
 
     expectInOrder(text)
       // Header (NT 2026.010 item 4.2)
-      .toContain('4226 1003 9160 7600 0583 5500 1000 0012')
+      .toContain('4226 10N4 BW1C V000 0100 5500 1000 0012')
       .toContain('342260001234567 - 06/10/2026 10:15:30')
       .toContain('123456789')
-      .toContain('03.916.076/0005-83')
+      .toContain('N4.BW1.CV0/0001-00')
       .toContain('CÓDIGO DO REGIME TRIBUTÁRIO')
       .toContain('3 - REGIME NORMAL')
 

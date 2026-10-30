@@ -6,7 +6,7 @@ const getDefaults = (): DanfcePdfDocument =>
       infNFe: {
         dest: {
           xNome: 'Cliente',
-          CNPJ: '03916076000583',
+          CNPJ: 'N4BW1CV0000100',
           CPF: undefined,
           idEstrangeiro: undefined,
           enderDest: {

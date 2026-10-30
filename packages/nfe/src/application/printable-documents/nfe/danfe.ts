@@ -293,6 +293,11 @@ export abstract class DanfePdfDocument {
     return this;
   }
 
+  public setCredits(credits: string | false = defaultCreditsText): this {
+    this.options.credits = credits === false ? undefined : credits;
+    return this;
+  }
+
   public end(): void {
     this.builder.end();
   }

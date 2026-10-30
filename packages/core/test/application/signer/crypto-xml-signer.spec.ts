@@ -89,7 +89,7 @@ describe('xml signer (unit)', () => {
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
-  <infNFe Id="NFe42250903916076000583550560000005651509037627" versao="4.00">
+  <infNFe Id="NFe422509N4BW1CV0000100550560000005651509037627" versao="4.00">
     <ide>
       <cUF>42</cUF>
       <cNF>50903762</cNF>
@@ -113,9 +113,9 @@ describe('xml signer (unit)', () => {
       <verProc>3.22.8</verProc>
     </ide>
     <emit>
-      <CNPJ>03916076000583</CNPJ>
-      <xNome>devszweb@zucchetti.com</xNome>
-      <xFant>devszweb@zucchetti.comu</xFant>
+      <CNPJ>N4BW1CV0000100</CNPJ>
+      <xNome>email@example.com</xNome>
+      <xFant>email@example.comu</xFant>
       <enderEmit>
         <xLgr>Travessa Nazareno Brusco</xLgr>
         <nro>S/N</nro>
@@ -152,7 +152,7 @@ describe('xml signer (unit)', () => {
       <email>88872489075cpf@melimail.com.br</email>
     </dest>
     <autXML>
-      <CNPJ>03916076000583</CNPJ>
+      <CNPJ>N4BW1CV0000100</CNPJ>
     </autXML>
     <autXML>
       <CNPJ>01605538000192</CNPJ>
@@ -314,10 +314,10 @@ describe('xml signer (unit)', () => {
       <infCpl>TESTE</infCpl>
     </infAdic>
     <infRespTec>
-      <CNPJ>03916076000400</CNPJ>
-      <xContato>Bernardo Rachadel Junior</xContato>
-      <email>bernardo.rachadel@zucchetti.com</email>
-      <fone>4934420122</fone>
+      <CNPJ>N4BW1CV0000100</CNPJ>
+      <xContato>Fulano da Silva</xContato>
+      <email>email@example.com</email>
+      <fone>4999999999</fone>
     </infRespTec>
   </infNFe>
 </NFe>`;
@@ -336,18 +336,18 @@ describe('xml signer (unit)', () => {
     expectIsRight(signed);
     expect(signed.value).toBeDefined();
 
-    const expectedDigestValue = 'A9/PSfUleTqioYO54CxLUvI1rog=';
+    const expectedDigestValue = 'PjaDjMPy+9i6jBNBmNaAYcypboE=';
     expect(signed.value).toContain(
       `<DigestValue>${expectedDigestValue}</DigestValue>`,
     );
 
     const expectedSignatureValue =
-      'f/hhwH8mtfmUKEuDv4XhpL66fHycdj//jXmsz0TFKfZgZ9aHhIo313RxxTzqOUE9etomSjwlosDl9SbQKf5Fr/W0uEW6r4vcppkGjWh071VfJSdtHX0jKCk4FjzNLOLuHO5W3ToQD0D/sSrMZLGAD6yRQTXebeCek/MdBqzXyoDoWY3XOPmmv1utYLEEf/43ZOEC8fSzCufrcIusjF+gHbca7A9h28+qd+/VIcTj3f9kXcOAItUO/UiPvGtEhbpVduih9uzpvxQKn7IDritCbRJmIMdJRVLW8Ntf4oTZ21DwHkyX/cNtrkPI2PmA+gsPGBU+0uLgnkmjOCK2LoROrQ==';
+      'uV7oqPWamfEwNEHdBc0U8A69Jx09XAgRLFVrWVADTYYlWWjUF72lUczilyCUt473Lr0tuZQw3y/r3oSXNtigKLZrrTjgPfFH24bqcWGni1xqWLtylmFu1o+Cp6qlhT+O7grAG7o0XxWIS3l7KLvyPubt9JT8CGopbZsYiKhu2iCax5kGZW8MqruSZPUsjtheAUm08n1Vd/XwrCCSuxf3QkqPg06GDHIcAnrOoJwYrthtPrk6Jx1DU+RkGjztBzVpY1z+dne44BawA28s6TNlNaiXxAQrfPm7o7VAkJpG54g668O9ZpexsV6oFKaHn1gEdlYUA2Od6tDc/QrW7A8LFw==';
     expect(signed.value).toContain(
       `<SignatureValue>${expectedSignatureValue}</SignatureValue>`,
     );
 
-    const expectedSignatureMetadata = `<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI="#NFe42250903916076000583550560000005651509037627"><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>`;
+    const expectedSignatureMetadata = `<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI="#NFe422509N4BW1CV0000100550560000005651509037627"><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>`;
     expect(signed.value).toContain(expectedSignatureMetadata);
 
     const expectedInfNFeGroup = xml
@@ -367,7 +367,7 @@ describe('xml signer (unit)', () => {
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
-  <infNFe Id="NFe42250903916076000583550560000005651509037627" versao="4.00">
+  <infNFe Id="NFe422509N4BW1CV0000100550560000005651509037627" versao="4.00">
     <ide>
       <cUF>42</cUF>
       <cNF>50903762</cNF>
@@ -391,9 +391,9 @@ describe('xml signer (unit)', () => {
       <verProc>3.22.8</verProc>
     </ide>
     <emit>
-      <CNPJ>03916076000583</CNPJ>
-      <xNome>devszweb@zucchetti.com</xNome>
-      <xFant>devszweb@zucchetti.comu</xFant>
+      <CNPJ>N4BW1CV0000100</CNPJ>
+      <xNome>email@example.com</xNome>
+      <xFant>email@example.comu</xFant>
       <enderEmit>
         <xLgr>Travessa Nazareno Brusco</xLgr>
         <nro>S/N</nro>
@@ -430,7 +430,7 @@ describe('xml signer (unit)', () => {
       <email>88872489075cpf@melimail.com.br</email>
     </dest>
     <autXML>
-      <CNPJ>03916076000583</CNPJ>
+      <CNPJ>N4BW1CV0000100</CNPJ>
     </autXML>
     <autXML>
       <CNPJ>01605538000192</CNPJ>
@@ -592,10 +592,10 @@ describe('xml signer (unit)', () => {
       <infCpl>TESTE</infCpl>
     </infAdic>
     <infRespTec>
-      <CNPJ>03916076000400</CNPJ>
-      <xContato>Bernardo Rachadel Junior</xContato>
-      <email>bernardo.rachadel@zucchetti.com</email>
-      <fone>4934420122</fone>
+      <CNPJ>N4BW1CV0000100</CNPJ>
+      <xContato>Fulano da Silva</xContato>
+      <email>email@example.com</email>
+      <fone>4999999999</fone>
     </infRespTec>
   </infNFe>
 </NFe>`;
@@ -614,18 +614,18 @@ describe('xml signer (unit)', () => {
     expectIsRight(signed);
     expect(signed.value).toBeDefined();
 
-    const expectedDigestValue = '+NEx5Zf3sdjuyKh5FQfJc7G1uT/R2SxM8c7CTOle8BM=';
+    const expectedDigestValue = '9tFioAigC7S5Ko/lF/IEoXvdf2E5WdcMHjKkh72dBMQ=';
     expect(signed.value).toContain(
       `<DigestValue>${expectedDigestValue}</DigestValue>`,
     );
 
     const expectedSignatureValue =
-      'jXYzNxaJ9kkZa0I+conWKMpQADC6hgsu1C+Wra+BcoUZllmjfxQzx74PjaDCABvSgMH9cjcCuO64TelcIce3m8iwx1MY6Z4u3ZSQHgNcHYzfc0/iFEXnqw2oHkzKMCuw/FVMBSrHyxGM+nzbSB27iLhVqLuz9gyZIjhNPdFkcsLqOG5CNM8mftbFeejiJO1rFuVSjHa1uX3cnzm/lrmDJXTJ4i1mxJk/awHD4Rj+7uqfO0/7CSgtQSG4juejiZRKOdrA45FIt1tB9eRxprr6wvLNcnNJjBHLwvI5oJveJulphAJv3nR+EO89ALvrnJzOR1ww8Zv2t46RhVIEiIhfIQ==';
+      'VUKFfnzIPqBdevcG010nzCsKt7eXv6eSt/WzEqv5TNmRFMjnEv+Se7lo9Bvk4PyDbQM18DJxb+c6JrQtS87Ojh8lfFp5CY+rSj/kbaipCn1NwDbItveKdfTjoKAKDP0CKfhy/b7n/M7jLvPllB8KiB8Yc6dx3sPxjEsopVnOQHi8MhDr0F7HEdoemqlWHaFVwrdsYxIJBzgalUUZJsiwNuT3aUEoRJB4osixUeBYFYsDd29e1SB2yvzNLzkQeS4EzjzoY4HWCie6YXWybcFyOATV9bagTeXsiOf0jmYq+UUfZKX59LEvhk2H7y+TZIh5hnoPUV0IgT/H9h9utYsToA==';
     expect(signed.value).toContain(
       `<SignatureValue>${expectedSignatureValue}</SignatureValue>`,
     );
 
-    const expectedSignatureMetadata = `<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><Reference URI="#NFe42250903916076000583550560000005651509037627"><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>`;
+    const expectedSignatureMetadata = `<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><Reference URI="#NFe422509N4BW1CV0000100550560000005651509037627"><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>`;
     expect(signed.value).toContain(expectedSignatureMetadata);
 
     const expectedInfNFeGroup = xml

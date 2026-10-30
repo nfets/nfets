@@ -41,7 +41,7 @@ describe('nfce cancel pipeline (unit)', () => {
     });
 
     const payload = {
-      identification: '03916076000664',
+      identification: 'N4BW1CV0000100',
       chNFe: '35240100000000000000650010000000011000000010',
       nProt: '135240000000001',
       xJust: 'Cancelamento NFC-e de teste',

@@ -112,8 +112,16 @@ export class Totals implements Builder {
     this.builder.moveDown(0.5);
     this.count();
     this.totalizers();
+    this.ibsCbs();
     this.total();
     return this.builder;
+  }
+
+  protected ibsCbs() {
+    const { IBSCBSTot, ISTot } = this.context.data.infNFe.total;
+    this.conditionalRowValue('(+) CBS R$', IBSCBSTot?.gCBS?.vCBS);
+    this.conditionalRowValue('(+) IBS R$', IBSCBSTot?.gIBS?.vIBS);
+    this.conditionalRowValue('(+) IS R$', ISTot?.vIS);
   }
 
   public end() {

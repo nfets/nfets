@@ -1,6 +1,6 @@
 <nfeProc xmlns="http://www.portalfiscal.inf.br/nfe" versao="4.00">
   <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
-    <infNFe Id="NFe42261003916076000583550010000012341300843559" versao="4.00">
+    <infNFe Id="NFe422610N4BW1CV0000100550010000012341300843559" versao="4.00">
       <ide>
         <cUF>42</cUF>
         <cNF>30084355</cNF>
@@ -24,7 +24,7 @@
         <verProc>3.22.8</verProc>
       </ide>
       <emit>
-        <CNPJ>03916076000583</CNPJ>
+        <CNPJ>N4BW1CV0000100</CNPJ>
         <xNome>EMPRESA EXEMPLO LTDA</xNome>
         <xFant>EMPRESA EXEMPLO</xFant>
         <enderEmit>
@@ -4702,7 +4702,7 @@
       </infAdic>
     </infNFe>
     <infNFeSupl>
-      <qrCode>https://www.nfe.fazenda.gov.br/portal/consultaRecaptcha.aspx?p=42261003916076000583550010000012341300843559|2|2</qrCode>
+      <qrCode>https://www.nfe.fazenda.gov.br/portal/consultaRecaptcha.aspx?p=422610N4BW1CV0000100550010000012341300843559|2|2</qrCode>
       <urlChave>www.nfe.fazenda.gov.br/portal</urlChave>
     </infNFeSupl>
   </NFe>
@@ -4710,7 +4710,7 @@
     <infProt>
       <tpAmb>2</tpAmb>
       <verAplic>SVRS202610011200</verAplic>
-      <chNFe>42261003916076000583550010000012341300843559</chNFe>
+      <chNFe>422610N4BW1CV0000100550010000012341300843559</chNFe>
       <dhRecbto>2026-10-06T10:15:30-03:00</dhRecbto>
       <nProt>342260001234567</nProt>
       <digVal>Gk5S4tRlB0yGZ3i5aHuwY8fzE7E=</digVal>

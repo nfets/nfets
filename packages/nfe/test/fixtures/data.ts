@@ -49,7 +49,7 @@ export const createValidEmit = (): Emit => ({
   enderEmit: {
     xLgr: '14 897',
     nro: '13897',
-    fone: '4934420122',
+    fone: '4999999999',
     xCpl: 'teste teste',
     CEP: '72831770',
     xMun: 'Luziania',

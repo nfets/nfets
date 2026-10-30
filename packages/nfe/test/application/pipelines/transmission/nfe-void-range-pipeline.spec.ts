@@ -29,7 +29,7 @@ const retInutNFeRejected = {
 };
 
 const matrizCnpj = '12345678000190';
-const filialCnpj = '03916076000664';
+const filialCnpj = 'N4BW1CV0000100';
 
 const voidRangePayload = {
   identification: matrizCnpj,
