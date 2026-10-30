@@ -5,7 +5,7 @@ import { NfeComplements } from '@nfets/nfe/application/complements/nfe-complemen
 import { TpEvent } from '@nfets/nfe/domain/entities/constants/tp-event';
 import { expectIsLeft, expectIsRight } from '@nfets/test/expects';
 
-const chNFe = '42251103916076000583650670000011301672406275';
+const chNFe = '422511N4BW1CV0000100650670000011301672406275';
 
 const nfeProcXml = readFileSync(
   path.join(

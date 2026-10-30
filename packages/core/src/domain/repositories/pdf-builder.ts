@@ -8,7 +8,13 @@ export interface TextOptions extends PDFKit.Mixins.TextOptions {
   y?: number | undefined;
 }
 
-export type ImageOptions = PDFKit.Mixins.ImageOption;
+export type ImageOptions = Omit<
+  PDFKit.Mixins.ImageOption,
+  'align' | 'valign'
+> & {
+  align?: 'left' | 'center' | 'right';
+  valign?: 'top' | 'center' | 'bottom';
+};
 
 export type ColorValue = PDFKit.Mixins.ColorValue;
 export type RuleValue = PDFKit.Mixins.RuleValue;

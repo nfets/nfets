@@ -4,7 +4,6 @@
 
 ## Identidade
 - Módulo: nfets — SDK NF-e em TypeScript (monorepo)
-- Parte do monorepo: zweb-projects
 
 ## Stack
 - **Linguagem:** Node.js + TypeScript 5

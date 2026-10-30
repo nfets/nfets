@@ -102,8 +102,16 @@ export class PdfkitPdfBuilder implements PdfBuilder {
   ): this {
     const src = this.imageSource(image);
     if (typeof xOrOptions === 'number' && typeof y === 'number')
-      return (this.doc.image(src, xOrOptions, y, options), this);
-    return (this.doc.image(src, xOrOptions as ImageOptions), this);
+      return (
+        this.doc.image(
+          src,
+          xOrOptions,
+          y,
+          options as PDFKit.Mixins.ImageOption,
+        ),
+        this
+      );
+    return (this.doc.image(src, xOrOptions as PDFKit.Mixins.ImageOption), this);
   }
 
   private imageSource(image: string): string | Buffer {

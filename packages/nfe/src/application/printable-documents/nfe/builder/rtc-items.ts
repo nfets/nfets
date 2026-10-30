@@ -129,10 +129,8 @@ export class RtcItems extends DanfeItemsBlock {
       ...(infAdProd ? [{ text: infAdProd, color: muted }] : []),
       ...(extras ? [{ text: extras, color: muted }] : []),
       { text: '', blankBefore: true },
-      {
-        text: `[Cód. ${cProd}] ${classification.join(' ')}`,
-        color: muted,
-      },
+      { text: `[Cód. ${cProd}]`, color: muted },
+      { text: classification.join(' '), color: muted },
     ];
   }
 

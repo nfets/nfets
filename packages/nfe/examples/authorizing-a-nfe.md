@@ -50,7 +50,7 @@ const builder = NfeXmlBuilder.create(toolkit)
   .emit({
     CRT: '1',
     xNome: 'Emissor Teste LTDA',
-    CNPJ: '03916076000583',
+    CNPJ: 'N4BW1CV0000100',
     IE: '261471520',
     enderEmit: {
       xLgr: 'Rua exemplo',
@@ -125,7 +125,7 @@ const builder = NfeXmlBuilder.create(toolkit)
     detPag: [{ tPag: '01', vPag: Decimal.from('1').toString() }],
   })
   .infRespTec({
-    CNPJ: '03916076000583',
+    CNPJ: 'N4BW1CV0000100',
     xContato: 'Contact',
     email: 'email@example.com',
     fone: '49999999999',

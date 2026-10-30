@@ -1,6 +1,6 @@
 <nfeProc xmlns="http://www.portalfiscal.inf.br/nfe" versao="4.00">
   <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
-    <infNFe Id="NFe42251103916076000583650670000011301672406275" versao="4.00">
+    <infNFe Id="NFe422511N4BW1CV0000100650670000011301672406275" versao="4.00">
       <ide>
         <cUF>42</cUF>
         <cNF>67240627</cNF>
@@ -23,9 +23,9 @@
         <verProc>3.22.8</verProc>
       </ide>
       <emit>
-        <CNPJ>03916076000583</CNPJ>
-        <xNome>devszweb2@zucchetti.com</xNome>
-        <xFant>devszweb2@zucchetti.com</xFant>
+        <CNPJ>N4BW1CV0000100</CNPJ>
+        <xNome>email@example.com</xNome>
+        <xFant>email@example.com</xFant>
         <enderEmit>
           <xLgr>Rua Silvino Ciarini</xLgr>
           <nro>S/N</nro>
@@ -43,7 +43,7 @@
         <CRT>3</CRT>
       </emit>
       <dest>
-        <CNPJ>03916076000583</CNPJ>
+        <CNPJ>N4BW1CV0000100</CNPJ>
         <xNome>TESTE saiudh uiashd uiahdhasu</xNome>
         <enderDest>
           <xLgr>Rua Silvino Ciarini</xLgr>
@@ -60,7 +60,7 @@
         </enderDest>
       </dest>
       <autXML>
-        <CNPJ>03916076000583</CNPJ>
+        <CNPJ>N4BW1CV0000100</CNPJ>
       </autXML>
       <det nItem="1">
         <prod>
@@ -1108,22 +1108,22 @@
           IBPT/empresometro.com.br 0D61CD</infCpl>
       </infAdic>
       <infRespTec>
-        <CNPJ>03916076000400</CNPJ>
-        <xContato>Bernardo Rachadel Junior</xContato>
-        <email>bernardo.rachadel@zucchetti.com</email>
-        <fone>4934420122</fone>
+        <CNPJ>N4BW1CV0000100</CNPJ>
+        <xContato>Fulano da Silva</xContato>
+        <email>email@example.com</email>
+        <fone>4999999999</fone>
       </infRespTec>
     </infNFe>
     <infNFeSupl>
       <qrCode>
-        https://hom.sat.sef.sc.gov.br/nfce/consulta?p=42251103916076000583650670000011301672406275|3|2</qrCode>
+        https://hom.sat.sef.sc.gov.br/nfce/consulta?p=422511N4BW1CV0000100650670000011301672406275|3|2</qrCode>
       <urlChave>https://hom.sat.sef.sc.gov.br/nfce/consulta</urlChave>
     </infNFeSupl>
     <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
       <SignedInfo>
         <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
         <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
-        <Reference URI="#NFe42251103916076000583650670000011301672406275">
+        <Reference URI="#NFe422511N4BW1CV0000100650670000011301672406275">
           <Transforms>
             <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
             <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
@@ -1146,7 +1146,7 @@
     <infProt>
       <tpAmb>2</tpAmb>
       <verAplic>SVRSnfce2511121004</verAplic>
-      <chNFe>42251103916076000583650670000011301672406275</chNFe>
+      <chNFe>422511N4BW1CV0000100650670000011301672406275</chNFe>
       <dhRecbto>2025-11-21T10:42:40-03:00</dhRecbto>
       <nProt>342250000626207</nProt>
       <digVal>p8O1oxNzRh6bE+IGelENFHrzc9g=</digVal>

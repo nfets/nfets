@@ -66,9 +66,9 @@ describe('DanfceReduced', () => {
 
       // Header section - company information in order
       const index = expectInOrder(text)
-        .toContain('CNPJ 03.916.076/0005-83')
+        .toContain('CNPJ N4.BW1.CV0/0001-00')
         .toContain('IE: 261471520')
-        .toContain('devszweb2@zucchetti.com')
+        .toContain('email@example.com')
         .toContain('Rua Silvino Ciarini, S/N')
         .toContain('Industriarios')
         .toContain('Concordia - SC')
@@ -108,10 +108,10 @@ describe('DanfceReduced', () => {
         // Access key section
         .toContain('Consulte pela Chave de Acesso em')
         .toContain('https://hom.sat.sef.sc.gov.br/nfce/consulta')
-        .toContain('4225 1103 9160 7600 0583 6506 7000 0011 3016 7240 6275')
+        .toContain('4225 11N4 BW1C V000 0100 6506 7000 0011 3016 7240 6275')
 
         // Recipient/Consumer section
-        .toContain('CONSUMIDOR - CNPJ: 03.916.076/0005-83')
+        .toContain('CONSUMIDOR - CNPJ: N4.BW1.CV0/0001-00')
         .toContain('TESTE saiudh uiashd uiahdhasu')
         .toContain(' - Rua Rua Silvino Ciarini, S/N')
         .toContain('Industriarios')
@@ -174,9 +174,9 @@ IBPT/empresometro.com.br 0D61CD`,
 
       // Header section - company information in order
       const index = expectInOrder(text)
-        .toContain('CNPJ 03.916.076/0005-83')
+        .toContain('CNPJ N4.BW1.CV0/0001-00')
         .toContain('IE: 261471520')
-        .toContain('devszweb2@zucchetti.com')
+        .toContain('email@example.com')
         .toContain('Rua Silvino Ciarini, S/N')
         .toContain('Industriarios')
         .toContain('Concordia - SC')
@@ -219,10 +219,10 @@ IBPT/empresometro.com.br 0D61CD`,
         // Access key section
         .toContain('Consulte pela Chave de Acesso em')
         .toContain('https://hom.sat.sef.sc.gov.br/nfce/consulta')
-        .toContain('4225 1103 9160 7600 0583 6506 7000 0011 3016 7240 6275')
+        .toContain('4225 11N4 BW1C V000 0100 6506 7000 0011 3016 7240 6275')
 
         // Recipient/Consumer section
-        .toContain('CONSUMIDOR - CNPJ: 03.916.076/0005-83')
+        .toContain('CONSUMIDOR - CNPJ: N4.BW1.CV0/0001-00')
         .toContain('TESTE saiudh uiashd uiahdhasu')
         .toContain(' - Rua Rua Silvino Ciarini, S/N')
         .toContain('Industriarios')
@@ -274,9 +274,9 @@ IBPT/empresometro.com.br 0D61CD`,
       const { text } = await parser.getText();
 
       const index = expectInOrder(text)
-        .toContain('CNPJ 03.916.076/0005-83')
+        .toContain('CNPJ N4.BW1.CV0/0001-00')
         .toContain('IE: 261471520')
-        .toContain('devszweb2@zucchetti.com')
+        .toContain('email@example.com')
         .toContain('Rua Silvino Ciarini, S/N')
         .toContain('Industriarios')
         .toContain('Concordia - SC')
@@ -322,10 +322,10 @@ VALOR FISCAL`,
         // Access key section
         .toContain('Consulte pela Chave de Acesso em')
         .toContain('https://hom.sat.sef.sc.gov.br/nfce/consulta')
-        .toContain('4225 1103 9160 7600 0583 6506 7000 0011 3016 7240 6275')
+        .toContain('4225 11N4 BW1C V000 0100 6506 7000 0011 3016 7240 6275')
 
         // Recipient/Consumer section
-        .toContain('CONSUMIDOR - CNPJ: 03.916.076/0005-83')
+        .toContain('CONSUMIDOR - CNPJ: N4.BW1.CV0/0001-00')
         .toContain('TESTE saiudh uiashd uiahdhasu')
         .toContain(' - Rua Rua Silvino Ciarini, S/N')
         .toContain('Industriarios')
@@ -376,9 +376,9 @@ VALOR FISCAL`,
       const { text } = await parser.getText();
 
       const index = expectInOrder(text)
-        .toContain('CNPJ 03.916.076/0005-83')
+        .toContain('CNPJ N4.BW1.CV0/0001-00')
         .toContain('IE: 261471520')
-        .toContain('devszweb2@zucchetti.com')
+        .toContain('email@example.com')
         .toContain('Rua Silvino Ciarini, S/N')
         .toContain('Industriarios')
         .toContain('Concordia - SC')
@@ -430,10 +430,10 @@ VALOR FISCAL`,
         // Access key section
         .toContain('Consulte pela Chave de Acesso em')
         .toContain('https://hom.sat.sef.sc.gov.br/nfce/consulta')
-        .toContain('4225 1103 9160 7600 0583 6506 7000 0011 3016 7240 6275')
+        .toContain('4225 11N4 BW1C V000 0100 6506 7000 0011 3016 7240 6275')
 
         // Recipient/Consumer section
-        .toContain('CONSUMIDOR - CNPJ: 03.916.076/0005-83')
+        .toContain('CONSUMIDOR - CNPJ: N4.BW1.CV0/0001-00')
         .toContain('TESTE saiudh uiashd uiahdhasu')
         .toContain(' - Rua Rua Silvino Ciarini, S/N')
         .toContain('Industriarios')

@@ -132,7 +132,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
     </emit>
     <total>
@@ -236,7 +236,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>xD</IE>
       <CRT>xD</CRT>
@@ -433,7 +433,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -600,7 +600,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -737,7 +737,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -875,7 +875,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -1064,7 +1064,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -1251,7 +1251,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -1472,7 +1472,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -1700,7 +1700,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -1929,7 +1929,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -2152,7 +2152,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -2364,7 +2364,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -2579,7 +2579,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -2793,7 +2793,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -3000,7 +3000,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -3206,7 +3206,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -3430,7 +3430,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -3651,7 +3651,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -3860,7 +3860,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -4096,7 +4096,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -4442,7 +4442,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -4754,7 +4754,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -4973,7 +4973,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -5210,7 +5210,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -5507,7 +5507,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -5741,7 +5741,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -5963,7 +5963,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -6183,7 +6183,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -6420,7 +6420,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -6654,7 +6654,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -6876,7 +6876,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -7114,7 +7114,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -7346,7 +7346,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -7585,7 +7585,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -7838,7 +7838,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -8074,7 +8074,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -8316,7 +8316,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -8558,7 +8558,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -8798,7 +8798,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -8978,7 +8978,7 @@ describe('xml builder with xml2js builder', () => {
         enderEmit: {
           xLgr: '14 897',
           nro: '13897',
-          fone: '4934420122',
+          fone: '4999999999',
           xCpl: 'teste teste',
           CEP: '72831770',
           xMun: 'Luziania',
@@ -9092,7 +9092,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -10183,7 +10183,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -10449,7 +10449,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -10741,7 +10741,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
@@ -11008,7 +11008,7 @@ describe('xml builder with xml2js builder', () => {
         <UF>GO</UF>
         <CEP>72831770</CEP>
         <cPais>1058</cPais>
-        <fone>4934420122</fone>
+        <fone>4999999999</fone>
       </enderEmit>
       <IE>109381599</IE>
       <IM>123748</IM>
