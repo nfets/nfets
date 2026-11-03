@@ -103,7 +103,8 @@ export abstract class DanfePdfDocument {
   protected readonly sideCanhotoWidth: number = 0;
 
   protected contentInset(): number {
-    if (this.page.number > 1 || this.sideCanhotoWidth <= 0) return 0;
+    if (this.page.number > 1 || this.sideCanhotoWidth <= 0 || !this.canhoto)
+      return 0;
     return this.sideCanhotoWidth + canhotoCutGap;
   }
 
