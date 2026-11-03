@@ -1,6 +1,10 @@
+import { PassThrough } from 'node:stream';
+
 import { DanfeRtcPdfDocument } from '@nfets/nfe/application/printable-documents/nfe/layouts/danfe-rtc';
 import { DanfeRtcLandscapePdfDocument } from '@nfets/nfe/application/printable-documents/nfe/layouts/danfe-rtc-landscape';
+import { mm } from '@nfets/nfe/domain/entities/printable-documents/nfe';
 import { expectInOrder } from '@nfets/test/expects';
+import { canhotoCutGap } from '@nfets/nfe/application/printable-documents/nfe/builder/canhoto';
 
 import { occurrences, renderDanfeText } from '../mocks/render-danfe';
 
@@ -190,5 +194,34 @@ describe('DanfeRtc', () => {
     expect(text).toContain('DESTINATÁRIO / REMETENTE');
     expect(text).toContain('DADOS DOS PRODUTOS / SERVIÇOS');
     expect(occurrences(text, 'RECEBEMOS DE')).toBe(1);
+  });
+
+  it('should omit landscape canhoto and expand content when showCanhoto is false', async () => {
+    class LandscapeWidthProbe extends DanfeRtcLandscapePdfDocument {
+      measureContentWidth(): number {
+        this.apply();
+        this.builder.page();
+        this.page = { number: 1, total: 1 };
+        return this.contentWidth;
+      }
+    }
+
+    const withCanhoto = new LandscapeWidthProbe(new PassThrough());
+    withCanhoto.options.showCanhoto = true;
+
+    const withoutCanhoto = new LandscapeWidthProbe(new PassThrough());
+    withoutCanhoto.options.showCanhoto = false;
+
+    expect(
+      withoutCanhoto.measureContentWidth() - withCanhoto.measureContentWidth(),
+    ).toBeCloseTo(mm(22) + canhotoCutGap, 5);
+
+    const text = await renderDanfeText(
+      DanfeRtcLandscapePdfDocument,
+      'rtc-homolog-protocoled.xml',
+      { showCanhoto: false },
+    );
+    expect(text).not.toContain('RECEBEMOS DE');
+    expect(text).not.toContain('INDICADA ABAIXO');
   });
 });

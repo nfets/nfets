@@ -107,9 +107,12 @@ app.get('/danfe', async (req, res) => {
     'Cache-Control': 'no-cache, no-store, must-revalidate',
   });
 
-  const { file = 'homolog-protocoled.xml' } = req.query;
+  const { file = 'homolog-protocoled.xml', canhoto = 'true' } = req.query;
   if (typeof file !== 'string') return res.status(400).end();
   const doc = new DanfeDefaultPdfDocument(res);
+  if (canhoto === 'false') {
+    doc.options.showCanhoto = false;
+  }
   await doc.build(SAMPLE_NFE_XML(file));
   doc.end();
 });
@@ -121,16 +124,24 @@ app.get('/danfe-rtc', async (req, res) => {
     'Cache-Control': 'no-cache, no-store, must-revalidate',
   });
 
-  const { file = 'rtc-homolog-protocoled.xml', layout } = req.query;
+  const {
+    file = 'rtc-homolog-protocoled.xml',
+    layout,
+    canhoto = 'true',
+  } = req.query;
+
   if (typeof file !== 'string') return res.status(400).end();
   const Layout =
     layout === 'landscape' ? DanfeRtcLandscapePdfDocument : DanfeRtcPdfDocument;
   const doc = new Layout(res);
+  if (canhoto === 'false') {
+    doc.options.showCanhoto = false;
+  }
   await doc.build(SAMPLE_NFE_XML(file));
   doc.end();
 });
 
-app.get('/danfe-rtc-landscape', async (_, res) => {
+app.get('/danfe-rtc-landscape', async (req, res) => {
   res.set({
     'Content-Type': 'application/pdf',
     'Content-Disposition': 'inline; filename="example.pdf"',
@@ -138,6 +149,13 @@ app.get('/danfe-rtc-landscape', async (_, res) => {
   });
 
   const doc = new DanfeRtcLandscapePdfDocument(res);
+
+  const { canhoto = 'true' } = req.query;
+  console.log(canhoto);
+  if (canhoto === 'false') {
+    doc.options.showCanhoto = false;
+  }
+
   await doc.build(SAMPLE_NFE_XML('rtc-homolog-protocoled.xml'));
   doc.end();
 });
