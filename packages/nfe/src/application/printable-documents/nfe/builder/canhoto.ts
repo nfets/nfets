@@ -8,19 +8,35 @@ import { DanfeBlock } from './block';
 export const canhotoCutGap = mm(4);
 
 export class Canhoto extends DanfeBlock {
-  protected readonly textHeight = mm(10);
+  protected readonly minTextHeight = mm(10);
   protected readonly signatureHeight = mm(7);
   protected readonly numberWidth = mm(35);
   protected readonly spacing = canhotoCutGap;
   protected readonly innerPad = mm(1.2);
+  protected readonly textSize = 6.5;
 
   public height(): number {
-    return this.textHeight + this.signatureHeight + this.spacing;
+    return (
+      this.textBoxHeight(this.context.contentWidth) +
+      this.signatureHeight +
+      this.spacing
+    );
   }
 
-  protected receivedText(atSide = true): string {
+  protected textBoxHeight(contentWidth: number): number {
+    const p = this.innerPad;
+    const textWidth = Math.max(contentWidth - this.numberWidth - 2 * p, 1);
+    const text = this.receivedText('ABAIXO');
+    const measured = this.fields.measure(text, textWidth, {
+      size: this.textSize,
+    });
+    this.builder.fontSize(this.textSize);
+    const line = this.builder.currentLineHeight(true);
+    return Math.max(this.minTextHeight, measured + 2 * p + line);
+  }
+
+  protected receivedText(where: string): string {
     const { emit, dest, ide, total } = this.infNFe;
-    const where = atSide ? 'AO LADO' : 'ABAIXO';
     const parts = [
       `RECEBEMOS DE ${emit.xNome} OS PRODUTOS E/OU SERVIÇOS CONSTANTES DA NOTA FISCAL ELETRÔNICA INDICADA ${where}.`,
       `EMISSÃO: ${this.format.date(ide.dhEmi)}`,
@@ -50,7 +66,7 @@ export class Canhoto extends DanfeBlock {
     this.drawNumber(x, y, width, nfeHeight);
     this.drawRotated(
       [
-        this.receivedText(false),
+        this.receivedText('AO LADO'),
         'DATA DE RECEBIMENTO',
         'IDENTIFICAÇÃO E ASSINATURA DO RECEBEDOR',
       ].join(' '),
@@ -100,23 +116,21 @@ export class Canhoto extends DanfeBlock {
   protected drawTop({ x, y, width }: DanfeArea): void {
     const p = this.innerPad;
     const left = width - this.numberWidth;
+    const textHeight = this.textBoxHeight(width);
+    const text = this.receivedText('ABAIXO');
 
-    this.fields.rect(x, y, left, this.textHeight);
-    this.fields.text(
-      this.receivedText(),
-      x + p,
-      y + p,
-      left - 2 * p,
-      this.textHeight - 2 * p,
-      { size: 6.5 },
-    );
+    this.fields.rect(x, y, left, textHeight);
+    this.fields.text(text, x + p, y + p, left - 2 * p, textHeight - 2 * p, {
+      size: this.textSize,
+      ellipsis: false,
+    });
 
-    this.fields.row(x, y + this.textHeight, left, this.signatureHeight, [
+    this.fields.row(x, y + textHeight, left, this.signatureHeight, [
       { label: 'DATA DE RECEBIMENTO', weight: 40 },
       { label: 'IDENTIFICAÇÃO E ASSINATURA DO RECEBEDOR', weight: 125 },
     ]);
 
-    const boxHeight = this.textHeight + this.signatureHeight;
+    const boxHeight = textHeight + this.signatureHeight;
     this.drawNumber(x + left, y, this.numberWidth, boxHeight);
 
     const line = y + boxHeight + this.spacing / 2;

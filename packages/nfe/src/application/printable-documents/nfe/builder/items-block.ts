@@ -87,8 +87,7 @@ export abstract class DanfeItemsBlock extends DanfeBlock {
     const requested = cell.columns ?? 1;
     if (requested <= 1) return 1;
 
-    const columnWidth =
-      (width - this.pairGap * (requested - 1)) / requested;
+    const columnWidth = (width - this.pairGap * (requested - 1)) / requested;
     const text = { size: this.fontSize };
     const fits = cell.pairs.every(([label, value]) => {
       return (
@@ -287,7 +286,6 @@ export abstract class DanfeItemsBlock extends DanfeBlock {
 
     const bodyTop = top + labels;
     this.fields.rect(x, bodyTop, width, bottom - bodyTop);
-    this.context.status.watermark(x, bodyTop, width, bottom - bodyTop);
     this.builder.lineWidth(0.5);
     this.drawColumnLines(x, top, bottom);
 
