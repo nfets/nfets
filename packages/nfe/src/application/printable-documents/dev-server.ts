@@ -151,7 +151,6 @@ app.get('/danfe-rtc-landscape', async (req, res) => {
   const doc = new DanfeRtcLandscapePdfDocument(res);
 
   const { canhoto = 'true' } = req.query;
-  console.log(canhoto);
   if (canhoto === 'false') {
     doc.options.showCanhoto = false;
   }

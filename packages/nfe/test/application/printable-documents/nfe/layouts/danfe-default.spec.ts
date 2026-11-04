@@ -58,8 +58,6 @@ describe('DanfeDefault', () => {
 
       // Items
       .toContain('DADOS DOS PRODUTOS / SERVIÇOS')
-      .toContain('NFe EMITIDA EM HOMOLOGAÇÃO')
-      .toContain('SEM VALOR FISCAL')
       .toContain('CAMISETA LINHO 00000000 0/300 5102 UN 1,00 0,10 0,10')
 
       // Additional data and footer
@@ -69,6 +67,8 @@ describe('DanfeDefault', () => {
       .toContain('gerado por github.com/nfets/nfets')
       .toContain('-- 1 of 1 --');
 
+    expect(text).toContain('NFe EMITIDA EM HOMOLOGAÇÃO');
+    expect(text).toContain('SEM VALOR FISCAL');
     expect(text).not.toContain('TOTAL DO IBS / CBS / IS');
     expect(text).not.toContain('FATURA / DUPLICATAS');
     expect(text).not.toContain('CÁLCULO DO ISSQN');
@@ -83,12 +83,13 @@ describe('DanfeDefault', () => {
 
     expectInOrder(text)
       .toContain('DADOS DOS PRODUTOS / SERVIÇOS')
-      .toContain('NFe EMITIDA EM HOMOLOGAÇÃO')
-      .toContain('NFe CANCELADA')
-      .toContain('05/10/2026 15:02:40 - 342260000998965')
-      .toContain('SEM VALOR FISCAL')
       .toContain('CAMISETA LINHO')
       .toContain('DADOS ADICIONAIS');
+
+    expect(text).toContain('NFe EMITIDA EM HOMOLOGAÇÃO');
+    expect(text).toContain('NFe CANCELADA');
+    expect(text).toContain('05/10/2026 15:02:40 - 342260000998965');
+    expect(text).toContain('SEM VALOR FISCAL');
   });
 
   it('should describe vehicle, medicine and weapon specific item groups', async () => {
@@ -141,13 +142,13 @@ describe('DanfeDefault', () => {
       .toContain('PROTOCOLO DE AUTORIZAÇÃO DE USO')
       .toContain('EMITIDA EM CONTINGÊNCIA 05/10/2026 14:50:00')
       .toContain('CONSUMIDOR EXEMPLO')
-      .toContain('EMITIDA EM CONTINGÊNCIA')
-      .toContain('PENDENTE DE AUTORIZAÇÃO')
       .toContain(
         'Emitida em contingência em 05/10/2026 14:50:00. Justificativa: Indisponibilidade do servidor da SEFAZ autorizadora',
       )
       .toContain('-- 1 of 1 --');
 
+    expect(text).toContain('EMITIDA EM CONTINGÊNCIA');
+    expect(text).toContain('PENDENTE DE AUTORIZAÇÃO');
     expect(text).not.toContain('NFe EMITIDA EM HOMOLOGAÇÃO');
     expect(text).not.toContain('SEM VALOR FISCAL');
   });
@@ -175,5 +176,7 @@ describe('DanfeDefault', () => {
     expect(occurrences(text, 'CÁLCULO DO IMPOSTO')).toBe(1);
     expect(occurrences(text, 'DADOS DOS PRODUTOS / SERVIÇOS')).toBe(4);
     expect(occurrences(text, '1001 PRODUTO EXEMPLO TRIBUTADO')).toBe(27);
+    expect(occurrences(text, 'NFe EMITIDA EM HOMOLOGAÇÃO')).toBe(4);
+    expect(occurrences(text, 'SEM VALOR FISCAL')).toBe(4);
   });
 });

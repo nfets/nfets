@@ -23,7 +23,7 @@ describe('DanfeRtc', () => {
     );
 
     expect(text).toContain('Folha 1/1');
-    expect(text).toContain('INDICADA AO LADO');
+    expect(text).toContain('INDICADA ABAIXO');
 
     expectInOrder(text)
       // Header (NT 2026.010 item 4.2)
@@ -169,6 +169,8 @@ describe('DanfeRtc', () => {
     expect(occurrences(text, 'TOTAL DO IBS / CBS / IS')).toBe(1);
     expect(occurrences(text, 'CÓDIGO DO REGIME TRIBUTÁRIO')).toBe(6);
     expect(occurrences(text, '200032')).toBe(27);
+    expect(occurrences(text, 'NFe EMITIDA EM HOMOLOGAÇÃO')).toBe(6);
+    expect(occurrences(text, 'SEM VALOR FISCAL')).toBe(6);
   });
 
   it('should print quantity, unit and total in full at 6pt', async () => {
@@ -184,13 +186,31 @@ describe('DanfeRtc', () => {
     expect(text).not.toContain('9.999.999.999…');
   });
 
+  it('should grow the portrait canhoto to fit the full receipt text', async () => {
+    const text = await renderDanfeText(
+      DanfeRtcPdfDocument,
+      'rtc-homolog-protocoled-maxlength.xml',
+    );
+
+    expect(text).toContain('INDICADA ABAIXO');
+    expect(text).toContain(
+      'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO XXXXXXXXXXXXXXXXXXXX',
+    );
+    expect(text).toContain(
+      'RUA EXEMPLO DE LOGRADOURO MUITO LONGO XXXXXXXXXXXXXXXXXXXXXX',
+    );
+    expect(text).toContain(
+      'MUNICIPIO DE CHAPECO SANTA CATARINA XXXXXXXXXXXXXXXXXXXXXXXX',
+    );
+  });
+
   it('should build the landscape rtc danfe with the receipt on the left', async () => {
     const text = await renderDanfeText(
       DanfeRtcLandscapePdfDocument,
       'rtc-homolog-protocoled.xml',
     );
 
-    expect(text).toContain('INDICADA ABAIXO');
+    expect(text).toContain('INDICADA AO LADO');
     expect(text).toContain('DESTINATÁRIO / REMETENTE');
     expect(text).toContain('DADOS DOS PRODUTOS / SERVIÇOS');
     expect(occurrences(text, 'RECEBEMOS DE')).toBe(1);

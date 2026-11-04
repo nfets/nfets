@@ -223,6 +223,8 @@ export abstract class DanfePdfDocument {
     const width = this.contentWidth;
     let y = this.pageTop;
 
+    this.status.watermark();
+
     const canhoto = this.canhoto;
     if (slice.isFirst && canhoto && this.sideCanhotoWidth === 0) {
       canhoto.build({ x, y, width });

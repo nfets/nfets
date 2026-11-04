@@ -91,10 +91,15 @@ export class StatusMarks {
     return textWidth > width ? (size * width) / textWidth : size;
   }
 
-  public watermark(x: number, y: number, width: number, height: number): void {
+  public watermark(): void {
     const { messages, detail, valid } = this.status();
     const lines = valid ? messages : [...messages, this.invalid];
     if (!lines.length) return;
+
+    const x = 0;
+    const y = 0;
+    const width = this.context.builder.pageWidth();
+    const height = this.context.builder.pageHeight();
 
     const maxWidth = width * 0.9;
     const sizes = lines.map((line) =>
