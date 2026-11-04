@@ -60,7 +60,7 @@ export interface ContingencyOptions {
 }
 
 export interface NfeTransmitterOptions extends TransmitterOptions {
-  cUF: StateCode | '91';
+  cUF: StateCode | '91' | '92';
   schema?: Schema;
   tpAmb: EnvironmentCode;
   contingency?: ContingencyOptions;

@@ -6,6 +6,7 @@ export * from './errors/xml-validation-error';
 
 export * from './entities/constants/tp-emis';
 export * from './entities/constants/tp-event';
+export * from './entities/constants/tp-autor-rtc';
 export * from './entities/constants/evento-cstat';
 export * from './entities/constants/inut-cstat';
 

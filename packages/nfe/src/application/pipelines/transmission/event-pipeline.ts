@@ -27,7 +27,7 @@ export abstract class EventPipeline extends TransmissionPipeline {
     payload: Pick<
       IEventoItem<T>['infEvento'],
       'nSeqEvento' | 'dhEvento' | 'chNFe' | 'detEvento'
-    > & { identification: string; cOrgao?: '91' },
+    > & { identification: string; cOrgao?: '91' | '92' },
     options: Pick<NfeTransmitterOptions, 'tpAmb'>,
   ): Promise<
     Either<NFeTsError, SignedEntity<IEventoItem<{ descEvento: string } & T>>>
