@@ -4,7 +4,17 @@ import { TpEvent } from '@nfets/nfe/domain/entities/constants/tp-event';
 
 const createContext = (events: DanfcePdfDocument['events'] = []) => {
   const texts: string[] = [];
-  const builder = {
+  const builder: {
+    font: jest.Mock;
+    fontSize: jest.Mock;
+    widthOfString: jest.Mock;
+    text: jest.Mock;
+    save: jest.Mock;
+    fillColor: jest.Mock;
+    restore: jest.Mock;
+    pageWidth: jest.Mock;
+    pageHeight: jest.Mock;
+  } = {
     font: jest.fn().mockReturnThis(),
     fontSize: jest.fn().mockReturnThis(),
     widthOfString: jest.fn((text: string) => text.length * 10),
@@ -60,4 +70,3 @@ describe('CancelMark', () => {
     expect(texts.some((text) => text.includes('342260000000099'))).toBe(true);
   });
 });
-
