@@ -5,6 +5,7 @@ import type {
 } from '@nfets/core/domain/repositories/pdf-builder';
 import type { NFe, NFeProc } from '@nfets/nfe/domain';
 import type { ProtNFe } from '@nfets/nfe/domain/entities/nfe/prot-nfe';
+import type { RetEvento } from '@nfets/nfe/domain/entities/services/evento';
 
 import { PdfkitPdfBuilder } from '@nfets/core/infrastructure/repositories/pdfkit-pdf-builder';
 import {
@@ -21,13 +22,20 @@ import {
 } from '@nfets/nfe/domain/entities/printable-documents/nfce';
 
 import type { Builder } from '@nfets/nfe/domain/entities/printable-documents/builder';
+import { CancelMark } from './builder/cancel-mark';
+
+export interface DanfceNFeProc extends NFeProc {
+  retEvento?: RetEvento | RetEvento[];
+}
 
 export abstract class DanfcePdfDocument {
   declare public data: NFe;
   declare public protNFe?: ProtNFe;
+  public events: RetEvento[] = [];
 
   public readonly builder: PdfBuilder;
   public readonly toolkit: XmlToolkit = new Xml2JsToolkit();
+  public readonly cancelMark = new CancelMark(this);
 
   public readonly defaults = {
     displayTitle: true,
@@ -104,12 +112,19 @@ export abstract class DanfcePdfDocument {
     });
   }
 
+  public asArray<T>(value?: T | T[]): T[] {
+    if (value === undefined || value === null) return [];
+    return Array.isArray(value) ? value : [value];
+  }
+
   protected async parse(xml: string) {
-    const parsed = await this.toolkit.parse<NFeProc | NFe>(xml);
+    const parsed = await this.toolkit.parse<DanfceNFeProc | NFe>(xml);
 
     if ('protNFe' in parsed) this.protNFe = parsed.protNFe;
-    if ('NFe' in parsed) this.data = parsed.NFe;
-    else this.data = parsed;
+    if ('NFe' in parsed) {
+      this.data = parsed.NFe;
+      this.events = this.asArray(parsed.retEvento);
+    } else this.data = parsed;
   }
 
   public async build(xml: string): Promise<this> {
@@ -124,6 +139,7 @@ export abstract class DanfcePdfDocument {
     this.builder.page();
 
     for (const builder of this.builders) await builder.build();
+    this.cancelMark.draw();
     return this;
   }
 

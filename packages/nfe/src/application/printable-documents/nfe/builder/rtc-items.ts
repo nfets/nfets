@@ -138,12 +138,17 @@ export class RtcItems extends DanfeItemsBlock {
     const reader = new RtcDetReader(det);
     const { prod } = det;
     const icms = reader.icms;
+    const issqn = reader.issqn;
     const ipi = reader.ipi;
     const ibscbs = reader.ibsCbs;
     const is = reader.is;
 
     const currency = (value?: DecimalValue) => this.format.currency(value);
     const percent = (value?: DecimalValue) => this.format.percent(value);
+
+    const tax = issqn
+      ? { label: 'ISS', vBC: issqn.vBC, p: issqn.vAliq, v: issqn.vISSQN }
+      : { label: 'ICMS', vBC: icms.vBC, p: icms.pICMS, v: icms.vICMS };
 
     return [
       this.descriptionCell(reader),
@@ -174,7 +179,7 @@ export class RtcItems extends DanfeItemsBlock {
       ],
       {
         pairs: [
-          ['ICMS', currency(icms.vBC)],
+          [tax.label, currency(tax.vBC)],
           ['IBS / CBS', currency(ibscbs?.vBC)],
           ['IS', currency(is?.vBCIS)],
           ['IPI', currency(ipi?.vBC)],
@@ -183,7 +188,7 @@ export class RtcItems extends DanfeItemsBlock {
       {
         columns: 2,
         pairs: [
-          ['ICMS', percent(icms.pICMS)],
+          [tax.label, percent(tax.p)],
           ['CBS', percent(this.rate(ibscbs?.gCBS, ibscbs?.gCBS?.pCBS))],
           [
             'IBS UF',
@@ -200,7 +205,7 @@ export class RtcItems extends DanfeItemsBlock {
       {
         columns: 2,
         pairs: [
-          ['ICMS', currency(icms.vICMS)],
+          [tax.label, currency(tax.v)],
           ['CBS', currency(ibscbs?.gCBS?.vCBS)],
           ['IBS UF', currency(ibscbs?.gIBSUF?.vIBSUF)],
           ['IPI', currency(ipi?.vIPI)],

@@ -30,6 +30,28 @@ export interface DanfeOptions {
   credits?: string;
 }
 
+export interface DaeventoEmitente {
+  razao?: string;
+  logradouro?: string;
+  numero?: string;
+  complemento?: string;
+  bairro?: string;
+  CEP?: string;
+  municipio?: string;
+  UF?: string;
+  telefone?: string;
+  email?: string;
+  CNPJ?: string;
+}
+
+export interface DaeventoOptions {
+  size: keyof typeof DanfeSize;
+  layout: DanfeLayout;
+  logo?: string;
+  credits?: string;
+  emitente?: DaeventoEmitente;
+}
+
 export interface DanfeArea {
   x: number;
   y: number;
