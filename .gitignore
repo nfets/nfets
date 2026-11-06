@@ -14,8 +14,8 @@ lerna-debug.log*
 
 .cache
 
-**/jest-localstorage.json
-**/jest-localstorage.json-*
+**/jest-localstorage*.json
+**/jest-localstorage*.json-*
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 
