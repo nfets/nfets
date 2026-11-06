@@ -33,6 +33,7 @@ export * from './printable-documents/nfe/layouts/danfe-simplificado';
 export * from './printable-documents/nfe/layouts/danfe-simplificado-etiqueta';
 export * from './printable-documents/nfe/layouts/danfe-rtc';
 export * from './printable-documents/nfe/layouts/danfe-rtc-landscape';
+export * from './printable-documents/nfe/layouts/daevento';
 
 export * from './transmission/nfe-transmitter';
 export * from './transmission/nfce-transmitter';

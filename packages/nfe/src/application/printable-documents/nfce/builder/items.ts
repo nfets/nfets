@@ -20,7 +20,7 @@ export class Items implements Builder {
   }
 
   protected get columnStyles() {
-    return [15, 32, 60, '*', '*', '*', '*'];
+    return [12, 24, '*', 28, 30, 26, 30];
   }
 
   protected get rowStyles() {
@@ -33,15 +33,25 @@ export class Items implements Builder {
 
   protected get headers(): (string | CellOptions)[] {
     const font = { src: `${this.context.defaults.font}-Bold` };
+    const noWrap = { lineBreak: false } as const;
     return [
       { font, text: '#' },
       { font, text: 'cod.' },
       { font, text: 'descrição' },
-      { font, align: { x: 'right' }, text: 'qtde' },
-      { font, align: { x: 'right' }, text: 'unit.' },
-      { font, align: { x: 'right' }, text: 'desc.' },
-      { font, align: { x: 'right' }, text: 'total' },
+      { font, align: { x: 'right' }, text: 'qtde', textOptions: noWrap },
+      { font, align: { x: 'right' }, text: 'unit.', textOptions: noWrap },
+      { font, align: { x: 'right' }, text: 'desc.', textOptions: noWrap },
+      { font, align: { x: 'right' }, text: 'total', textOptions: noWrap },
     ];
+  }
+
+  protected valueCell(text: string): CellOptions {
+    return {
+      font: { size: this.context.options.textFontSize },
+      align: { x: 'right' },
+      text,
+      textOptions: { lineBreak: false },
+    };
   }
 
   protected item(det: Det): CellOptions[][] {
@@ -57,27 +67,11 @@ export class Items implements Builder {
       cProdCell = { font, text: cProd };
 
     const values = [
-      {
-        font,
-        align: { x: 'right' },
-        text: `${this.context.currency(qCom, 4)} ${uCom}`,
-      },
-      {
-        font,
-        align: { x: 'right' },
-        text: this.context.currency(vUnCom, 10),
-      },
-      {
-        font,
-        align: { x: 'right' },
-        text: this.context.currency(vDesc ?? 0),
-      },
-      {
-        font,
-        align: { x: 'right' },
-        text: this.context.currency(vProd),
-      },
-    ] as const;
+      this.valueCell(`${this.context.currency(qCom, 4)} ${uCom}`),
+      this.valueCell(this.context.currency(vUnCom, 10)),
+      this.valueCell(this.context.currency(vDesc ?? 0)),
+      this.valueCell(this.context.currency(vProd)),
+    ];
 
     const cProdWidth = this.builder.widthOfString(cProd);
     const cProdMaxWidth = this.columnStyles[1] as number;
@@ -90,7 +84,7 @@ export class Items implements Builder {
     }
 
     const xProdWidth = this.builder.widthOfString(xProd);
-    const xProdMaxWidth = this.columnStyles[2] as number;
+    const xProdMaxWidth = this.getDescriptionWidth();
 
     if (xProdWidth >= xProdMaxWidth) {
       return [
@@ -150,9 +144,17 @@ export class Items implements Builder {
     Items._instance = undefined;
   }
 
+  protected getDescriptionWidth(): number {
+    const style = this.columnStyles[2];
+    return typeof style === 'number' ? style : this.getProportionalWidth();
+  }
+
   protected getFirstLineWidth(): number {
-    const fixed = this.columnStyles.slice(1, 3) as number[];
-    return fixed.reduce((sum, col) => sum + col, 0);
+    const code = this.columnStyles[1];
+    return (
+      (typeof code === 'number' ? code : this.getProportionalWidth()) +
+      this.getDescriptionWidth()
+    );
   }
 
   protected getProportionalWidth(): number {

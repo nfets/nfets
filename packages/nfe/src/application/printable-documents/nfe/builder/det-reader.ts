@@ -2,6 +2,7 @@ import { Decimal } from '@nfets/core';
 import type { DecimalValue } from '@nfets/core/domain';
 import type { Det } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det';
 import type { IPITrib } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/ipi';
+import type { ISSQN } from '@nfets/nfe/domain/entities/nfe/inf-nfe/det/imposto/issqn';
 
 export interface DetIcmsValues {
   orig?: string;
@@ -35,6 +36,14 @@ export class DetReader {
     if (!group) return {};
     const [values] = Object.values(group) as (DetIcmsValues | undefined)[];
     return values ?? {};
+  }
+
+  public get issqn(): ISSQN | undefined {
+    return this.det.imposto?.ISSQN;
+  }
+
+  public get hasIssqn(): boolean {
+    return !!this.issqn;
   }
 
   public get cstCode(): string {

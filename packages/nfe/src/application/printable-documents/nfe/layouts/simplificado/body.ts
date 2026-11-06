@@ -1,4 +1,9 @@
-import { Environment, dateToolkit, timezones } from '@nfets/core';
+import {
+  Environment,
+  dateToolkit,
+  timezones,
+  type DecimalValue,
+} from '@nfets/core';
 import type { PdfBuilder } from '@nfets/core/domain/repositories/pdf-builder';
 import type { Local } from '@nfets/nfe/domain/entities/nfe/inf-nfe/local';
 import { TpEmis } from '@nfets/nfe/domain';
@@ -372,7 +377,8 @@ export class SimplificadoBody implements Builder {
   }
 
   private totals() {
-    const { vProd, vDesc, vNF } = this.infNFe.total.ICMSTot;
+    const { vProd, vDesc, vFrete, vSeg, vOutro, vNF } = this.infNFe.total.ICMSTot;
+    const { vServ } = this.infNFe.total.ISSQNtot ?? {};
     if (this.context.showsItems()) {
       const count = [this.infNFe.det].flat().length;
       this.pair('Qtd. Total de Itens', String(count), true);
@@ -381,7 +387,11 @@ export class SimplificadoBody implements Builder {
         this.context.currency(vProd),
         true,
       );
+      this.optionalPair('Valor dos Serviços R$', vServ);
       this.pair('Valor Descontos R$', this.context.currency(vDesc), true);
+      this.optionalPair('Valor Frete R$', vFrete);
+      this.optionalPair('Valor Seguro R$', vSeg);
+      this.optionalPair('Outras Despesas R$', vOutro);
       this.pair('Valor Total R$', this.context.currency(vNF), true);
       return;
     }
@@ -389,6 +399,11 @@ export class SimplificadoBody implements Builder {
       'VALOR TOTAL DA NOTA FISCAL:',
       `R$ ${this.context.currency(vNF)}`,
     );
+  }
+
+  private optionalPair(label: string, value?: DecimalValue) {
+    if (!this.context.isValueNotEmpty(value)) return;
+    this.pair(label, this.context.currency(value), true);
   }
 
   private totalLine(label: string, value: string) {

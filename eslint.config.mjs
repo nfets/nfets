@@ -15,6 +15,7 @@ export default [
       'package.json',
       'node_modules/**/*',
       'eslint.config.mjs',
+      'packages/test/localstorage-polyfill.mjs',
     ],
   },
   // defaults

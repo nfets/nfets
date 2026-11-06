@@ -101,7 +101,7 @@ describe('DanfceDefault', () => {
           'com 120 caracteres igual ao schema para testar o layout',
         )
         .toContain(
-          'e ver se o layout quebra a linha corretamente quando a des',
+          'ver se o layout quebra a linha corretamente quando a des',
         )
 
         // Item quantities and values
@@ -235,7 +235,7 @@ IBPT/empresometro.com.br 0D61CD`,
           'com 120 caracteres igual ao schema para testar o layout',
         )
         .toContain(
-          'e ver se o layout quebra a linha corretamente quando a des',
+          'ver se o layout quebra a linha corretamente quando a des',
         )
         .toContain('1,00 UN')
         .toContain('10,00')
@@ -366,7 +366,7 @@ VALOR FISCAL`,
           'com 120 caracteres igual ao schema para testar o layout',
         )
         .toContain(
-          'e ver se o layout quebra a linha corretamente quando a des',
+          'ver se o layout quebra a linha corretamente quando a des',
         )
 
         // Item quantities and values
@@ -493,7 +493,7 @@ VALOR FISCAL`,
           'com 120 caracteres igual ao schema para testar o layout',
         )
         .toContain(
-          'e ver se o layout quebra a linha corretamente quando a des',
+          'ver se o layout quebra a linha corretamente quando a des',
         )
 
         // Item quantities and values

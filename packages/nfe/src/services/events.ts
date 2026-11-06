@@ -1,6 +1,11 @@
 import { TpEvent } from '../domain/entities/constants/tp-event';
 
 export default {
+  [TpEvent.CartaCorrecao]: {
+    method: 'envEventoCCe',
+    version: '1.00',
+    descEvento: 'Carta de Correção',
+  },
   [TpEvent.Cancelamento]: {
     method: 'envEventoCancNFe',
     version: '1.00',
