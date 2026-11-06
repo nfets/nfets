@@ -1,4 +1,5 @@
 export enum TpEvent {
+  CartaCorrecao = '110110',
   Cancelamento = '110111',
   CancelamentoSubstituicao = '110112',
   ConfirmacaoOperacao = '210200',

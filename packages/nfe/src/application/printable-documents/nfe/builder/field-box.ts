@@ -1,8 +1,8 @@
+import type { PdfBuilder } from '@nfets/core/domain/repositories/pdf-builder';
 import {
   mm,
   type DanfeFieldCell,
 } from '@nfets/nfe/domain/entities/printable-documents/nfe';
-import type { DanfePdfDocument } from '../danfe';
 
 export interface FieldTextOptions {
   size: number;
@@ -15,6 +15,12 @@ export interface FieldTextOptions {
 
 export type FieldBoxCell = Omit<DanfeFieldCell, 'weight'>;
 
+export interface FieldBoxHost {
+  builder: PdfBuilder;
+  bold: string;
+  defaults: { font: string };
+}
+
 export class FieldBox {
   public readonly labelSize = 5;
   public readonly valueSize = 8;
@@ -24,7 +30,7 @@ export class FieldBox {
   public readonly rowHeight = mm(7);
   public readonly radius = mm(0.8);
 
-  public constructor(private readonly context: DanfePdfDocument) {}
+  public constructor(private readonly context: FieldBoxHost) {}
 
   protected get builder() {
     return this.context.builder;

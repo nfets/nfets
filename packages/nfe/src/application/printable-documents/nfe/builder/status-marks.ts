@@ -124,7 +124,7 @@ export class StatusMarks {
       top += lineSize * this.lineHeight;
     };
 
-    builder.save().fillColor('#000000', 0.3);
+    builder.save().fillColor('#000000', 0.6);
     lines.forEach((line, index) => {
       if (detail && index === detailIndex) write(detail, detailSize);
       write(line, sizes[index]);

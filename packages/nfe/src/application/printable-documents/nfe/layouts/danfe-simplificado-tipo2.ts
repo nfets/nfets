@@ -62,6 +62,7 @@ export class DanfeSimplificadoTipo2PdfDocument extends DanfcePdfDocument {
       this.via = via;
       this.builder.page();
       for (const builder of this.builders) await builder.build();
+      this.cancelMark.draw();
     }
 
     return this;

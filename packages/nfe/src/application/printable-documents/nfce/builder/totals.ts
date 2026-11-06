@@ -1,4 +1,4 @@
-import { Decimal, type DecimalValue } from '@nfets/core';
+import type { DecimalValue } from '@nfets/core';
 import type { PdfBuilder } from '@nfets/core/domain/repositories/pdf-builder';
 import type { DanfcePdfDocument } from '../danfce';
 import type { Builder } from '@nfets/nfe/domain/entities/printable-documents/builder';
@@ -41,10 +41,8 @@ export class Totals implements Builder {
         this.context.data.infNFe.total.ICMSTot,
       { vServ } = this.context.data.infNFe.total.ISSQNtot ?? {};
 
-    this.conditionalRowValue(
-      'Valor Total R$',
-      new Decimal(vProd).add(vServ ?? 0.0).toNumber(),
-    );
+    this.conditionalRowValue('Valor Total R$', vProd);
+    this.conditionalRowValue('Valor dos Serviços R$', vServ);
     this.conditionalRowValue('Desconto total R$', vDesc, '-');
     this.conditionalRowValue('Frete total R$', vFrete);
     this.conditionalRowValue('Seguro total R$', vSeg);
@@ -81,7 +79,7 @@ export class Totals implements Builder {
     value?: DecimalValue,
     prefix = '',
   ) {
-    if (!value || !Number.parseFloat(value.toString())) return;
+    if (!this.context.isValueNotEmpty(value)) return;
     value = this.context.currency(value);
 
     const { left, right } = this.builder.pageMargins();
