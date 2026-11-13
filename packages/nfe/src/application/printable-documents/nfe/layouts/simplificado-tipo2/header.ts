@@ -1,8 +1,8 @@
 import type { DanfcePdfDocument } from '../../../nfce/danfce';
 
-import { Header } from '../../../nfce/builder/header';
+import { HeaderWithLogo } from '../../../nfce/builder/header-with-logo';
 
-export class SimplificadoTipo2Header extends Header {
+export class SimplificadoTipo2Header extends HeaderWithLogo {
   private static current?: SimplificadoTipo2Header;
 
   public static instance(context: DanfcePdfDocument): SimplificadoTipo2Header {

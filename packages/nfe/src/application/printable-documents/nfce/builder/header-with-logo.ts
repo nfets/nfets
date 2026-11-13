@@ -3,7 +3,6 @@ import type { DanfcePdfDocument } from '../danfce';
 import type { Builder } from '@nfets/nfe/domain/entities/printable-documents/builder';
 
 import { mmToPt } from '@nfets/nfe/domain/entities/printable-documents/nfce';
-import defaultLogo from '../resource/default-logo';
 import { Header } from './header';
 
 export class HeaderWithLogo extends Header implements Builder {
@@ -11,13 +10,6 @@ export class HeaderWithLogo extends Header implements Builder {
 
   public static instance(context: DanfcePdfDocument): HeaderWithLogo {
     return (this._instance ??= new HeaderWithLogo(context));
-  }
-
-  protected get logo() {
-    const { logo, ignoreDefaultLogo } = this.context.options;
-    if (logo) return logo;
-    if (ignoreDefaultLogo) return void 0;
-    return defaultLogo;
   }
 
   protected emitAndOrLogo() {

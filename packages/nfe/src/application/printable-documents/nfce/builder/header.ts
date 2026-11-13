@@ -9,8 +9,6 @@ import type {
 import type { DanfcePdfDocument } from '../danfce';
 import type { Builder } from '@nfets/nfe/domain/entities/printable-documents/builder';
 
-import defaultLogo from '../resource/default-logo';
-
 export class Header implements Builder {
   protected static _instance?: Header;
 
@@ -134,11 +132,8 @@ export class Header implements Builder {
       );
   }
 
-  protected get logo() {
-    const { logo, ignoreDefaultLogo } = this.context.options;
-    if (logo) return logo;
-    if (ignoreDefaultLogo) return void 0;
-    return defaultLogo;
+  protected get logo(): string | undefined {
+    return this.context.options.logo;
   }
 
   public setup() {
