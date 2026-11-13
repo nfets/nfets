@@ -41,14 +41,16 @@ const SAMPLE_NFCE_XML = (
     'utf-8',
   );
 
-app.get('/danfce', async (_, res) => {
+app.get('/danfce', async (req, res) => {
   res.set({
     'Content-Type': 'application/pdf',
     'Content-Disposition': 'inline; filename="example.pdf"',
     'Cache-Control': 'no-cache, no-store, must-revalidate',
   });
 
+  const { logo } = req.query;
   const doc = new DanfceDefaultPdfDocument(res);
+  if (logo === 'true') doc.setLogo(defaultLogo);
   await doc.build(SAMPLE_NFCE_XML());
   doc.end();
 });
@@ -374,6 +376,7 @@ app.get('/daevento-maxlength', async (req, res) => {
 app.get('/', (_req, res) => {
   const links = [
     ['/danfce', 'NFC-e'],
+    ['/danfce?logo=true', 'NFC-e com logo'],
     ['/danfce-reduced', 'NFC-e reduzida'],
     ['/danfce-payments', 'NFC-e todas formas de pagamento'],
     ['/danfce-payments-reduced', 'NFC-e reduzida — todas formas de pagamento'],

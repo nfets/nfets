@@ -97,12 +97,8 @@ describe('DanfceDefault', () => {
           'cProd com 60 caracteres igual ao schema para testar o layout',
         )
         .toContain('xProd')
-        .toContain(
-          'com 120 caracteres igual ao schema para testar o layout',
-        )
-        .toContain(
-          'ver se o layout quebra a linha corretamente quando a des',
-        )
+        .toContain('com 120 caracteres igual ao schema para testar o layout')
+        .toContain('ver se o layout quebra a linha corretamente quando a des')
 
         // Item quantities and values
         .toContain('1,00 UN')
@@ -231,12 +227,8 @@ IBPT/empresometro.com.br 0D61CD`,
           'cProd com 60 caracteres igual ao schema para testar o layout',
         )
         .toContain('xProd')
-        .toContain(
-          'com 120 caracteres igual ao schema para testar o layout',
-        )
-        .toContain(
-          'ver se o layout quebra a linha corretamente quando a des',
-        )
+        .toContain('com 120 caracteres igual ao schema para testar o layout')
+        .toContain('ver se o layout quebra a linha corretamente quando a des')
         .toContain('1,00 UN')
         .toContain('10,00')
         .toContain('0,00')
@@ -284,9 +276,7 @@ IBPT/empresometro.com.br 0D61CD`,
         )
 
         // Pending authorization message (second occurrence - after metadata)
-        .toContain(
-          'PENDENTE DE AUTORIZAÇÃO - SEM VALOR FISCAL',
-        )
+        .toContain('PENDENTE DE AUTORIZAÇÃO - SEM VALOR FISCAL')
 
         // Footer
         .toContain('gerado por github.com/nfets/nfets')
@@ -362,12 +352,8 @@ VALOR FISCAL`,
           'cProd com 60 caracteres igual ao schema para testar o layout',
         )
         .toContain('xProd')
-        .toContain(
-          'com 120 caracteres igual ao schema para testar o layout',
-        )
-        .toContain(
-          'ver se o layout quebra a linha corretamente quando a des',
-        )
+        .toContain('com 120 caracteres igual ao schema para testar o layout')
+        .toContain('ver se o layout quebra a linha corretamente quando a des')
 
         // Item quantities and values
         .toContain('1,00 UN')
@@ -489,12 +475,8 @@ VALOR FISCAL`,
           'cProd com 60 caracteres igual ao schema para testar o layout',
         )
         .toContain('xProd')
-        .toContain(
-          'com 120 caracteres igual ao schema para testar o layout',
-        )
-        .toContain(
-          'ver se o layout quebra a linha corretamente quando a des',
-        )
+        .toContain('com 120 caracteres igual ao schema para testar o layout')
+        .toContain('ver se o layout quebra a linha corretamente quando a des')
 
         // Item quantities and values
         .toContain('1,00 UN')
@@ -545,6 +527,43 @@ Pendente de autorização`,
         .toContain('-- 1 of 1 --');
     } finally {
       await parser.destroy();
+    }
+  });
+
+  it('prints the emitter logo only when one is set', async () => {
+    const xml = readFileSync(
+      path.join(
+        __dirname,
+        '..',
+        'mocks',
+        'complete-xml-production-protocoled.xml',
+      ),
+    ).toString('utf-8');
+    const logo =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+
+    await danfce.build(xml);
+    await new Promise<void>(
+      (resolve) => (danfce.end(), stream.on('finish', () => resolve())),
+    );
+    expect(readFileSync(file).toString('latin1')).not.toMatch(
+      /\/Subtype\s*\/Image/,
+    );
+
+    const logoFile = path.join(tmpdir(), `danfce-logo-${Date.now()}.pdf`);
+    const logoStream = createWriteStream(logoFile);
+    const withLogo = new DanfceDefaultPdfDocument(logoStream);
+    withLogo.setLogo(logo);
+    try {
+      await withLogo.build(xml);
+      await new Promise<void>(
+        (resolve) => (withLogo.end(), logoStream.on('finish', () => resolve())),
+      );
+      expect(readFileSync(logoFile).toString('latin1')).toMatch(
+        /\/Subtype\s*\/Image/,
+      );
+    } finally {
+      if (existsSync(logoFile)) unlinkSync(logoFile);
     }
   });
 });

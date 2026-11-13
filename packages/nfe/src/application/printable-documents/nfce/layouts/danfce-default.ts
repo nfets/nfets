@@ -2,7 +2,7 @@ import type { Writable } from 'node:stream';
 
 import type { Builder } from '@nfets/nfe/domain/entities/printable-documents/builder';
 
-import { Header } from '../builder/header';
+import { HeaderWithLogo } from '../builder/header-with-logo';
 import { FiscalMessages } from '../builder/fiscal-messages';
 import { HomologMessage } from '../builder/homolog-message';
 import { Items } from '../builder/items';
@@ -20,7 +20,7 @@ export class DanfceDefaultPdfDocument extends DanfcePdfDocument {
 
   protected get builders(): Builder[] {
     return [
-      Header.instance(this),
+      HeaderWithLogo.instance(this),
       FiscalMessages.instance(this),
       HomologMessage.instance(this),
       Items.instance(this),

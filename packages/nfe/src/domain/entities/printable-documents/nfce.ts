@@ -13,7 +13,6 @@ export interface DanfceOptions {
   titleFontSize: number;
   width: keyof typeof DanfceSize;
   height: number;
-  ignoreDefaultLogo?: boolean;
   logo?: string;
   credits?: string;
 }
