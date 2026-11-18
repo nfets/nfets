@@ -25,12 +25,12 @@ class RtcDetReader extends DetReader {
     return this.det.imposto?.IBSCBS?.cClassTrib;
   }
 
-  public get ibsCbsCst(): string {
-    return this.det.imposto?.IBSCBS?.CST ?? '';
-  }
-
   public get is(): IS | undefined {
     return this.det.imposto?.IS;
+  }
+
+  public get cstLabel(): string {
+    return this.icms.CSOSN !== undefined ? 'CSOSN' : 'CST';
   }
 }
 
@@ -41,13 +41,17 @@ export class RtcItems extends DanfeItemsBlock {
 
   private fittedWeights?: number[];
 
+  protected get isSimples(): boolean {
+    return ['1', '4'].includes(this.infNFe.emit.CRT);
+  }
+
   protected get columns(): DanfeItemsColumn[] {
     const [description, cst, quantity, unit, total, bases, rates, taxes] =
       this.columnWeights();
 
     return [
       { label: 'DESCRIÇÃO DO PRODUTO / SERVIÇO', weight: description },
-      { label: 'CST / CFOP', weight: cst },
+      { label: `${this.isSimples ? 'CSOSN' : 'CST'} / CFOP`, weight: cst },
       { label: 'QTD / UN', weight: quantity, align: 'center' },
       { label: 'VLR UNIT', weight: unit, align: 'right' },
       { label: 'VLR TOTAL', weight: total, align: 'right' },
@@ -155,7 +159,7 @@ export class RtcItems extends DanfeItemsBlock {
       {
         muted: false,
         pairs: [
-          ['CST', reader.ibsCbsCst],
+          [reader.cstLabel, reader.cst()],
           ['CFOP', prod.CFOP],
         ],
       },
