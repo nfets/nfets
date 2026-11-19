@@ -5,6 +5,7 @@ const Schemas = {
   PL_010_V1: 'PL_010_V1',
   PL_010_V1_21: 'PL_010_V1.21',
   PL_010_V1_30: 'PL_010_V1.30',
+  PL_010g: 'PL_010g',
 } as const;
 
 export const PL_009 = [
@@ -15,6 +16,7 @@ export const PL_010 = [
   Schemas.PL_010_V1,
   Schemas.PL_010_V1_21,
   Schemas.PL_010_V1_30,
+  Schemas.PL_010g,
 ] as const satisfies (typeof Schemas)[keyof typeof Schemas][];
 
 export const DefaultSchema = Schemas.PL_009_V4;
