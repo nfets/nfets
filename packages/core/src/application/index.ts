@@ -1,6 +1,7 @@
 export * from './signer/signer';
 export * from './signer/entity-signer';
 export * from './signer/xml-signer';
+export * from './signer/menu-fiscal-stream-xml-signer';
 export * from './validations/index';
 export * from './certificate/asn1';
 export { default as dateToolkit } from './date/date-toolkit';

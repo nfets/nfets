@@ -46,6 +46,15 @@ export abstract class Signer {
   }
 
   protected signedInfo(node: string, mark: string) {
+    const signedInfo = this.createSignedInfo(
+      '',
+      `#${this.toolkit.getAttribute(node, mark)}`,
+    );
+    signedInfo.Reference.DigestValue = this.digest(node);
+    return signedInfo;
+  }
+
+  protected createSignedInfo(digestValue: string, referenceUri: string) {
     return {
       CanonicalizationMethod: {
         $: { Algorithm: CanonicalizationMethod },
@@ -54,10 +63,10 @@ export abstract class Signer {
         $: { Algorithm: this.signatureMethod },
       },
       Reference: {
-        $: { URI: `#${this.toolkit.getAttribute(node, mark)}` },
+        $: { URI: referenceUri },
         Transforms: this.transforms,
         DigestMethod: { $: { Algorithm: this.digestAlgorithm } },
-        DigestValue: this.digest(node),
+        DigestValue: digestValue,
       },
     } satisfies SignedInfo;
   }
