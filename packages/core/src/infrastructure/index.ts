@@ -8,3 +8,6 @@ export * from './repositories/soap-remote-transmission-repository';
 
 export * from './xml/xml-validator';
 export * from './xml/xml2js-toolkit';
+export * from './xml/append-signature-to-xml-file';
+export * from './xml/digest-menu-fiscal-xml-from-file';
+export * from './xml/menu-fiscal-xml';
